@@ -1,0 +1,3127 @@
+﻿@charset "UTF-8";
+
+* {
+    outline-style: none;
+    margin: 0;
+    padding: 0
+}
+
+img {
+    border: 0 none
+}
+
+body {
+    font-size: 11px;
+    color: #333333;
+    font-weight: normal;
+}
+
+b, strong {
+    font-weight: 700
+}
+
+u {
+    text-decoration: underline
+}
+
+s {
+    text-decoration: line-through
+}
+
+p {
+    margin: 0
+}
+
+i {
+    font-style: italic
+}
+
+big {
+    text-transform: uppercase
+}
+
+small {
+    text-transform: lowercase
+}
+
+ul li {
+    list-style: none
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #333333
+}
+
+h1 {
+    font-size: 22px;
+}
+
+h2 {
+    font-size: 20px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+h4 {
+    font-size: 16px;
+}
+
+h5 {
+    font-size: 14px;
+}
+
+h6 {
+    font-size: 12px;
+}
+
+body {
+    font-family: 'geometriamedium';
+    margin: 0;
+    padding: 0;
+    color: #333;
+    min-width: 100%;
+    float: left;
+    width: 100%;
+    min-widtH: 300px;
+    -webkit-font-smoothing: subpixel-antialiased !important;
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+}
+
+a:link, a:visited {
+    color: #333333;
+    outline: 0
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+
+@font-face {
+    font-family: 'geometriabold';
+    src: url('fonts/geometria-bold-webfont.eot');
+    src: url('fonts/geometria-bold-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-bold-webfont.sql') format('woff2'), url('fonts/geometria-bold-webfont.woff') format('woff'), url('fonts/geometria-bold-webfont.hxd') format('truetype'), url('fonts/geometria-bold-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'geometrialight';
+    src: url('fonts/geometria-light-webfont.eot');
+    src: url('fonts/geometria-light-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-light-webfont.sql') format('woff2'), url('fonts/geometria-light-webfont.woff') format('woff'), url('fonts/geometria-light-webfont.hxd') format('truetype'), url('fonts/geometria-light-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'geometriamedium';
+    src: url('fonts/geometria-medium-webfont.eot');
+    src: url('fonts/geometria-medium-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-medium-webfont.sql') format('woff2'), url('fonts/geometria-medium-webfont.woff') format('woff'), url('fonts/geometria-medium-webfont.hxd') format('truetype'), url('fonts/geometria-medium-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('fonts/fontawesome-webfont.eot');
+    src: url('fonts/fontawesome-webfont.eot?#iefix&v=4.5.0') format('embedded-opentype'), url('fonts/fontawesome-webfont.sql') format('woff2'), url('fonts/fontawesome-webfont.woff') format('woff'), url('fonts/fontawesome-webfont.hxd') format('truetype'), url('fonts/fontawesome-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+html, body {
+    height: 100%;
+}
+
+.ui-datepicker {
+    z-index: 35 !important;
+}
+
+.main {
+    height: 100%;
+    min-height: 100%;
+}
+
+#lblMsg {
+    text-align: center;
+    margin-bottom: 15px;
+    display: block;
+}
+/*.login{position:absolute;top:0;lefT:0;right:0;bottom:0;width:100%;height:100%;min-height: 540px;background:url(images/bg3.jpg);background-size:cover;background-position:center;}*/
+.login {
+    position: absolute;
+    top: 0;
+    lefT: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    min-height: 540px;
+    background-size: cover;
+    background-position: center;
+}
+
+label select {
+    font-family: 'geometrialight';
+    font-size: 16px;
+    float: left;
+    width: 100%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #0552A5;
+    padding: 6px 5%;
+}
+
+.pre_article {
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    max-width: 600px !important;
+    padding: 0 !important;
+}
+
+.col-0 {
+    width: 325px;
+    display: block;
+    margin: 0 auto;
+}
+
+.pre_article .button {
+    margin: 0px 35px !important;
+    padding: 15px 40px !important;
+}
+
+.edit_field {
+    margin: 0 15px;
+}
+
+.check_inline {
+    width: 50% !important;
+}
+
+.little {
+    margin: 0px 0 0 -165px !important;
+    width: 300px !important;
+}
+
+.form__order2 .order_box .search input.txt {
+    font-family: 'geometrialight';
+    font-size: 16px;
+    float: left;
+    width: 90%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #0552A5;
+    padding: 7px 5%;
+}
+
+    .form__order2 .order_box .search input.txt.center {
+        text-align: center;
+    }
+
+    .form__order2 .order_box .search input.txt:active {
+        color: #343742;
+    }
+
+.form__order2 .order_box .search {
+    width: 250px;
+    display: block;
+    float: right;
+    margin-top: -60px;
+}
+
+    .form__order2 .order_box .search .sub_title.ico10:before {
+        content: '\f002';
+        color: #0357B9;
+    }
+
+    .form__order2 .order_box .search .sub_title {
+        position: relative;
+        padding-lefT: 5%;
+        float: right;
+        top: -25px;
+        color: #808080;
+        font-size: 9px;
+        text-transform: uppercase;
+    }
+
+        .form__order2 .order_box .search .sub_title:before {
+            font-family: 'FontAwesome';
+            font-size: 15px;
+            content: '\f041';
+            displaY: inline-block;
+            margin: 0 3px 0 0;
+            width: 9px;
+            height: 9px;
+        }
+
+.form__buttons .checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 17px;
+    height: 17px;
+}
+
+    .form__buttons .checkbox:not(checked) + label {
+        position: relative;
+    }
+
+    .form__buttons .checkbox + label {
+        cursor: pointer;
+        margin: 0 !important;
+    }
+
+.form__buttons .labeltxt {
+    font-family: 'geometriamedium';
+    font-size: 12px;
+    text-transform: uppercase;
+    float: left;
+    width: 100%;
+}
+
+.form__buttons .checkbox:not(checked) + label:before {
+    content: '';
+    position: relative;
+    top: 2px;
+    left: 0;
+    display: inline-block;
+    width: 14px;
+    height: 12px;
+    margin: 0 7px 0 0;
+    background: url(images/checkbox.png);
+}
+
+.form__buttons .checkbox:checked + label:before {
+    background-position: 0 -13px;
+}
+
+.labeltxt.right {
+    float: none;
+    padding: 15px;
+}
+
+.button.right {
+    margin-left: 150px !important;
+}
+
+.openpopup.max_width {
+    margin: 40px;
+}
+
+.price.right {
+    margin: 0 100px;
+}
+
+.comment_write .form__buttons .button {
+    font-family: 'geometrialight';
+    display: inline-block;
+    margin: auto;
+    background: #F75527;
+    border-radius: 3px;
+    bordeR: none;
+    padding: 15px 40px;
+    color: #ffffff;
+    font-size: 12px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: none;
+    transition: .3s;
+}
+
+    .comment_write .form__buttons .button:hover {
+        background: #DC390B;
+        transition: .3s;
+    }
+
+    .comment_write .form__buttons .button.no__color {
+        background: none;
+        color: #000;
+    }
+
+.comment_write .form__buttons.comment {
+    margin: 0 auto;
+    width: 120px;
+}
+
+.comment_write {
+    margin: 60px 0px;
+}
+
+.right__maps_big .form textarea {
+    resize: none;
+    float: left;
+    width: 100%;
+    height: 182px;
+    background: url(images/txt.png);
+    border: none;
+    font-size: 14px;
+    line-height: 26px;
+    background-position: 0 -3px;
+}
+
+
+.menu {
+    position: relative;
+    z-index: 1;
+    font-family: 'geometriamedium';
+    float: left;
+    width: 100%
+}
+
+    .menu .wrapper {
+        max-width: 1280px;
+        display: block;
+        margin: auto;
+        padding: 0 10px;
+    }
+
+    .menu .menu__left {
+        float: left;
+        width: 44%;
+        padding: 22px 0 22px 0;
+        border-bottom: 1px solid rgba(255,255,255,.2)
+    }
+
+        .menu .menu__left li {
+            float: left;
+            width: 50%;
+            text-align: left;
+        }
+
+    .menu .menu__right {
+        float: right;
+        width: 44%;
+        padding: 22px 0 22px 0;
+        border-bottom: 1px solid rgba(255,255,255,.2)
+    }
+
+        .menu .menu__right li {
+            float: left;
+            width: 33.333%;
+            text-align: right;
+        }
+
+    .menu li a {
+        font-size: 10px;
+        text-transform: uppercase;
+        display: inline-block;
+        color: #FFF;
+        text-decoration: none;
+        transition: .3s;
+    }
+
+        .menu li a:after {
+            content: '';
+            displaY: block;
+            border-bottom: 1px solid #FFF;
+            opacity: 0;
+            transition: .3s;
+        }
+
+        .menu li a:hover:after {
+            opacity: 1;
+            transition: .3s;
+        }
+
+    .menu.black li a {
+        color: #0556a8;
+    }
+
+        .menu.black li a:after {
+            border-bottom: 1px solid #0556a8;
+        }
+
+    .menu.black .header__title {
+        color: #0556a8;
+    }
+
+    .menu.black .menu__right {
+        border-bottom: 1px solid rgb(3, 87, 185);
+    }
+
+    .menu.black .menu__left {
+        border-bottom: 1px solid rgb(3, 87, 185);
+    }
+
+    .menu.black .trigger i {
+        background: #0C70C7
+    }
+
+.trigger {
+    display: none;
+    position: relative;
+    z-index: 1;
+    floaT: right;
+    width: 34px;
+    margin: 20px 3% 0 0;
+    padding: 2%;
+    cursor: pointer;
+}
+
+    .trigger.close i:nth-child(1) {
+        width: 50%;
+        transition: .3s;
+    }
+
+    .trigger.close i:nth-child(2) {
+        width: 70%;
+        transition: .3s;
+    }
+
+    .trigger i {
+        floaT: right;
+        width: 100%;
+        height: 2px;
+        background: #FFF;
+        margin-bottom: 5px;
+        border-radius: 1px;
+        transition: .3s;
+    }
+
+    .trigger.close i {
+        background: #FFF !important;
+    }
+
+.menu__mobile {
+    displaY: none;
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    float: right;
+    width: 100%;
+    border-bottom: 2px solid #0C70C7;
+}
+
+    .menu__mobile ul {
+        padding: 80px 0 20px 0;
+        background: #0556A8;
+    }
+
+        .menu__mobile ul li {
+            displaY: none;
+            font-size: 16px;
+            padding: 8px 15px;
+            background: #0556A8;
+        }
+
+            .menu__mobile ul li a {
+                color: #FFF !important;
+                text-decoration: none;
+                font-size: 11px;
+                line-height: 16px;
+            }
+
+
+.logo {
+    position: absolute;
+    top: 16px;
+    lefT: 50%;
+    margin: 0 0 0 -56px;
+    width: 112px;
+    z-index: 1;
+}
+
+.header__title {
+    font-family: 'geometrialight';
+    font-size: 13px;
+    margin: 20px 0 80px 0;
+    color: #FFF;
+    float: left;
+    width: 100%;
+    text-aligN: center;
+}
+
+    .header__title.small__padding {
+        margin-bottom: 10px;
+    }
+
+.header__title_main {
+    float: left;
+    width: 100%;
+    text-align: center;
+    padding-top: 40px;
+    margin-bottom: 140px;
+}
+
+    .header__title_main big {
+        font-family: 'geometriamedium';
+        font-size: 60px;
+        color: #FFF;
+        text-align: center;
+        display: block;
+        text-transform: none;
+    }
+
+    .header__title_main small {
+        font-family: 'geometrialight';
+        font-size: 20px;
+        color: #FFF;
+        text-align: center;
+        display: block;
+        text-transform: none;
+    }
+
+.order_boxing {
+    float: left;
+    width: 100%;
+}
+
+    .order_boxing.box-col3 .order_box {
+        position: relative;
+        width: 12.333%;
+    }
+
+.box__checkboxes {
+    float: left;
+    width: 100%;
+    text-align: center;
+    display: table;
+}
+
+    .box__checkboxes label {
+        floaT: none !important;
+        width: initial !important;
+        margin: 0 20px;
+        display: inline-block;
+        text-transform: uppercase;
+    }
+
+        .box__checkboxes label input {
+            font-family: 'bebas_neueregular';
+            text-transform: uppercase;
+            width: 58%;
+            float: left;
+            background: none;
+            bordeR: none;
+            color: #000;
+            padding: 5px 0;
+            border-bottom: 1px solid #FFF;
+        }
+
+        .box__checkboxes label .checkbox:not(checked) {
+            position: absolute;
+            opacity: 0;
+        }
+
+    .box__checkboxes .checkbox:not(checked) + label {
+        position: relative;
+        font-size: 12px;
+        float: left;
+        width: 100%;
+        color: #000;
+        margin: 8px 0 5px 0;
+        cursor: pointer;
+    }
+
+        .box__checkboxes .checkbox:not(checked) + label:before {
+            content: '';
+            position: relative;
+            top: 1px;
+            left: 0;
+            display: inline-block;
+            width: 11px;
+            height: 11px;
+            margin: 0 7px 0 0;
+            background: url(images/checkbox2.png);
+            background-position: 0 -12px;
+        }
+
+    .box__checkboxes .checkbox:checked + label:before {
+        background-position: 0 0;
+    }
+
+.boxes__select {
+    float: left;
+    width: 100%;
+}
+
+.content .form__order {
+    display: flex
+}
+
+.form__order {
+    display: block;
+    padding: 35px 45px;
+    background: #FFF;
+    margin: 0 auto 25px auto;
+    border-radius: 4px;
+    max-width: 1255px;
+}
+
+    .form__order.order_width {
+        max-width: 1284px;
+    }
+
+    .form__order.no-padding {
+        padding: 0;
+    }
+
+    .form__order .order_box {
+        float: left;
+        width: 20%;
+    }
+
+        .form__order .order_box.col-1 {
+            float: left;
+            width: 10%;
+        }
+
+        .form__order .order_box.col-2 {
+            float: left;
+            width: 15%;
+        }
+
+        .form__order .order_box + .order_box {
+            margin-left: 3%;
+        }
+
+        .form__order .order_box .plusminus {
+            position: absolute;
+            top: 17px;
+            lefT: 0;
+            right: 0;
+            font-size: 20px;
+        }
+
+            .form__order .order_box .plusminus i {
+                font-family: 'geometrialight';
+                font-style: normal;
+                font-size: 20px;
+                cursor: pointer;
+            }
+
+            .form__order .order_box .plusminus .plus {
+                float: right;
+            }
+
+            .form__order .order_box .plusminus .minus {
+                float: left;
+            }
+
+        .form__order .order_box .add {
+            float: left;
+            font-family: 'geometriamedium';
+            font-size: 12px;
+            color: #343742;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin-top: 16px;
+        }
+
+    .form__order .aircraft {
+        display: none;
+        position: absolute;
+        top: 45px;
+        lefT: 0;
+        width: 260px;
+        background: #FFF;
+        z-index: 1;
+        text-align: left;
+        -webkit-box-shadow: 0px 0px 56px -6px rgba(0,0,0,0.56);
+        -moz-box-shadow: 0px 0px 56px -6px rgba(0,0,0,0.56);
+        box-shadow: 0px 0px 56px -6px rgba(0,0,0,0.56);
+        border-radius: 4px;
+    }
+
+        .form__order .aircraft .airlabel {
+            display: block;
+            padding: 15px 20px;
+            border-bottom: 1px solid #F6EFE6;
+            overflow: hidden;
+        }
+
+        .form__order .aircraft .airlabel_txt {
+            display: block;
+            text-transform: uppercase;
+            margin: 0 0 10px 0;
+        }
+
+        .form__order .aircraft .airlabelwrap {
+            float: left;
+            width: 100%;
+            margin-bottom: 7px;
+        }
+
+            .form__order .aircraft .airlabelwrap input[type="checkbox"] {
+                displaY: none
+            }
+
+            .form__order .aircraft .airlabelwrap .labeltxt {
+                font-family: 'geometriamedium';
+                font-size: 12px;
+                color: #0556a8;
+                text-transform: uppercase;
+                margin: 0;
+                cursor: pointer;
+            }
+
+            .form__order .aircraft .airlabelwrap .checkbox:not(checked) + label:before {
+                content: '';
+                position: relative;
+                top: 2px;
+                left: 0;
+                display: inline-block;
+                width: 14px;
+                height: 13px;
+                margin: 0 8px 0 0;
+                background: url(images/checkbox_blue.png);
+                background-position: 0 -14px;
+            }
+
+            .form__order .aircraft .airlabelwrap .checkbox:checked + label:before {
+                background-position: 0 0;
+            }
+
+            .form__order .aircraft .airlabelwrap .labeltxt:hover {
+                color: #F75527;
+            }
+
+
+.form__order_wrpa {
+    float: left;
+    width: 100%;
+}
+
+.form__order .button_boxing {
+    float: left;
+    width: 100% !important;
+    display: table;
+    text-align: center;
+}
+
+    .form__order .button_boxing input {
+        display: inline-block;
+        margin: 0 10px;
+    }
+
+    .form__order .button_boxing .button {
+        font-family: 'geometrialight';
+        display: inline-block;
+        background: #F75527;
+        border-radius: 3px;
+        bordeR: none;
+        padding: 15px 25px;
+        color: #ffffff;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .form__order .button_boxing .button:hover {
+            background: #DC390B;
+            transition: .3s;
+        }
+
+    .form__order .button_boxing .button__secont {
+        font-family: 'geometriamedium';
+        padding: 15px 25px;
+        background: none;
+        bordeR: none;
+        color: #343742;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+    }
+
+    .form__order .button_boxing .input {
+        display: inline-block;
+        float: none;
+        width: 200px;
+        margin: 0 20px;
+        top: 17px;
+    }
+
+.form__order .form label {
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-bottom: 32px;
+}
+
+    .form__order .form label.ico__fly:after {
+        content: '';
+        position: absolute;
+        left: -10%;
+        top: 22px;
+        width: 14px;
+        height: 9px;
+        background: url(images/ico_air.png);
+        font-size: 12px;
+        color: #808080;
+    }
+
+    .form__order .form label input.txt {
+        font-family: 'geometrialight';
+        font-size: 16px;
+        float: left;
+        width: 90%;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #0552A5;
+        padding: 7px 5%;
+    }
+
+    .form__order .form label select {
+        font-family: 'geometrialight';
+        font-size: 16px;
+        float: left;
+        width: 100%;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #0552A5;
+        padding: 6px 5%;
+    }
+
+    .form__order .form label input.txt.center {
+        text-align: center;
+    }
+
+    .form__order .form label input.txt:active {
+        color: #343742;
+    }
+
+    .form__order .form label .sub_title {
+        position: relative;
+        padding-lefT: 5%;
+        float: left;
+        color: #808080;
+        font-size: 9px;
+        text-transform: uppercase;
+    }
+
+        .form__order .form label .sub_title:before {
+            font-family: 'FontAwesome';
+            font-size: 10px;
+            content: '\f041';
+            displaY: inline-block;
+            margin: 0 3px 0 0;
+            width: 9px;
+            height: 9px;
+        }
+
+        .form__order .form label .sub_title.ico1:before {
+            content: '\f041';
+        }
+
+        .form__order .form label .sub_title.ico2:before {
+            content: '\f007';
+        }
+
+        .form__order .form label .sub_title.ico3:before {
+            content: '\f073';
+        }
+
+        .form__order .form label .sub_title.ico4:before {
+            content: '\f017';
+        }
+
+        .form__order .form label .sub_title.ico6:before {
+            content: '\f047';
+        }
+
+        .form__order .form label .sub_title.ico7:before {
+            content: '\f0b1';
+        }
+
+        .form__order .form label .sub_title.ico5:before {
+            content: '';
+            width: 14px;
+            height: 9px;
+            background: url(images/ico_air.png);
+            font-size: 12px;
+            color: #808080;
+        }
+
+        .form__order .form label .sub_title.ico8:before {
+            content: '';
+            width: 14px;
+            height: 9px;
+            background: url(images/ico_air.png);
+        }
+
+.form__order .form {
+    float: left;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.form__order .title {
+    display: block;
+    width: 100%;
+    font-family: 'geometriabold';
+    color: #0556a8;
+    font-size: 20px;
+    text-aligN: center;
+    font-weighT: normal;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+
+.form__order .form label .sub_title .helps {
+    width: 14px;
+    height: 14px;
+    margin: -5px 0 0 4px;
+    position: relative;
+    top: 2px;
+    background: url(images/helps.png);
+    displaY: inline-block;
+    cursor: pointer;
+}
+
+    .form__order .form label .sub_title .helps:hover {
+        background-position: -16px 0;
+    }
+
+        .form__order .form label .sub_title .helps:hover ~ .formshover {
+            display: block;
+        }
+
+.form__order .form label .sub_title .formshover {
+    display: none;
+    position: absolute;
+    color: #0556a8;
+    font-size: 12px;
+    text-align: center;
+    bottom: 24px;
+    padding: 15px;
+    background: white;
+    width: 200px;
+    right: -105px;
+    border-radius: 3px;
+    -webkit-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    -moz-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+}
+
+.bg__white {
+    displaY: block;
+    overflow: hidden;
+    padding: 40px;
+    margin: 0 0 50px 0;
+    background: #FFF;
+    -webkit-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    -moz-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+}
+
+    .bg__white .title {
+        font-family: 'geometriabold';
+        color: #0556a8;
+        font-size: 20px;
+        text-aligN: center;
+        font-weighT: normal;
+        text-transform: uppercase;
+        margin-bottom: 25px;
+    }
+
+    .bg__white .description {
+        text-transform: uppercase;
+        font-size: 11px;
+        line-height: 21px;
+        text-aligN: center;
+        font-weighT: normal;
+        displaY: block;
+        max-width: 490px;
+        margin: -15px auto 40px auto;
+    }
+
+    .bg__white .order_box {
+        width: 17.444% !important;
+    }
+
+
+.form__order2 {
+    display: block;
+    padding: 45px;
+    background: #FFF;
+    overflow: hidden;
+    margin: 0 auto 50px auto;
+    border-radius: 4px;
+    max-width: 1195px;
+    -webkit-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    -moz-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+}
+
+    .form__order2.small {
+        max-width: 610px;
+    }
+
+    .form__order2 .title {
+        font-family: 'geometriabold';
+        color: #0556a8;
+        font-size: 20px;
+        text-aligN: center;
+        font-weighT: normal;
+        text-transform: uppercase;
+        margin-bottom: 25px;
+    }
+
+    .form__order2 .table {
+        float: left;
+        widtH: 100%;
+        overflow: auto;
+    }
+
+    .form__order2 .description input {
+        font-family: 'geometrialight';
+        font-size: 16px;
+        width: 115px;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #0552A5;
+        margin: 0 10px;
+    }
+
+    .form__order2 .description .button {
+        margin: 10px 0px;
+        font-family: 'geometrialight';
+        display: inline-block;
+        background: #F75527;
+        border-radius: 3px;
+        bordeR: none;
+        padding: 8px 25px;
+        color: #ffffff;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .form__order2 .description .button:hover {
+            background: #DC390B;
+            transition: .3s;
+        }
+
+    .form__order2 .description.find {
+        max-width: 580px;
+    }
+
+    .form__order2 .table .table__scroll {
+        min-width: 660px;
+        overflow: hidden;
+    }
+
+    .form__order2 .table_h {
+        display: table;
+        width: 100%;
+        border-collapse: collapse;
+        border-collapse: collapse;
+        border-spacing: 0px;
+        vertical-align: top;
+    }
+
+        .form__order2 .table_h .h {
+            font-family: 'geometriamedium';
+            font-weighT: normal;
+            text-transform: uppercase;
+            displaY: inline-block;
+            widtH: 18.5%;
+            color: #808080;
+            border-bottom: 1px solid #808080;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+            .form__order2 .table_h .h.col-small {
+                widtH: 8%;
+            }
+
+            .form__order2 .table_h .h + .h {
+                padding-left: 2%;
+            }
+
+    .form__order2 .table .table__item {
+        float: left;
+        widtH: 18.5%;
+    }
+
+        .form__order2 .table .table__item + .table__item {
+            padding-left: 2%;
+        }
+
+        .form__order2 .table .table__item.col-small {
+            width: 8%;
+        }
+
+        .form__order2 .table .table__item ul {
+            display: block;
+        }
+
+            .form__order2 .table .table__item ul li {
+                float: left;
+                font-size: 13px;
+                width: 100%;
+                margin: 0 0 5px 0;
+            }
+
+    .form__order2 .form__buttons {
+        position: relative;
+        float: left;
+        width: 100%;
+        text-align: center;
+        margin: 30px 0 0 0;
+    }
+
+        .form__order2 .form__buttons .button {
+            font-family: 'geometrialight';
+            display: inline-block;
+            margin: auto;
+            background: #F75527;
+            border-radius: 3px;
+            bordeR: none;
+            padding: 15px 25px;
+            color: #ffffff;
+            font-size: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            transition: .3s;
+        }
+
+            .form__order2 .form__buttons .button:hover {
+                background: #DC390B;
+                transition: .3s;
+            }
+
+            .form__order2 .form__buttons .button.no__color {
+                background: none;
+                color: #000;
+            }
+
+        .form__order2 .form__buttons .price {
+            font-family: 'geometriabold';
+            position: absolute;
+            top: 12px;
+            righT: 0;
+            font-size: 20px;
+        }
+
+.table__tr {
+    font-family: 'geometriamedium';
+    font-weighT: normal;
+    width: 100%;
+    min-width: 680px;
+    font-size: 13px;
+    border-collapse: collapse;
+    border-collapse: collapse;
+    border-width: 0px;
+    border-spacing: 0px;
+    border-color: white !important;
+}
+
+    .table__tr .table__h {
+        width: 100%;
+        margin: 0 0 10px 0;
+        border-bottom: 1px solid #F6EFE6;
+    }
+
+        .table__tr .table__h th {
+            font-size: 10px;
+            color: #808080;
+            text-transform: uppercase;
+        }
+
+    .table__tr tr {
+        width: 100%;
+        padding: 10px 0;
+        font-weighT: normal;
+    }
+
+        .table__tr tr th {
+            text-align: left;
+            padding: 5px 0;
+            font-weighT: normal;
+        }
+
+        .table__tr tr td {
+            padding: 10px 0;
+            font-weighT: normal;
+        }
+
+            .table__tr tr td a {
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
+                .table__tr tr td a:hover {
+                    color: #f75527;
+                }
+
+    .table__tr .true {
+        width: 8px;
+        height: 6px;
+        display: block;
+        background: url(images/ico.png);
+        margin-left: 5px;
+    }
+
+    .table__tr .false {
+        width: 6px;
+        height: 6px;
+        display: block;
+        background: url(images/ico.png);
+        margin-left: 5px;
+        background-position: -10px 0;
+    }
+
+.form__order2 .description {
+    text-transform: uppercase;
+    font-size: 11px;
+    line-height: 21px;
+    text-aligN: center;
+    font-weighT: normal;
+    displaY: block;
+    max-width: 490px;
+    margin: -15px auto 40px auto;
+    margin-bottom: 15px;
+}
+
+
+/*.gridview .table__h.grid th { font-size: 11px;  }
+.gridview .table__h { border-bottom-color: #808080; }
+.gridview .table__tr tr td { width: 70px; padding-top: 10px;}*/
+
+.table.grid .table__tr tr td {
+    padding: 0px 0px;
+    padding-top: 3px;
+    width: 19%;
+}
+
+.table.grid .table__tr tr:nth-child(2) td {
+    padding-top: 15px;
+}
+
+.table.grid .table__tr .table__h th {
+    height: 20px;
+    font-size: 11px;
+}
+
+.table.grid .table__tr .table__h {
+    border-bottom-color: #808080;
+}
+
+    .table.grid .table__tr .table__h th:nth-child(5) {
+        widtH: 8%;
+    }
+
+.title {
+    font-family: 'geometriabold';
+    color: #0556a8;
+    font-size: 20px;
+    text-aligN: center;
+    font-weighT: normal;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.description {
+    text-transform: uppercase;
+    font-size: 11px;
+    line-height: 21px;
+    text-aligN: center;
+    font-weighT: 700;
+    displaY: block;
+    max-width: 490px;
+    margin: -15px auto 40px auto;
+    margin-bottom: 15px;
+}
+
+.form__order2.broker {
+    margin-top: 50px;
+}
+
+.broker_nopadding {
+    padding-bottom: 100px;
+}
+
+.login__box.broker {
+    max-width: initial;
+}
+
+.form.broker {
+    width: auto !important;
+}
+
+.labeltxt.active {
+    text-align: center;
+}
+
+.popup.delete {
+    margin: 0 0 0 -195px;
+    width: 346px;
+}
+
+.description a {
+    text-decoration: none;
+}
+
+.addboxing {
+    max-width: 440px;
+    display: block;
+    margin: 0 auto 20px auto;
+    overflow: hidden;
+}
+
+    .addboxing .title {
+        font-family: 'geometriabold';
+        color: #0556a8;
+        width: 100%;
+        font-size: 20px;
+        text-aligN: center !important;
+        font-weighT: normal;
+        displaY: block;
+        text-transform: uppercase;
+        margin-bottom: 15px !important;
+    }
+
+    .addboxing .form label {
+        position: relative;
+        float: left;
+        width: 100%;
+        margin-bottom: 32px;
+        text-align: center;
+    }
+
+        .addboxing .form label input.txt {
+            font-family: 'geometrialight';
+            font-size: 16px;
+            float: left;
+            width: 90%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #0552A5;
+            padding: 7px 5%;
+        }
+
+            .addboxing .form label input.txt.center {
+                text-align: center;
+            }
+
+            .addboxing .form label input.txt:active {
+                color: #343742;
+            }
+
+        .addboxing .form label .sub_title {
+            padding-lefT: 5%;
+            float: left;
+            color: #808080;
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+
+        .addboxing .form label .button {
+            font-family: 'geometriamedium';
+            display: inline-block;
+            text-decoration: none;
+            margin: auto;
+            padding: 14px 35px;
+            border-radius: 4px;
+            background: #F75527;
+            transition: .3s;
+            border: none;
+            color: #ffffff;
+            font-size: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+            .addboxing .form label .button:hover {
+                background: #DC390B;
+                transition: .3s;
+            }
+
+.edit_profile {
+    float: left;
+    width: 100%;
+}
+
+    .edit_profile .form label {
+        text-align: center;
+        float: left;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+        .edit_profile .form label.col-50 {
+            width: 47%;
+            float: left;
+        }
+
+        .edit_profile .form label.col-25 {
+            width: 20.5%;
+            float: left;
+        }
+
+        .edit_profile .form label.col-100 .sub_title {
+            padding-lefT: 2.5%;
+        }
+
+        .edit_profile .form label.col-100 input.txt {
+            width: 95%;
+            padding: 7px 2.5%;
+        }
+
+        .edit_profile .form label.margin {
+            margin-left: 6%;
+        }
+
+        .edit_profile .form label.no {
+            margin-bottom: 0;
+        }
+
+        .edit_profile .form label input.txt {
+            font-family: 'geometrialight';
+            font-size: 16px;
+            float: left;
+            width: 90%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #0552A5;
+            padding: 7px 5%;
+        }
+
+        .edit_profile .form label textarea {
+            font-family: 'geometrialight';
+            font-size: 16px;
+            line-height: 37px;
+            float: left;
+            width: 90%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #0552A5;
+            padding: 7px 5%;
+            margin: 0 0 30px 0;
+            background: url(images/textarea.png);
+            min-height: 100px;
+        }
+
+        .edit_profile .form label p.text {
+            float: left;
+            width: 100%;
+            text-align: left;
+            color: #808080;
+            text-transform: uppercase;
+            line-height: 21px;
+        }
+
+        .edit_profile .form label select {
+            font-family: 'geometrialight';
+            font-size: 16px;
+            float: left;
+            width: 100%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #0552A5;
+            padding: 6px 5%;
+        }
+
+            .edit_profile .form label select.col-33 {
+                float: left;
+                width: 30%;
+                padding: 6px 2%;
+            }
+
+            .edit_profile .form label select.margin {
+                margin-left: 5%;
+            }
+
+        .edit_profile .form label input.txt:active {
+            color: #343742;
+        }
+
+        .edit_profile .form label input.button {
+            font-family: 'geometriamedium';
+            display: inline-block;
+            margin: auto;
+            padding: 14px 35px;
+            border-radius: 4px;
+            background: #F75527;
+            transition: .3s;
+            border: none;
+            color: #ffffff;
+            font-size: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+            .edit_profile .form label input.button:hover {
+                background: #DC390B;
+                transition: .3s;
+            }
+
+        .edit_profile .form label .sub_title {
+            width: 95%;
+            text-align: left;
+            padding-lefT: 5%;
+            float: left;
+            color: #808080;
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+
+
+.forms_maps {
+    float: left;
+    width: 100%;
+    border-radius: 4px;
+}
+
+    .forms_maps .title {
+        font-family: 'geometriabold';
+        color: #0556a8;
+        width: 100%;
+        font-size: 20px;
+        text-aligN: center !important;
+        font-weighT: normal;
+        displaY: block;
+        text-transform: uppercase;
+        margin-bottom: 15px !important;
+    }
+
+    .forms_maps .description {
+        font-family: 'geometrialight';
+        margin: auto;
+        font-size: 15px;
+        line-height: 21px;
+        text-aligN: center;
+        font-weighT: normal;
+        displaY: block;
+        max-width: 490px;
+        margin-bottom: 25px;
+    }
+
+    .forms_maps .left__maps {
+        position: relative;
+        float: left;
+        width: 49%;
+        height: 360px;
+        -webkit-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+        -moz-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+        box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    }
+
+        .forms_maps .left__maps.full__width {
+            width: 100%;
+        }
+
+            .forms_maps .left__maps.full__width .bottom__wrap {
+                float: left;
+                width: 50%;
+            }
+
+    .forms_maps .right__maps {
+        position: relative;
+        float: right;
+        width: 49%;
+        height: 360px;
+        -webkit-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+        -moz-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+        box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    }
+
+    .forms_maps .map {
+        position: absolute;
+        top: 0;
+        lefT: 0;
+        righT: 0;
+        bottom: 0;
+        z-index: 10;
+    }
+
+    .forms_maps .labels {
+        color: white;
+        text-align: center;
+        width: 25px;
+        white-space: nowrap;
+        margin: -15px 0 0 -4px !important;
+        text-transform: uppercase;
+    }
+
+    .forms_maps .bottom {
+        position: absolute;
+        bottom: 0;
+        lefT: 0;
+        righT: 0;
+        padding: 15px 20px;
+        background: #FFF;
+        z-index: 10;
+        border-radius: 0 0 4px 4px;
+    }
+
+    .forms_maps .sub_title {
+        float: left;
+        width: 100%;
+        font-size: 13px;
+        margin: 0 0 3px 0;
+    }
+
+    .forms_maps .bottom .title {
+        float: left !important;
+        margin: 0 !important;
+        text-aligN: left !important;
+    }
+
+    .forms_maps .forms_order {
+        max-width: 1280px;
+        margin: 0 auto;
+        display: block;
+        margin: auto;
+    }
+
+    .forms_maps .left__maps_big {
+        position: relative;
+        float: left;
+        width: 68%;
+        height: 360px;
+        -webkit-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+        -moz-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+        box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    }
+
+        .forms_maps .left__maps_big .bottom {
+            position: absolute;
+            text-align: center;
+            bottom: 307px;
+            lefT: 0;
+            righT: 0;
+            padding: 20px 0px;
+            background: #FFF;
+            z-index: 10;
+            border-radius: 0 0 4px 4px;
+        }
+
+            .forms_maps .left__maps_big .bottom a {
+                text-align: center;
+                display: inline-block;
+                margin: 0 20px;
+                text-decoration: none;
+                text-transform: uppercase;
+            }
+
+                .forms_maps .left__maps_big .bottom a:hover {
+                    text-decoration: none;
+                    color: #0357B9;
+                    font-weight: 700;
+                }
+
+    .forms_maps .right__maps_big {
+        float: right;
+        width: 30%;
+        height: 360px;
+        -webkit-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+        -moz-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+        box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    }
+
+        .forms_maps .right__maps_big .right__maps--title {
+            font-family: 'geometriabold';
+            float: left;
+            width: 100%;
+            color: #0556a8;
+            font-size: 20px;
+            text-aligN: center;
+            font-weighT: normal;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .forms_maps .right__maps_big .form {
+            display: block;
+            padding: 30px;
+            text-align: Center;
+        }
+
+            .forms_maps .right__maps_big .form label {
+                float: left;
+                width: 100%;
+                margin-bottom: 20px;
+            }
+
+            .forms_maps .right__maps_big .form textarea {
+                resize: none;
+                float: left;
+                width: 100%;
+                height: 182px;
+                background: url(images/txt.png);
+                border: none;
+                font-size: 14px;
+                line-height: 26px;
+                background-position: 0 -3px;
+            }
+
+            .forms_maps .right__maps_big .form .button {
+                font-family: 'geometrialight';
+                display: inline-block;
+                margin: auto;
+                background: #F75527;
+                border-radius: 3px;
+                bordeR: none;
+                padding: 15px 25px;
+                color: #ffffff;
+                font-size: 12px;
+                text-transform: uppercase;
+                cursor: pointer;
+                text-decoration: none;
+                transition: .3s;
+            }
+
+                .forms_maps .right__maps_big .form .button:hover {
+                    background: #DC390B;
+                    transition: .3s;
+                }
+
+
+
+.login__form {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 90%;
+    display: table;
+    text-align: center;
+}
+
+.login__boxwrap {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.login__box {
+    display: inline-block;
+    margin: 0 10px;
+    max-widtH: 250px;
+    padding: 27px 35px;
+    background: #FFF;
+    border-radius: 5px;
+}
+
+.form_title {
+    font-family: 'geometriabold';
+    display: block;
+    text-align: center;
+    color: #0556a8;
+    font-size: 20px;
+    margin: 0 0 18px 0;
+    text-transform: uppercase;
+}
+
+.login__box .form {
+    float: left;
+    width: 100%;
+}
+
+    .login__box .form label {
+        float: left;
+        width: 100%;
+        margin-bottom: 32px;
+    }
+
+        .login__box .form label.col-2 {
+            width: 48%;
+            margin-left: 1%;
+            margin-right: 1%;
+        }
+
+        .login__box .form label.col-3 {
+            width: 23%;
+            margin-left: 1%;
+            margin-right: 1%;
+        }
+
+        .login__box .form label.col-0 input.txt {
+            width: 94%;
+            padding: 7px 3%;
+        }
+
+        .login__box .form label.col-0 select {
+            width: 94%;
+            padding: 7px 3%;
+        }
+
+        .login__box .form label.col-0 .sub_title {
+            padding-lefT: 3%;
+        }
+
+        .login__box .form label.nom {
+            margin-bottom: 10px;
+        }
+
+        .login__box .form label.no {
+            margin-bottom: 0;
+        }
+
+        .login__box .form label select {
+            font-family: 'geometrialight';
+            font-size: 16px;
+            float: left;
+            width: 100%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #0552A5;
+            padding: 6px 0;
+        }
+
+        .login__box .form label input.txt {
+            font-family: 'geometrialight';
+            font-size: 16px;
+            float: left;
+            width: 90%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #0552A5;
+            padding: 7px 5%;
+        }
+
+            .login__box .form label input.txt.error {
+                border-bottom: 1px solid #FF3800
+            }
+
+            .login__box .form label input.txt:active {
+                color: #343742;
+            }
+
+        .login__box .form label input.button {
+            font-family: 'geometriamedium';
+            display: block;
+            margin: auto;
+            padding: 14px 52px;
+            border-radius: 4px;
+            background: #F75527;
+            transition: .3s;
+            border: none;
+            color: #ffffff;
+            font-size: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+            .login__box .form label input.button:hover {
+                background: #DC390B;
+                transition: .3s;
+            }
+
+        .login__box .form label .sub_title {
+            padding-lefT: 5%;
+            float: left;
+            color: #808080;
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+
+            .login__box .form label .sub_title:before {
+                content: '';
+                displaY: inline-block;
+                font-family: 'FontAwesome';
+                font-size: 10px;
+                height: 9px;
+            }
+
+            .login__box .form label .sub_title.ico1:before {
+                content: '\f007';
+                margin: 0 5px 0 0;
+            }
+
+            .login__box .form label .sub_title.ico2:before {
+                content: '\f084';
+                margin: 0 5px 0 0;
+            }
+
+            .login__box .form label .sub_title.ico3:before {
+                content: '\f0e0';
+                margin: 0 5px 0 0;
+            }
+
+    .login__box .form .checkbox {
+        width: 17px;
+        height: 17px;
+    }
+
+    .login__box .form .labeltxt {
+        font-family: 'geometriamedium';
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+    .login__box .form .checkbox + label {
+        cursor: pointer;
+        margin: 0 !important;
+    }
+
+    .login__box .form .checkbox:not(checked) {
+        position: absolute;
+        opacity: 0;
+    }
+
+        .login__box .form .checkbox:not(checked) + label {
+            position: relative;
+        }
+
+            .login__box .form .checkbox:not(checked) + label:before {
+                content: '';
+                position: relative;
+                top: 2px;
+                left: 0;
+                display: inline-block;
+                width: 14px;
+                height: 12px;
+                margin: 0 7px 0 0;
+                background: url(images/checkbox.png);
+            }
+
+    .login__box .form .checkbox:checked + label:before {
+        background-position: 0 -13px;
+    }
+
+    .login__box .form .forgot {
+        font-family: 'geometriamedium';
+        font-size: 12px;
+        text-aligN: center;
+        text-transform: uppercase;
+        text-decoration: none;
+        padding: 0 5px;
+    }
+
+        .login__box .form .forgot:hover {
+            text-decoration: underline
+        }
+
+/*.content{float:left;width:100%;position:relative;background:url(images/bg3.jpg);background-size:cover;background-position:center;}*/
+.content {
+    float: left;
+    width: 100%;
+    position: relative;
+    background-size: cover;
+    background-position: center;
+}
+
+    .content.no-img {
+        background: #FFF
+    }
+
+.article {
+    float: left;
+    width: 90%;
+    padding: 55px 0;
+    margin: 0 5%;
+}
+
+    .article .article__txt {
+        display: block;
+        max-width: 780px;
+        margin: auto;
+        font-size: 13px;
+        line-height: 19px;
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+
+    .article .article__title {
+        font-family: 'geometrialight';
+        display: block;
+        width: 100%;
+        text-align: center;
+        font-size: 30px;
+        text-align: center;
+        margin-bottom: 25px;
+    }
+
+    .article.nopadding {
+        margin: 0;
+        width: 100%;
+    }
+
+.paymentform__box {
+    display: block;
+    padding: 45px;
+    background: #FFF;
+    overflow: hidden;
+    margin: 0 auto 50px auto;
+    border-radius: 4px;
+    max-width: 1195px;
+    -webkit-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    -moz-box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+    box-shadow: 0px 0px 45px -5px rgba(0,0,0,0.36);
+}
+
+.paymentform__box--title {
+    font-family: 'geometriabold';
+    display: block;
+    color: #0556a8;
+    font-size: 20px;
+    text-aligN: center;
+    font-weighT: normal;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+}
+
+.paymentform__box--description {
+    text-transform: uppercase;
+    font-size: 11px;
+    line-height: 21px;
+    text-aligN: center;
+    font-weighT: normal;
+    displaY: block;
+    max-width: 490px;
+    margin: 0 auto 40px auto;
+}
+
+.paymentform__box .button__wrap {
+    float: left;
+    width: 100%;
+    margin: 30px 0 0 0;
+}
+
+    .paymentform__box .button__wrap .button {
+        font-family: 'geometriamedium';
+        display: block;
+        margin: auto;
+        padding: 14px 35px;
+        border-radius: 4px;
+        background: #F75527;
+        transition: .3s;
+        border: none;
+        color: #ffffff;
+        font-size: 12px;
+        text-transform: uppercase;
+        cursor: pointer;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+    }
+
+        .paymentform__box .button__wrap .button:hover {
+            background: #DC390B;
+            transition: .3s;
+        }
+
+.paybox__left {
+    float: left;
+    widtH: 45%;
+}
+
+    .paybox__left .coll-margin {
+        margin-lefT: 5%;
+    }
+
+.paybox__right {
+    float: right;
+    widtH: 45%;
+}
+
+.paybox__left label {
+    position: relative;
+    float: left;
+    width: 100%;
+    margin-bottom: 32px;
+}
+
+.paybox__left input.txt {
+    font-family: 'geometrialight';
+    font-size: 16px;
+    float: left;
+    width: 90%;
+    background: none;
+    border: none;
+    border-bottom: 1px solid #0552A5;
+    padding: 7px 5%;
+}
+
+.paybox__left .coll-50 {
+    float: left;
+    widtH: 47.5%;
+}
+
+.paybox__left .coll-25 {
+    float: left;
+    widtH: 47.5%;
+}
+
+.paybox__left .coll-15 {
+    float: left;
+    widtH: 21%;
+}
+
+.paybox__left .coll-50 .sub_title {
+    margin-left: 6%;
+}
+
+.paybox__left .coll-50 input {
+    width: 80%;
+    padding: 7px 10%;
+}
+
+.paybox__left .coll-15 input {
+    width: 70%;
+    padding: 7px 15%;
+}
+
+.paybox__left .sub_title {
+    padding-lefT: 5%;
+    float: left;
+    color: #808080;
+    font-size: 9px;
+    text-transform: uppercase;
+}
+
+    .paybox__left .sub_title:before {
+        font-family: 'FontAwesome';
+        font-size: 10px;
+        content: '\f041';
+        displaY: inline-block;
+        margin: 0 3px 0 0;
+        width: 9px;
+        height: 9px;
+    }
+
+    .paybox__left .sub_title.ico1:before {
+        content: '\f041';
+    }
+
+    .paybox__left .sub_title.ico2:before {
+        content: '\f007';
+    }
+
+    .paybox__left .sub_title.ico3:before {
+        content: '\f073';
+    }
+
+    .paybox__left .sub_title.ico4:before {
+        content: '\f017';
+    }
+
+    .paybox__left .sub_title.ico6:before {
+        content: '\f047';
+    }
+
+    .paybox__left .sub_title.ico7:before {
+        content: '\f0b1';
+    }
+
+.paybox__right .card {
+    position: relative;
+    width: 482px;
+    height: 254px;
+    display: block;
+    margin: auto;
+    background: url(images/card.png)
+}
+
+.paybox__right .card__number {
+    display: block;
+    padding: 0 20px;
+    overflow: hidden;
+    width: 301px;
+}
+
+    .paybox__right .card__number label {
+        float: left;
+        width: 100%;
+    }
+
+    .paybox__right .card__number input {
+        font-family: 'geometrialight';
+        font-size: 16px;
+        float: left;
+        width: 17%;
+        margin: 0 2%;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #0552A5;
+        padding: 7px 2%;
+    }
+
+    .paybox__right .card__number .sub--title {
+        padding-lefT: 2%;
+        margin-top: 40px;
+        float: left;
+        width: 100%;
+        color: #808080;
+        font-size: 9px;
+        text-transform: uppercase;
+    }
+
+.paybox__right .card__date {
+    float: left;
+    width: 145px;
+    margin: 0 0 0 171px;
+}
+
+    .paybox__right .card__date input {
+        font-family: 'geometrialight';
+        font-size: 16px;
+        float: right;
+        width: 36%;
+        margin: 0 0 0 10%;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #0552A5;
+        padding: 7px 2%;
+    }
+
+    .paybox__right .card__date .sub--title {
+        padding-lefT: 2%;
+        text-align: center;
+        text-align: center;
+        margin-top: 30px;
+        float: left;
+        width: 100%;
+        color: #808080;
+        font-size: 9px;
+        text-transform: uppercase;
+    }
+
+.paybox__right .card__cvv {
+    width: 60px;
+    position: absolute;
+    right: 40px;
+    bottom: 71px;
+}
+
+    .paybox__right .card__cvv input {
+        font-family: 'geometrialight';
+        font-size: 16px;
+        display: block;
+        margin: auto;
+        width: 96%;
+        background: none;
+        border: none;
+        border-bottom: 1px solid #0552A5;
+        padding: 7px 2%;
+    }
+
+    .paybox__right .card__cvv .sub--title {
+        padding-lefT: 2%;
+        text-align: center;
+        float: left;
+        width: 100%;
+        color: #808080;
+        font-size: 9px;
+        text-transform: uppercase;
+    }
+
+
+
+
+
+
+
+
+footer {
+    position: absolute;
+    width: 100%;
+    bottom: 20px;
+    overflow: hidden;
+}
+
+    footer .wrapper {
+        max-width: 1280px;
+        display: block;
+        margin: auto;
+        padding: 0 10px;
+    }
+
+    footer.normal {
+        position: initial;
+        float: left;
+        width: 100%;
+        margin: 0;
+        padding: 15px 0;
+        bottom: 0;
+        background: #0357B9;
+        margin-top: -40px
+    }
+
+    footer.nomargin {
+        margin-top: 0
+    }
+
+    footer .copyring {
+        float: left;
+        font-size: 9px;
+        color: rgba(255, 255, 255, 0.3);
+        text-transform: uppercase;
+    }
+
+        footer .copyring p {
+            float: left;
+        }
+
+            footer .copyring p + p {
+                margin-left: 15px;
+            }
+
+    footer .social {
+        float: right;
+    }
+
+        footer .social li {
+            float: left;
+        }
+
+            footer .social li .ico {
+                float: left;
+                width: 6px;
+                height: 10px;
+                margin-left: 10px;
+                background: url(images/social.png);
+                opacity: .4;
+                transition: .3s;
+            }
+
+                footer .social li .ico:hover {
+                    opacity: 1;
+                    transition: .3s;
+                }
+
+                footer .social li .ico.ico1 {
+                    background-position: 0 0
+                }
+
+                footer .social li .ico.ico2 {
+                    background-position: -14px 0;
+                    width: 12px;
+                }
+
+                footer .social li .ico.ico3 {
+                    background-position: -34px 0;
+                    width: 10px;
+                }
+
+                footer .social li .ico.ico4 {
+                    background-position: -53px 0;
+                    width: 10px;
+                }
+
+
+.ui-datepicker {
+    z-index: 50 !important;
+    font-family: 'geometriamedium';
+    width: 190px;
+    padding: 20px;
+    background: #FFF;
+    -webkit-box-shadow: 0px 0px 56px -6px rgba(0,0,0,0.56);
+    -moz-box-shadow: 0px 0px 56px -6px rgba(0,0,0,0.56);
+    box-shadow: 0px 0px 56px -6px rgba(0,0,0,0.56);
+    border-radius: 4px;
+}
+
+.ui-datepicker-prev {
+    float: left;
+}
+
+.ui-datepicker-next {
+    float: right;
+}
+
+.ui-datepicker-calendar {
+    width: 100%;
+}
+
+    .ui-datepicker-calendar td {
+        text-align: center;
+        padding: 6px 0;
+    }
+
+    .ui-datepicker-calendar tr {
+        margin-bottom: 5px;
+    }
+
+    .ui-datepicker-calendar td a {
+        text-decoration: none;
+    }
+
+    .ui-datepicker-calendar td.ui-datepicker-other-month:hover {
+        background: none;
+        color: #FFF;
+        border-radius: 3px;
+    }
+
+    .ui-datepicker-calendar td:hover {
+        background: #E44E24;
+        color: #FFF;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+        .ui-datepicker-calendar td:hover a {
+            color: #FFF;
+        }
+
+.ui-datepicker-header {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.ui-datepicker-title {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    color: #0556A7;
+    font-size: 12px;
+}
+
+.ui-datepicker-next {
+    width: 10px;
+    height: 13px;
+    text-indent: -9999px;
+    background: url(images/arrow.png);
+    background-position: -10px 0;
+    cursor: pointer;
+}
+
+.ui-datepicker-prev {
+    width: 10px;
+    height: 13px;
+    text-indent: -9999px;
+    background: url(images/arrow.png);
+    cursor: pointer;
+}
+
+.ui-state-disabled {
+    opacity: .3;
+}
+
+#login__password {
+    display: none;
+}
+
+#registration__form {
+    display: none;
+}
+
+    #registration__form .login__box {
+        max-widtH: 700px;
+    }
+
+    #registration__form .form {
+        height: 380px;
+        overflow: auto;
+        width: 98%;
+        padding-right: 3%;
+    }
+
+
+.popup {
+    displaY: none;
+    position: absolute;
+    lefT: 50%;
+    top: 60px;
+    margin: 0 0 0 -350px;
+    width: 660px;
+    background: #FFF;
+    border-radius: 5px;
+    padding: 20px;
+    z-index: 150;
+}
+
+    .popup.minipopup {
+        width: 320px;
+        margin: 0 0 0 -160px;
+    }
+
+.popup--title {
+    display: block;
+    text-aligN: center;
+    font-family: 'geometriabold';
+    color: #0556a8;
+    font-size: 20px;
+    text-aligN: center;
+    font-weighT: normal;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
+.popup.no-center .form {
+    width: 96%;
+    padding: 0 2%;
+}
+
+.popup .form {
+    width: 260px;
+    display: block;
+    margin: auto;
+    overflow: hidden;
+}
+
+    .popup .form label {
+        text-align: center;
+        float: left;
+        width: 100%;
+        margin-bottom: 25px;
+    }
+
+        .popup .form label.col-50 {
+            width: 47%;
+            float: left;
+        }
+
+        .popup .form label.col-25 {
+            width: 20.5%;
+            float: left;
+        }
+
+        .popup .form label.col-100 .sub_title {
+            padding-lefT: 2.5%;
+        }
+
+        .popup .form label.col-100 input.txt {
+            width: 95%;
+            padding: 7px 2.5%;
+        }
+
+        .popup .form label.margin {
+            margin-left: 6%;
+        }
+
+        .popup .form label.no {
+            margin-bottom: 0;
+        }
+
+        .popup .form label input.txt {
+            font-family: 'geometrialight';
+            font-size: 16px;
+            float: left;
+            width: 90%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #0552A5;
+            padding: 7px 5%;
+        }
+
+        .popup .form label select {
+            font-family: 'geometrialight';
+            font-size: 16px;
+            float: left;
+            width: 100%;
+            background: none;
+            border: none;
+            border-bottom: 1px solid #0552A5;
+            padding: 7px 5%;
+        }
+
+        .popup .form label input.txt:active {
+            color: #343742;
+        }
+
+        .popup .form label input.button {
+            font-family: 'geometriamedium';
+            display: inline-block;
+            margin: auto;
+            padding: 14px 35px;
+            border-radius: 4px;
+            background: #F75527;
+            transition: .3s;
+            border: none;
+            color: #ffffff;
+            font-size: 12px;
+            text-transform: uppercase;
+            cursor: pointer;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+            .popup .form label input.button:hover {
+                background: #DC390B;
+                transition: .3s;
+            }
+
+        .popup .form label .sub_title {
+            padding-lefT: 5%;
+            float: left;
+            color: #808080;
+            font-size: 9px;
+            text-transform: uppercase;
+        }
+
+.popup .checkbox {
+    position: absolute;
+    opacity: 0;
+    width: 17px;
+    height: 17px;
+}
+
+    .popup .checkbox:not(checked) + label {
+        position: relative;
+    }
+
+    .popup .checkbox + label {
+        cursor: pointer;
+        margin: 0 !important;
+    }
+
+.popup .labeltxt {
+    font-family: 'geometriamedium';
+    font-size: 12px;
+    text-transform: uppercase;
+    float: left;
+    width: 100%;
+}
+
+.popup .checkbox:not(checked) + label:before {
+    content: '';
+    position: relative;
+    top: 2px;
+    left: 0;
+    display: inline-block;
+    width: 14px;
+    height: 12px;
+    margin: 0 7px 0 0;
+    background: url(images/checkbox.png);
+}
+
+.popup .checkbox:checked + label:before {
+    background-position: 0 -13px;
+}
+
+
+.maska {
+    displaY: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    righT: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 86, 168, 0.9);
+    z-index: 100;
+}
+
+#registration__form .form::-webkit-scrollbar {
+    width: 2px;
+}
+
+#registration__form .form::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+}
+
+#registration__form .form::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    background: #427DBB;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+}
+
+@media screen and (max-width:1060px) {
+    .paybox__left {
+        width: 40%;
+    }
+
+    .paybox__right {
+        widtH: 57%;
+    }
+}
+
+@media screen and (max-width:1040px) {
+    .form__order .order_box {
+        width: 18%;
+    }
+
+        .form__order .order_box.col-1 {
+            width: 10%;
+        }
+
+        .form__order .order_box.col-2 {
+            width: 15%;
+        }
+}
+
+
+@media screen and (max-width:980px) {
+    .menu .menu__right, .menu .menu__left {
+        width: 36%;
+    }
+
+    .form__order {
+        padding: 30px;
+    }
+
+    .menu .menu__right, .menu .menu__left {
+        display: none
+    }
+
+    .trigger {
+        display: block;
+    }
+
+    .price.right {
+        margin: 0;
+    }
+}
+
+@media screen and (max-width:920px) {
+    .form__order .order_box {
+        width: 100% !important;
+    }
+
+        .form__order .order_box + .order_box {
+            margin-left: 0;
+        }
+
+        .form__order .order_box.col-1 {
+            width: 100% !important;
+        }
+
+        .form__order .order_box.col-2 {
+            width: 100% !important;
+        }
+
+        .form__order .order_box .add {
+            float: none;
+            text-align: center;
+        }
+
+    .order_boxing {
+        border-bottom: 1px dashed #D2D2D2;
+        margin-bottom: 50px;
+    }
+
+        .order_boxing.box-col3 .order_box {
+            width: 30%;
+        }
+
+        .order_boxing.box-col3.col-1 {
+            width: 30%;
+        }
+
+    .form__order .order_box {
+        width: 98% !important;
+        left: 1%;
+    }
+
+        .form__order .order_box + .order_box {
+            margin-left: 0;
+        }
+
+        .form__order .order_box.col-1 {
+            width: 98% !important;
+        }
+
+        .form__order .order_box.col-2 {
+            width: 98% !important;
+        }
+
+        .form__order .order_box .add {
+            float: none;
+            text-align: center;
+        }
+
+    .form__order .button_boxing .input {
+        width: 100%;
+        margin: 0;
+        top: 0;
+        margin-bottom: 15px;
+    }
+
+    .content {
+        background: url(images/bg3.jpg);
+        background-size: none;
+        background-position: top left;
+    }
+
+    .forms_maps .left__maps_big {
+        width: 60%;
+    }
+
+    .forms_maps .right__maps_big {
+        width: 36%;
+    }
+
+    .button.right {
+        margin-left: 0px !important;
+    }
+}
+
+@media screen and (max-width:860px) {
+    .paybox__left {
+        width: 100%;
+    }
+
+    .paybox__right {
+        widtH: 100%;
+    }
+}
+
+@media screen and (max-width:800px) {
+    .logo {
+        position: relative;
+        floaT: left;
+        lefT: 0;
+        top: 0;
+        margin: 16px 0 0 5%;
+    }
+
+    .form__order2 .order_box .search {
+        width: 175px
+    }
+}
+
+_maps .right__maps_big {
+    width: 100%;
+}
+
+rgin:0 0 40px 0;
+}
+
+.forms_maps .right__maps_big {
+    width: 100%;
+}
+
+.little {
+    width: 86%;
+    margin: 0;
+}
+
+}
+
+@media screen and (max-width:590px) {
+    .popup.little {
+        width: 86%;
+        margin: 0;
+        left: 50% !important;
+    }
+
+    .form__order .button_boxing .button {
+        width: 100%;
+        margin: 0;
+    }
+
+    .form__order .button_boxing input {
+        padding: 0;
+    }
+
+    .form__order .form label.ico__fly:after {
+        left: 50%;
+        top: -21px;
+    }
+
+    .order_boxing.box-col3 .order_box {
+        width: 100% !important;
+    }
+
+    .article.nopadding {
+        margin: 0 4%;
+        width: 90%;
+    }
+
+    .article .article__txt {
+        -webkit-column-count: 1;
+        -moz-column-count: 1;
+        column-count: 1;
+    }
+
+    .form__order .button_boxing .input {
+        float: left;
+        width: 98% !important;
+        margin: 0 0 20px 0;
+    }
+
+    .form__order .button_boxing .button__secont {
+        width: 100%;
+    }
+
+    .paybox__right .card {
+        width: 100%;
+        background: url(images/card.png);
+        background-swidth: 590px)
+
+{
+    .form__order .button_boxing .button
+
+{
+    width: 100%;
+    margin: 0;
+}
+
+.form__order .button_boxing input {
+    padding: 0;
+}
+
+.form__order .form label.ico__fly:after {
+    left: 50%;
+    top: -21px;
+}
+
+.order_boxing.box-col3 .order_box {
+    width: 100% !important;
+}
+
+.article.nopadding {
+    margin: 0 4%;
+    width: 90%;
+}
+
+.article .article__txt {
+    -webkit-column-count: 1;
+    -moz-column-count: 1;
+    column-count: 1;
+}
+
+.form__order .button_boxing .input {
+    float: left;
+    width: 98% !important;
+    margin: 0 0 20px 0;
+}
+
+.form__order .button_boxing .button__secont {
+    width: 100%;
+}
+
+.paybox__right .card {
+    width: 100%;
+    background: url(images/card.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.paybox__right .card__number {
+    width: 61%;
+}
+
+    .paybox__right .card__number .sub--title {
+        margin-top: 20px;
+    }
+
+.paybox__right .card__date {
+    width: 30%;
+    margin: 0 0 0 34%;
+}
+
+.edit_profile .form label.col-50 {
+    width: 100%;
+}
+
+    .edit_profile .form label.col-50.margin {
+        margin-left: 0;
+    }
+
+.edit_profile .form label.col-25 {
+    width: 47%;
+}
+
+    .edit_profile .form label.col-25.one.margin {
+        margin-left: 0;
+    }
+
+.edit_profile .form label.col-100 input.txt {
+    width: 90%;
+    padding: 7px 5%;
+}
+
+.edit_profile .form label.col-100 .sub_title {
+    padding-lefT: 5%;
+}
+
+.edit_profile .form label select.col-33 {
+    float: left;
+    width: 30%;
+    padding: 6px 4%;
+}
+
+.edit_profile .form label.col-25.one.margin .sub_title {
+    padding-lefT: 10%;
+}
+
+.edit_profile .form label.col-25.one.margin select {
+    padding: 6px 8%;
+}
+
+}
+
+@media screen and (max-width:510px) {
+    .paybox__right .card {
+        background: none
+    }
+
+    .paybox__right .card__number {
+        width: 100%;
+        padding: 0;
+    }
+
+    .paybox__right .card__date {
+        width: 50%;
+        margin: 0;
+    }
+
+        .paybox__right .card__date input {
+            float: left;
+            margin: 0 6% 0 4%;
+        }
+
+    .paybox__right .card__cvv {
+        position: relative;
+        float: right;
+        width: 30%;
+        right: 0;
+        bottom: 0;
+    }
+
+        .paybox__right .card__cvv .sub--title {
+            margin-top: 30px;
+        }
+
+    .paybox__left .phonebox {
+        width: 100%;
+    }
+
+    .paybox__left .extbox {
+        width: 45%;
+    }
+
+    .paybox__left .zipcode {
+        width: 45%;
+    }
+}
+
+@media screen and (max-width:380px) {
+    footer .copyring {
+        float: left;
+        width: 100%;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+        footer .copyring p {
+            float: none;
+            display: inline-block;
+        }
+
+    footer .social {
+        float: left;
+        width: 100%;
+        text-align: center;
+    }
+
+        footer .social li {
+            float: none;
+            display: inline-block;
+        }
+
+    .popup .form label {
+        width: 100% !important;
+        margin-left: 0 !important;
+    }
+}
