@@ -37,8 +37,6 @@ Public Class Dashboard
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
-                Me.gvServiceProviderMatrix.Visible = True
-
                 '20160517 - pab - fix carrierid = 0 preventing quotes
                 If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
                     _carrierid = 65
@@ -59,22 +57,6 @@ Public Class Dashboard
                     _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
                 End If
 
-                Dim oLookup As New PopulateLookups
-                Me.departtime_combo.Items.Clear()
-                dt = oLookup.TimeDD("All")
-                Me.departtime_combo.DataSource = dt.DefaultView
-                Me.departtime_combo.DataBind()
-                Me.departtime_combo.SelectedValue = "09:00 AM"
-
-            Else
-                '20131016 - pab - fix session timeout
-                If IsNothing(Session("flights")) And IsNothing(Session("triptype")) Then
-                    lblMsg.Text = da.GetSetting(_carrierid, "TimeoutMessage")
-                    gvServiceProviderMatrix.EmptyDataText = lblMsg.Text
-                    dtflights.Clear()
-                    Me.gvServiceProviderMatrix.DataSource = dtflights
-                    Me.gvServiceProviderMatrix.DataBind()
-                End If
             End If
 
             '20100608 - pab - add logo to email
