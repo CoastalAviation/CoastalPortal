@@ -60,6 +60,12 @@ Public Class AirTaxi
     Public Shared companywelcomeleft As String
     Public Shared companywelcomeright As String
 
+    '20171027 - pab - calendar
+    Public Shared modelrunid As String
+    Public Shared _CalendarTimeZone As String
+    Public Shared _CalendarDetailVisible As Boolean
+    Public Shared usedevdb As Boolean = False
+
     '20140723 - pab - use sql storage for carrier logos and aircraft images
     '20150114 - pab - use blob storage for carrier logos and aircraft images instead of sql
     Shared Function GetImageURLByATSSID(ByRef carrierid As Integer, ByRef ServiceTypeID As Integer, ByRef imgtype As String) As String

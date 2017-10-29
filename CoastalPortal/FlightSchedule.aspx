@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="FlightSchedule.aspx.vb" Inherits="CoastalPortal.FlightSchedule" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="asp" %>
+<%@ Register src="Controls/OptimizerCalendar.ascx" tagname="OptimizerCalendar" tagprefix="uc3" %>
 
 <!DOCTYPE html>
 
@@ -13,9 +14,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 	<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <script type="text/javascript" id="telerikClientEvents1">
-        function cmdFindFlights_Clicking(sender, args) {
-            document.getElementById("PleaseWait").style.visibility = "visible";
-        }
         function onLoad(sender) {
             var div = sender.get_element();
 
@@ -47,8 +45,265 @@
             combo._focused = false;
         }
     </script>
+    <script language="javascript" type="text/javascript" >
+        var mouseX;
+        var mouseY;
+        var winW;
+        var winH;
+        var isIE = document.all ? true : false;
+
+        //GET MOUSE POSITION	
+        if (!isIE) document.captureEvents(Event.MOUSEMOVE);
+
+        document.onmousemove = getMousePosition;
+
+        function getMousePosition(mp) {
+            var _x;
+            var _y;
+
+            var _w;
+            var _h;
+
+            if (!isIE) {
+                _x = mp.pageX;
+                _y = mp.pageY;
+
+                _w = window.innerWidth;
+                _h = window.innerHeight;
+            }
+            if (isIE) {
+                try {
+                    _x = event.clientX + document.body.scrollLeft;
+                    _y = event.clientY + document.body.scrollTop;
+                }
+                catch (e) {
+                    _x = event.clientX;
+                    _y = event.clientY;
+                }
+                try {
+                    _w = document.body.clientWidth;
+                    _h = document.body.clientHeight;
+                }
+                catch (e) {
+
+                }
+            }
+            mouseX = _x;
+            mouseY = _y;
+
+            winW = _w;
+            winH = _h;
+
+            //window.status = winW + ' ' + winH;
+            //window.status = mouseX + ' ' + mouseY;
+            return true;
+        }
+        function getScrollXY() {
+            var scrOfX = 0, scrOfY = 0;
+            if (typeof (window.pageYOffset) == 'number') {
+                //Netscape compliant
+                scrOfY = window.pageYOffset;
+                scrOfX = window.pageXOffset;
+            } else if (document.body && (document.body.scrollLeft || document.body.scrollTop)) {
+                //DOM compliant
+                scrOfY = document.body.scrollTop;
+                scrOfX = document.body.scrollLeft;
+            } else if (document.documentElement && (document.documentElement.scrollLeft || document.documentElement.scrollTop)) {
+                //IE6 standards compliant mode
+                scrOfY = document.documentElement.scrollTop;
+                scrOfX = document.documentElement.scrollLeft;
+            }
+            mouseX = scrOfX;
+            mouseY = scrOfY;
+            return true; //[ scrOfX, scrOfY ];
+        }
+        function cancelBubbleUp() {
+            var e = window.event;
+            // handle event
+            e.cancelBubble = true;
+            if (e.stopPropagation) e.stopPropagation();
+        }
+    </script>
+    <%--<script language="javascript" type="text/javascript">
+        function showFlightDetailPopout(flightID) {
+            var elem = document.getElementById('flightDetailContainer');
+
+            elem.style.visibility = 'visible';
+            elem.style.display = 'inline';
+
+            elem.style.visibility = 'visible';
+            elem.style.display = 'inline';
+
+            elem.style.top = (parseInt(mouseY) + 20) + 'px'; //(parseInt(mouseY) - 100) + 'px';
+            //elem.style.left = (parseInt(mouseX) - 100) + 'px';
+
+            if (parseInt(mouseX) - parseInt(elem.style.width) > 0) {
+                //too far to the right
+                if (parseInt(mouseX) +
+                    parseInt(elem.style.width) >= parseInt(winW)) {
+                    elem.style.left =
+                        parseInt(mouseX) -
+                        parseInt(elem.style.width) + 20;
+                }
+                else //just right
+                {
+                    elem.style.left = (parseInt(mouseX) - 100
+                        - parseInt(elem.style.width) / 2) + 'px';
+                }
+            }
+            else //to far to the left
+            {
+                elem.style.left = '5px';
+            }
+
+            // rk 10.30.2010 add flight editor and random number fix to refresh iframe
+            // document.getElementById('flightDetailFrame').src = 'FlightDetailPopout.aspx?flightID=' + flightID;
+            document.getElementById('flightDetailFrame').src = 'FlightEditorPopout.aspx?flightID=' + flightID + '&junk=' + (new Date()).valueOf();
+
+        }
+
+        function hideFlightDetailPopout() {
+            var elem = document.getElementById('flightDetailContainer');
+
+            //rk 10.30.2010 refresh main page after editing flight
+            parent.location.reload()
+
+            elem.style.visibility = 'hidden';
+            elem.style.display = 'none';
+        }
+    </script>--%>
+    <%--<script language="javascript" type="text/javascript">
+        function showAircraftDetailPopout(aircraftID) {
+            var elem = document.getElementById('flightDetailContainer');
+
+            elem.style.visibility = 'visible';
+            elem.style.display = 'inline';
+
+            elem.style.visibility = 'visible';
+            elem.style.display = 'inline';
+
+            elem.style.top = (parseInt(mouseY) + 45) + 'px'; //(parseInt(mouseY) - 100) + 'px';
+            //elem.style.left = (parseInt(mouseX) - 100) + 'px';
+
+            if (parseInt(mouseX) - parseInt(elem.style.width) > 0) {
+                //too far to the right
+                if (parseInt(mouseX) +
+                    parseInt(elem.style.width) >= parseInt(winW)) {
+                    elem.style.left =
+                        parseInt(mouseX) -
+                        parseInt(elem.style.width) + 20;
+                }
+                else //just right
+                {
+                    elem.style.left = (parseInt(mouseX) - 100
+                        - parseInt(elem.style.width) / 2) + 'px';
+                }
+            }
+            else //to far to the left
+            {
+                elem.style.left = '145px';
+            }
+
+            // rk 10.30.2010 add flight editor and random number fix to refresh iframe
+            // document.getElementById('flightDetailFrame').src = 'FlightDetailPopout.aspx?flightID=' + flightID;
+
+            //  document.getElementById('flightDetailFrame').src = 'AircraftDetailPopout.aspx?aircraftID=' + aircraftID;
+            document.getElementById('flightDetailFrame').src = 'AircraftDetailPopout.aspx?aircraftID=' + aircraftID + '&junk=' + (new Date()).valueOf();
+
+        }
+
+        function hideAircraftDetailPopout() {
+            var elem = document.getElementById('flightDetailContainer');
+
+            //rk 10.30.2010 refresh main page after making changes
+            parent.location.reload()
+
+            elem.style.visibility = 'hidden';
+            elem.style.display = 'none';
+        }
+    </script>--%>
+    
+<script language=javascript>
+
+        function hideOrShow(obj) {
+            if (obj.style.visibility == 'visible') {
+                hide(obj);
+            }
+            else {
+                show(obj);
+            }
+        }
+
+        function show(obj) {
+            obj.style.visibility = 'visible';
+            obj.style.position = 'relative';
+        }
+
+        function hide(obj) {
+            obj.style.visibility = 'hidden';
+            obj.style.position = 'absolute';
+        }
+
+</script>   
+ 
+<script type="text/javascript">
+    //<!--
+
+    var flightID = 0;
+    var orig = "";
+    var dest = "";
+    var flightDetail = 0;
+    var apppath = "";
+
+    function buildMenu(e1, e2, e3, e4) {
+        flightID = e1;
+        orig = e2;
+        dest = e3;
+        flightDetail = e4;
+        displayMenu();
+    }
+    function displayMenu() {
+        whichDiv = event.srcElement;
+        menu1.style.leftPos += 10;
+        menu1.style.posLeft = event.clientX;
+        menu1.style.posTop = event.clientY;
+        menu1.style.width = 120;
+        menu1.style.display = "";
+        menu1.setCapture();
+    }
+    function switchMenu() {
+        el = event.srcElement;
+        if (el.className == "menuItem") {
+            el.className = "highlightItem";
+        } else if (el.className == "highlightItem") {
+            el.className = "menuItem";
+        }
+    }
+    function clickMenu() {
+        menu1.releaseCapture();
+        menu1.style.display = "none";
+        el = event.srcElement;
+        if (el.id == "mnuFlightDetail") {
+            showFlightDetailPopout(flightID);
+        } else if (el.id == "mnuTripBuilder") {
+            window.open("flighteditor.aspx?tripnumber=" + flightDetail);
+            //        } else if (el.id == "mnuOrigAirport") {
+            //            whichDiv.style.backgroundColor = "green";
+            //        } else if (el.id == "mnuDestAirport") {
+            //            whichDiv.style.backgroundColor = "blue";
+            //        } else if (el.id == "mnuItem4") {
+            //            whichDiv.style.backgroundColor = "yellow";
+            //        if (el.id == "mnuPrintCBPForm") {
+            //            showFlightDetailPopout(flightID);
+        }
+    }
+
+    //-->
+</script>
    </head>
 <body>
+    <script type="text/javascript" src="Scripts/wz_tooltip.js"></script>
+    <script type="text/javascript" src="tip_balloon/tip_balloon.js"></script>
     <form id="form1" runat="server">
         <telerik:RadStyleSheetManager ID="RadStyleSheetManager1" runat="server"></telerik:RadStyleSheetManager>
         <telerik:RadScriptManager ID="ScriptManager1" runat="server" EnableTheming="True">
@@ -200,377 +455,12 @@
 	<div class="form__order2"  id="form_1" runat="server" >
 		<div class="title">Flight Schedule</div>
 
-		<div class="title"> <asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label> </div>
-		<%--<div class="table">
-			<div class="table__scroll">
-			<div class="table_h">
-				<span class="h">Origin</span>
-				<span class="h">Departs</span>
-				<span class="h">Destination</span>
-				<span class="h">Arrives</span>
-				<span class="h col-small">Flight Duration</span>
-				<span class="h col-small">Price</span>
-			</div>
-
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="origin_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="origin_two_1" Text="BEVERLY MUNI (BVY)">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="departs_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="departs_two_1" Text="2/23/16 9:00 AM">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="destination_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="destination_two_1" Text="WESTCHESTER COUNTY (HPN)">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="arrives_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="arrives_two_1" Text="2/23/16 9:29 AM">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item col-small">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="flight_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="flight_two_1" Text="00:29">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item col-small">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="price_one_1" Text="$5200" >  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="price_two_1" Text="$5200" >  </asp:Label></li>
-				</ul>
-			</div>
-		</div>	
-		</div>--%>
-    	<div class="table grid">
-            <asp:GridView ID="gvServiceProviderMatrix" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
-            AutoGenerateColumns="False" DataKeyNames="Origin,Departs,Destination,Arrives,Flight Duration,Price"  CssClass="table__tr">
-            <Columns >
-                <%--<asp:BoundField DataField="origin"  HeaderText="origin"  />--%>
-                <%--<asp:BoundField DataField="departs"   HeaderText="departs" />--%>
-                <%--<asp:BoundField DataField="destination"   HeaderText="destination" />--%>
-                <%--<asp:BoundField DataField="arrives"  HeaderText="arrives" />--%>
-                <%--<asp:BoundField DataField="flight_duration"   HeaderText="flight duration" />--%>
-                <%--<asp:BoundField DataField="price"   HeaderText="price" />--%>
-                <asp:TemplateField HeaderText="Select">
-                    <ItemTemplate>
-                        <asp:RadioButton ID="RadioButton1" runat="server" />
-                        <asp:HiddenField ID="HiddenField1" runat="server" Value = '<%#Eval("ID")%>' />
-                    </ItemTemplate>
-                    <ControlStyle Width="5%" />
-                    <ItemStyle Width="5%" />
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Aircraft Type" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "name")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="80px" />--%>
-                    <%--<ItemStyle Width="80px" />--%>
-                </asp:TemplateField>
-                <asp:TemplateField  HeaderText="Origin">
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "OriginFacilityName")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="200px" />--%>
-                    <%--<ItemStyle Width="200px" />--%>
-                </asp:TemplateField> 
-                <asp:TemplateField HeaderText="Departs" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Departs", "{0:G}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField  HeaderText="Destination">
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "DestinationFacilityName")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="200px" />--%>
-                    <%--<ItemStyle Width="200px" />--%>
-                </asp:TemplateField> 
-                <asp:TemplateField HeaderText="Arrives" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Arrives", "{0:g}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Flight Duration" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Flight Duration", "{0:g}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Fuel Stops">
-                    <ItemTemplate> 
-                        <%#DataBinder.Eval(Container.DataItem, "FuelStops")%> 
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Price<br />(w/o Tax)">
-                    <ItemTemplate> <%#DataBinder.Eval(Container.DataItem, "Price", "{0:c}")%> </ItemTemplate>
-                    <ItemStyle HorizontalAlign="Right" />
-                    <%--<ControlStyle Width="40px" />--%>
-                    <%--<ItemStyle Width="40px" />--%>
-                </asp:TemplateField>
-            </Columns>
-            </asp:GridView>		
-		</div>
-		<div class="form__buttons">
-                <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
-                <br />
-                <asp:Label ID="lblFlightTimeMsg" runat="server" ForeColor="Red"></asp:Label>
-			    <%--<br />--%>
-                <%--<br />--%>
-            <%--<asp:Button CssClass="button" Text="Review Qoute" runat="server" ID="CmdReview" />--%>
-            <%--&nbsp;&nbsp;&nbsp;--%>
-            <%--<div class="button_boxing order_box">
-            </div>--%>
-			<p class="price"> <asp:Label runat="server" ID="price_summary_1" Text="">  </asp:Label> </p>
+		<div> 
+            <uc3:OptimizerCalendar ID="OptimizerCalendar1" runat="server" /> 
 		</div>
 	
 	</div>
-
-    <div class="form__order">
-        <div class="form">
-            <div class="button_boxing order_box">
-                <asp:Button ID="cmdEdit" CssClass="button" Text="Edit/Email Quote" runat="server" />
-                <asp:Button CssClass="button__secont" text="Start Over" runat="server" ID="cmdStartOver1" />
-            </div>
-        </div>
-    </div>
-	
-<%--<div class="form__order2" id="form_2" runat="server">
-		<div class="title"> <asp:Label runat="server" ID="aircraft_type_txt_2" CssClass="title" Text="Cirrus SR22"> </asp:Label> </div>
-		<div class="table">
-			<div class="table__scroll">
-			<div class="table_h">
-				<span class="h">Origin</span>
-				<span class="h">Departs</span>
-				<span class="h">Destination</span>
-				<span class="h">Arrives</span>
-				<span class="h col-small">Flight Duration</span>
-				<span class="h col-small">Price</span>
-			</div>
-
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="origin_one_2" Text="WESTCHESTER COUNTY (HPN)">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="origin_two_2" Text="BEVERLY MUNI (BVY)">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="departs_one_2" Text="2/23/16 9:00 AM">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="departs_two_2" Text="2/23/16 9:00 AM">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="destination_one_2" Text="BEVERLY MUNI (BVY)">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="destination_two_2" Text="WESTCHESTER COUNTY (HPN)">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="arrives_one_2" Text="2/23/16 9:29 AM">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="arrives_two_2" Text="2/23/16 9:29 AM">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item col-small">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="flight_one_2" Text="00:29">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="flight_two_2" Text="00:29">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item col-small">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="price_one_2" Text="$5200" >  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="price_two_2" Text="$5200" >  </asp:Label></li>
-				</ul>
-			</div>
-		</div>	
-		</div>
-		<div class="form__buttons">
-            <asp:Button ID="cmdQuote" CssClass="button" Text="Generate Qoute" runat="server" />
-            <asp:Button ID="cmdStartOver" CssClass="button no__color" Text="New Quote" runat="server" />
-			<p class="price"> <asp:Label runat="server" ID="price_summary_2" Text="$5700">  </asp:Label> </p>
-		</div>
-	</div>--%>
-	
-	<div class="form__order">
-        <span class="title">EDIT Itinerary</span>
-		<div class="form">
-			<div id="orderform">
-				<span class="order_boxing first">
-					<div class="box__checkboxes">
-						<%--<label class="box__checkboxes--check">
-							 <asp:RadioButton Text="one way" id="checkbox1" CssClass="checkbox" runat="server" GroupName="fl_type" AutoPostBack="true" />
-							<label class="labeltxt" for="checkbox1">one way</label>
-						</label>
-						<label class="box__checkboxes--check">
-							 <asp:RadioButton text="round trip" id="checkbox2" CssClass="checkbox" runat="server" GroupName="fl_type" autopostback="true" />
-							<label class="labeltxt" for="checkbox2">ROUND TRIP</label>
-						</label>
-						<label class="box__checkboxes--check">
-                            <asp:RadioButton Text="multi leg" id="checkbox3" CssClass="checkbox" runat="server" GroupName="fl_type" AutoPostBack="true" />
-							<label class="labeltxt" for="checkbox3">multi Leg</label>
-						</label>--%>
-                        <div>
-                            <asp:RadioButtonList ID="rblOneWayRoundTrip" runat="server" RepeatDirection="Horizontal" AutoPostBack="True">
-                                <asp:ListItem Value="OneWay">One Way</asp:ListItem>
-                                <asp:ListItem Value="RoundTrip">Round Trip</asp:ListItem>
-                                <asp:ListItem Value="MultiLeg">Multi-Leg</asp:ListItem>
-                            </asp:RadioButtonList>
-                        </div>
-					</div>
-					
-					<div class="boxes__select">
-						<span class="order_box col-3">
-							<label>
-								<p class="sub_title ico8">Select Company</p>
-                                <asp:DropDownList ID="ddllBrokerCompanies" runat="server" AutoPostBack="True" >
-                                    </asp:DropDownList>
-							</label>	
-							
-						</span>
-						<span class="order_box col-3">
-							<label>
-								<p class="sub_title ico2">Select contact</p>
-                              <asp:DropDownList ID="ddllBrokers" runat="server" >
-                                  </asp:DropDownList>
-							</label>	
-							
-						</span>
-						<span class="order_box col-3">
-							<label>
-								<p class="sub_title ico8">Aircraft Types </p>
-                             <%--<asp:DropDownList ID="ddlAircraftServiceTypes" runat="server">
-                                <asp:ListItem Text="Aircraft types"  Value="Aircraft types"></asp:ListItem>
-                                <asp:ListItem Text="CAS"  Value="CAS"></asp:ListItem>
-                             </asp:DropDownList>--%>
-                                <div style="border-bottom-style: solid; padding-top: 6%; border-bottom-color: #0556a8; border-bottom-width: 1px; padding-bottom: 3%;">
-                                    <telerik:RadComboBox ID="RadComboBoxACInclude" runat="server" CheckBoxes="True" 
-                                        EmptyMessage="Optional Aircraft types to INCLUDE" 
-                                        EnableCheckAllItemsCheckBox="True" Width="100%">
-                                        <Items>
-                                            <%-- suppress all but light, mid and heavy per David 1/15/2016 --%>
-                                            <%--<telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Single Piston" 
-                                                ToolTip="Piston Propeller" Value="P" />--%>
-                                            <%--<telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Twin Piston" 
-                                                ToolTip="Twin Piston Propeller" Value="T" />--%>
-                                            <%--<telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Single Turboprop" 
-                                                ToolTip="TurboProp (PC12, TBM, Caravan)" Value="1" />--%>
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Twin Turboprop" 
-                                                ToolTip="TurboProp (King Air)" Value="2" />
-                                            <%--<telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Very Light Jet" 
-                                                ToolTip="Very Light Jet (Phenom 100, Mustang, Eclipse)" Value="V" />--%>
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Light Jet" 
-                                                ToolTip="Light Jet (Hawker 400)" Value="L" />
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Mid Jet" 
-                                                ToolTip="Midsize Jet (Hawker 800, Hawker 800XP)" Value="M" />
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="SuperMid Jet" 
-                                                ToolTip="Super Midsize Jet (Citation X, Challenger)" Value="U" />
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Heavy Jet" 
-                                                ToolTip="Heavy Jet (Challenger 604)" Value="H" />
-                                        </Items>
-                                    </telerik:RadComboBox>
-                                </div>
-							</label>	
-							
-						</span>
-					</div>
-				
-					<span class="order_box">
-						<label>
-							<p class="sub_title ico1">
-								Departure Point:
-								<i class="helps"></i>
-								<span class="formshover">
-									Enter an Airport Code
-									[KXXX], City, Street Address,
-									or Landmark Name
-								</span>
-							</p>
-                            <%--<asp:TextBox ID="OriginAddress" CssClass="txt" runat="server" placeholder="Airport Code, City" />--%> 
-                            <div style="border-bottom-style: solid; padding-top: 6%; border-bottom-color: #0556a8; border-bottom-width: 1px; padding-bottom: 3%;">
-                                <telerik:RadComboBox ID="OriginAddress" runat="server" EmptyMessage="Airport Code [KXXX], City" EnableLoadOnDemand="True" 
-                                    Font-Size="10pt" Height="225px" OnClientDropDownOpening="OnClientDropDownOpening1" OnClientItemsRequested="ItemsLoaded" 
-                                    OnClientItemsRequesting="OnClientItemsRequesting" OnClientSelectedIndexChanged="ProdSearch" 
-                                    OnItemsRequested="Address_ItemsRequested" OpenDropDownOnFocus="False" OpenDropDownOnLoad="true" ShowToggleImage="False" 
-                                    Width="100%">
-                                </telerik:RadComboBox>
-                            </div>
-						</label>
-					</span>
-					<span class="order_box">
-						<label class="ico__fly">
-							<p class="sub_title ico1">Destination:
-							<i class="helps"></i>
-								<span class="formshover">
-									Enter an Airport Code
-									[KXXX], City, Street Address,
-									or Landmark Name
-								</span>
-							</p>
-                            <%--<asp:TextBox ID="DestinationAddress" CssClass="txt" runat="server" placeholder="Airport Code, City" />--%> 
-                            <div style="border-bottom-style: solid; padding-top: 6%; border-bottom-color: #0556a8; border-bottom-width: 1px; padding-bottom: 3%;">
-                                <telerik:RadComboBox ID="DestinationAddress" runat="server" EmptyMessage="Airport Code [KXXX], City" EnableLoadOnDemand="True" 
-                                    Font-Size="10pt" Height="225px" OnClientDropDownOpening="OnClientDropDownOpening1" OnClientItemsRequested="ItemsLoaded" 
-                                    OnClientItemsRequesting="OnClientItemsRequesting" OnClientSelectedIndexChanged="ProdSearch" Width="100%" 
-                                    OnItemsRequested="Address_ItemsRequested" OpenDropDownOnFocus="False" OpenDropDownOnLoad="true" ShowToggleImage="False" >
-                                </telerik:RadComboBox>
-                            </div>
-						</label>
-					</span>
-					<span class="order_box col-1">
-						<label>
-							<p class="sub_title ico2">Passengers:</p>
-							<span class="plusminus">
-								<i class="plus">+</i>
-								<i class="minus">-</i>
-							</span>
-                            <asp:TextBox ID="ddlPassengers" CssClass="txt center" runat="server" value="1" placeholder="Airport Code, City" /> 
-						</label>
-					</span>
-					<span class="order_box col-1">
-						<label>
-							<p class="sub_title ico3">Depart Date:</p>
-                            <%--<asp:TextBox ID="calLeave" type="date" CssClass="txt" runat="server" placeholder="Airport Code, City" />--%> 
-                            <div style="border-bottom-style: solid; padding-top: 8%; border-bottom-color: #0556a8; border-bottom-width: 1px; padding-bottom: 3%;">
-                                <telerik:RadDatePicker ID="depart_date" runat="server" Culture="en-US" Width="100%"></telerik:RadDatePicker>
-                            </div>
-						</label>
-					</span>
-					<span class="order_box col-2">
-						<label>
-							<p class="sub_title ico4">Depart time:</p>
-                              <asp:DropDownList ID="departtime_combo" runat="server" DataTextField="TimeStr" DataValueField="TimeStr" >
-                                  <asp:ListItem Text="9:45 AM"  Value="9:45 AM"></asp:ListItem>
-                                  </asp:DropDownList>
-						</label>	
-						
-					</span>
-					<span class="order_box col-1 leggg">
-						<label>
-							<%--<p class="add" id="addLeg">+  Add Leg</p>--%>
-                            <asp:Button CssClass="button__secont" text="+  Add Leg" runat="server" ID="bttnAddLeg" Width="100%" />
-						</label>
-					</span>
-				</span>
-			</div>	
-			<div class="button_boxing order_box">
-                <asp:Label ID="lblMsg1" runat="server" ForeColor="Red"></asp:Label>
-                <br />
-                <br />
-                <asp:Button CssClass="button" text="Generate Quote" runat="server" ID="cmdQuote" />
-                <asp:Button CssClass="button__secont" text="Start Over" runat="server" ID="cmdStartOver" />
-            </div>
-		</div>
-	</div>
-		
+			
 </section>
 	
 <footer class="normal">
