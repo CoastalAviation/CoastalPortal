@@ -14,7 +14,7 @@ Public Class PortalMember
     Private _AccountType As String
     Private _PlanType As String
     Private _family As String
-    Private _PlanPeriod As String
+    'Private _PlanPeriod As Decimal?
     Private _OriginationCity As String
     Private _Username As String
     Private _PIN As String
@@ -45,14 +45,14 @@ Public Class PortalMember
     Private _TravelsPerYear As String
     Private _LicenseName As String
     Private _LicenseNumber As String
-    Private _LicenseExpires As Date
+    Private _LicenseExpires As Date?
     Private _LicenseState As String
-    Private _LicenseBirthDate As Date
+    Private _LicenseBirthDate As Date?
     Private _CardType As String
     Private _CardName As String
     Private _CardNumber As String
-    Private _CardExpiresMonth As String
-    Private _CardExpiresYear As String
+    Private _CardExpiresMonth As Decimal?
+    Private _CardExpiresYear As Decimal?
     Private _CardCVV As String
     Private _BillingAddress As String
     Private _BillingAddress2 As String
@@ -60,11 +60,11 @@ Public Class PortalMember
     Private _BillingState As String
     Private _BillingZip As String
     Private _PersonalMessage As String
-    Private _Status As String
+    Private _Status As Decimal?
     Private _Billed As String
     Private _DateCreated As Date
-    Private _DateUpdated As Date
-    Private _LastSignIn As Date
+    Private _DateUpdated As Date?
+    Private _LastSignIn As Date?
     Private _MemberSystem As Integer
     Private _UserType As String
     Private _Active As Boolean
@@ -75,25 +75,25 @@ Public Class PortalMember
     Private _CityofBirth As String
     Private _StateofBirth As String
     Private _CountryOfBirth As String
-    Private _DateOfBirth As Date
+    Private _DateOfBirth As Date?
     Private _Citizenship As String
     Private _DocumentType As String
     Private _DocumentNumber As String
     Private _CountryOfIssuance As String
-    Private _DocumentExpDate As Date
+    Private _DocumentExpDate As Date?
     Private _AdditionalDocType As String
     Private _AdditionalDocNumber As String
     Private _AdditionalDocCountry As String
-    Private _AdditionalDocExpDate As Date
+    Private _AdditionalDocExpDate As Date?
     Private _Gender As String
     Private _MiddleName As String
-    Private _IncludeInPromotions As Boolean
-    Private _canAcceptAll As Boolean
-    Public Property canAcceptAll() As Boolean
+    Private _IncludeInPromotions As Boolean?
+    Private _canAcceptAll As Boolean?
+    Public Property canAcceptAll() As Boolean?
         Get
             Return _canAcceptAll
         End Get
-        Set(ByVal value As Boolean)
+        Set(ByVal value As Boolean?)
             _canAcceptAll = value
         End Set
     End Property
@@ -139,14 +139,14 @@ Public Class PortalMember
             _family = value
         End Set
     End Property
-    Public Property PlanPeriod() As String
-        Get
-            Return _PlanPeriod
-        End Get
-        Set(ByVal value As String)
-            _PlanPeriod = value
-        End Set
-    End Property
+    'Public Property PlanPeriod() As Decimal?
+    '    Get
+    '        Return _PlanPeriod
+    '    End Get
+    '    Set(ByVal value As Decimal?)
+    '        _PlanPeriod = value
+    '    End Set
+    'End Property
     Public Property OriginationCity() As String
         Get
             Return _OriginationCity
@@ -387,11 +387,11 @@ Public Class PortalMember
             _LicenseNumber = value
         End Set
     End Property
-    Public Property LicenseExpires() As Date
+    Public Property LicenseExpires() As Date?
         Get
             Return _LicenseExpires
         End Get
-        Set(ByVal value As Date)
+        Set(ByVal value As Date?)
             _LicenseExpires = value
         End Set
     End Property
@@ -403,11 +403,11 @@ Public Class PortalMember
             _LicenseState = value
         End Set
     End Property
-    Public Property LicenseBirthDate() As Date
+    Public Property LicenseBirthDate() As Date?
         Get
             Return _LicenseBirthDate
         End Get
-        Set(ByVal value As Date)
+        Set(ByVal value As Date?)
             _LicenseBirthDate = value
         End Set
     End Property
@@ -435,19 +435,19 @@ Public Class PortalMember
             _CardNumber = value
         End Set
     End Property
-    Public Property CardExpiresMonth() As String
+    Public Property CardExpiresMonth() As Decimal?
         Get
             Return _CardExpiresMonth
         End Get
-        Set(ByVal value As String)
+        Set(ByVal value As Decimal?)
             _CardExpiresMonth = value
         End Set
     End Property
-    Public Property CardExpiresYear() As String
+    Public Property CardExpiresYear() As Decimal?
         Get
             Return _CardExpiresYear
         End Get
-        Set(ByVal value As String)
+        Set(ByVal value As Decimal?)
             _CardExpiresYear = value
         End Set
     End Property
@@ -507,11 +507,11 @@ Public Class PortalMember
             _PersonalMessage = value
         End Set
     End Property
-    Public Property Status() As String
+    Public Property Status() As Decimal?
         Get
             Return _Status
         End Get
-        Set(ByVal value As String)
+        Set(ByVal value As Decimal?)
             _Status = value
         End Set
     End Property
@@ -523,27 +523,27 @@ Public Class PortalMember
             _Billed = value
         End Set
     End Property
-    Public Property DateCreated() As Date
+    Public Property DateCreated() As Date?
         Get
             Return _DateCreated
         End Get
-        Set(ByVal value As Date)
+        Set(ByVal value As Date?)
             _DateCreated = value
         End Set
     End Property
-    Public Property DateUpdated() As Date
+    Public Property DateUpdated() As Date?
         Get
             Return _DateUpdated
         End Get
-        Set(ByVal value As Date)
+        Set(ByVal value As Date?)
             _DateUpdated = value
         End Set
     End Property
-    Public Property LastSignIn() As Date
+    Public Property LastSignIn() As Date?
         Get
             Return _LastSignIn
         End Get
-        Set(ByVal value As Date)
+        Set(ByVal value As Date?)
             _LastSignIn = value
         End Set
     End Property
@@ -627,11 +627,11 @@ Public Class PortalMember
             _CountryOfBirth = value
         End Set
     End Property
-    Public Property DateOfBirth() As Date
+    Public Property DateOfBirth() As Date?
         Get
             Return _DateOfBirth
         End Get
-        Set(ByVal value As Date)
+        Set(ByVal value As Date?)
             _DateOfBirth = value
         End Set
     End Property
@@ -667,11 +667,11 @@ Public Class PortalMember
             _CountryOfIssuance = value
         End Set
     End Property
-    Public Property DocumentExpDate() As Date
+    Public Property DocumentExpDate() As Date?
         Get
             Return _DocumentExpDate
         End Get
-        Set(ByVal value As Date)
+        Set(ByVal value As Date?)
             _DocumentExpDate = value
         End Set
     End Property
@@ -699,11 +699,11 @@ Public Class PortalMember
             _AdditionalDocCountry = value
         End Set
     End Property
-    Public Property AdditionalDocExpDate() As Date
+    Public Property AdditionalDocExpDate() As Date?
         Get
             Return _AdditionalDocExpDate
         End Get
-        Set(ByVal value As Date)
+        Set(ByVal value As Date?)
             _AdditionalDocExpDate = value
         End Set
     End Property
@@ -723,11 +723,11 @@ Public Class PortalMember
             _MiddleName = value
         End Set
     End Property
-    Public Property IncludeInPromotions() As Boolean
+    Public Property IncludeInPromotions() As Boolean?
         Get
             Return _IncludeInPromotions
         End Get
-        Set(ByVal value As Boolean)
+        Set(ByVal value As Boolean?)
             _IncludeInPromotions = value
         End Set
     End Property

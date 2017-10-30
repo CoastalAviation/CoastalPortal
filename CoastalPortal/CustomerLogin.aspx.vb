@@ -139,9 +139,10 @@ Public Class loginpage
 
         awclookup.Clear()
             AWC = odb.AircraftWeightClass.ToList()
-            For Each x As WeightClass In AWC
-                awclookup.Add(Trim(x.AircraftType), Trim(x.AircraftWeightClass))
-            Next
+        For Each x As WeightClass In AWC
+            awclookup.Add(Trim(x.AircraftType), Trim(x.AircraftWeightClass))
+        Next
+        'LoginUser = pdb.Members.FirstOrDefault()
         LoginUser = pdb.Members.Where(Function(x) Trim(x.Email).ToUpper = username And Trim(x.PIN) = Password And Trim(x.CarrierID) = _carrierid).FirstOrDefault()
         'If Not rs.EOF Then
         If LoginUser IsNot Nothing Then

@@ -5,7 +5,7 @@ Namespace Models
     Public Class PortalContext
         Inherits DbContext
         Public Sub New()
-            MyBase.New(OptimizerDB)
+            MyBase.New(PortalDB)
             Configuration.ProxyCreationEnabled = False
         End Sub
         Protected Overrides Sub OnModelCreating(ByVal modelBuilder As DbModelBuilder)
