@@ -2,6 +2,8 @@
 <%@ Import Namespace="CoastalPortal.AirTaxi" %>
 <%@ Import Namespace="System.Web.Services.Description" %>
 
+<asp:Content ID="Content2" ContentPlaceHolderID="HeadContent" runat="server">
+
     <style type="text/css">
         /*
         .auto-style15 {
@@ -116,6 +118,8 @@
     }
 
     </style>
+    </asp:content>
+<asp:Content ID="Content3" ContentPlaceHolderID="BetweenContent" runat="server">
      <telerik:RadCodeBlock ID="radCodeBlock" runat="server">
         <script type="text/javascript" language="javascript">
             var daaRecieved;
@@ -182,12 +186,10 @@
         </script>
     </telerik:RadCodeBlock>
 
-
+    </asp:Content>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
-    <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server"></telerik:RadAjaxManager>
-    <telerik:RadScriptManager ID="RadScriptManager1" runat="server"></telerik:RadScriptManager>
     <div>
         <table id="tryme" style="vertical-align: top; width: auto" runat="server">
             <tr style="vertical-align: top;">
