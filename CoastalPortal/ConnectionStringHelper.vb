@@ -1,6 +1,9 @@
 ﻿Imports CoastalPortal.AirTaxi
 
 Public Class ConnectionStringHelper
+    Public Shared ts As String = ""
+    Public Shared usevmdb As Boolean = True
+    Public Shared testflag As String = ""
 
     '20140523 - pab - change to dynamic optimizer database location
     Shared Function getglobalconnectionstring(connection As String) As String

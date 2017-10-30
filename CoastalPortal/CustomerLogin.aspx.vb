@@ -1,7 +1,9 @@
 ﻿Imports CoastalPortal.AirTaxi
+Imports CoastalPortal.Models
 
 Public Class loginpage
     Inherits System.Web.UI.Page
+
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -64,6 +66,7 @@ Public Class loginpage
 
         End Try
 
+
     End Sub
 
     Protected Sub Page_PreRender(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRender
@@ -120,211 +123,172 @@ Public Class loginpage
     End Sub
 
     Protected Sub imgLogin_Click(sender As Object, e As EventArgs) Handles imgLogin.Click
+        Dim AWC As New List(Of WeightClass)
+        Dim LoginUser As New PortalMember
+        Dim mycarrierprofile As New CarrierProfile
+        Dim odb As New OptimizerContext
+        Dim pdb As New PortalContext
 
 
         '20160602 - pab - implement remember me 
         Dim username As String = txtEmail.Text
         Dim Password As String = txtPin.Text
 
-        Dim ValidationResult As Boolean = ValidateLogin(username, Password)
-        If ValidationResult = True Then
+        'Dim ValidationResult As Boolean = ValidateLogin(username, Password)
+        'If ValidationResult = True Then
 
-            '' Create Cookie and Store the Login Detail in it if check box is checked
-            'If (chkbox.Checked = True) Then
-            '    Dim mycookie As New HttpCookie("CASLoginDetail")
-            '    mycookie.Values("Username") = txtEmail.Text.Trim()
-            '    mycookie.Values("Password") = txtPin.Text.Trim()
-            '    mycookie.Expires = Date.Now.AddDays(1)
+        awclookup.Clear()
+            AWC = odb.AircraftWeightClass.ToList()
+            For Each x As WeightClass In AWC
+                awclookup.Add(Trim(x.AircraftType), Trim(x.AircraftWeightClass))
+            Next
+            LoginUser = pdb.Members.Where(Function(x) x.Email.ToUpper = username.ToUpper.ToString.Trim And x.PIN = Password.Trim).FirstOrDefault()
+        'If Not rs.EOF Then
+        If LoginUser IsNot Nothing Then
+            If LoginUser.Active Then
+                Session("defaultemail") = LoginUser.Email.Trim
+                Session("carrierid") = LoginUser.CarrierID
+                Session("AcceptAll") = LoginUser.canAcceptAll
+                mycarrierprofile = odb.CarrierProfiles.Find(LoginUser.CarrierID)
+                Session("Profile") = mycarrierprofile
+                Session("LoginUser") = LoginUser
+                Session("PlanType") = LoginUser.PlanType
+                Session("FirstName") = LoginUser.FirstName
+                Session("email") = Me.txtEmail.Text
+                Session("Pin") = Me.txtPin.Text
+                Session("DateCreated") = LoginUser.DateCreated
+                Session("IsLoggedIn") = True
+                Session("MemberID") = LoginUser.UserID
+                Session("MemberIDCarrier") = If(LoginUser.CarrierID.ToString, 0)
+                Session("datecreated") = If(LoginUser.DateCreated.ToString, Now)
 
-            '    Response.Cookies.Add(mycookie)
-            'End If
+                Me.txtmsg.Text = "Welcome Back " & LoginUser.FirstName & "." & vbCr & vbLf & vbCr & vbLf & "You are a valued " & LoginUser.PlanType & " level member. " & vbCr & vbLf
 
-            '20160410 - pab - selworthy integration
-            Response.Redirect("RunOptimizer.aspx", True)
+                If LoginUser.LastSignIn.ToString() IsNot Nothing Then
+                    Me.txtmsg.Text = Me.txtmsg.Text & vbCr & vbLf
+                    Me.txtmsg.Text = Me.txtmsg.Text & "Your last sign in was " & LoginUser.LastSignIn & vbCr & vbLf
+                End If
+
+                Session("family") = If(LoginUser.family.ToString(), "NO")
+
+                Dim da As New DataAccess
+                If LoginUser.UserType = "A" Then
+                    'login successful
+                    Session("usertype") = LoginUser.UserType
+                    Session.Timeout = CInt(da.GetSetting(_carrierid, "SessionTimeout")) 'rk 10.18.2010 set session timeout as seteting
+                Else
+                    Session("usertype") = "M"
+
+                End If
+                If (LoginUser.DateCreated.ToString Is Nothing) Then LoginUser.DateCreated = Now
+                LoginUser.LastSignIn = Now
+                pdb.SaveChanges()
+            Else
+                    Me.txtmsg.Text = ("Your account is no longer active")
+                Exit Sub
+            End If
+        Else
+                Me.txtmsg.Text = ("Invalid Email Address or Pin")
+            Exit Sub
         End If
 
 
-
-
-        Exit Sub
-
-
-
-
         Session("IsLoggedIn") = False
-
-
-
-
         Dim path As String
 
         path = Me.Application.Item("path")
 
-
-
         'Session.Abandon()
 
 
-        Session("email") = Me.txtEmail.Text
-        Session("Pin") = Me.txtPin.Text
 
+        'Dim dc As Date
+        'If IsDate(rs.Fields("DateCreated").Value) Then dc = rs.Fields("DateCreated").Value
 
-        '** rk 9.5.2010 RK protect against sql injection attack
-        If Not (IsSqlSafe(Me.txtEmail.Text) And IsSqlSafe(Me.txtPin.Text)) Then
-            Me.txtmsg.Text = ("Invalid Email Address Or Pin")
-            Exit Sub
-        End If
+        'Session("DateCreated") = dc
 
-
-        ' Inherits System.Web.UI.Page
-        '20100222 - pab - use global shared connection
-        'Dim cn As New ADODB.Connection
-        Dim rs As New ADODB.Recordset
-
-
-        If cnsetting.State = 0 Then
-            cnsetting.ConnectionString = ConnectionStringHelper.getglobalconnectionstring(PortalDriver)
-            cnsetting.Open()
-        End If
-
-        If rs.State = 1 Then rs.Close()
-
-
-        Dim req As String
-
-
-
-        req = "SELECT * FROM members WHERE email = '" & Me.txtEmail.Text & "' and pin = '" & Me.txtPin.Text & "'"
-                        req &= " and carrierid = " & _carrierid
-
-
-
-        'rs.Open(req)
-        '20100222 - pab - use global shared connection
-        'rs.Open(req, cn, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockOptimistic)
-        rs.Open(req, cnsetting, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockOptimistic)
-
-
-
-
-        If rs.EOF Then
-
-            Me.txtmsg.Text = ("Invalid Email Address or Pin")
-            Exit Sub
-
-
-        End If
-
-        '20110517 - pab - check active flag - do not allow if not active
-        If CBool(rs.Fields("active").Value) = False Then
-            Me.txtmsg.Text = ("Your account is no longer active")
-            rs.CancelUpdate()
-            rs.Close()
-            Exit Sub
-        End If
-
-
-
-
-        'If Not rs.EOF Then
-
-
-        'Dim souls As String
-        'If IsDBNull(rs.Fields("SoulsOnBoard").Value) Then
-        '    souls = 0
-        'End If
-        'souls = 0
-
-        Session("PlanType") = rs.Fields("PlanType").Value
-        Session("FirstName") = rs.Fields("firstname").Value
-
-        Dim dc As Date
-        If IsDate(rs.Fields("DateCreated").Value) Then dc = rs.Fields("DateCreated").Value
-
-        Session("DateCreated") = dc
-
-        'used to check if user logged in throughout this page
-        Session("IsLoggedIn") = True
+        ''used to check if user logged in throughout this page
+        'Session("IsLoggedIn") = True
 
         'Me.ImgJumpOn.Visible = True
 
-        Me.txtmsg.Text = "Welcome Back " & rs.Fields("FirstName").Value & "." & vbCr & vbLf & vbCr & vbLf & "You are a valued " & rs.Fields("PlanType").Value & " level member. " & vbCr & vbLf
+        'Me.txtmsg.Text = "Welcome Back " & rs.Fields("FirstName").Value & "." & vbCr & vbLf & vbCr & vbLf & "You are a valued " & rs.Fields("PlanType").Value & " level member. " & vbCr & vbLf
 
 
-        If Not (IsDBNull(rs.Fields("LastSignIn").Value)) Then
+        'If Not (IsDBNull(rs.Fields("LastSignIn").Value)) Then
 
-            Me.txtmsg.Text = Me.txtmsg.Text & vbCr & vbLf
+        '    Me.txtmsg.Text = Me.txtmsg.Text & vbCr & vbLf
 
-            Me.txtmsg.Text = Me.txtmsg.Text & "Your last sign in was " & rs.Fields("LastSignIn").Value & vbCr & vbLf
+        '    Me.txtmsg.Text = Me.txtmsg.Text & "Your last sign in was " & rs.Fields("LastSignIn").Value & vbCr & vbLf
 
-        End If
+        'End If
 
-        rs.Fields("LastSignIn").Value = Now
-
-
-        If Not (IsDBNull(rs.Fields("family").Value)) Then
-            Session("family") = rs.Fields("family").Value
-        Else
-            Session("family") = "NO"
-        End If
+        '    rs.Fields("LastSignIn").Value = Now
 
 
-        Session("usertype") = "M"
-
-        '    Me.Menu1.Visible = False
-
-        '20110207 - pab - change navigation bar to match admin navigation
-        '20160410 - pab - selworthy integration
-        'Me.Navigation1.Visible = False
-
-        If Not (IsDBNull(rs.Fields("usertype").Value)) Then
-            Session("usertype") = rs.Fields("usertype").Value
-
-            Dim da As New DataAccess
-            If rs.Fields("usertype").Value = "A" Then
-                'login successful
-                Session.Timeout = CInt(da.GetSetting(_carrierid, "SessionTimeout")) 'rk 10.18.2010 set session timeout as seteting
-
-                '20101129 - pab - display menu if admin
-                '20160410 - pab - selworthy integration
-                'Me.Navigation1.Visible = True
-
-            End If
+        'If Not (IsDBNull(rs.Fields("family").Value)) Then
+        '    Session("family") = rs.Fields("family").Value
+        'Else
+        '    Session("family") = "NO"
+        'End If
 
 
+        'Session("usertype") = "M"
 
-        Else
-            Session("usertype") = "M"
-        End If
+        ''    Me.Menu1.Visible = False
+
+        ''20110207 - pab - change navigation bar to match admin navigation
+        ''20160410 - pab - selworthy integration
+        ''Me.Navigation1.Visible = False
+
+        'If Not (IsDBNull(rs.Fields("usertype").Value)) Then
+        '    Session("usertype") = rs.Fields("usertype").Value
+
+        '    Dim da As New DataAccess
+        '    If rs.Fields("usertype").Value = "A" Then
+        '        'login successful
+        '        Session.Timeout = CInt(da.GetSetting(_carrierid, "SessionTimeout")) 'rk 10.18.2010 set session timeout as seteting
+
+        '        '20101129 - pab - display menu if admin
+        '        '20160410 - pab - selworthy integration
+        '        'Me.Navigation1.Visible = True
+
+        '    End If
 
 
-        If Not (IsDBNull(rs.Fields("userid").Value)) Then
-            Session("userid") = rs.Fields("userid").Value
-        Else
-            Session("userid") = 0
-        End If
+
+        'Else
+        '    Session("usertype") = "M"
+        'End If
 
 
-        If Not (IsDBNull(rs.Fields("firstname").Value)) Then
-            Session("firstname") = rs.Fields("firstname").Value
-            'Session("username") = rs.Fields("firstname").Value
-            Session("username") = rs.Fields("email").Value
+        'If Not (IsDBNull(rs.Fields("userid").Value)) Then
+        '    Session("userid") = rs.Fields("userid").Value
+        'Else
+        '    Session("userid") = 0
+        'End If
 
-        Else
-            Session("firstname") = ""
-        End If
+
+        'If Not (IsDBNull(rs.Fields("firstname").Value)) Then
+        '    Session("firstname") = rs.Fields("firstname").Value
+        '    'Session("username") = rs.Fields("firstname").Value
+        '    Session("username") = rs.Fields("email").Value
+
+        'Else
+        '    Session("firstname") = ""
+        'End If
 
         '20150821 - pab - force login before getting quotes to track users
-        If Not (IsDBNull(rs.Fields("userID").Value)) Then
-            Session("MemberID") = rs.Fields("userID").Value
-        Else
-            Session("MemberID") = 0
-        End If
-        If Not (IsDBNull(rs.Fields("CarrierID").Value)) Then
-            Session("MemberIDCarrier") = rs.Fields("CarrierID").Value
-        Else
-            Session("MemberIDCarrier") = 0
-        End If
+        'If Not (IsDBNull(rs.Fields("userID").Value)) Then
+        '    Session("MemberID") = rs.Fields("userID").Value
+        'Else
+        '    Session("MemberID") = 0
+        'End If
+        'If Not (IsDBNull(rs.Fields("CarrierID").Value)) Then
+        '    Session("MemberIDCarrier") = rs.Fields("CarrierID").Value
+        'Else
+        '    Session("MemberIDCarrier") = 0
+        'End If
 
         'If Session("usertype") = "A" Then
         '    Me.Menu1.Visible = True
@@ -333,39 +297,44 @@ Public Class loginpage
 
 
 
-        If Not (IsDBNull(rs.Fields("datecreated").Value)) Then
-            Session("datecreated") = rs.Fields("datecreated").Value
-        Else
-            rs.Fields("datecreated").Value = Now
-            Session("datecreated") = Now
-        End If
+        'If Not (IsDBNull(rs.Fields("datecreated").Value)) Then
+        '    Session("datecreated") = rs.Fields("datecreated").Value
+        'Else
+        '    rs.Fields("datecreated").Value = Now
+        '    Session("datecreated") = Now
+        'End If
 
         'is user active? if not, cannot use the system
-        Session("Active") = CBool(rs.Fields("Active").Value)
+        'Session("Active") = CBool(rs.Fields("Active").Value)
 
-        Me.txtmsg.Text = Me.txtmsg.Text & vbCr & vbLf
+        'Me.txtmsg.Text = Me.txtmsg.Text & vbCr & vbLf
 
-        Dim myf As String
-        myf = CStr(myflightrecs(Session("email")))
+        'Dim myf As String
+        'myf = CStr(myflightrecs(Session("email")))
 
-        Me.txtmsg.Text = Me.txtmsg.Text & myf
+        'Me.txtmsg.Text = Me.txtmsg.Text & myf
 
 
-        rs.Update()
-        rs.Close()
+        'rs.Update()
+        'rs.Close()
 
         '** rk 9.5.2010 check if pilot
-        Dim isapilot As Boolean = False
-        req = "SELECT * FROM pilots WHERE pilotemail = '" & Me.txtEmail.Text & "' "
-        req &= " and carrierid = " & _carrierid
-        rs.Open(req, cnsetting, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockOptimistic)
-        If Not rs.EOF Then isapilot = True
-        Session("isapilot") = "YES"
+        If (pdb.Database.SqlQuery(Of Integer)("SELECT 1 FROM pilots WHERE pilotemail = '" & LoginUser.Email & "' and carrierid = " & LoginUser.CarrierID).FirstOrDefault() = 1) Then
+            Session("isapilot") = "YES"
+        End If
+
+        'req = "SELECT * FROM pilots WHERE pilotemail = '" & Me.txtEmail.Text & "' "
+        '    req &= " and carrierid = " & _carrierid
+
+
+        'rs.Open(req, cnsetting, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockOptimistic)
+        'If Not rs.EOF Then isapilot = True
+        'Session("isapilot") = "YES"
         '20160410 - pab - selworthy integration
         'If isapilot Then Me.PilotSchedule.Visible = True
 
 
-        If rs.State = 1 Then rs.Close()
+        'If rs.State = 1 Then rs.Close()
 
 
 

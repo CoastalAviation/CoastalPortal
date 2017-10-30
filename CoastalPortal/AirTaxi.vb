@@ -1,7 +1,17 @@
 ﻿'20140224 - pab - add threading
 Imports System.Threading
+Imports CoastalPortal.DataAccess
+Imports StackExchange.Redis
+Imports CoastalPortal.Models
+Imports CoastalPortal.ConnectionStringHelper
+Imports System.Data.SqlClient
+Imports System.Collections.Generic
+
 
 Public Class AirTaxi
+
+    Public Shared OptimizerDB As String = If(ConnectionStringHelper.ts = "Test", "OptimizerTestDB", "OptimizerDB")
+    Public Shared PortalDB As String = If(ConnectionStringHelper.ts = "Test", "PortalTestDB", "PortalDB")
 
     '20150921 - move to SDS SQL server
     Public Shared PortalServer As String = "UATPortalServer"
@@ -17,6 +27,7 @@ Public Class AirTaxi
     Public Shared DriverOpt As String = ""
     Public Shared ServerOpt As String = ""
     Public Shared DataSourceOpt As String = ""
+    Public Shared colornames(50) As String
 
     '20101101 - pab - clean up connection strings
     'Public Shared connectstring As String = "PROVIDER=MSDASQL;driver={SQL Server};server=(local);uid=sa;password=CoastalPass1;database=Portal"
@@ -59,6 +70,39 @@ Public Class AirTaxi
     Public Shared companysplash As String
     Public Shared companywelcomeleft As String
     Public Shared companywelcomeright As String
+    Public Shared changecolor_dictionary As New Dictionary(Of String, String)
+    Public Shared fstart_dictionary As New Dictionary(Of String, String)
+    Public Shared aclookup_dictionary As New Dictionary(Of String, String)
+    Public Shared awclookup As New Dictionary(Of String, String)
+    Public Shared FOSRecords As New List(Of FOSFlightsOptimizerRecord)
+    Public Shared CASRecords As New List(Of CASFlightsOptimizerRecord)
+    Public Shared fname_dictionary As New Dictionary(Of String, String)
+
+    Public Const DELTA As Integer = 108
+    Public Const JETLINX As Integer = 104
+    Public Const ASI As Integer = 107
+    Public Const XOJET As Integer = 49
+    Public Const WHEELSUP As Integer = 100
+    Public Const TMC As Integer = 65
+
+    Public Shared _fosmodelstartfos As Date
+    Public Shared modelrunid As String
+    Public Shared cascalendarmodelid As String
+    Public Shared casmodelrunid As String = ""
+
+    Public Shared _fosmodelrunid As String
+    Public Shared _fosmodelrunidcas As String
+    Public Shared _fosmodelstart As Date
+    Public Shared _fosmodelend As Date
+    Public Shared overridemodel As String
+    Public Shared AC1 As String
+    Public Shared AC2 As String
+    Public Shared ACX(50) As String
+    Public Shared groups(50, 50) As String 'group number, tail number
+    Public Shared groupcount As Integer
+
+    Public Shared caslinebreaks As Integer
+
 
     '20140723 - pab - use sql storage for carrier logos and aircraft images
     '20150114 - pab - use blob storage for carrier logos and aircraft images instead of sql
@@ -114,6 +158,292 @@ Public Class AirTaxi
         Return filename
 
     End Function
+    Public Shared Function fname(ByVal airportcode As String) As String
+        Dim odb As New OptimizerContext
+        Dim newfname As New List(Of fname_class)
+
+        airportcode = Trim(airportcode)
+
+        Dim value As String
+        If (fname_dictionary.TryGetValue(airportcode, value)) Then
+            Return value
+        End If
+
+        If Trim(airportcode) = "" Then
+            fname = "?"
+            Exit Function
+        End If
+
+
+        If Trim(airportcode) = "PID" Then
+            fname = "Nassau"
+            Exit Function
+        End If
+
+        Dim req As String
+
+        '20110721 - pab - fix when called with icao code
+        airportcode = airportcode.ToUpper
+
+        req = "SELECT icao_id, airport_nm,city,state from airport"
+
+        newfname = odb.Database.SqlQuery(Of fname_class)(req).ToList()
+        fname_dictionary.Clear()
+        For Each x As fname_class In newfname
+            fname_dictionary(Trim(x.icao_id)) = Trim(x.airport_nm) & " " & Trim(x.City) & "," & Trim(x.State) & "(" & Trim(x.icao_id) & ")"
+        Next
+        fname_dictionary.TryGetValue(airportcode, value)
+        Return value
+
+
+
+        'Dim fn As String
+
+        'rk 7.19.17 harden against REDIS errors
+        'If DateDiff(DateInterval.Minute, redisdown, Now) > 10 Then
+
+        '    Try
+        '        If IsNothing(AirTaxi.rdc) Then
+        '            ' AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=false,abortConnect=False")
+        '            AirTaxi.rdc = ConnectionMultiplexer.Connect("10.177.209.57:14001,ssl=false,abortConnect=False")
+        '        End If
+        '        If AirTaxi.rdc.IsConnected = False Then
+        '            'AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=false,abortConnect=False")
+        '            AirTaxi.rdc = ConnectionMultiplexer.Connect("10.177.209.10:14001,ssl=false,abortConnect=False")
+        '        End If
+        '        AirTaxi.cache = rdc.GetDatabase
+
+        '        fn = AirTaxi.cache.StringGet(airportcode)
+
+        '        If IsNothing(fn) Then fn = ""
+
+        '        If fn <> "" Then
+        '            fname_dictionary(airportcode) = fn
+        '            Return fn
+        '        End If
+
+        '    Catch
+
+        '        redisdown = Now
+
+        '    End Try
+
+        'End If
+
+
+        ' Inherits System.Web.UI.Page
+        'Dim cnfaa As New ADODB.Connection
+        'Dim rs As New ADODB.Recordset
+
+
+        '20110106 - pab - fix error if connection string empty
+        'If ConnectionStringHelper.GetCASConnectionStringSQL = "" Then
+
+        'End If
+
+        'If cnfaa.State = 0 Then
+
+        '20081209 - pab - use connection string in web.config
+        'cnfaa.ConnectionString = connectstringfaa
+        '20101101 - pab - clean up connection strings
+        'cnfaa.ConnectionString = xonfigurationmanager.ConnectionStrings("PortalConnectionStringFAA").ConnectionString
+        'cnfaa.ConnectionString = ConnectionStringHelper.ReadOnlyDriverConnectionString
+
+        '    cnfaa.Open()
+        'End If
+
+
+        'If rs.State = 1 Then rs.Close()
+
+
+
+
+        'rs.Open(req, cnfaa, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockReadOnly)
+
+        '20090714 - pab - look up airport code in icao-iata xref if not found in facilities
+        'If Not rs.EOF Then
+
+        '    If Not (IsDBNull(rs.Fields("airport_nm").Value)) Then
+
+        '        fn = Trim(rs.Fields("airport_nm").Value) & "  "
+        '        fn = fn & Trim(rs.Fields("city").Value) & "," & Trim(rs.Fields("state").Value)
+
+        '        fname = fn & " (" & airportcode & ")"
+        '        fname_dictionary(airportcode) = fname
+        '        AirTaxi.cache.StringSet(airportcode, fname)
+
+        '    Else
+        '        fname = airportcode
+        '    End If
+
+        '    rs.Close()
+
+        'End If
+
+
+    End Function
+
+    Shared Function normalizemodelrunid(m As String) As String
+
+        'replace the 'R" in the model run id back to role zero.
+
+        Dim ib As String = InBetween(1, m, "-R", "-")
+        If ib <> "0" Then
+            m = Replace(m, "-R" & ib & "-", "-R0-")
+        End If
+
+        If Right(m, 1) <> "C" Then
+            If m <> "" Then
+
+                If Mid(m, Len(m) - 1, 1) = "-" Then
+                    m = Left(m, Len(m) - 2)
+                    GoTo done
+                End If
+
+                If Mid(m, Len(m) - 2, 1) = "-" Then
+                    m = Left(m, Len(m) - 3)
+                    GoTo done
+                End If
+
+                If Mid(m, Len(m) - 3, 1) = "-" Then
+                    m = Left(m, Len(m) - 4)
+                    GoTo done
+                End If
+
+            End If
+        End If
+done:
+
+        Return m
+    End Function
+
+    Public Shared Function lookupac(ac As String) As String
+        Dim odb As OptimizerContext
+        Dim aclist As New List(Of lookupac_class)
+        ac = Trim(ac)
+
+        Dim value As String = ""
+        If (aclookup_dictionary.TryGetValue(ac, value)) Then
+            Return value
+        End If
+
+        'rk 7.19.17 harden against REDIS errors
+        aclookup_dictionary.Clear()
+        Dim req As String
+        Dim lookup As String
+        req = "SELECT Registration,BrokerAircraft,TypeID,HomeBaseAirportCode,VendorName,RTB,FosAircraftID,Operator as ACOperator FROM [OptimizerWest].[dbo].[Aircraft]"
+
+        aclist = odb.Database.SqlQuery(Of lookupac_class)(req).ToList()
+        aclookup_dictionary.Clear()
+        For Each x As lookupac_class In aclist
+            If x.brokeraircraft = "False" Then
+                awclookup.TryGetValue(Trim(x.TypeID), lookup)
+                req = Trim(x.registration) & "  Broker:" & Trim(x.brokeraircraft) & "  Equip Type:" & Trim(x.TypeID) & "  Class:" & lookup & "  Operator:" & Trim(x.ACOperator)
+            Else
+                fname_dictionary.TryGetValue(Trim(x.HomeBaseAirportCode), lookup)
+                req = Trim(x.registration) & "  Broker:" & Trim(x.brokeraircraft) & "  Equip Type:" & Trim(x.TypeID) & "  HB:" & lookup & "  Vendor:" & Trim(x.VendorName) & "  RTB:" & Trim(x.RTB)
+            End If
+            aclookup_dictionary(Trim(x.FosAircraftID)) = req
+        Next
+        fname_dictionary.TryGetValue(ac, value)
+        Return value
+
+
+
+        's = rs.Fields("Registration").Value & "  Broker:" & rs.Fields("BrokerAircraft").Value & "  Equip Type:" & rs.Fields("TypeID").Value & " HB:" & lookupclass(rs.Fields("HomeBaseAirportCode").Value.ToString.Trim)
+        '' s = s & "  Operator:" & rs.Fields("Operator").Value.ToString.Trim
+        's = s & "  Vendor Name:" & rs.Fields("VendorName").Value.ToString.Trim
+        's = s & "  RTB:" & rs.Fields("RTB").Value.ToString.Trim
+
+
+
+        'Dim fn As String
+        'If DateDiff(DateInterval.Minute, redisdown, Now) > 10 Then
+
+
+        '    Try
+
+        '        If IsNothing(AirTaxi.rdc) Then
+        '            '  AirTaxiClass.rdc = ConnectionMultiplexer.Connect("casexchange.redis.cache.windows.net:6379,ssl=false,password=YzVXw0YYJGVr/Uxkrw10lmbOEWEaXeG1oBHmdwCzuKU=")
+
+        '            AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=False,abortConnect=False")
+
+        '            '    GaviaExchange.redis.cache.windows.net : 6380,password=GVgQYlUyTVVPva6TsElpUJLE/EweBGwJwrRxyk3sd4Q=,ssl=True,abortConnect=FalseGaviaExchange.redis.cache.windows.net:6380,password=GVgQYlUyTVVPva6TsElpUJLE/EweBGwJwrRxyk3sd4Q=,ssl=True,abortConnect=False
+
+        '            '    GaviaExchange.redis.cache.windows.net : 6380,password=GVgQYlUyTVVPva6TsElpUJLE/EweBGwJwrRxyk3sd4Q=,ssl=True,abortConnect=False
+
+
+        '        End If
+
+        '        If AirTaxi.rdc.IsConnected = False Then
+        '            '  AirTaxiClass.rdc = ConnectionMultiplexer.Connect("casexchange.redis.cache.windows.net:6379,ssl=false,password=YzVXw0YYJGVr/Uxkrw10lmbOEWEaXeG1oBHmdwCzuKU=")
+        '            AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=False,abortConnect=False")
+
+        '        End If
+
+        '        AirTaxi.cache = rdc.GetDatabase
+
+
+        '        fn = AirTaxi.cache.StringGet(ac)
+
+        '        If IsNothing(fn) Then fn = ""
+
+        '        If fn <> "" Then
+        '            aclookup_dictionary(ac) = fn
+        '            Return fn
+        '        End If
+
+
+        '    Catch
+        '        redisdown = Now
+        '    End Try
+
+
+        'End If
+
+
+        'Dim cn As New ADODB.Connection
+        'Dim rs As New ADODB.Recordset
+        'Dim req As String
+
+        'If cn.State = 1 Then cn.Close()
+        'If cn.State = 0 Then
+        '    cn.ConnectionString = getglobalconnectionstring("OptimizerDriver")
+        '    cn.Open()
+        'End If
+
+        'req = "SELECT Registration & "  FROM [OptimizerWest].[dbo].[Aircraft] where [FOSAircraftID] = '06SJ' and carrierid = 104"
+
+        'req = Replace(req, "104", _carrierid)
+        'req = Replace(req, "06SJ", ac)
+
+
+        'If rs.State = 1 Then rs.Close()
+        'rs.Open(req, cn, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockReadOnly)
+
+        'If Not rs.EOF Then
+
+        '    Dim s As String
+        '    s = rs.Fields("Registration").Value & "  Broker:" & rs.Fields("BrokerAircraft").Value & "  Equip Type:" & rs.Fields("TypeID").Value & " HB:" & lookupclass(rs.Fields("HomeBaseAirportCode").Value.ToString.Trim)
+        '    ' s = s & "  Operator:" & rs.Fields("Operator").Value.ToString.Trim
+        '    s = s & "  Vendor Name:" & rs.Fields("VendorName").Value.ToString.Trim
+        '    s = s & "  RTB:" & rs.Fields("RTB").Value.ToString.Trim
+
+
+        '    aclookup_dictionary(ac) = s
+        '    AirTaxi.cache.StringSet(ac, s)
+
+        '    Return s
+
+        'End If
+
+        'If rs.State = 1 Then rs.Close()
+
+        'Return ""
+
+    End Function
+
+
 
     '20101105 - pab - add code for aliases
     Shared Sub geturlaliasandconnections(ByVal host As String)

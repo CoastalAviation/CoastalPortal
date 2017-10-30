@@ -1,5 +1,6 @@
 ﻿Imports System.Data.SqlClient
 Imports CoastalPortal.AirTaxi
+Imports CoastalPortal.Models
 
 Public Class DataAccess
 
@@ -66,6 +67,34 @@ Public Class DataAccess
         End Try
 
     End Function
+
+    Shared Function GetPinnedFlights(ByRef req As String) As DataTable
+        Dim db As New OptimizerContext
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.GetConnectionStringServer()
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.Text
+                    cmd.CommandText = req
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = ex.Message
+        End Try
+
+        Return dt
+    End Function
+
 
     '20120807 - pab - write to email queue
     '20140224 - pab - add threading
