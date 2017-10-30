@@ -459,30 +459,30 @@ Public Class FlightChangeDetail
         Dim req As String
 
         '20120815 - pab - run time improvements
-        Dim p1 As Date = CDate(Date.UtcNow.Month & "/" & Date.UtcNow.Day & "/" & Date.UtcNow.Year & " 10:00 AM")
-        req = "select id, TripNumber, ltrim(rtrim(AirportFrom)) as AirportFrom, ltrim(rtrim(AirportTo)) as AirportTo, PinnedOn, Pinned from pinned " &
-            "where pinned = 1 and pinnedon > '" & p1 & "' order by tripnumber"
+        'Dim p1 As Date = CDate(Date.UtcNow.Month & "/" & Date.UtcNow.Day & "/" & Date.UtcNow.Year & " 10:00 AM")
+        'req = "select id, TripNumber, ltrim(rtrim(AirportFrom)) as AirportFrom, ltrim(rtrim(AirportTo)) as AirportTo, PinnedOn, Pinned from pinned " &
+        '    "where pinned = 1 and pinnedon > '" & p1 & "' order by tripnumber"
 
-        Insertsys_log(Session("carrierid"), appName, "FOSFlightsAzure.ascx Get Pinned Start " & Now & "  ", "", "")
-        Dim dt As DataTable = DataAccess.GetPinnedFlights(req)
-        Insertsys_log(Session("carrierid"), appName, "FOSFlightsAzure.ascx Start Get Pinned End " & Now & "  ", "", "")
+        'Insertsys_log(Session("carrierid"), appName, "FOSFlightsAzure.ascx Get Pinned Start " & Now & "  ", "", "")
+        'Dim dt As DataTable = DataAccess.GetPinnedFlights(req)
+        'Insertsys_log(Session("carrierid"), appName, "FOSFlightsAzure.ascx Start Get Pinned End " & Now & "  ", "", "")
 
-        req = "select * from aog " &
-         "where aog = 1 "
-        Dim dtaog As DataTable = DataAccess.GetPinnedFlights(req)
-        Dim dv_aog As DataView = dtaog.DefaultView
-        Dim dv_pinned As DataView = dt.DefaultView
-        Dim bAOGflights As Boolean = False
+        'req = "select * from aog " &
+        ' "where aog = 1 "
+        'Dim dtaog As DataTable = DataAccess.GetPinnedFlights(req)
+        'Dim dv_aog As DataView = dtaog.DefaultView
+        'Dim dv_pinned As DataView = dt.DefaultView
+        'Dim bAOGflights As Boolean = False
 
-        If Not AirTaxi.isdtnullorempty(dtaog) Then
-            bAOGflights = True
-        End If
+        'If Not AirTaxi.isdtnullorempty(dtaog) Then
+        '    bAOGflights = True
+        'End If
 
-        Dim bpinnedflights As Boolean = False
+        'Dim bpinnedflights As Boolean = False
 
-        If Not AirTaxi.isdtnullorempty(dt) Then
-            bpinnedflights = True
-        End If
+        'If Not AirTaxi.isdtnullorempty(dt) Then
+        '    bpinnedflights = True
+        'End If
 
         Dim mycolor As System.Drawing.Color
         mycolor = Drawing.Color.White
@@ -665,55 +665,55 @@ Public Class FlightChangeDetail
             End If
             ' gridviewtrips.Rows(i).BackColor = mycolor
 
-            Dim pinned As Boolean = False
-            If bpinnedflights = True Then
-                dv_pinned.RowFilter = "TripNumber = '" & gridviewtrips.Rows(i).Cells(FOS_TRIP).Text & "' and AirportFrom = '" &
-                    Trim(gridviewtrips.Rows(i).Cells(FOS_FROM).Text).ToString & "' and AirportTo = '" & Trim(gridviewtrips.Rows(i).Cells(FOS_TO).Text).ToString & "'"
-                If dv_pinned.Count > 0 Then
-                    pinned = True
-                End If
-            End If
+            'Dim pinned As Boolean = False
+            'If bpinnedflights = True Then
+            '    dv_pinned.RowFilter = "TripNumber = '" & gridviewtrips.Rows(i).Cells(FOS_TRIP).Text & "' and AirportFrom = '" &
+            '        Trim(gridviewtrips.Rows(i).Cells(FOS_FROM).Text).ToString & "' and AirportTo = '" & Trim(gridviewtrips.Rows(i).Cells(FOS_TO).Text).ToString & "'"
+            '    If dv_pinned.Count > 0 Then
+            '        pinned = True
+            '    End If
+            'End If
 
-            If pinned Then
-                gridviewtrips.Rows(i).Cells(FOS_FROMGMT).BackColor = Drawing.Color.Goldenrod
-                gridviewtrips.Rows(i).Cells(FOS_TRIP).BackColor = Drawing.Color.Goldenrod
-                ' gridviewtrips.Rows.Item(i).Cells(13).BackColor = Drawing.Color.Goldenrod 'rk 4.3.2013 change from 13 to 10 to show pinned field
-            End If
+            'If pinned Then
+            '    gridviewtrips.Rows(i).Cells(FOS_FROMGMT).BackColor = Drawing.Color.Goldenrod
+            '    gridviewtrips.Rows(i).Cells(FOS_TRIP).BackColor = Drawing.Color.Goldenrod
+            '    ' gridviewtrips.Rows.Item(i).Cells(13).BackColor = Drawing.Color.Goldenrod 'rk 4.3.2013 change from 13 to 10 to show pinned field
+            'End If
 
             'rk 8.24.2013 back up auto pinned 3 hours
-            If pinned = False Then
-                If IsDate(gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text) Then
-                    Dim gmt As Date = DateTime.UtcNow
-                    Dim departgmt As Date = CDate(gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text)
+            'If pinned = False Then
+            '    If IsDate(gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text) Then
+            '        Dim gmt As Date = DateTime.UtcNow
+            '        Dim departgmt As Date = CDate(gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text)
 
-                    gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Font.Underline = False
-                    'gridviewtrips.Rows(i).Cells(4).Font.Underline = False
+            '        gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Font.Underline = False
+            '        'gridviewtrips.Rows(i).Cells(4).Font.Underline = False
 
-                    If gmt > DateAdd(DateInterval.Minute, -180, departgmt) Then
+            '        If gmt > DateAdd(DateInterval.Minute, -180, departgmt) Then
 
-                        gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Font.Underline = True
-                        'gridviewtrips.Rows(i).Cells(4).Font.Underline = True
+            '            gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Font.Underline = True
+            '            'gridviewtrips.Rows(i).Cells(4).Font.Underline = True
 
-                    End If
-                End If
-            End If
+            '        End If
+            '    End If
+            'End If
 
-            'show aog flights
-            Dim aog As Boolean = False
-            If bAOGflights = True Then
-                dv_aog.RowFilter = "Aircraft = '" & Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) & "'"
-                If dv_aog.Count > 0 Then
-                    aog = True
-                End If
-            End If
+            ''show aog flights
+            'Dim aog As Boolean = False
+            'If bAOGflights = True Then
+            '    dv_aog.RowFilter = "Aircraft = '" & Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) & "'"
+            '    If dv_aog.Count > 0 Then
+            '        aog = True
+            '    End If
+            'End If
 
-            If aog = False Then
-                '   GridViewTrips.Rows.Item(i).Cells(8).BackColor = Drawing.Color.White
+            'If aog = False Then
+            '    '   GridViewTrips.Rows.Item(i).Cells(8).BackColor = Drawing.Color.White
 
-            Else
-                gridviewtrips.Rows(i).Cells(FOS_AC).BackColor = Drawing.Color.Violet
+            'Else
+            '    gridviewtrips.Rows(i).Cells(FOS_AC).BackColor = Drawing.Color.Violet
 
-            End If
+            'End If
 
             For z = 2 To 5
                 If IsDate(gridviewtrips.Rows(i).Cells(z).Text) Then
@@ -738,24 +738,24 @@ Public Class FlightChangeDetail
 
 
         '20120815 - pab - run time improvements
-        Dim p1 As Date = CDate(Date.UtcNow.Month & "/" & Date.UtcNow.Day & "/" & Date.UtcNow.Year & " 10:00 AM")
-        req = "select id, TripNumber, ltrim(rtrim(AirportFrom)) as AirportFrom, ltrim(rtrim(AirportTo)) as AirportTo, PinnedOn, Pinned from pinned " &
-            "where pinned = 1 and carrierid = 'gef' and pinnedon > '" & p1 & "' order by tripnumber"
-        req = Replace(req, "gef", Session("carrierid"))
+        'Dim p1 As Date = CDate(Date.UtcNow.Month & "/" & Date.UtcNow.Day & "/" & Date.UtcNow.Year & " 10:00 AM")
+        'req = "select id, TripNumber, ltrim(rtrim(AirportFrom)) as AirportFrom, ltrim(rtrim(AirportTo)) as AirportTo, PinnedOn, Pinned from pinned " &
+        '    "where pinned = 1 and carrierid = 'gef' and pinnedon > '" & p1 & "' order by tripnumber"
+        'req = Replace(req, "gef", Session("carrierid"))
 
-        Insertsys_log(Session("carrierid"), appName, "CASFlightsAzure.ascx colorme start Get Pinnned " & Now, "", "")
-        Dim dt As DataTable = DataAccess.GetPinnedFlights(req)
-        Insertsys_log(Session("carrierid"), appName, "CASFlightsAzure.ascx colorme end Get Pinned " & Now, "", "")
+        'Insertsys_log(Session("carrierid"), appName, "CASFlightsAzure.ascx colorme start Get Pinnned " & Now, "", "")
+        'Dim dt As DataTable = DataAccess.GetPinnedFlights(req)
+        'Insertsys_log(Session("carrierid"), appName, "CASFlightsAzure.ascx colorme end Get Pinned " & Now, "", "")
 
         _carrierid = Session("carrierid")
 
 
-        Dim dv_pinned As DataView = dt.DefaultView
-        Dim bpinnedflights As Boolean = False
+        'Dim dv_pinned As DataView = dt.DefaultView
+        'Dim bpinnedflights As Boolean = False
 
-        If Not AirTaxi.isdtnullorempty(dt) Then
-            bpinnedflights = True
-        End If
+        'If Not AirTaxi.isdtnullorempty(dt) Then
+        '    bpinnedflights = True
+        'End If
         Dim colorsArray As System.Array =
         [Enum].GetValues(GetType(KnownColor))
         Dim allColors(colorsArray.Length) As KnownColor
@@ -896,18 +896,18 @@ Public Class FlightChangeDetail
             End If
             'gridviewtrips.Rows(i).BackColor = mycolor
 
-            Dim pinned As Boolean = False
-            If bpinnedflights = True Then
-                dv_pinned.RowFilter = "TripNumber = '" & gridviewtrips.Rows(i).Cells(CAS_TRIP).Text & "' and AirportFrom = '" &
-                    gridviewtrips.Rows(i).Cells(CAS_FROM).Text.ToString & "' and AirportTo = '" & gridviewtrips.Rows(i).Cells(CAS_TO).Text.ToString & "'"
-                If dv_pinned.Count > 0 Then
-                    pinned = True
-                End If
-            End If
+            'Dim pinned As Boolean = False
+            'If bpinnedflights = True Then
+            '    dv_pinned.RowFilter = "TripNumber = '" & gridviewtrips.Rows(i).Cells(CAS_TRIP).Text & "' and AirportFrom = '" &
+            '        gridviewtrips.Rows(i).Cells(CAS_FROM).Text.ToString & "' and AirportTo = '" & gridviewtrips.Rows(i).Cells(CAS_TO).Text.ToString & "'"
+            '    If dv_pinned.Count > 0 Then
+            '        pinned = True
+            '    End If
+            'End If
 
-            If pinned Then
-                gridviewtrips.Rows(i).Cells(CAS_FROMGMT).BackColor = Drawing.Color.Goldenrod
-            End If
+            'If pinned Then
+            '    gridviewtrips.Rows(i).Cells(CAS_FROMGMT).BackColor = Drawing.Color.Goldenrod
+            'End If
 
             If IsDate(gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text) Then
                 Dim gmt As Date = DateTime.UtcNow
