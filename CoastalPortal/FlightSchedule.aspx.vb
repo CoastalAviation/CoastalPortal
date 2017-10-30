@@ -4,7 +4,10 @@ Imports Telerik.Web.UI
 Public Class FlightSchedule
     Inherits System.Web.UI.Page
 
-    Private dtflights As New DataTable
+    Shared OptimizerCalendarModelRunBase As String
+    Shared OptimizerCalendarModelRunBestModel As String
+    Shared OptimizerCalendarModelRunBestEff As String
+    Shared OptimizerCalendarModelStartDate As String
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -37,8 +40,6 @@ Public Class FlightSchedule
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
-                Me.gvServiceProviderMatrix.Visible = True
-
                 '20160517 - pab - fix carrierid = 0 preventing quotes
                 If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
                     _carrierid = 65
@@ -59,33 +60,10 @@ Public Class FlightSchedule
                     _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
                 End If
 
-                Dim oLookup As New PopulateLookups
-                Me.departtime_combo.Items.Clear()
-                dt = oLookup.TimeDD("All")
-                Me.departtime_combo.DataSource = dt.DefaultView
-                Me.departtime_combo.DataBind()
-                Me.departtime_combo.SelectedValue = "09:00 AM"
-
-            Else
-                '20131016 - pab - fix session timeout
-                If IsNothing(Session("flights")) And IsNothing(Session("triptype")) Then
-                    lblMsg.Text = da.GetSetting(_carrierid, "TimeoutMessage")
-                    gvServiceProviderMatrix.EmptyDataText = lblMsg.Text
-                    dtflights.Clear()
-                    Me.gvServiceProviderMatrix.DataSource = dtflights
-                    Me.gvServiceProviderMatrix.DataBind()
-                End If
             End If
 
             '20100608 - pab - add logo to email
             Session("ApplicationPath") = Request.PhysicalApplicationPath
-
-            If Not (IsNothing(Session("flights"))) Then
-                dtflights = Session("flights")
-            Else
-                'chg3641 - 20101008 - pab - fix clearing session variables when going back to request another flight
-                dtflights.Clear()
-            End If
 
         Catch ex As Exception
             Dim s As String = ex.Message
@@ -130,18 +108,6 @@ Public Class FlightSchedule
             AirTaxi.Insertsys_log(_carrierid, appName, Left(Now & " " & s, 500), "FlightSchedule.aspx.vb Page_PreRender", "")
             SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
                       appName & " FlightSchedule.aspx.vb Page_PreRender error", s, _carrierid)
-
-        End Try
-
-    End Sub
-
-    Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
-
-        Try
-
-            Exit Sub
-
-        Catch ex As Exception
 
         End Try
 

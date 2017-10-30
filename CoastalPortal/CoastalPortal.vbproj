@@ -187,6 +187,8 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Controls\FOSFlightsCalendar.ascx" />
+    <Content Include="Controls\OptimizerCalendar.ascx" />
     <Content Include="CustomerLogin.aspx" />
     <Content Include="Dashboard.aspx" />
     <Content Include="Default.aspx" />
@@ -231,6 +233,23 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Scripts\tip_centerwindow.js" />
+    <Content Include="Scripts\tip_followscroll.js" />
+    <Content Include="Scripts\wz_tooltip.js" />
+    <Content Include="StyleSheet.css" />
+    <Content Include="Styles\Site.css" />
+    <Content Include="tip_balloon\b.gif" />
+    <Content Include="tip_balloon\background.gif" />
+    <Content Include="tip_balloon\l.gif" />
+    <Content Include="tip_balloon\lb.gif" />
+    <Content Include="tip_balloon\lt.gif" />
+    <Content Include="tip_balloon\r.gif" />
+    <Content Include="tip_balloon\rb.gif" />
+    <Content Include="tip_balloon\rt.gif" />
+    <Content Include="tip_balloon\stemb.gif" />
+    <Content Include="tip_balloon\stemt.gif" />
+    <Content Include="tip_balloon\t.gif" />
+    <Content Include="tip_balloon\tip_balloon.js" />
     <Content Include="WebForm1.aspx" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -299,6 +318,20 @@
     <Compile Include="Contact.aspx.vb">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="Controls\FOSFlightsCalendar.ascx.designer.vb">
+      <DependentUpon>FOSFlightsCalendar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FOSFlightsCalendar.ascx.vb">
+      <DependentUpon>FOSFlightsCalendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\OptimizerCalendar.ascx.designer.vb">
+      <DependentUpon>OptimizerCalendar.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OptimizerCalendar.ascx.vb">
+      <DependentUpon>OptimizerCalendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerLogin.aspx.designer.vb">
       <DependentUpon>CustomerLogin.aspx</DependentUpon>
@@ -381,6 +414,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="PlanningFOS.vb" />
     <Compile Include="PopulateLookups.vb" />
     <Compile Include="RunOptimizer.aspx.designer.vb">
       <DependentUpon>RunOptimizer.aspx</DependentUpon>

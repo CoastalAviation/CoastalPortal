@@ -1,0 +1,561 @@
+﻿body
+{
+    /*background-color: #42455A;*/
+}
+
+.smallText
+{
+	font-size:1.0em; /*80%;	*/
+}
+
+.inputField
+{
+	font-size:1.0em; /*85%;*/
+	z-index:0;
+}
+/*NOTE not working*/
+.gridViewHeader a
+{
+	text-decoration:none;	
+}
+
+.gridViewHeader a:hover
+{
+	text-decoration:underline;
+}
+
+.gridViewItem a
+{ 
+	text-decoration:underline;	
+	color:Navy;
+}
+
+.gridViewAltItem a
+{
+	text-decoration:underline;	
+	color:Navy;
+}
+/*END NOTE not working*/
+
+
+.planningTable
+{
+	
+}
+
+.planningCellHeaderXY
+{
+	border:solid 1px #808080;
+	padding:1px 2px 1px 2px;
+	font-weight:normal;
+	background-color: White;
+	font-size:0.8em;
+	position:relative;
+	height:13px;
+}
+
+.planningCellHeader
+{
+	border:solid 1px #808080;
+	padding:1px 2px 1px 2px;
+	font-weight:normal;
+	background-color: White;
+	font-size:0.8em;
+	height:13px;
+}
+
+.planningCell
+{
+	padding:1px 2px 1px 2px;
+	height:19px;
+}
+
+.planningCellVacation
+{
+	background-color:#FFC7CE;	
+	font-size:0.8em;
+	height:19px;
+}
+
+.planningCellOFF
+{
+	background-color: #99CCFF;
+	font-size: 0.8em;
+	height: 19px;
+}
+
+.planningCellTraining
+{
+    background-color: #99FF66;
+    font-size: 0.8em;
+    height: 19px;
+}
+
+.planningCellPartialOn
+{
+	background-color:#FFEB9C;	
+	font-size:0.8em;
+	height:19px;
+}
+
+.planningCellOn
+{
+	background-color: white;
+	font-size: 0.8em;
+	height: 19px;
+}
+
+.planningCellCustomerFlight
+{
+	background-color:#C6EFCE;
+	font-size:0.8em;
+	height:19px;	
+}
+
+.planningCellOnGround
+{
+	background-color:#FFC7CE;	
+	font-size:0.8em;
+	height:19px;
+}
+
+.planningCellCustomerDeadLeg
+{
+	background-color:#FFEB9C;
+	font-size:0.8em;	
+	height:19px;
+}
+
+.planningCellMaintenance
+{
+	background-color:#99CCFF; /*#CCFFFF;*/
+	font-size:0.8em;
+	height:19px;	
+}
+
+/* 20140806 - pab - add transient - available for sale */
+.planningCellTransient
+{
+    background-color: #00FF99;
+    font-size: 0.8em;
+    height: 19px;
+}
+
+.planningCellAsset
+{
+	border:solid 1px #808080;
+	border-top:none;
+	background-color: White;
+	padding:1px 2px 1px 2px;
+	position:relative;
+	height:16px;
+}
+
+.planningCellTitle
+{
+	border:none;
+	background-color: White;
+	padding:1px 2px 1px 2px;
+	position:relative;
+	width:800px;
+}
+
+.flightDetailPopOutHeaderClose
+{
+    padding:1px 0px 1px 0px;
+    color:#000000;
+    background-color:#CADFFC;
+    border-bottom:solid 1px #C0C0C0;
+    /*font-weight:bold;*/
+}
+.flightDetailPopOutCell 
+{
+    /*width:75px;*/
+    /*border-bottom:solid 1px #C0C0C0;*/
+    /*padding:2px 0px 2px 0px;*/
+    color:#000000;
+    background-color:#FFFFFF;
+    /*font-size:0.9em;*/
+}
+
+/* chg3641 - 20101008 - pab - add daily/weekly/monthly calendar views to flight planning */
+.planningCellFlightPlanningCustomerFlight
+{
+	background-color: #008000;
+	font-size: x-small;
+	height: 19px;
+	color: #FFFFFF;
+}
+
+.planningCellFlightPlanningRestricted {
+    background-color: #CCFFCC;
+    font-size: xx-small;
+    height: 19px;
+}
+
+.planningCellFlightPlanningPinned {
+    background-color: #FFCC66;
+    font-size: xx-small;
+    height: 19px;
+}
+
+.planningCellFlightPlanningOnGround
+{
+	background-color: #99CCFF;
+	font-size: x-small;
+	height: 19px;
+}
+
+.planningCellFlightPlanningCustomerDeadLeg
+{
+	background-color: #FFFF00;
+	font-size: x-small;
+	height: 19px;
+}
+
+.planningCellFlightPlanningMaintenance
+{
+	background-color: #FF0000; /*#CCFFFF;*/
+	font-size: x-small;
+	height: 19px;
+	color: #FFFFFF;
+}
+
+.planningCellFlightPlanningQuickFlight
+{
+    background-color: #FF6600; /* #FF3300;*/
+    font-size: x-small;
+    height: 19px;
+}
+
+.planningCellFlightPlanningActive
+{
+    background-color: #FFFFFF;
+    font-size: x-small;
+    height: 19px;
+}
+
+/* 20130710 - pab - add owner trip */
+.planningCellFlightPlanningOwner
+{
+    background-color: #CC99FF;
+    font-size: x-small;
+    height: 19px;
+}
+
+.planningCellFlightPlanningOther
+{
+    background-color: #CCCCCC;
+    font-size: x-small;
+    height: 19px;
+}
+
+.planningCellTallFlightPlanningCustomerFlight
+{
+	background-color: #008000;
+	font-size: x-small;
+	height: 29px;
+	color: #FFFFFF;
+}
+
+.planningCellTallFlightPlanningOnGround
+{
+	background-color: #99CCFF;
+	font-size: x-small;
+	height: 29px;
+}
+
+.planningCellTallFlightPlanningCustomerDeadLeg
+{
+	background-color: #FFFF00;
+	font-size: x-small;
+	height: 29px;
+}
+
+.planningCellTallFlightPlanningMaintenance
+{
+	background-color: #FF0000; /*#CCFFFF;*/
+	font-size: x-small;
+	height: 29px;
+	color: #FFFFFF;
+}
+
+.planningCellTallFlightPlanningQuickFlight
+{
+	background-color: #FF6600; /* #FF3300;*/
+	font-size: x-small;
+	height: 29px;
+}
+
+.planningCellTallFlightPlanningAsset
+{
+	border:solid 1px #808080;
+	border-top:none;
+	background-color: White;
+	padding:1px 2px 1px 2px;
+	position:relative;
+	height:27px;
+}
+
+.planningCellTallFlightPlanningActive
+{
+    background-color: #FFFFFF;
+    font-size: x-small;
+    height: 29px;
+}
+
+.planningCellTallVacation
+{
+	background-color:#FFC7CE;	
+	font-size:0.8em;
+	height:29px;
+}
+
+.planningCellTallTraining
+{
+    background-color: #99FF66;
+    font-size: 0.8em;
+    height: 29px;
+}
+
+/* 20130710 - pab - add owner trip */
+.planningCellTallFlightPlanningOwner
+{
+    background-color: #CC99FF;
+    font-size: 0.8em;
+    height: 29px;
+}
+
+/* 20140806 - pab - add transient - available for sale */
+.planningCellTallTransient
+{
+    background-color: #00FF99;
+    font-size: 0.8em;
+    height: 29px;
+}
+
+/* 20161215 - pab - add outsource */
+.planningCellFlightPlanningOutsource
+{
+    background-color: #FFCCFF;
+    font-size: x-small;
+    height: 19px;
+}
+
+/* 20161228 - pab - add outsource */
+.planningCellFlightPlanningSwap
+{
+    background-color: #CC66FF;
+    font-size: x-small;
+    height: 19px;
+}
+
+.planningCellTallFlightPlanningOther
+{
+    background-color: #CCCCCC;
+    font-size: 0.8em;
+    height: 29px;
+}
+
+.planningCellText
+{
+    border: 1px solid #808080;
+    border-top: none;
+    background-color: White;
+    padding: 2px;
+    position: relative;
+    height: 19px;
+}
+
+.planningCellTallText
+{
+    border: 1px solid #808080;
+    border-top: none;
+    background-color: White;
+    padding: 2px;
+    position: relative;
+    height: 29px;
+}
+
+.planningCellTallOn
+{
+    background-color: White;
+    font-size: x-small;
+    height: 29px;
+}
+
+/* 20140204 - pab - fos calendar */
+.planningCellFlightPlanningCustomerFlightFOS
+{
+	background-color: #008000;
+	font-size: xx-small;
+	height: 19px;
+	color: #FFFFFF;
+}
+
+.planningCellFlightPlanningOnGroundFOS
+{
+	background-color: #99CCFF;
+	font-size: xx-small;
+	height: 19px;
+}
+
+.planningCellFlightPlanningCustomerDeadLegFOS
+{
+	background-color: #FFFF00;
+	font-size: xx-small;
+	height: 19px;
+}
+
+.planningCellFlightPlanningMaintenanceFOS
+{
+	background-color: #FF0000; /*#CCFFFF;*/
+	font-size: xx-small;
+	height: 19px;
+	color: #FFFFFF;
+}
+
+.planningCellFlightPlanningMaintenanceAOG
+{
+	background-color: #990000; 
+	font-size: xx-small;
+	height: 19px;
+	color: #FFFFFF;
+}
+
+.planningCellFlightPlanningQuickFlightFOS
+{
+    background-color: #FF6600; /* #FF3300;*/
+    font-size: xx-small;
+    height: 19px;
+}
+
+.planningCellFlightPlanningActiveFOS
+{
+    background-color: #FFFFFF;
+    font-size: xx-small;
+    height: 19px;
+}
+
+.planningCellFlightPlanningOwnerFOS
+{
+    background-color: #CC99FF;
+    font-size: x-small;
+    height: 19px;
+}
+
+.planningCellFlightPlanningOtherFOS
+{
+    background-color: #CCCCCC;
+    font-size: xx-small;
+    height: 19px;
+}
+
+.planningCellTrainingFOS
+{
+    background-color: #99FF66;
+    font-size: xx-small;
+    height: 19px;
+}
+
+.planningCellVacationFOS
+{
+	background-color:#FFC7CE;	
+	font-size:xx-small;
+	height:19px;
+}
+
+.planningCellOnFOS
+{
+	background-color: white;
+	font-size: xx-small;
+	height: 19px;
+}
+
+/* 20140806 - pab - add transient - available for sale */
+.planningCellTransientFOS
+{
+    background-color: #00FF99;
+    font-size: 0.8em;
+    height: 19px;
+}
+
+.planningCellTextFOS
+{
+    border-left: 1px solid #808080;
+    border-right: 1px solid #808080;
+    background-color: White;
+    padding: 2px;
+    position: relative;
+    height: 19px;
+}
+
+/* 20141204 - pab - scrollable tables with fixed ehadings */
+.cell   
+{
+    display:table-cell;
+    border:1px solid black;
+    padding:5px;
+    border-radius:8px;
+    vertical-align:middle;
+}
+.row   {
+                display:table-row
+            } 
+.tabcap    {
+                    color:navy;
+                    font-size:125%;
+                    font-weight:bold;
+                    display:table-caption;
+                }
+.htabl  {
+            width:400px;
+            display:table;
+            margin:0px auto;
+             padding-right:10px;
+             border:2px solid red; 
+             // this border is just for testing
+             // remove for production
+          }
+
+.htabl.cell {
+                            border:1px solid white;
+                            border-radius:12px;
+                            background-color:blue;
+                            color:white;
+                            font-size:1.5em;
+                            text-align:center; 
+                        }
+#wrapper {
+                    max-height:200px;
+                    overflow-y:scroll;
+                    overflow-x:hidden;
+                    width:420px;
+                    margin:auto;
+                     padding-left:4px;
+                    border:2px dashed black;
+                   // this border is just for testing
+                   // remove for production
+                } 
+.tabl {
+            width:400px;           
+            display:table;
+            margin:0px auto;
+            border:2px solid red;
+            // this border is just for testing
+            // remove for production
+        } 
+[title=Left]     {
+                    width:110px;
+               }
+[title=Middle]     {
+                    width:150px;
+                   }
+[title=Right]     {
+                    width:130px;
+                }
+
+
+
+
+

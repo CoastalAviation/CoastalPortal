@@ -12,6 +12,21 @@
     <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+    <style type="text/css">
+    body,td,th {
+	    font-family: Arial, Helvetica, sans-serif;
+	    
+    }
+    body
+    {
+        margin:0px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 12px;
+        /*background-image:url(Images/SATSair/bg_repeat.gif);*/
+        /*background-repeat:repeat-x;*/
+        /*background-color:#FAFAFA;*/
+    }
+    </style>
 </head>
 <body>
 
