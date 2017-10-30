@@ -268,6 +268,7 @@
     <Content Include="tip_balloon\t.gif" />
     <Content Include="tip_balloon\tip_balloon.js" />
     <Content Include="WebForm1.aspx" />
+    <None Include="My Project\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
