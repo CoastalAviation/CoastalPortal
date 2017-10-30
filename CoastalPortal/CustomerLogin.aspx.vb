@@ -131,8 +131,8 @@ Public Class loginpage
 
 
         '20160602 - pab - implement remember me 
-        Dim username As String = txtEmail.Text
-        Dim Password As String = txtPin.Text
+        Dim username As String = Trim(txtEmail.Text).ToUpper
+        Dim Password As String = Trim(txtPin.Text)
 
         'Dim ValidationResult As Boolean = ValidateLogin(username, Password)
         'If ValidationResult = True Then
@@ -142,7 +142,7 @@ Public Class loginpage
             For Each x As WeightClass In AWC
                 awclookup.Add(Trim(x.AircraftType), Trim(x.AircraftWeightClass))
             Next
-            LoginUser = pdb.Members.Where(Function(x) x.Email.ToUpper = username.ToUpper.ToString.Trim And x.PIN = Password.Trim).FirstOrDefault()
+        LoginUser = pdb.Members.Where(Function(x) Trim(x.Email).ToUpper = username And Trim(x.PIN) = Password And Trim(x.CarrierID) = _carrierid).FirstOrDefault()
         'If Not rs.EOF Then
         If LoginUser IsNot Nothing Then
             If LoginUser.Active Then
