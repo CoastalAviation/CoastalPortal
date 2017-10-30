@@ -12,6 +12,9 @@ Public Class AirTaxi
 
     Public Shared OptimizerDB As String = If(ConnectionStringHelper.ts = "Test", "OptimizerTestDB", "OptimizerDB")
     Public Shared PortalDB As String = If(ConnectionStringHelper.ts = "Test", "PortalTestDB", "PortalDB")
+    Public Shared cache As StackExchange.Redis.IDatabase
+    Public Shared rdc As StackExchange.Redis.ConnectionMultiplexer
+    Public Shared redisdown As DateTime = CDate("7/18/2017 10:00")
 
     '20150921 - move to SDS SQL server
     Public Shared PortalServer As String = "UATPortalServer"
@@ -166,7 +169,7 @@ Public Class AirTaxi
     End Function
     Public Shared Function fname(ByVal airportcode As String) As String
         Dim odb As New OptimizerContext
-        Dim newfname As New List(Of fname_class)
+        Dim newfname As New fname_class
 
         airportcode = Trim(airportcode)
 
@@ -191,107 +194,54 @@ Public Class AirTaxi
         '20110721 - pab - fix when called with icao code
         airportcode = airportcode.ToUpper
 
-        req = "SELECT icao_id, airport_nm,city,state from airport"
-
-        newfname = odb.Database.SqlQuery(Of fname_class)(req).ToList()
-        fname_dictionary.Clear()
-        For Each x As fname_class In newfname
-            fname_dictionary(Trim(x.icao_id)) = Trim(x.airport_nm) & " " & Trim(x.City) & "," & Trim(x.State) & "(" & Trim(x.icao_id) & ")"
-        Next
-        fname_dictionary.TryGetValue(airportcode, value)
-        Return value
-
-
-
-        'Dim fn As String
+        Dim fn As String
 
         'rk 7.19.17 harden against REDIS errors
-        'If DateDiff(DateInterval.Minute, redisdown, Now) > 10 Then
+        If DateDiff(DateInterval.Minute, redisdown, Now) > 10 Then
 
-        '    Try
-        '        If IsNothing(AirTaxi.rdc) Then
-        '            ' AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=false,abortConnect=False")
-        '            AirTaxi.rdc = ConnectionMultiplexer.Connect("10.177.209.57:14001,ssl=false,abortConnect=False")
-        '        End If
-        '        If AirTaxi.rdc.IsConnected = False Then
-        '            'AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=false,abortConnect=False")
-        '            AirTaxi.rdc = ConnectionMultiplexer.Connect("10.177.209.10:14001,ssl=false,abortConnect=False")
-        '        End If
-        '        AirTaxi.cache = rdc.GetDatabase
+            Try
+                If IsNothing(AirTaxi.rdc) Then
+                    ' AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=false,abortConnect=False")
+                    AirTaxi.rdc = ConnectionMultiplexer.Connect("10.177.209.57:14001,ssl=false,abortConnect=False")
+                End If
+                If AirTaxi.rdc.IsConnected = False Then
+                    'AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=false,abortConnect=False")
+                    AirTaxi.rdc = ConnectionMultiplexer.Connect("10.177.209.10:14001,ssl=false,abortConnect=False")
+                End If
+                AirTaxi.cache = rdc.GetDatabase
 
-        '        fn = AirTaxi.cache.StringGet(airportcode)
+                fn = AirTaxi.cache.StringGet(airportcode)
 
-        '        If IsNothing(fn) Then fn = ""
+                If IsNothing(fn) Then fn = ""
 
-        '        If fn <> "" Then
-        '            fname_dictionary(airportcode) = fn
-        '            Return fn
-        '        End If
+                If fn <> "" Then
+                    fname_dictionary(airportcode) = fn
+                    Return fn
+                End If
 
-        '    Catch
+            Catch
+                redisdown = Now
+            End Try
 
-        '        redisdown = Now
+        End If
 
-        '    End Try
+        req = "SELECT icao_id, airport_nm,city,state from airport WHERE icao_id = '" & airportcode & "'"
+        newfname = odb.Database.SqlQuery(Of fname_class)(req).First()
 
-        'End If
+        If newfname IsNot Nothing Then
+            fname = Trim(newfname.airport_nm) & "  " & Trim(newfname.City) & "," & Trim(newfname.State) & "(" & Trim(airportcode) & ")"
+            fname_dictionary(airportcode) = fname
+            AirTaxi.cache.StringSet(airportcode, fname)
 
-
-        ' Inherits System.Web.UI.Page
-        'Dim cnfaa As New ADODB.Connection
-        'Dim rs As New ADODB.Recordset
-
-
-        '20110106 - pab - fix error if connection string empty
-        'If ConnectionStringHelper.GetCASConnectionStringSQL = "" Then
-
-        'End If
-
-        'If cnfaa.State = 0 Then
-
-        '20081209 - pab - use connection string in web.config
-        'cnfaa.ConnectionString = connectstringfaa
-        '20101101 - pab - clean up connection strings
-        'cnfaa.ConnectionString = xonfigurationmanager.ConnectionStrings("PortalConnectionStringFAA").ConnectionString
-        'cnfaa.ConnectionString = ConnectionStringHelper.ReadOnlyDriverConnectionString
-
-        '    cnfaa.Open()
-        'End If
-
-
-        'If rs.State = 1 Then rs.Close()
-
-
-
-
-        'rs.Open(req, cnfaa, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockReadOnly)
-
-        '20090714 - pab - look up airport code in icao-iata xref if not found in facilities
-        'If Not rs.EOF Then
-
-        '    If Not (IsDBNull(rs.Fields("airport_nm").Value)) Then
-
-        '        fn = Trim(rs.Fields("airport_nm").Value) & "  "
-        '        fn = fn & Trim(rs.Fields("city").Value) & "," & Trim(rs.Fields("state").Value)
-
-        '        fname = fn & " (" & airportcode & ")"
-        '        fname_dictionary(airportcode) = fname
-        '        AirTaxi.cache.StringSet(airportcode, fname)
-
-        '    Else
-        '        fname = airportcode
-        '    End If
-
-        '    rs.Close()
-
-        'End If
-
+        Else
+            fname = airportcode
+        End If
 
     End Function
 
     Shared Function normalizemodelrunid(m As String) As String
 
-        'replace the 'R" in the model run id back to role zero.
+        'replace the 'R" In the model run id back To role zero.
 
         Dim ib As String = InBetween(1, m, "-R", "-")
         If ib <> "0" Then
@@ -325,7 +275,7 @@ done:
 
     Public Shared Function lookupac(ac As String) As String
         Dim odb As OptimizerContext
-        Dim aclist As New List(Of lookupac_class)
+        Dim newac As New lookupac_class
         ac = Trim(ac)
 
         Dim value As String = ""
@@ -333,119 +283,54 @@ done:
             Return value
         End If
 
+        Dim fn As String
+        If DateDiff(DateInterval.Minute, redisdown, Now) > 10 Then
+
+            Try
+
+                If IsNothing(AirTaxi.rdc) Then
+                    AirTaxi.rdc = ConnectionMultiplexer.Connect("10.177.209.57:14001,ssl=false,abortConnect=False")
+                End If
+                If AirTaxi.rdc.IsConnected = False Then
+                    AirTaxi.rdc = ConnectionMultiplexer.Connect("10.177.209.10:14001,ssl=false,abortConnect=False")
+
+                End If
+                AirTaxi.cache = rdc.GetDatabase
+
+                fn = AirTaxi.cache.StringGet(ac)
+
+                If IsNothing(fn) Then fn = ""
+
+                If fn <> "" Then
+                    aclookup_dictionary(ac) = fn
+                    Return fn
+                End If
+            Catch
+                redisdown = Now
+            End Try
+        End If
+
         'rk 7.19.17 harden against REDIS errors
         aclookup_dictionary.Clear()
         Dim req As String
         Dim lookup As String
-        req = "SELECT Registration,BrokerAircraft,TypeID,HomeBaseAirportCode,VendorName,RTB,FosAircraftID,Operator as ACOperator FROM [OptimizerWest].[dbo].[Aircraft]"
+        req = "SELECT Registration,BrokerAircraft,TypeID,HomeBaseAirportCode,VendorName,RTB,FosAircraftID,Operator as ACOperator FROM [OptimizerWest].[dbo].[Aircraft] where [FOSAircraftID] = '" & ac & "' and carrierid = " & _carrierid
 
-        aclist = odb.Database.SqlQuery(Of lookupac_class)(req).ToList()
-        aclookup_dictionary.Clear()
-        For Each x As lookupac_class In aclist
-            If x.brokeraircraft = "False" Then
-                awclookup.TryGetValue(Trim(x.TypeID), lookup)
-                req = Trim(x.registration) & "  Broker:" & Trim(x.brokeraircraft) & "  Equip Type:" & Trim(x.TypeID) & "  Class:" & lookup & "  Operator:" & Trim(x.ACOperator)
+        newac = odb.Database.SqlQuery(Of lookupac_class)(req).First
+        If newac IsNot Nothing Then
+            If newac.brokeraircraft = "False" Then
+                awclookup.TryGetValue(Trim(newac.TypeID), lookup)
+                req = Trim(newac.registration) & "  Broker:" & Trim(newac.brokeraircraft) & "  Equip Type:" & Trim(newac.TypeID) & "  Class:" & lookup & "  Operator:" & Trim(newac.ACOperator)
             Else
-                fname_dictionary.TryGetValue(Trim(x.HomeBaseAirportCode), lookup)
-                req = Trim(x.registration) & "  Broker:" & Trim(x.brokeraircraft) & "  Equip Type:" & Trim(x.TypeID) & "  HB:" & lookup & "  Vendor:" & Trim(x.VendorName) & "  RTB:" & Trim(x.RTB)
+                fname_dictionary.TryGetValue(Trim(newac.HomeBaseAirportCode), lookup)
+                req = Trim(newac.registration) & "  Broker:" & Trim(newac.brokeraircraft) & "  Equip Type:" & Trim(newac.TypeID) & "  HB:" & lookup & "  Vendor:" & Trim(newac.VendorName) & "  RTB:" & Trim(newac.RTB)
             End If
-            aclookup_dictionary(Trim(x.FosAircraftID)) = req
-        Next
-        fname_dictionary.TryGetValue(ac, value)
-        Return value
-
-
-
-        's = rs.Fields("Registration").Value & "  Broker:" & rs.Fields("BrokerAircraft").Value & "  Equip Type:" & rs.Fields("TypeID").Value & " HB:" & lookupclass(rs.Fields("HomeBaseAirportCode").Value.ToString.Trim)
-        '' s = s & "  Operator:" & rs.Fields("Operator").Value.ToString.Trim
-        's = s & "  Vendor Name:" & rs.Fields("VendorName").Value.ToString.Trim
-        's = s & "  RTB:" & rs.Fields("RTB").Value.ToString.Trim
-
-
-
-        'Dim fn As String
-        'If DateDiff(DateInterval.Minute, redisdown, Now) > 10 Then
-
-
-        '    Try
-
-        '        If IsNothing(AirTaxi.rdc) Then
-        '            '  AirTaxiClass.rdc = ConnectionMultiplexer.Connect("casexchange.redis.cache.windows.net:6379,ssl=false,password=YzVXw0YYJGVr/Uxkrw10lmbOEWEaXeG1oBHmdwCzuKU=")
-
-        '            AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=False,abortConnect=False")
-
-        '            '    GaviaExchange.redis.cache.windows.net : 6380,password=GVgQYlUyTVVPva6TsElpUJLE/EweBGwJwrRxyk3sd4Q=,ssl=True,abortConnect=FalseGaviaExchange.redis.cache.windows.net:6380,password=GVgQYlUyTVVPva6TsElpUJLE/EweBGwJwrRxyk3sd4Q=,ssl=True,abortConnect=False
-
-        '            '    GaviaExchange.redis.cache.windows.net : 6380,password=GVgQYlUyTVVPva6TsElpUJLE/EweBGwJwrRxyk3sd4Q=,ssl=True,abortConnect=False
-
-
-        '        End If
-
-        '        If AirTaxi.rdc.IsConnected = False Then
-        '            '  AirTaxiClass.rdc = ConnectionMultiplexer.Connect("casexchange.redis.cache.windows.net:6379,ssl=false,password=YzVXw0YYJGVr/Uxkrw10lmbOEWEaXeG1oBHmdwCzuKU=")
-        '            AirTaxi.rdc = ConnectionMultiplexer.Connect("pub-redis-11392.dal-05.1.sl.garantiadata.com:11392,password=5acbAlcy3jeeBFzu,ssl=False,abortConnect=False")
-
-        '        End If
-
-        '        AirTaxi.cache = rdc.GetDatabase
-
-
-        '        fn = AirTaxi.cache.StringGet(ac)
-
-        '        If IsNothing(fn) Then fn = ""
-
-        '        If fn <> "" Then
-        '            aclookup_dictionary(ac) = fn
-        '            Return fn
-        '        End If
-
-
-        '    Catch
-        '        redisdown = Now
-        '    End Try
-
-
-        'End If
-
-
-        'Dim cn As New ADODB.Connection
-        'Dim rs As New ADODB.Recordset
-        'Dim req As String
-
-        'If cn.State = 1 Then cn.Close()
-        'If cn.State = 0 Then
-        '    cn.ConnectionString = getglobalconnectionstring("OptimizerDriver")
-        '    cn.Open()
-        'End If
-
-        'req = "SELECT Registration & "  FROM [OptimizerWest].[dbo].[Aircraft] where [FOSAircraftID] = '06SJ' and carrierid = 104"
-
-        'req = Replace(req, "104", _carrierid)
-        'req = Replace(req, "06SJ", ac)
-
-
-        'If rs.State = 1 Then rs.Close()
-        'rs.Open(req, cn, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockReadOnly)
-
-        'If Not rs.EOF Then
-
-        '    Dim s As String
-        '    s = rs.Fields("Registration").Value & "  Broker:" & rs.Fields("BrokerAircraft").Value & "  Equip Type:" & rs.Fields("TypeID").Value & " HB:" & lookupclass(rs.Fields("HomeBaseAirportCode").Value.ToString.Trim)
-        '    ' s = s & "  Operator:" & rs.Fields("Operator").Value.ToString.Trim
-        '    s = s & "  Vendor Name:" & rs.Fields("VendorName").Value.ToString.Trim
-        '    s = s & "  RTB:" & rs.Fields("RTB").Value.ToString.Trim
-
-
-        '    aclookup_dictionary(ac) = s
-        '    AirTaxi.cache.StringSet(ac, s)
-
-        '    Return s
-
-        'End If
-
-        'If rs.State = 1 Then rs.Close()
-
-        'Return ""
+            aclookup_dictionary(ac) = req
+            AirTaxi.cache.StringSet(ac, req)
+            Return req
+            'fname_dictionary.TryGetValue(ac, value)
+        End If
+        Return ""
 
     End Function
 
