@@ -68,6 +68,43 @@ Public Class RunOptimizer
 
                 Me.txtemail.Text = Session("email").ToString
 
+                '20171031 - pab - fix model run defaults
+                RadSliderUpg.Value = 72
+                RadSliderMBF.Value = 60
+                RadSliderDepDelay.Value = 15
+                ChkBroker.Checked = False
+                RadSliderAutoPin.Value = 3
+                RadSliderTaxiTime1.Value = 15
+                RadSliderFastTurn.Value = 30
+                RadSliderPrePosition.Value = 0
+                chkValidation.Checked = True
+                chkTrailingDH.Checked = True
+                chkCrewRules.Checked = True
+                chkDeconflict.Checked = True
+                chkRejects.Checked = False
+                RadSliderR60Delay.Value = 5
+                RadSliderCycleCost.Value = 0
+                chkScrubAfterModel.Checked = False
+                chkIterate.Checked = True
+                chkDetangleCrewIncoming.Checked = True
+                RadSliderCrewWithinX.Value = 240
+                chkRebuild.Checked = True
+                chkallowupgrades.Checked = False
+                chkallowslides.Checked = False
+                chkproratecostbyday.Checked = False
+                chkscrubincoming.Checked = False
+                RadSlidercrewdutyday.Value = 14
+                RadSliderswapwindow.Value = 18
+                CheckOverride.Checked = False
+                chkAssigns.Checked = False
+                RadSliderMaxSlideMinutes.Value = 0
+
+                If InStr(Session("email").ToString.ToLower, "@coastal") > 0 Then
+                    pnlAdvancedSettings.Visible = True
+                Else
+                    pnlAdvancedSettings.Visible = False
+                End If
+
             End If
 
             '20100608 - pab - add logo to email
@@ -210,74 +247,73 @@ Public Class RunOptimizer
             rs.Fields("GMTEnd").Value = RaddatetimeTo.SelectedDate
             rs.Fields("MinutesBetweenFlights").Value = CInt(RadSliderMBF.Value.ToString)
             rs.Fields("MaxSpeedKts").Value = 680 'RadSliderAvgSpeed.Value.ToString
-            'rs.Fields("DepartureDelays").Value = RadSliderDepDelay.Value.ToString
-            rs.Fields("DepartureDelays").Value = 0
+            rs.Fields("DepartureDelays").Value = RadSliderDepDelay.Value.ToString
 
-            'If chkallowslides.Checked = True Then
-            '    rs.Fields("allowslides").Value = 1
-            'Else
-            rs.Fields("allowslides").Value = 0
-            'End If
+            If chkallowslides.Checked = True Then
+                rs.Fields("allowslides").Value = 1
+            Else
+                rs.Fields("allowslides").Value = 0
+            End If
 
-            'If chkallowupgrades.Checked = True Then
-            '    rs.Fields("checkallowupgrades").Value = 1
-            'Else
-            rs.Fields("checkallowupgrades").Value = 0
-            'End If
+            If chkallowupgrades.Checked = True Then
+                rs.Fields("checkallowupgrades").Value = 1
+            Else
+                rs.Fields("checkallowupgrades").Value = 0
+            End If
 
-            'If CheckOverride.Checked = True Then
-            '    rs.Fields("OverrideMBF").Value = 1
-            'Else
-            rs.Fields("OverrideMBF").Value = 0
-            'End If
+            If CheckOverride.Checked = True Then
+                rs.Fields("OverrideMBF").Value = 1
+            Else
+                rs.Fields("OverrideMBF").Value = 0
+            End If
 
-            'If chkRebuild.Checked = True Then
-            '    rs.Fields("RebuildModel").Value = 1
-            'Else
-            rs.Fields("RebuildModel").Value = 0
-            'End If
+            If chkRebuild.Checked = True Then
+                rs.Fields("RebuildModel").Value = 1
+            Else
+                rs.Fields("RebuildModel").Value = 0
+            End If
 
-            'If chkDeconflict.Checked = True Then
-            '    rs.Fields("DeConflict").Value = 1
-            'Else
-            rs.Fields("DeConflict").Value = 0
-            'End If
+            If chkDeconflict.Checked = True Then
+                rs.Fields("DeConflict").Value = 1
+            Else
+                rs.Fields("DeConflict").Value = 0
+            End If
 
-            'If chkIterate.Checked = True Then
-            '    rs.Fields("Iterate").Value = 1
-            'Else
-            rs.Fields("Iterate").Value = 0
-            'End If
+            If chkIterate.Checked = True Then
+                rs.Fields("Iterate").Value = 1
+            Else
+                rs.Fields("Iterate").Value = 0
+            End If
 
-            'If chkScrubAfterModel.Checked = True Then
-            '    rs.Fields("ScrubAfterModel").Value = 1
-            'Else
-            rs.Fields("ScrubAfterModel").Value = 0
-            'End If
+            If chkScrubAfterModel.Checked = True Then
+                rs.Fields("ScrubAfterModel").Value = 1
+            Else
+                rs.Fields("ScrubAfterModel").Value = 0
+            End If
 
-            'If chkDetangleCrewIncoming.Checked = True Then
-            '    rs.Fields("DetangleCrewIncoming").Value = 1
-            'Else
-            rs.Fields("DetangleCrewIncoming").Value = 0
-            'End If
+            If chkDetangleCrewIncoming.Checked = True Then
+                rs.Fields("DetangleCrewIncoming").Value = 1
+            Else
+                rs.Fields("DetangleCrewIncoming").Value = 0
+            End If
 
-            'If chkValidation.Checked = True Then
-            '    rs.Fields("RunAddlValidation").Value = 1
-            'Else
-            rs.Fields("RunAddlValidation").Value = 0
-            'End If
+            If chkValidation.Checked = True Then
+                rs.Fields("RunAddlValidation").Value = 1
+            Else
+                rs.Fields("RunAddlValidation").Value = 0
+            End If
 
-            'If chkTrailingDH.Checked = True Then
-            '    rs.Fields("ExcludeTrailingDH").Value = 1
-            'Else
-            rs.Fields("ExcludeTrailingDH").Value = 0
-            'End If
+            If chkTrailingDH.Checked = True Then
+                rs.Fields("ExcludeTrailingDH").Value = 1
+            Else
+                rs.Fields("ExcludeTrailingDH").Value = 0
+            End If
 
-            'If ChkBroker.Checked = True Then
-            '    rs.Fields("IncludeBrokerAircraft").Value = 1
-            'Else
-            rs.Fields("IncludeBrokerAircraft").Value = 0
-            'End If
+            If ChkBroker.Checked = True Then
+                rs.Fields("IncludeBrokerAircraft").Value = 1
+            Else
+                rs.Fields("IncludeBrokerAircraft").Value = 0
+            End If
 
             'If chkFastRun.Checked = True Then
             If rblModelType.SelectedValue = "Fast" Then
@@ -300,27 +336,26 @@ Public Class RunOptimizer
                 rs.Fields("RunR0only").Value = 1
             End If
 
-            'If chkAssigns.Checked = True Then
-            '    rs.Fields("UseAssigns").Value = 1
-            'Else
-            rs.Fields("UseAssigns").Value = 0
-            'End If
+            If chkAssigns.Checked = True Then
+                rs.Fields("UseAssigns").Value = 1
+            Else
+                rs.Fields("UseAssigns").Value = 0
+            End If
 
-            'If chkRejects.Checked = True Then
-            '    rs.Fields("RecordRR").Value = 1
-            'Else
-            rs.Fields("RecordRR").Value = 0
-            'End If
-
-            'rs.Fields("R60Wait").Value = CInt(RadSliderR60Delay.Value.ToString)
-            rs.Fields("R60Wait").Value = 0
             ' RejectReasons
+            If chkRejects.Checked = True Then
+                rs.Fields("RecordRR").Value = 1
+            Else
+                rs.Fields("RecordRR").Value = 0
+            End If
 
-            'If chkCrewRules.Checked = True Then
-            '    rs.Fields("CheckCrewRules").Value = 1
-            'Else
-            rs.Fields("CheckCrewRules").Value = 0
-            'End If
+            rs.Fields("R60Wait").Value = CInt(RadSliderR60Delay.Value.ToString)
+
+            If chkCrewRules.Checked = True Then
+                rs.Fields("CheckCrewRules").Value = 1
+            Else
+                rs.Fields("CheckCrewRules").Value = 0
+            End If
 
             Dim st As New System.TimeSpan
 
@@ -333,20 +368,14 @@ Public Class RunOptimizer
             'End If
 
             rs.Fields("CrewDutyDay").Value = RadSlidercrewdutyday.Value.ToString
-            'rs.Fields("SwapWindow").Value = RadSliderswapwindow.Value.ToString
-            'rs.Fields("MaxSlideMinutes").Value = RadSliderMaxSlideMinutes.Value.ToString
-            rs.Fields("SwapWindow").Value = 0
-            rs.Fields("MaxSlideMinutes").Value = 0
+            rs.Fields("SwapWindow").Value = RadSliderswapwindow.Value.ToString
+            rs.Fields("MaxSlideMinutes").Value = RadSliderMaxSlideMinutes.Value.ToString
             rs.Fields("UpgradeWindow").Value = RadSliderUpg.Value.ToString
             rs.Fields("AutoPin").Value = RadSliderAutoPin.Value.ToString
-            'rs.Fields("TaxiTime").Value = RadSliderTaxiTime1.Value.ToString
-            'rs.Fields("FastTurnSameTrip").Value = RadSliderFastTurn.Value.ToString
-            'rs.Fields("PrepositionFirstFlight").Value = RadSliderPrePosition.Value.ToString
-            'rs.Fields("CrewWithinX").Value = RadSliderCrewWithinX.Value.ToString
-            rs.Fields("TaxiTime").Value = 0
-            rs.Fields("FastTurnSameTrip").Value = 0
-            rs.Fields("PrepositionFirstFlight").Value = 0
-            rs.Fields("CrewWithinX").Value = 0
+            rs.Fields("TaxiTime").Value = RadSliderTaxiTime1.Value.ToString
+            rs.Fields("FastTurnSameTrip").Value = RadSliderFastTurn.Value.ToString
+            rs.Fields("PrepositionFirstFlight").Value = RadSliderPrePosition.Value.ToString
+            rs.Fields("CrewWithinX").Value = RadSliderCrewWithinX.Value.ToString
             rs.Fields("email").Value = Me.txtemail.Text 'rk 3/6/2013 add email for notifications
             rs.Fields("RequestDate").Value = Now
             ' rs.Fields("CompleteDate").Value =
@@ -368,19 +397,18 @@ Public Class RunOptimizer
             '    rs.Fields("Template").Value = 1
             'End If
 
-            'rs.Fields("CycleCost").Value = RadSliderCycleCost.Value
-            rs.Fields("CycleCost").Value = 0
-            'If chkproratecostbyday.Checked Then
-            '    rs.Fields("ProRateCostsByDay").Value = 1
-            'Else
-            rs.Fields("ProRateCostsByDay").Value = 0
-            'End If
+            rs.Fields("CycleCost").Value = RadSliderCycleCost.Value
+            If chkproratecostbyday.Checked Then
+                rs.Fields("ProRateCostsByDay").Value = 1
+            Else
+                rs.Fields("ProRateCostsByDay").Value = 0
+            End If
 
-            'If chkscrubincoming.Checked Then
-            '    rs.Fields("ScrubIncoming").Value = 1
-            'Else
-            rs.Fields("ScrubIncoming").Value = 0
-            'End If
+            If chkscrubincoming.Checked Then
+                rs.Fields("ScrubIncoming").Value = 1
+            Else
+                rs.Fields("ScrubIncoming").Value = 0
+            End If
 
             rs.Update()
 

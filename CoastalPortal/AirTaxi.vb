@@ -132,9 +132,12 @@ Public Class AirTaxi
 again:
 
         Try
+
+
             Dim ws As New CATMSGQ.msgq
 
             postToServiceBusQueue = ws.Post(message, Trim(queid) & tf, 60, minutesdelay)
+
 
             If InStr(postToServiceBusQueue, "Added record") = 0 Then
                 retries = retries + 1
@@ -143,91 +146,24 @@ again:
                     GoTo again
                 Else
                     DataAccess.Insert_sys_log(_carrierid, "Error PostToServiceBusQueue 20 retries " & postToServiceBusQueue,
-                        Trim(queid) & Trim(UCase(ConnectionStringHelper.ts)) & " " & Now, "PostToServiceBusQueue cds", "Post")
-                    sendemailtemplate("5612397068@txt.att.net", "unable to post after 20 retries", "queid " & queid & "msg " & message, 100)
+                        Trim(queid) & Trim(UCase(ConnectionStringHelper.testflag)) & " " & Now, "PostToServiceBusQueue cds", "Post")
+                    sendemailtemplate("5612397068@txt.att.net", "unable to post after 20 retries", "queid " & queid & "msg " &
+                        message, _carrierid)
 
                 End If
+
+
             End If
 
             Return postToServiceBusQueue
 
+
+
         Catch ex As Exception
-
-            DataAccess.Insert_sys_log(_carrierid, " ERROR PSQ ", Trim(queid) & Trim(UCase(ConnectionStringHelper.ts)) & " " & Now, ex.Message & ":" & ex.StackTrace, "Post")
+            DataAccess.Insert_sys_log(_carrierid, " ERROR PSQ ", Trim(queid) & Trim(UCase(ConnectionStringHelper.testflag)) & " " & Now,
+                ex.Message & ":" & ex.StackTrace, "Post")
             Return ""
         End Try
-
-
-        'Try
-        '    Dim ws As New CATMSGQ.msgq
-        '    postToServiceBusQueue = ws.Post(message, Trim(queid) & Trim(UCase(ConnectionStringHelper.testflag)), 60, minutesdelay)
-        '    Return postToServiceBusQueue
-
-        'Catch ex As Exception
-
-        '    DataAccess.Insertsys_log(100, "PostToServiceBusQueue " & ex.Message & ":" & ex.StackTrace, Trim(queid) & Trim(UCase(ConnectionStringHelper.testflag)) & " " & Now, "autobatch cds", "Post")
-        '    Return ""
-        'End Try
-
-        Exit Function
-
-    End Function
-
-    '20171030 - pab - run optimizer page
-    Public Shared Function PopFromServiceBusQueue(ByVal queid As String) As String
-
-
-        Try
-
-            Dim connectionString As String
-
-            If queid = "acceptchanges" Then
-                '   connectionString = "Endpoint=sb://acceptall.servicebus.windows.net/;SharedAccessKeyName=acceptchanges;SharedAccessKey=7XoF3jyMSaEiuW6LXgQ2r2H+2qALGJItTBOs6Y09jsA="
-                connectionString = "Endpoint=sb://optimizerscheduling.servicebus.windows.net/;SharedAccessKeyName=accept;SharedAccessKey=pF40xuMcLKJ9hzJZ2VgeTQsw65grr9kaZaNQzivPUuc="
-
-            End If
-
-
-            'Dim Client As QueueClient = QueueClient.CreateFromConnectionString(connectionString, queid, ReceiveMode.ReceiveAndDelete)
-
-            '  Client.
-
-
-
-            'Dim mbr As New BrokeredMessage
-
-
-            'mbr = Client.Peek
-            'If IsNothing(mbr) Then
-            '    PopFromServiceBusQueue = ""
-            '    Exit Function
-
-            'End If
-
-            'mbr = Client.Receive
-
-
-            'If Not (IsNothing(mbr)) Then
-
-            '    Dim a, b, c As String
-
-            '    c = mbr.Label
-            '    b = mbr.GetBody(Of String)()
-
-            '    PopFromServiceBusQueue = c 'message.GetBody(Of String)
-
-            'Else
-
-            '    PopFromServiceBusQueue = ""
-            'End If
-
-
-        Catch
-
-            Return ""
-        End Try
-
-
 
     End Function
 
@@ -268,7 +204,8 @@ again:
         body &= "</br>"
         body &= "</br>"
 
-        Dim carrierlogo As String = GetSetting(carrierid, "CompanyLogo", "")
+        Dim da As New DataAccess
+        Dim carrierlogo As String = da.GetSetting(carrierid, "CompanyLogo")
 
         If testrun = False Then
 

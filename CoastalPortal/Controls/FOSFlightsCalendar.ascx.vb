@@ -12,8 +12,11 @@ Public Class FOSFlightsCalendar
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         '20170126 - pab - fix old tmc models being pulled up
-        If Session("username") Is Nothing Then
-            FormsAuthentication.RedirectToLoginPage()
+        '20171031 - pab - fix calendar
+        'If Session("username") Is Nothing Then
+        If Session("email") Is Nothing Then
+            'FormsAuthentication.RedirectToLoginPage()
+            Response.Redirect("CustomerLogin.aspx", True)
             Exit Sub
         End If
 
@@ -39,7 +42,8 @@ Public Class FOSFlightsCalendar
             '20170221 - pab - fix page going blank
             Dim setting As String = da.GetSetting(_carrierid, "CalendarStyle")
             If setting = "" Then
-                Session("CalendarStyle") = "Graphic"
+                '20171031 - pab - fix calendar
+                setting = "Graphic"
             End If
             Session("CalendarStyle") = setting
             '20170203 - pab - change calendar style
@@ -98,6 +102,9 @@ Public Class FOSFlightsCalendar
                 HydrateddlACType()
                 Me.rcACType.SelectedIndex = 0
             End If
+
+            '20171031 - pab - fix calendar
+            Me.rcStyle.SelectedValue = Session("CalendarStyle").ToString
 
             '20170316 - pab - load from and to with initial values
             If IsNothing(Me.from_date.SelectedDate) Then
