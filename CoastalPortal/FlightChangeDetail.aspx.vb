@@ -508,9 +508,9 @@ Public Class FlightChangeDetail
                 gridviewtrips.Rows(i).Cells(FOS_AC).ToolTip = AirTaxi.lookupac(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text))
             End If
             rownumber += 1
-            ' If IsNumeric(gridviewtrips.Rows(i).Cells(FOS_COST).Text) Then
-            ''gridviewtrips.Rows(i).Cells(FOS_COST).Text = Convert.ToDecimal(gridviewtrips.Rows(i).Cells(FOS_COST).Text).ToString("c0")
-            ' End If
+            If IsNumeric(gridviewtrips.Rows(i).Cells(FOS_COST).Text) Then
+                gridviewtrips.Rows(i).Cells(FOS_COST).Text = Convert.ToDecimal(gridviewtrips.Rows(i).Cells(FOS_COST).Text).ToString("c0")
+            End If
             If i > 0 Then
                 currentTail = If(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text))
                 LastTail = If(Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i - 1).Cells(CAS_AC).Text))

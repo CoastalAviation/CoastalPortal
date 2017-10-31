@@ -246,13 +246,14 @@
 				<ul class="table__list">
 					<li> <asp:Label runat="server" ID="price_one_1" Text="$5200" >  </asp:Label></li>
 					<li> <asp:Label runat="server" ID="price_two_1" Text="$5200" >  </asp:Label></li>
-				</ul>
-			</div>
+				</ul> CssClass="table__tr" HeaderStyle-CssClass="table__h"
+			</div> <div style="align-items:center; justify-content:center;margin-left:10px;">
+
 		</div>	
 		</div>--%>
-    	<div class="table grid">
-            <asp:GridView ID="gvFCDRList" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0" AutoGenerateColumns="False"  
-                HeaderStyle-HorizontalAlign ="Center" CssClass="table__tr" ItemType="CoastalPortal.FCDRList">
+       <div style="align-items:center; justify-content:center;margin-left:10px;">
+    <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="table__tr" HeaderStyle-CssClass="table__h"
+                HeaderStyle-HorizontalAlign ="Center"  ItemType="CoastalPortal.FCDRList">
             <Columns >
                 <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="FCDRPage" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center"/>

@@ -373,18 +373,21 @@
 				</ul>
 			</div>	
 		</div>	
-	</header>
-	
-	
-	
+	</header>	
 </section>
 
-    <div style="align-items:center; justify-content:center;margin-left:10px;">
+<section class="article nopadding">
+           <%-- %> <div class="form__order2" id="form_1" runat="server"> --%>
+                <div class="title">Flight Change Detail Report</div>
+                <div class="title">
+                    <asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label>
+                </div>
+               <div style="align-items:center; justify-content:center;margin-left:10px;">
         <table id="tryme" style="vertical-align: top; width: auto" runat="server">
             <tr style="vertical-align: top;">
                 <td style="vertical-align: top; padding-right: 4px" class="auto-style15">
                     <div style="background-color: #ffff; width: auto; font-family: Arial, Helvetica, sans-serif">
-                        <div width="1400px">
+                        <div width="100%">
                             <asp:ListView ID="lvflightlist" runat="server" ItemType="CoastalPortal.PanelDisplay">
                                 <LayoutTemplate>
                                     <table class="table" style="padding-left: 10px; color: #00ff00">
@@ -399,16 +402,17 @@
                                 <ItemTemplate>
                                     <table style="vertical-align: top; width: auto">
                                         <tr>
-                                            <td><asp:Label runat="server" Font-size="Medium" Text="Change in Non Revenue Miles:">
-                                         <asp:Label ID="lblNonRevDeltab" runat="server" Font-Size="Medium" Text='<%#Eval("NRM", "{0:N0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-size="Medium" Text="Cost Savings:">
-                                         <asp:Label ID="lblCostSavings" runat="server" Font-Size="Medium" Text='<%#Eval("TotalSavings", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-size="Medium" Text="Total Cost Day 0:">
-                                         <asp:Label ID="lblCostDay0b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday0", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-size="Medium" Text="Total Cost Day 1:">
-                                         <asp:Label ID="lblCostDay1b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday1", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-size="Medium" Text="Total Cost Day 2:">
-                                         <asp:Label ID="lblCostDay2b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday2", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
+                                            <td>
+                                                <asp:Label runat="server" Font-Size="Medium" Text="Change in Non Revenue Miles:">
+                                                    <asp:Label ID="lblNonRevDeltab" runat="server" Font-Size="Medium" Text='<%#Eval("NRM", "{0:N0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Cost Savings:">
+                                                    <asp:Label ID="lblCostSavings" runat="server" Font-Size="Medium" Text='<%#Eval("TotalSavings", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 0:">
+                                                    <asp:Label ID="lblCostDay0b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday0", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 1:">
+                                                    <asp:Label ID="lblCostDay1b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday1", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 2:">
+                                                    <asp:Label ID="lblCostDay2b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday2", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
                                             </td>
                                         </tr>
                                         <tr>
@@ -469,8 +473,8 @@
                                                         <asp:BoundField DataField="CASRecord.LegTypeCode" HeaderText="LTC" SortExpression="LTC" />
                                                         <asp:BoundField DataField="CASRecord.SIC" HeaderText="SIC" SortExpression="SIC" Visible="false" />
                                                         <asp:BoundField DataField="CASRecord.PIC" HeaderText="PIC" SortExpression="PIC" Visible="false" />
-                                                         <asp:BoundField DataField="CASRecord.triprevenue" HeaderText="Revenue" SortExpression="Revenue" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
-                                                       <asp:BoundField DataField="CASRecord.Cost" HeaderText="Cost" SortExpression="Cost" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="CASRecord.triprevenue" HeaderText="Revenue" SortExpression="Revenue" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
+                                                        <asp:BoundField DataField="CASRecord.Cost" HeaderText="Cost" SortExpression="Cost" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="CASRecord.PandL" HeaderText="P&L" SortExpression="P&L" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="CASRecord.BaseCode" HeaderText="Base" SortExpression="Base" />
                                                         <asp:ButtonField CommandName="X" HeaderText=" Pin  " ShowHeader="True" Text="Pin" ItemStyle-ForeColor="#009999" ButtonType="Link">
@@ -493,18 +497,18 @@
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td> </br></br></td>
+                                            <td></br></br></td>
                                         </tr>
-                                        <tr >
+                                        <tr>
                                             <td>
                                                 <asp:GridView ID="GVbaseRevenue" runat="server" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3"
                                                     Font-Names="Arial" Font-Size="Small" Width="700px" Style="margin-top: 0px;" AutoGenerateColumns="false"
                                                     DataSource="<%#Item.RevenueRecords %>" ItemType="Optimizer.RevenueRecords">
                                                     <Columns>
-                                                        <asp:BoundField DataField="basecode" HeaderText="Base" SortExpression="Base" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"/>
-                                                        <asp:BoundField DataField="FosRevenue" HeaderText="FOS P&L" SortExpression="FosRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"/>
-                                                        <asp:BoundField DataField="CasRevenue" HeaderText="CAS P&L" SortExpression="CasRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"/>
-                                                        <asp:BoundField DataField="TotalRevenue" HeaderText="Delta P&L" SortExpression="DelatRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"/>
+                                                        <asp:BoundField DataField="basecode" HeaderText="Base" SortExpression="Base" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="FosRevenue" HeaderText="FOS P&L" SortExpression="FosRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="CasRevenue" HeaderText="CAS P&L" SortExpression="CasRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="TotalRevenue" HeaderText="Delta P&L" SortExpression="DelatRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                     </Columns>
                                                 </asp:GridView>
                                             </td>
@@ -517,8 +521,11 @@
                 </td>
             </tr>
         </table>
-    </div>
-        </form>
+                </div>
+     <%-- %>       </div>--%>
+
+        </section>
+    </form>
        <input id="hidIsClose" type="hidden" value="0" runat="server" />
     <input id="hidData" type="hidden" runat="server" value="" />
     <script language="javascript" type="text/javascript">

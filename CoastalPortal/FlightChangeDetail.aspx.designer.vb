@@ -86,6 +86,15 @@ Partial Public Class FlightChangeDetail
     Protected WithEvents lblCarrier As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
+    '''aircraft_type_txt_1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents aircraft_type_txt_1 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
     '''tryme control.
     '''</summary>
     '''<remarks>
