@@ -95,13 +95,13 @@ Partial Public Class FlightChangeReports
     Protected WithEvents aircraft_type_txt_1 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''gvServiceProviderMatrix control.
+    '''gvFCDRList control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents gvServiceProviderMatrix As Global.System.Web.UI.WebControls.GridView
+    Protected WithEvents gvFCDRList As Global.System.Web.UI.WebControls.GridView
     
     '''<summary>
     '''lblMsg control.

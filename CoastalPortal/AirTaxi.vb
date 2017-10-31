@@ -387,7 +387,7 @@ done:
     End Function
 
     Public Shared Function lookupac(ac As String) As String
-        Dim odb As OptimizerContext
+        Dim odb As New OptimizerContext
         Dim newac As New lookupac_class
         ac = Trim(ac)
 
@@ -429,7 +429,7 @@ done:
         Dim lookup As String
         req = "SELECT Registration,BrokerAircraft,TypeID,HomeBaseAirportCode,VendorName,RTB,FosAircraftID,Operator as ACOperator FROM [OptimizerWest].[dbo].[Aircraft] where [FOSAircraftID] = '" & ac & "' and carrierid = " & _carrierid
 
-        newac = odb.Database.SqlQuery(Of lookupac_class)(req).First
+        newac = odb.Database.SqlQuery(Of lookupac_class)(req).FirstOrDefault()
         If newac IsNot Nothing Then
             If newac.brokeraircraft = "False" Then
                 awclookup.TryGetValue(Trim(newac.TypeID), lookup)

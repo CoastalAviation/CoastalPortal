@@ -251,71 +251,21 @@
 		</div>	
 		</div>--%>
     	<div class="table grid">
-            <asp:GridView ID="gvServiceProviderMatrix" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
-            AutoGenerateColumns="False" DataKeyNames="Origin,Departs,Destination,Arrives,Flight Duration,Price"  CssClass="table__tr">
+            <asp:GridView ID="gvFCDRList" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0" AutoGenerateColumns="False"  
+                HeaderStyle-HorizontalAlign ="Center" CssClass="table__tr" ItemType="CoastalPortal.FCDRList">
             <Columns >
-                <%--<asp:BoundField DataField="origin"  HeaderText="origin"  />--%>
-                <%--<asp:BoundField DataField="departs"   HeaderText="departs" />--%>
-                <%--<asp:BoundField DataField="destination"   HeaderText="destination" />--%>
-                <%--<asp:BoundField DataField="arrives"  HeaderText="arrives" />--%>
-                <%--<asp:BoundField DataField="flight_duration"   HeaderText="flight duration" />--%>
-                <%--<asp:BoundField DataField="price"   HeaderText="price" />--%>
-                <asp:TemplateField HeaderText="Select">
-                    <ItemTemplate>
-                        <asp:RadioButton ID="RadioButton1" runat="server" />
-                        <asp:HiddenField ID="HiddenField1" runat="server" Value = '<%#Eval("ID")%>' />
-                    </ItemTemplate>
-                    <ControlStyle Width="5%" />
-                    <ItemStyle Width="5%" />
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Aircraft Type" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "name")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="80px" />--%>
-                    <%--<ItemStyle Width="80px" />--%>
-                </asp:TemplateField>
-                <asp:TemplateField  HeaderText="Origin">
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "OriginFacilityName")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="200px" />--%>
-                    <%--<ItemStyle Width="200px" />--%>
-                </asp:TemplateField> 
-                <asp:TemplateField HeaderText="Departs" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Departs", "{0:G}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField  HeaderText="Destination">
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "DestinationFacilityName")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="200px" />--%>
-                    <%--<ItemStyle Width="200px" />--%>
-                </asp:TemplateField> 
-                <asp:TemplateField HeaderText="Arrives" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Arrives", "{0:g}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Flight Duration" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Flight Duration", "{0:g}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Fuel Stops">
-                    <ItemTemplate> 
-                        <%#DataBinder.Eval(Container.DataItem, "FuelStops")%> 
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Price<br />(w/o Tax)">
-                    <ItemTemplate> <%#DataBinder.Eval(Container.DataItem, "Price", "{0:c}")%> </ItemTemplate>
-                    <ItemStyle HorizontalAlign="Right" />
-                    <%--<ControlStyle Width="40px" />--%>
-                    <%--<ItemStyle Width="40px" />--%>
-                </asp:TemplateField>
-            </Columns>
+                <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="FCDRPage" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="GMTStart" HeaderText="Model Start" SortExpression="Start" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="deltanonrevmiles" HeaderText="Delta Non Rev Miles" SortExpression="NRM" DataFormatString="{0:N0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="TotalSavings" HeaderText="Total Savings" SortExpression="TotalSavings" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="savingsday0" HeaderText="Savings Day 0" SortExpression="SaveNow" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="savingsday1" HeaderText="Savings Day 1" SortExpression="Save1" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="savingsday2" HeaderText="Savings Day 2" SortExpression="Save2" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="priortailnumber" HeaderText="Starting Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
+           </Columns>
+
             </asp:GridView>		
 		</div>
 		<div class="form__buttons">
