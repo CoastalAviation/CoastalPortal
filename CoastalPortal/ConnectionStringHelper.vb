@@ -1,6 +1,9 @@
 ﻿Imports CoastalPortal.AirTaxi
 
 Public Class ConnectionStringHelper
+    Public Shared ts As String = ""
+    Public Shared usevmdb As Boolean = True
+    Public Shared testflag As String = ""
 
     '20171030 - pab - run optimizer page
     Public Shared ts As String = ""

@@ -14,6 +14,42 @@ Option Explicit On
 Partial Public Class SiteMaster
     
     '''<summary>
+    '''HeadContent control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents HeadContent As Global.System.Web.UI.WebControls.ContentPlaceHolder
+    
+    '''<summary>
+    '''BetweenContent control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents BetweenContent As Global.System.Web.UI.WebControls.ContentPlaceHolder
+    
+    '''<summary>
+    '''RadAjaxManager1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadAjaxManager1 As Global.Telerik.Web.UI.RadAjaxManager
+    
+    '''<summary>
+    '''RadScriptManager1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadScriptManager1 As Global.Telerik.Web.UI.RadScriptManager
+    
+    '''<summary>
     '''MainContent control.
     '''</summary>
     '''<remarks>
