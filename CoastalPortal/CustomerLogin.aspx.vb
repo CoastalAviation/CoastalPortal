@@ -163,6 +163,11 @@ Public Class loginpage
                 Session("MemberIDCarrier") = If(LoginUser.CarrierID.ToString, 0)
                 Session("datecreated") = If(LoginUser.DateCreated.ToString, Now)
 
+                '20171031 - fix missing session variables from validatelogin that was commented out
+                Session("userid") = LoginUser.UserID
+                Session("username") = LoginUser.Email.Trim
+                Session("Active") = True
+
                 Me.txtmsg.Text = "Welcome Back " & LoginUser.FirstName & "." & vbCr & vbLf & vbCr & vbLf & "You are a valued " & LoginUser.PlanType & " level member. " & vbCr & vbLf
 
                 If LoginUser.LastSignIn.ToString() IsNot Nothing Then

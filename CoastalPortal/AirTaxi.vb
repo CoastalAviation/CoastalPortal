@@ -113,6 +113,119 @@ Public Class AirTaxi
     Public Shared _CalendarDetailVisible As Boolean
     Public Shared usedevdb As Boolean = False
 
+    '20171030 - pab - run optimizer page
+    Public Shared testrun As Boolean = False
+    Public Shared usevmdb As Boolean = True
+
+    '20171030 - pab - run optimizer page
+    Public Shared Function postToServiceBusQueue(ByVal queid As String, ByVal message As String, minutesdelay As Integer) As String
+
+        Dim tf As String
+        tf = Trim(UCase(ConnectionStringHelper.ts))
+
+        '  If OptimizerDesktop.frmDesktop.chkTest.Checked = True Then
+        ' tf = "TEST"
+        'End If
+
+        Dim retries As Integer = 0
+
+again:
+
+        Try
+
+
+            Dim ws As New CATMSGQ.msgq
+
+            postToServiceBusQueue = ws.Post(message, Trim(queid) & tf, 60, minutesdelay)
+
+
+            If InStr(postToServiceBusQueue, "Added record") = 0 Then
+                retries = retries + 1
+
+                If retries < 20 Then
+                    GoTo again
+                Else
+                    DataAccess.Insert_sys_log(_carrierid, "Error PostToServiceBusQueue 20 retries " & postToServiceBusQueue,
+                        Trim(queid) & Trim(UCase(ConnectionStringHelper.testflag)) & " " & Now, "PostToServiceBusQueue cds", "Post")
+                    sendemailtemplate("5612397068@txt.att.net", "unable to post after 20 retries", "queid " & queid & "msg " &
+                        message, _carrierid)
+
+                End If
+
+
+            End If
+
+            Return postToServiceBusQueue
+
+
+
+        Catch ex As Exception
+            DataAccess.Insert_sys_log(_carrierid, " ERROR PSQ ", Trim(queid) & Trim(UCase(ConnectionStringHelper.testflag)) & " " & Now,
+                ex.Message & ":" & ex.StackTrace, "Post")
+            Return ""
+        End Try
+
+    End Function
+
+    '20171030 - pab - run optimizer page
+    Shared Function sendemailtemplate(targetemail As String, subject As String, b As String, carrierid As Integer)
+
+
+        b = Replace(b, "...", "</br>")
+
+        Dim body As String
+
+        body = "   <head>  <style type=%text/css% media=%screen%> " &
+            "table{        border-collapse:collapse;         border:1px solid #0000FF;         } " &
+    "        table td{         border:1px solid #0000FF;         }         </style>    </head>"
+        body = Replace(body, "%", Chr(34))
+
+
+        body &= "<div style=""font-family:tahoma;text-align:left;"">"
+        body &= "<img src=cid:companylogo>"
+        body &= "<h3 style=""font-size:0.8em;""> :" & subject & "</h3>"
+        body &= "<table border=""0"" cellpadding=""3"" cellspacing=""0"" style=""font-size:0.8em;  border:1px solid #FF0000;"">"
+
+        body &= "<tr>"
+
+        body &= "<td valign=""top"" align=""right"">"
+        body &= b
+        body &= "</td>"
+
+        'body &= "<td valign=""top"" align=""left"">"
+        'body &= "http://www.optimizerpanel.com/panel.aspx?modelrunid=" & b
+        'body &= "</td>"
+
+
+        body &= "</tr>"
+
+
+        body &= "</table>"
+        body &= "</br>"
+        body &= "</br>"
+
+        Dim da As New DataAccess
+        Dim carrierlogo As String = da.GetSetting(carrierid, "CompanyLogo")
+
+        If testrun = False Then
+
+            body = body
+
+            Try
+                ' Dim ws As New coastalavtech.service.WebService1
+                Dim ws As New aws.WebService1
+                ws.SendEmail("pbaumgart@ctgi.com", "123", carrierid, targetemail, "",
+                       "optimizer@coastalaviationsoftware.com", subject, body, True, "", carrierlogo, True, "")
+            Catch ex As Exception
+
+                ex = ex
+            End Try
+
+        End If
+
+
+    End Function
+
     '20140723 - pab - use sql storage for carrier logos and aircraft images
     '20150114 - pab - use blob storage for carrier logos and aircraft images instead of sql
     Shared Function GetImageURLByATSSID(ByRef carrierid As Integer, ByRef ServiceTypeID As Integer, ByRef imgtype As String) As String

@@ -5,6 +5,22 @@ Public Class ConnectionStringHelper
     Public Shared usevmdb As Boolean = True
     Public Shared testflag As String = ""
 
+    '20171030 - pab - run optimizer page
+    Public Shared Function GetConnectionStringSQLMKAzure() As String
+
+        If Not testrun Then
+
+            If usevmdb Then Return getglobalconnectionstring("OptimizerDriver" & ts)
+            '  If usevmdb Then Return "Driver={SQL Server Native Client 11.0};server=tcp:optimizersqlvm.cloudapp.net,1433;database=OptimizerWest;uid=cas;Password=n621kf!12;Encrypt=no;"
+
+            'Return "Driver={SQL Server Native Client 11.0};server=tcp:b2pqcffmjl.database.windows.net,1433;database=OptimizerWest;uid=OptimizerWest@b2pqcffmjl;Password=n621kf!12;Encrypt=yes;"
+        Else
+            Return "Driver={SQL Server Native Client 11.0};Server=RICHARDdesktop;database=OptimizerWest;User ID=sa;Password=n621kf!12;"
+
+        End If
+
+    End Function
+
     '20140523 - pab - change to dynamic optimizer database location
     Shared Function getglobalconnectionstring(connection As String) As String
 

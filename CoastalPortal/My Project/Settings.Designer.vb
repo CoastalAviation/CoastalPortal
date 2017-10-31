@@ -53,6 +53,26 @@ Namespace My
                 Return defaultInstance
             End Get
         End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.WebServiceUrl),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("http://casmsgq.coastalavtech.com/msgq.asmx")>  _
+        Public ReadOnly Property CoastalPortal_CATMSGQ_msgq() As String
+            Get
+                Return CType(Me("CoastalPortal_CATMSGQ_msgq"),String)
+            End Get
+        End Property
+        
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.WebServiceUrl),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("http://169.47.243.162/service.asmx")>  _
+        Public ReadOnly Property CoastalPortal_AWS_WebService1() As String
+            Get
+                Return CType(Me("CoastalPortal_AWS_WebService1"),String)
+            End Get
+        End Property
     End Class
 End Namespace
 

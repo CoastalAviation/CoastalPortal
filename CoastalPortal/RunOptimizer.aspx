@@ -47,6 +47,84 @@
             combo._focused = false;
         }
     </script>
+    <script type="text/javascript">
+        function HandleValueChangedMBF(sender, eventArgs) {
+            $get("txtmbf").value = sender.get_value();
+        }
+    </script>
+
+    <script type="text/javascript">
+        function HandleValueChangedUpgrade(sender, eventArgs) {
+            $get("upgvalue").value = sender.get_value();
+        }
+    </script>
+
+ <script type="text/javascript">
+        function HandleValueChangedSpeed(sender, eventArgs) {
+            $get("txtspeed").value = sender.get_value();
+        }
+    </script>
+
+ <script type="text/javascript">
+     function HandleValueChangedDepDelay(sender, eventArgs) {
+         $get("txtdepdelay").value = sender.get_value();
+     }
+    </script>
+
+
+<script type="text/javascript">
+     function hvtt(sender, eventArgs) {
+         $get("txttaxitime").value = sender.get_value();
+     }
+    </script>
+
+ <script type="text/javascript">
+     function HandleValueAutoPin(sender, eventArgs) {
+         $get("txtAutoPin").value = sender.get_value();
+     }
+    </script>
+
+
+ <script type="text/javascript">
+     function HandleValueFastTurn(sender, eventArgs) {
+         $get("txtFastTurn").value = sender.get_value();
+     }
+    </script>
+
+ <script type="text/javascript">
+     function rscc(sender, eventArgs) {
+         $get("txtCycleCost").value = sender.get_value();
+     }
+    </script>
+
+
+
+<script type="text/javascript">
+     function hvpp(sender, eventArgs) {
+         $get("txtPrePosition").value = sender.get_value();
+     }
+    </script>
+
+<script type="text/javascript">
+    function rsc(sender, eventArgs) {
+        $get("txtCrewWithinX").value = sender.get_value();
+    }
+    </script>
+<script type="text/javascript">
+    function rscdd(sender, eventArgs) {
+        $get("txtCrewDutyDay").value = sender.get_value();
+    }
+    </script>
+<script type="text/javascript">
+    function rssw(sender, eventArgs) {
+        $get("txtSwapWindow").value = sender.get_value();
+    }
+    </script>
+<script type="text/javascript">
+    function rsvalue(sender, eventArgs, txtbox) {
+        $get(txtbox).value = sender.get_value();
+    }
+    </script>
    </head>
 <body>
     <form id="form1" runat="server">
@@ -200,7 +278,260 @@
 	<div class="form__order2"  id="form_1" runat="server" >
 		<div class="title">Run Optimizer</div>
 
-		<div class="title"> <asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label> </div>
+		<div class="form__buttons">
+            <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
+		</div>
+
+        <div>
+            <table style="width: 100%">
+                <tr>
+                    <td style="width: 50%; vertical-align: top;">
+                        <asp:Label ID="Label5" runat="server" Text="Description: " Font-Bold="True" Font-Size="Small"></asp:Label>
+                        <br />
+                        <asp:TextBox ID="txtDescription" runat="server" Width="331px" Height="24px" TextMode="MultiLine"></asp:TextBox>
+                        <br />
+                        <br />
+                    </td>
+                    <td style="width: 50%; vertical-align: top;">
+                        <asp:Label ID="Label8" runat="server" Text="Email to Notify: " Font-Bold="True" Font-Size="Small"></asp:Label>
+                        <br />
+                        <asp:TextBox ID="txtemail" runat="server" Width="331px" Height="24px" TextMode="MultiLine" ></asp:TextBox>
+                        <br />
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%; vertical-align: top;">
+                        <asp:Label ID="Label1" runat="server" Text="GMT Start: " Font-Bold="True" Font-Size="Small" ></asp:Label>
+                        <br />
+                        <telerik:raddatetimepicker ID="RadDateTimeFrom" placeholder="Model Start" 
+			                EmptyMessage="Model Start" text="Model Start" runat="server" ToolTip="Model Start Date" 
+                            Width="220px" Culture="en-US">
+                            <TimeView CellSpacing="-1" Interval="00:30:00"></TimeView>
+                            <TimePopupButton HoverImageUrl="" ImageUrl="" />
+                            <Calendar ID="CalendarFrom" runat="server" EnableKeyboardNavigation="true"></Calendar>
+                            <DateInput DateFormat="M/d/yyyy" DisplayDateFormat="M/d/yyyy" DisplayText="" 
+                                LabelWidth="40%" type="text" value=""></DateInput>
+                            <DatePopupButton HoverImageUrl="" ImageUrl="" />
+                        </telerik:raddatetimepicker>
+                        <br />
+                        (For best results, use 0400 start time)
+                        <br />
+                        <br />
+                        <asp:Label ID="Label2" runat="server" Text="GMT End:  " Font-Bold="True" Font-Size="Small" ></asp:Label>
+                        <br />
+                        <telerik:raddatetimepicker ID="RaddatetimeTo" placeholder="Model Through" 
+			                EmptyMessage="Model Through" text="Model Through" runat="server" ToolTip="Model Through Date" 
+                            Width="220px" Culture="en-US">
+                            <TimeView CellSpacing="-1" Interval="00:30:00"></TimeView>
+                            <TimePopupButton HoverImageUrl="" ImageUrl="" />
+                            <Calendar ID="CalendarTo" runat="server" EnableKeyboardNavigation="true"></Calendar>
+                            <DateInput DateFormat="M/d/yyyy" DisplayDateFormat="M/d/yyyy" DisplayText="" 
+                                LabelWidth="40%" type="text" value=""></DateInput>
+                            <DatePopupButton HoverImageUrl="" ImageUrl="" />
+                        </telerik:raddatetimepicker>
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                    </td>
+                    <td style="width: 50%; vertical-align: top;">
+                        <asp:Label ID="Label3" runat="server" Text="Type Of Model To Run:" Font-Bold="True" Font-Size="Small" ></asp:Label>
+                        <br />
+                        <asp:RadioButtonList ID="rblModelType" runat="server">
+                            <asp:ListItem Value="Fast"> Fast Run (5 minutes)</asp:ListItem>
+                            <asp:ListItem Value="Schedule"> Schedule Update (20 minutes)</asp:ListItem>
+                            <asp:ListItem Value="Full"> Full Schedule Rebuild (40 minutes)</asp:ListItem>
+                        </asp:RadioButtonList>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 50%; vertical-align: top;">
+                        <asp:Label ID="Label4" runat="server" Text="Model Rule Settings:" Font-Bold="True" Font-Size="Small" ></asp:Label>
+                        <br />
+                        <br />
+                    </td>
+                    <td style="width: 50%; vertical-align: top;"></td>
+                </tr>
+                <tr>
+                    <td style="width: 50%; vertical-align: top;">
+                        <strong><input type="text" style="width: 22px;" id="txtAutoPin" readonly="true"  />  Auto Pin (hours prior to departure)</strong>
+                        <br />
+                        <br />
+                        <telerik:RadSlider ID="RadSliderAutoPin" runat="server"  OnClientValueChanged="HandleValueAutoPin" OnClientLoad="HandleValueAutoPin" 
+                            MinimumValue="1"  MaximumValue="24" Value="3" ToolTip="Hours before departure to auto-pin flight" DbValue="0" Height="22px" 
+                            Length="200" Width="300px" ></telerik:RadSlider>
+                        <br />
+                        <strong><input type="text" style="width: 22px;" id="upgvalue" readonly="true" value="72" />  Allow upgrades (hours prior to departure)</strong>  
+                        <br />
+                        <br />
+                        <telerik:RadSlider ID="RadSliderUpg" runat="server"  OnClientValueChanged="HandleValueChangedUpgrade" OnClientLoad="HandleValueChangedUpgrade" 
+                            MinimumValue="0"  MaximumValue="72" Value="72" ToolTip="Number of hours in advance to allow upgrades" DbValue="0" Height="22px" 
+                            Length="200" Width="300px" ></telerik:RadSlider>
+                        <br />
+                    </td>
+                    <td style="width: 50%; vertical-align: top;">
+                        <strong><input type="text" style="width: 22px;" id="txtmbf" readonly="true"  />  Minutes between flights</strong>
+                        <br />
+                        <br />
+                        <telerik:RadSlider ID="RadSliderMBF" runat="server" OnClientValueChanged="HandleValueChangedMBF" OnClientLoad="HandleValueChangedMBF" 
+                            MinimumValue="0" MaximumValue="180" Value="60" ToolTip="Minutes between flights" DbValue="0" 
+                            Height="22px" Length="200"  Width="300px" ></telerik:RadSlider>
+                        <br />
+                        <strong><input type="text" style="width: 30px;" id="txtCrewDutyDay" readonly="true"  />  Crew Duty Day</strong> 
+                        <br />
+                        <br />
+                        <telerik:RadSlider ID="RadSlidercrewdutyday" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtCrewDutyDay');}" 
+                            OnClientLoad="function(sender,args){rsvalue(sender,args,'txtCrewDutyDay');}" MinimumValue="6"  MaximumValue="14" 
+                            Value="12.5" ToolTip="Crew Duty Day" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
+                        <br />
+                    </td>
+                </tr>
+            </table>
+            <asp:Panel ID="pnlAdvancedSettings" runat="server" Width="100%" Visible="False">
+                <table style="width: 100%">
+                <tr>
+                    <td style="width: 50%; vertical-align: top;">
+                        <br />
+                        <asp:Label ID="Label6" runat="server" Text="Advanced Rule Settings:" Font-Bold="True" Font-Size="Small" ></asp:Label>
+                        <br />
+                        <br />
+                    </td>
+                    <td style="width: 50%; vertical-align: top;">
+                        <br />
+                    </td>
+                </tr>
+                    <tr>
+                        <td style="width: 50%; vertical-align: top;">
+                            <asp:CheckBox ID="chkCrewRules" runat="server" Text=" Enforce Crew Rules" Font-Names="arial" Checked="True"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="ChkBroker" runat="server" Text=" Include Broker Aircraft" Font-Names="arial"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkTrailingDH" runat="server" Text=" Exclude FOS Trailing DH" Font-Names="arial" ToolTip="Remove trailing empty legs in FOS" Checked="True"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkIterate" runat="server" Text=" Iterate Models" Font-Names="arial" ToolTip="Iterate from earlier models in run" Checked="True"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkDetangleCrewIncoming" runat="server" Text=" Detangle initial crew" Font-Names="arial" ToolTip="Detangle Incoming Crew Schedule" Checked="True"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkallowupgrades" runat="server" Text=" Allow Upgrades" Font-Names="arial" ToolTip="Allow Upgrades"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkproratecostbyday" runat="server" Text=" Pro-rate Costs By Day" Font-Names="arial" ToolTip="Pro-rate Costs By Day"  Checked="false" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkAssigns" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 22px;" id="txtspeed" readonly="true" />  Consolidate After X Minutes</strong> 
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderR60Delay" runat="server"  OnClientValueChanged="HandleValueChangedSpeed" 
+                                OnClientLoad="HandleValueChangedSpeed" MinimumValue="0"  MaximumValue="120" Value="5" 
+                                ToolTip="Consolidate Plus X Minutes" DbValue="0" Height="22px" Length="200" Width="300px"></telerik:RadSlider>
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 22px;" id="txtFastTurn" readonly="true"  />  Fast Turn on Same Trip # (minutes)</strong> 
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderFastTurn" runat="server"  OnClientValueChanged="HandleValueFastTurn" 
+                                OnClientLoad="HandleValueFastTurn" MinimumValue="1"  MaximumValue="90" Value="30" 
+                                ToolTip="Fast turn time on same trip number" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 22px;" id="txtCrewWithinX" readonly="true"  />  Enforce Crew Within First X Hours</strong>                                                                                        
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderCrewWithinX" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtCrewWithinX');}" 
+                                OnClientLoad="function(sender,args){rsvalue(sender,args,'txtCrewWithinX');}" MinimumValue="0"  
+                                MaximumValue="240" Value="240" ToolTip="Enforce Crew Within First X Hours From Start of Model" DbValue="0" 
+                                Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 22px;" id="txtSwapWindow" readonly="true"  />  Swap Window</strong>                                                                                        
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderswapwindow" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtSwapWindow');}" 
+                                OnClientLoad="function(sender,args){rsvalue(sender,args,'txtSwapWindow');}" MinimumValue="0"  MaximumValue="18" 
+                                Value="18" ToolTip="Crew Planning Swap Window" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 22px;" id="txtMaxSlideMinutes" readonly="true"  />  Max Slide Minutes</strong>
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderMaxSlideMinutes" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtMaxSlideMinutes');}" 
+                                OnClientLoad="function(sender,args){rsvalue(sender,args,'txtSwapWindow');}" MinimumValue="0"  MaximumValue="180" 
+                                Value="15" ToolTip="Max Minutes for Slide" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
+
+                        </td>
+                        <td style="width: 50%; vertical-align: top;">
+                            <asp:CheckBox ID="chkDeconflict" runat="server" Text=" DeConflict Initial Model" Font-Names="arial"  Checked="True" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="CheckOverride" runat="server" Text=" Override LPC Driven Time Windows" Font-Names="arial" ToolTip="Let Minutes Between Flights slider override show times driven by LPC, LRC codes" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkValidation" runat="server" Text=" Run Additional Validation" Font-Names="arial" ToolTip="Perform additional model checks on MX overlap" Checked="True" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkScrubAfterModel" runat="server" Text=" Scrub Crew Events Post Model" Font-Names="arial" ToolTip="Perform additional model checks on crew" Checked="False" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkRebuild" runat="server" Text=" Rebuild Schedule" Font-Names="arial" ToolTip="Detangle Incoming Crew Schedule" Checked="True"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkallowslides" runat="server" Text=" Allow Slides" Font-Names="arial" ToolTip="Allow Slides"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkscrubincoming" runat="server" Text=" Scrub Incoming" Font-Names="arial" ToolTip="Scrub Incoming" Checked="false"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkRejects" runat="server" Text="Write Reject Reasons" Font-Names="arial"    />
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 22px;" id="txtdepdelay" readonly="true"  />  Departure Delays</strong>  (minutes)
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderDepDelay" runat="server"  OnClientValueChanged="HandleValueChangedDepDelay" 
+                                OnClientLoad="HandleValueChangedDepDelay" MinimumValue="0"  MaximumValue="90" Value="15" 
+                                ToolTip="Standard departure delay" DbValue="0" Height="22px" Width="300px"></telerik:RadSlider>
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 22px;" id="txtPrePosition" readonly="true" />  Create repo before first flight (minutes)</strong> 
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderPrePosition" runat="server"  OnClientValueChanged="hvpp" OnClientLoad="hvpp" 
+                                MinimumValue="1"  MaximumValue="90" Value="30" ToolTip="Create empty leg ahead of the schedule to preposition an aircraft missing an empty leg" 
+                                DbValue="0" Height="22px" Length="200" Width="300px"></telerik:RadSlider>
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 30px;" id="txtCycleCost" readonly="true"  />  Cycle Cost</strong> 
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderCycleCost" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtCycleCost');}" 
+                                OnClientLoad="function(sender,args){rsvalue(sender,args,'txtCycleCost');}" MinimumValue="0"  MaximumValue="2500" 
+                                Value="0" ToolTip="Cycle Cost" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
+                            <br />
+                            <br />
+                            <strong><input type="text" style="width: 22px;" id="txttaxitime" readonly="true"  />  Taxi time</strong>&nbsp; (minutes)
+                            <br />
+                            <br />
+                            <telerik:RadSlider ID="RadSliderTaxiTime1" runat="server"  OnClientValueChanged="hvtt" OnClientLoad="hvtt" 
+                                MinimumValue="0"  MaximumValue="90" Value="15" ToolTip="Standard taxi time" DbValue="0" Height="22px" 
+                                Length="200" Width="300px" ></telerik:RadSlider>
+
+                        </td>
+                    </tr>
+                </table>
+            </asp:Panel>
+        </div>
+
+		<%--<div class="title"> <asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label> </div>--%>
 		<%--<div class="table">
 			<div class="table__scroll">
 			<div class="table_h">
@@ -250,16 +581,10 @@
 			</div>
 		</div>	
 		</div>--%>
-    	<div class="table grid">
+    	<%--<div class="table grid">
             <asp:GridView ID="gvServiceProviderMatrix" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
             AutoGenerateColumns="False" DataKeyNames="Origin,Departs,Destination,Arrives,Flight Duration,Price"  CssClass="table__tr">
             <Columns >
-                <%--<asp:BoundField DataField="origin"  HeaderText="origin"  />--%>
-                <%--<asp:BoundField DataField="departs"   HeaderText="departs" />--%>
-                <%--<asp:BoundField DataField="destination"   HeaderText="destination" />--%>
-                <%--<asp:BoundField DataField="arrives"  HeaderText="arrives" />--%>
-                <%--<asp:BoundField DataField="flight_duration"   HeaderText="flight duration" />--%>
-                <%--<asp:BoundField DataField="price"   HeaderText="price" />--%>
                 <asp:TemplateField HeaderText="Select">
                     <ItemTemplate>
                         <asp:RadioButton ID="RadioButton1" runat="server" />
@@ -272,15 +597,11 @@
                     <ItemTemplate>
                         <%#DataBinder.Eval(Container.DataItem, "name")%>
                     </ItemTemplate>
-                    <%--<ControlStyle Width="80px" />--%>
-                    <%--<ItemStyle Width="80px" />--%>
                 </asp:TemplateField>
                 <asp:TemplateField  HeaderText="Origin">
                     <ItemTemplate>
                         <%#DataBinder.Eval(Container.DataItem, "OriginFacilityName")%>
                     </ItemTemplate>
-                    <%--<ControlStyle Width="200px" />--%>
-                    <%--<ItemStyle Width="200px" />--%>
                 </asp:TemplateField> 
                 <asp:TemplateField HeaderText="Departs" >
                     <ItemTemplate>
@@ -291,8 +612,6 @@
                     <ItemTemplate>
                         <%#DataBinder.Eval(Container.DataItem, "DestinationFacilityName")%>
                     </ItemTemplate>
-                    <%--<ControlStyle Width="200px" />--%>
-                    <%--<ItemStyle Width="200px" />--%>
                 </asp:TemplateField> 
                 <asp:TemplateField HeaderText="Arrives" >
                     <ItemTemplate>
@@ -312,32 +631,18 @@
                 <asp:TemplateField HeaderText="Price<br />(w/o Tax)">
                     <ItemTemplate> <%#DataBinder.Eval(Container.DataItem, "Price", "{0:c}")%> </ItemTemplate>
                     <ItemStyle HorizontalAlign="Right" />
-                    <%--<ControlStyle Width="40px" />--%>
-                    <%--<ItemStyle Width="40px" />--%>
                 </asp:TemplateField>
             </Columns>
             </asp:GridView>		
-		</div>
-		<div class="form__buttons">
-                <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
-                <br />
-                <asp:Label ID="lblFlightTimeMsg" runat="server" ForeColor="Red"></asp:Label>
-			    <%--<br />--%>
-                <%--<br />--%>
-            <%--<asp:Button CssClass="button" Text="Review Qoute" runat="server" ID="CmdReview" />--%>
-            <%--&nbsp;&nbsp;&nbsp;--%>
-            <%--<div class="button_boxing order_box">
-            </div>--%>
-			<p class="price"> <asp:Label runat="server" ID="price_summary_1" Text="">  </asp:Label> </p>
-		</div>
+		</div>--%>
 	
 	</div>
 
     <div class="form__order">
         <div class="form">
             <div class="button_boxing order_box">
-                <asp:Button ID="cmdEdit" CssClass="button" Text="Edit/Email Quote" runat="server" />
-                <asp:Button CssClass="button__secont" text="Start Over" runat="server" ID="cmdStartOver1" />
+                <asp:Button ID="LinkButtonAdd" CssClass="button" Text="Submit Run" runat="server" />
+                <%--<asp:Button CssClass="button__secont" text="Start Over" runat="server" ID="cmdStartOver1" />--%>
             </div>
         </div>
     </div>
@@ -399,178 +704,7 @@
 			<p class="price"> <asp:Label runat="server" ID="price_summary_2" Text="$5700">  </asp:Label> </p>
 		</div>
 	</div>--%>
-	
-	<div class="form__order">
-        <span class="title">EDIT Itinerary</span>
-		<div class="form">
-			<div id="orderform">
-				<span class="order_boxing first">
-					<div class="box__checkboxes">
-						<%--<label class="box__checkboxes--check">
-							 <asp:RadioButton Text="one way" id="checkbox1" CssClass="checkbox" runat="server" GroupName="fl_type" AutoPostBack="true" />
-							<label class="labeltxt" for="checkbox1">one way</label>
-						</label>
-						<label class="box__checkboxes--check">
-							 <asp:RadioButton text="round trip" id="checkbox2" CssClass="checkbox" runat="server" GroupName="fl_type" autopostback="true" />
-							<label class="labeltxt" for="checkbox2">ROUND TRIP</label>
-						</label>
-						<label class="box__checkboxes--check">
-                            <asp:RadioButton Text="multi leg" id="checkbox3" CssClass="checkbox" runat="server" GroupName="fl_type" AutoPostBack="true" />
-							<label class="labeltxt" for="checkbox3">multi Leg</label>
-						</label>--%>
-                        <div>
-                            <asp:RadioButtonList ID="rblOneWayRoundTrip" runat="server" RepeatDirection="Horizontal" AutoPostBack="True">
-                                <asp:ListItem Value="OneWay">One Way</asp:ListItem>
-                                <asp:ListItem Value="RoundTrip">Round Trip</asp:ListItem>
-                                <asp:ListItem Value="MultiLeg">Multi-Leg</asp:ListItem>
-                            </asp:RadioButtonList>
-                        </div>
-					</div>
-					
-					<div class="boxes__select">
-						<span class="order_box col-3">
-							<label>
-								<p class="sub_title ico8">Select Company</p>
-                                <asp:DropDownList ID="ddllBrokerCompanies" runat="server" AutoPostBack="True" >
-                                    </asp:DropDownList>
-							</label>	
-							
-						</span>
-						<span class="order_box col-3">
-							<label>
-								<p class="sub_title ico2">Select contact</p>
-                              <asp:DropDownList ID="ddllBrokers" runat="server" >
-                                  </asp:DropDownList>
-							</label>	
-							
-						</span>
-						<span class="order_box col-3">
-							<label>
-								<p class="sub_title ico8">Aircraft Types </p>
-                             <%--<asp:DropDownList ID="ddlAircraftServiceTypes" runat="server">
-                                <asp:ListItem Text="Aircraft types"  Value="Aircraft types"></asp:ListItem>
-                                <asp:ListItem Text="CAS"  Value="CAS"></asp:ListItem>
-                             </asp:DropDownList>--%>
-                                <div style="border-bottom-style: solid; padding-top: 6%; border-bottom-color: #0556a8; border-bottom-width: 1px; padding-bottom: 3%;">
-                                    <telerik:RadComboBox ID="RadComboBoxACInclude" runat="server" CheckBoxes="True" 
-                                        EmptyMessage="Optional Aircraft types to INCLUDE" 
-                                        EnableCheckAllItemsCheckBox="True" Width="100%">
-                                        <Items>
-                                            <%-- suppress all but light, mid and heavy per David 1/15/2016 --%>
-                                            <%--<telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Single Piston" 
-                                                ToolTip="Piston Propeller" Value="P" />--%>
-                                            <%--<telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Twin Piston" 
-                                                ToolTip="Twin Piston Propeller" Value="T" />--%>
-                                            <%--<telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Single Turboprop" 
-                                                ToolTip="TurboProp (PC12, TBM, Caravan)" Value="1" />--%>
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Twin Turboprop" 
-                                                ToolTip="TurboProp (King Air)" Value="2" />
-                                            <%--<telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Very Light Jet" 
-                                                ToolTip="Very Light Jet (Phenom 100, Mustang, Eclipse)" Value="V" />--%>
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Light Jet" 
-                                                ToolTip="Light Jet (Hawker 400)" Value="L" />
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Mid Jet" 
-                                                ToolTip="Midsize Jet (Hawker 800, Hawker 800XP)" Value="M" />
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="SuperMid Jet" 
-                                                ToolTip="Super Midsize Jet (Citation X, Challenger)" Value="U" />
-                                            <telerik:RadComboBoxItem Owner="RadComboBoxACInclude" Text="Heavy Jet" 
-                                                ToolTip="Heavy Jet (Challenger 604)" Value="H" />
-                                        </Items>
-                                    </telerik:RadComboBox>
-                                </div>
-							</label>	
-							
-						</span>
-					</div>
-				
-					<span class="order_box">
-						<label>
-							<p class="sub_title ico1">
-								Departure Point:
-								<i class="helps"></i>
-								<span class="formshover">
-									Enter an Airport Code
-									[KXXX], City, Street Address,
-									or Landmark Name
-								</span>
-							</p>
-                            <%--<asp:TextBox ID="OriginAddress" CssClass="txt" runat="server" placeholder="Airport Code, City" />--%> 
-                            <div style="border-bottom-style: solid; padding-top: 6%; border-bottom-color: #0556a8; border-bottom-width: 1px; padding-bottom: 3%;">
-                                <telerik:RadComboBox ID="OriginAddress" runat="server" EmptyMessage="Airport Code [KXXX], City" EnableLoadOnDemand="True" 
-                                    Font-Size="10pt" Height="225px" OnClientDropDownOpening="OnClientDropDownOpening1" OnClientItemsRequested="ItemsLoaded" 
-                                    OnClientItemsRequesting="OnClientItemsRequesting" OnClientSelectedIndexChanged="ProdSearch" 
-                                    OnItemsRequested="Address_ItemsRequested" OpenDropDownOnFocus="False" OpenDropDownOnLoad="true" ShowToggleImage="False" 
-                                    Width="100%">
-                                </telerik:RadComboBox>
-                            </div>
-						</label>
-					</span>
-					<span class="order_box">
-						<label class="ico__fly">
-							<p class="sub_title ico1">Destination:
-							<i class="helps"></i>
-								<span class="formshover">
-									Enter an Airport Code
-									[KXXX], City, Street Address,
-									or Landmark Name
-								</span>
-							</p>
-                            <%--<asp:TextBox ID="DestinationAddress" CssClass="txt" runat="server" placeholder="Airport Code, City" />--%> 
-                            <div style="border-bottom-style: solid; padding-top: 6%; border-bottom-color: #0556a8; border-bottom-width: 1px; padding-bottom: 3%;">
-                                <telerik:RadComboBox ID="DestinationAddress" runat="server" EmptyMessage="Airport Code [KXXX], City" EnableLoadOnDemand="True" 
-                                    Font-Size="10pt" Height="225px" OnClientDropDownOpening="OnClientDropDownOpening1" OnClientItemsRequested="ItemsLoaded" 
-                                    OnClientItemsRequesting="OnClientItemsRequesting" OnClientSelectedIndexChanged="ProdSearch" Width="100%" 
-                                    OnItemsRequested="Address_ItemsRequested" OpenDropDownOnFocus="False" OpenDropDownOnLoad="true" ShowToggleImage="False" >
-                                </telerik:RadComboBox>
-                            </div>
-						</label>
-					</span>
-					<span class="order_box col-1">
-						<label>
-							<p class="sub_title ico2">Passengers:</p>
-							<span class="plusminus">
-								<i class="plus">+</i>
-								<i class="minus">-</i>
-							</span>
-                            <asp:TextBox ID="ddlPassengers" CssClass="txt center" runat="server" value="1" placeholder="Airport Code, City" /> 
-						</label>
-					</span>
-					<span class="order_box col-1">
-						<label>
-							<p class="sub_title ico3">Depart Date:</p>
-                            <%--<asp:TextBox ID="calLeave" type="date" CssClass="txt" runat="server" placeholder="Airport Code, City" />--%> 
-                            <div style="border-bottom-style: solid; padding-top: 8%; border-bottom-color: #0556a8; border-bottom-width: 1px; padding-bottom: 3%;">
-                                <telerik:RadDatePicker ID="depart_date" runat="server" Culture="en-US" Width="100%"></telerik:RadDatePicker>
-                            </div>
-						</label>
-					</span>
-					<span class="order_box col-2">
-						<label>
-							<p class="sub_title ico4">Depart time:</p>
-                              <asp:DropDownList ID="departtime_combo" runat="server" DataTextField="TimeStr" DataValueField="TimeStr" >
-                                  <asp:ListItem Text="9:45 AM"  Value="9:45 AM"></asp:ListItem>
-                                  </asp:DropDownList>
-						</label>	
-						
-					</span>
-					<span class="order_box col-1 leggg">
-						<label>
-							<%--<p class="add" id="addLeg">+  Add Leg</p>--%>
-                            <asp:Button CssClass="button__secont" text="+  Add Leg" runat="server" ID="bttnAddLeg" Width="100%" />
-						</label>
-					</span>
-				</span>
-			</div>	
-			<div class="button_boxing order_box">
-                <asp:Label ID="lblMsg1" runat="server" ForeColor="Red"></asp:Label>
-                <br />
-                <br />
-                <asp:Button CssClass="button" text="Generate Quote" runat="server" ID="cmdQuote" />
-                <asp:Button CssClass="button__secont" text="Start Over" runat="server" ID="cmdStartOver" />
-            </div>
-		</div>
-	</div>
-		
+			
 </section>
 	
 <footer class="normal">

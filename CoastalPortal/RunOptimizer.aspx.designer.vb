@@ -86,24 +86,6 @@ Partial Public Class RunOptimizer
     Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
     
     '''<summary>
-    '''aircraft_type_txt_1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents aircraft_type_txt_1 As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''gvServiceProviderMatrix control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents gvServiceProviderMatrix As Global.System.Web.UI.WebControls.GridView
-    
-    '''<summary>
     '''lblMsg control.
     '''</summary>
     '''<remarks>
@@ -113,155 +95,389 @@ Partial Public Class RunOptimizer
     Protected WithEvents lblMsg As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''lblFlightTimeMsg control.
+    '''Label5 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lblFlightTimeMsg As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents Label5 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''price_summary_1 control.
+    '''txtDescription control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents price_summary_1 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents txtDescription As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''cmdEdit control.
+    '''Label8 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cmdEdit As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents Label8 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''cmdStartOver1 control.
+    '''txtemail control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cmdStartOver1 As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents txtemail As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''rblOneWayRoundTrip control.
+    '''Label1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rblOneWayRoundTrip As Global.System.Web.UI.WebControls.RadioButtonList
+    Protected WithEvents Label1 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''ddllBrokerCompanies control.
+    '''RadDateTimeFrom control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddllBrokerCompanies As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents RadDateTimeFrom As Global.Telerik.Web.UI.RadDateTimePicker
     
     '''<summary>
-    '''ddllBrokers control.
+    '''Label2 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddllBrokers As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents Label2 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''RadComboBoxACInclude control.
+    '''RaddatetimeTo control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RadComboBoxACInclude As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents RaddatetimeTo As Global.Telerik.Web.UI.RadDateTimePicker
     
     '''<summary>
-    '''OriginAddress control.
+    '''Label3 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents OriginAddress As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents Label3 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''DestinationAddress control.
+    '''rblModelType control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents DestinationAddress As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents rblModelType As Global.System.Web.UI.WebControls.RadioButtonList
     
     '''<summary>
-    '''ddlPassengers control.
+    '''Label4 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddlPassengers As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents Label4 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''depart_date control.
+    '''RadSliderAutoPin control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents depart_date As Global.Telerik.Web.UI.RadDatePicker
+    Protected WithEvents RadSliderAutoPin As Global.Telerik.Web.UI.RadSlider
     
     '''<summary>
-    '''departtime_combo control.
+    '''RadSliderUpg control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents departtime_combo As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents RadSliderUpg As Global.Telerik.Web.UI.RadSlider
     
     '''<summary>
-    '''bttnAddLeg control.
+    '''RadSliderMBF control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents bttnAddLeg As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents RadSliderMBF As Global.Telerik.Web.UI.RadSlider
     
     '''<summary>
-    '''lblMsg1 control.
+    '''RadSlidercrewdutyday control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lblMsg1 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents RadSlidercrewdutyday As Global.Telerik.Web.UI.RadSlider
     
     '''<summary>
-    '''cmdQuote control.
+    '''pnlAdvancedSettings control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cmdQuote As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents pnlAdvancedSettings As Global.System.Web.UI.WebControls.Panel
     
     '''<summary>
-    '''cmdStartOver control.
+    '''Label6 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cmdStartOver As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents Label6 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''chkCrewRules control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkCrewRules As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''ChkBroker control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ChkBroker As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkTrailingDH control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkTrailingDH As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkIterate control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkIterate As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkDetangleCrewIncoming control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkDetangleCrewIncoming As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkallowupgrades control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkallowupgrades As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkproratecostbyday control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkproratecostbyday As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkAssigns control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkAssigns As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''RadSliderR60Delay control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderR60Delay As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderFastTurn control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderFastTurn As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderCrewWithinX control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderCrewWithinX As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderswapwindow control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderswapwindow As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderMaxSlideMinutes control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderMaxSlideMinutes As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''chkDeconflict control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkDeconflict As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''CheckOverride control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents CheckOverride As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkValidation control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkValidation As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkScrubAfterModel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkScrubAfterModel As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkRebuild control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkRebuild As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkallowslides control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkallowslides As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkscrubincoming control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkscrubincoming As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkRejects control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkRejects As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''RadSliderDepDelay control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderDepDelay As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderPrePosition control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderPrePosition As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderCycleCost control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderCycleCost As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderTaxiTime1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderTaxiTime1 As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''LinkButtonAdd control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents LinkButtonAdd As Global.System.Web.UI.WebControls.Button
 End Class

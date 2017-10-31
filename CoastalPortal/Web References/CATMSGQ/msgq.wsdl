@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="Post">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="value" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="queue" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="visibleuntilXMinutes" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="visibleNotBeforeXMinutes" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PostResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostResult" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Pop">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="queue" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="delete" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PopResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PopResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Delete">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="queue" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="keyvalue" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Reserve">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="queue" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="seconds" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReserveResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="ReserveResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LIST">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="queue" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LISTResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LISTResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Count">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="queue" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CountResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="CountResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="PostSoapIn">
+    <wsdl:part name="parameters" element="tns:Post" />
+  </wsdl:message>
+  <wsdl:message name="PostSoapOut">
+    <wsdl:part name="parameters" element="tns:PostResponse" />
+  </wsdl:message>
+  <wsdl:message name="PopSoapIn">
+    <wsdl:part name="parameters" element="tns:Pop" />
+  </wsdl:message>
+  <wsdl:message name="PopSoapOut">
+    <wsdl:part name="parameters" element="tns:PopResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSoapIn">
+    <wsdl:part name="parameters" element="tns:Delete" />
+  </wsdl:message>
+  <wsdl:message name="DeleteSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReserveSoapIn">
+    <wsdl:part name="parameters" element="tns:Reserve" />
+  </wsdl:message>
+  <wsdl:message name="ReserveSoapOut">
+    <wsdl:part name="parameters" element="tns:ReserveResponse" />
+  </wsdl:message>
+  <wsdl:message name="LISTSoapIn">
+    <wsdl:part name="parameters" element="tns:LIST" />
+  </wsdl:message>
+  <wsdl:message name="LISTSoapOut">
+    <wsdl:part name="parameters" element="tns:LISTResponse" />
+  </wsdl:message>
+  <wsdl:message name="CountSoapIn">
+    <wsdl:part name="parameters" element="tns:Count" />
+  </wsdl:message>
+  <wsdl:message name="CountSoapOut">
+    <wsdl:part name="parameters" element="tns:CountResponse" />
+  </wsdl:message>
+  <wsdl:portType name="msgqSoap">
+    <wsdl:operation name="Post">
+      <wsdl:input message="tns:PostSoapIn" />
+      <wsdl:output message="tns:PostSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Pop">
+      <wsdl:input message="tns:PopSoapIn" />
+      <wsdl:output message="tns:PopSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <wsdl:input message="tns:DeleteSoapIn" />
+      <wsdl:output message="tns:DeleteSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Reserve">
+      <wsdl:input message="tns:ReserveSoapIn" />
+      <wsdl:output message="tns:ReserveSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="LIST">
+      <wsdl:input message="tns:LISTSoapIn" />
+      <wsdl:output message="tns:LISTSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Count">
+      <wsdl:input message="tns:CountSoapIn" />
+      <wsdl:output message="tns:CountSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="msgqSoap" type="tns:msgqSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Post">
+      <soap:operation soapAction="http://tempuri.org/Post" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Pop">
+      <soap:operation soapAction="http://tempuri.org/Pop" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <soap:operation soapAction="http://tempuri.org/Delete" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Reserve">
+      <soap:operation soapAction="http://tempuri.org/Reserve" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LIST">
+      <soap:operation soapAction="http://tempuri.org/LIST" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Count">
+      <soap:operation soapAction="http://tempuri.org/Count" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="msgqSoap12" type="tns:msgqSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Post">
+      <soap12:operation soapAction="http://tempuri.org/Post" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Pop">
+      <soap12:operation soapAction="http://tempuri.org/Pop" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Delete">
+      <soap12:operation soapAction="http://tempuri.org/Delete" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Reserve">
+      <soap12:operation soapAction="http://tempuri.org/Reserve" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LIST">
+      <soap12:operation soapAction="http://tempuri.org/LIST" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Count">
+      <soap12:operation soapAction="http://tempuri.org/Count" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="msgq">
+    <wsdl:port name="msgqSoap" binding="tns:msgqSoap">
+      <soap:address location="http://casmsgq.coastalavtech.com/msgq.asmx" />
+    </wsdl:port>
+    <wsdl:port name="msgqSoap12" binding="tns:msgqSoap12">
+      <soap12:address location="http://casmsgq.coastalavtech.com/msgq.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
