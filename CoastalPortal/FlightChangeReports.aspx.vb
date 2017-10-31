@@ -1,6 +1,6 @@
 ﻿Imports CoastalPortal.AirTaxi
 Imports Telerik.Web.UI
-
+Imports CoastalPortal.Models
 Public Class FlightChangeReports
     Inherits System.Web.UI.Page
 
@@ -37,7 +37,7 @@ Public Class FlightChangeReports
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
-                Me.gvServiceProviderMatrix.Visible = True
+                Me.gvFCDRList.Visible = True
 
                 '20160517 - pab - fix carrierid = 0 preventing quotes
                 If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
@@ -68,24 +68,19 @@ Public Class FlightChangeReports
 
             Else
                 '20131016 - pab - fix session timeout
-                If IsNothing(Session("flights")) And IsNothing(Session("triptype")) Then
-                    lblMsg.Text = da.GetSetting(_carrierid, "TimeoutMessage")
-                    gvServiceProviderMatrix.EmptyDataText = lblMsg.Text
-                    dtflights.Clear()
-                    Me.gvServiceProviderMatrix.DataSource = dtflights
-                    Me.gvServiceProviderMatrix.DataBind()
-                End If
+
+                'If IsNothing(Session("flights")) And IsNothing(Session("triptype")) Then
+                '    lblMsg.Text = da.GetSetting(_carrierid, "TimeoutMessage")
+                '    gvServiceProviderMatrix.EmptyDataText = lblMsg.Text
+                '    dtflights.Clear()
+                '    Me.gvServiceProviderMatrix.DataSource = dtflights
+                '    Me.gvServiceProviderMatrix.DataBind()
+                'End If
             End If
 
             '20100608 - pab - add logo to email
             Session("ApplicationPath") = Request.PhysicalApplicationPath
 
-            If Not (IsNothing(Session("flights"))) Then
-                dtflights = Session("flights")
-            Else
-                'chg3641 - 20101008 - pab - fix clearing session variables when going back to request another flight
-                dtflights.Clear()
-            End If
 
         Catch ex As Exception
             Dim s As String = ex.Message
@@ -134,7 +129,12 @@ Public Class FlightChangeReports
         End Try
 
     End Sub
+    Public Sub GetTrips()
+        Dim odb As New OptimizerContext
+        Dim fcdrlist As New List(Of FCDRList)
 
+        'fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = _carrierid).OrderByDescending(Of.ToList()
+    End Sub
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
 
         Try

@@ -2040,6 +2040,15 @@ Public Class FCDRList
     Private m_carrieracceptid As String
     Private m_carrieracceptdate As DateTime?
     Private m_deltanonrevmiles As Integer
+    Private m_carrierid As Integer
+    Public Property CarrierID() As Integer
+        Get
+            Return m_carrierid
+        End Get
+        Set(ByVal value As Integer)
+            m_carrierid = value
+        End Set
+    End Property
     Public Property DeltaNonRevMiles() As Integer
         Get
             Return m_deltanonrevmiles
@@ -2169,6 +2178,11 @@ Public Class FCDRList
         Set(ByVal value As String)
             m_keyid = value
         End Set
+    End Property
+    Public ReadOnly Property PDFlink() As String
+        Get
+            Return "~/FCDRpages/" & keyid & ".pdf"
+        End Get
     End Property
 End Class
 Public Class PanelRecord
