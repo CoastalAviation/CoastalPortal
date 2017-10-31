@@ -2184,6 +2184,11 @@ Public Class FCDRList
             Return "~/FCDRpages/" & keyid & ".pdf"
         End Get
     End Property
+    Public ReadOnly Property FCDRPage() As String
+        Get
+            Return "~/FlightChangeDetail.aspx?key=" & keyid
+        End Get
+    End Property
 End Class
 Public Class PanelRecord
     'Private _CasModification As String

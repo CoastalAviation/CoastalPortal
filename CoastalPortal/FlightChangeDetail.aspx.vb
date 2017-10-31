@@ -878,21 +878,36 @@ Public Class FlightChangeDetail
             currentTail = If(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text))
             LastTail = If(Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i - 1).Cells(CAS_AC).Text))
             If currentTail <> LastTail Then
-                Dim row As New GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Alternate)
-                For zzz = 0 To 1
-                    Dim cell As New TableCell
-                    cell.Text = "&nbsp;"
-                    cell.ColumnSpan = If(zzz = 0, foscount, cascount) '14,13
-                    'cell.Text = Espace
-                    row.Cells.Add(cell)
-                Next
-                row.Cells(1).Style.Add("border-left", "8px solid white")
-                row.BackColor = Drawing.Color.FromArgb(0, 147, 111)
-                gridviewtrips.Controls(0).Controls.AddAt(i + maxrows, row) ' This line will insert row at 2nd line
+                'Dim row As New GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Alternate)
+                'For zzz = 0 To 1
+                '    Dim cell As New TableCell
+                '    cell.Text = "&nbsp;"
+                '    cell.ColumnSpan = If(zzz = 0, foscount, cascount) '14,13
+                '    'cell.Text = Espace
+                '    row.Cells.Add(cell)
+                'Next
+                'row.Cells(1).Style.Add("border-left", "8px solid white")
+                'row.BackColor = Drawing.Color.FromArgb(0, 147, 111)
+                gridviewtrips.Controls(0).Controls.AddAt(i + maxrows, AddRow(foscount, cascount)) ' This line will insert row at 2nd line
                 maxrows += 1
             End If
         Next
+        gridviewtrips.Controls(0).Controls.AddAt(gridviewtrips.Rows.Count + maxrows, AddRow(foscount, cascount)) ' This line will insert row at 2nd line
         gridviewtrips.Columns(CAS_PT).Visible = False
+    End Function
+    Function AddRow(foscount As Integer, cascount As Integer) As GridViewRow
+        Dim row As New GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Alternate)
+        For zzz = 0 To 1
+            Dim cell As New TableCell
+            cell.Text = "&nbsp;"
+            cell.ColumnSpan = If(zzz = 0, foscount, cascount) '14,13
+            'cell.Text = Espace
+            row.Cells.Add(cell)
+        Next
+        row.Cells(1).Style.Add("border-left", "8px solid white")
+        row.BackColor = Drawing.Color.FromArgb(0, 147, 111)
+
+        Return row
     End Function
 
     Protected Sub GVGridViewTrips_PreRender(sender As Object, e As EventArgs)
@@ -901,7 +916,7 @@ Public Class FlightChangeDetail
 
         For i = 0 To lvflightlist.Items.Count - 1
             x = DirectCast(lvflightlist.Items(i).FindControl("pnlFCDR"), Label).Text
-            If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblNonRevDeltab"), Label).Text) > 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblNonRevDeltab"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+            If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblNonRevDeltab"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblNonRevDeltab"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblCostSavings"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblCostSavings"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblCostDay0b"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblCostDay0b"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblCostDay1b"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblCostDay1b"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)

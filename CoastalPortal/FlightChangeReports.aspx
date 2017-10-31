@@ -251,10 +251,21 @@
 		</div>	
 		</div>--%>
     	<div class="table grid">
-            <asp:GridView ID="gvFCDRList" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0" AutoGenerateColumns="False"   CssClass="table__tr" ItemType="CoastalPortal.FCDRList">
+            <asp:GridView ID="gvFCDRList" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0" AutoGenerateColumns="False"  
+                HeaderStyle-HorizontalAlign ="Center" CssClass="table__tr" ItemType="CoastalPortal.FCDRList">
             <Columns >
-                <asp:BoundField DataField="DepartureAirportICAO" HeaderText="From" SortExpression="From" />
-            </Columns>
+                <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="FCDRPage" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="GMTStart" HeaderText="Model Start" SortExpression="Start" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="deltanonrevmiles" HeaderText="Delta Non Rev Miles" SortExpression="NRM" DataFormatString="{0:N0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="TotalSavings" HeaderText="Total Savings" SortExpression="TotalSavings" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="savingsday0" HeaderText="Savings Day 0" SortExpression="SaveNow" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="savingsday1" HeaderText="Savings Day 1" SortExpression="Save1" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="savingsday2" HeaderText="Savings Day 2" SortExpression="Save2" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="priortailnumber" HeaderText="Starting Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
+           </Columns>
+
             </asp:GridView>		
 		</div>
 		<div class="form__buttons">

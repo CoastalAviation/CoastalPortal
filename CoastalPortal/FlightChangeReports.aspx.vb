@@ -5,6 +5,15 @@ Public Class FlightChangeReports
     Inherits System.Web.UI.Page
 
     Private dtflights As New DataTable
+    Public Const F_KEY = 0
+    Public Const F_RUN = 1
+    Public Const F_MDL = 2
+    Public Const F_NRM = 3
+    Public Const F_TOT = 4
+    Public Const F_SV0 = 5
+    Public Const F_SV1 = 6
+    Public Const F_SV2 = 7
+    Public Const F_ACC = 8
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -66,6 +75,7 @@ Public Class FlightChangeReports
                 Me.departtime_combo.DataBind()
                 Me.departtime_combo.SelectedValue = "09:00 AM"
 
+                GetTrips()
             Else
                 '20131016 - pab - fix session timeout
 
@@ -132,8 +142,28 @@ Public Class FlightChangeReports
     Public Sub GetTrips()
         Dim odb As New OptimizerContext
         Dim fcdrlist As New List(Of FCDRList)
+        Dim today = DateAdd("d", -2, DateTime.Now)
 
-        'fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = _carrierid).OrderByDescending(Of.ToList()
+        fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = _carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.GMTStart).ThenByDescending(Function(c) c.TotalSavings).ToList()
+        gvFCDRList.DataSource = fcdrlist
+        gvFCDRList.DataBind()
+
+        Colorme()
+    End Sub
+    Public Sub Colorme()
+        Dim i As Integer = 0
+
+        For i = 0 To gvFCDRList.Rows.Count - 1
+            If gvFCDRList.Rows(i).Cells(F_NRM).Text < 0 Then gvFCDRList.Rows(i).Cells(F_NRM).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+            If gvFCDRList.Rows(i).Cells(F_SV0).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV0).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+            If gvFCDRList.Rows(i).Cells(F_SV1).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV1).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+            If gvFCDRList.Rows(i).Cells(F_SV2).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV2).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+            If gvFCDRList.Rows(i).Cells(F_TOT).Text < 0 Then gvFCDRList.Rows(i).Cells(F_TOT).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+            For ii = 1 To gvFCDRList.Columns.Count - 1
+                gvFCDRList.Rows(i).Cells(ii).Text = Trim(gvFCDRList.Rows(i).Cells(ii).Text)
+            Next
+        Next
+
     End Sub
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
 

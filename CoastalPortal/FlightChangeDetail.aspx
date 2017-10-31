@@ -493,15 +493,18 @@
                                             </td>
                                         </tr>
                                         <tr>
+                                            <td> </br></br></td>
+                                        </tr>
+                                        <tr >
                                             <td>
                                                 <asp:GridView ID="GVbaseRevenue" runat="server" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3"
-                                                    Font-Names="Arial" Font-Size="X-Small" Width="1000px" Style="margin-top: 0px" AutoGenerateColumns="false"
+                                                    Font-Names="Arial" Font-Size="Small" Width="700px" Style="margin-top: 0px;" AutoGenerateColumns="false"
                                                     DataSource="<%#Item.RevenueRecords %>" ItemType="Optimizer.RevenueRecords">
                                                     <Columns>
-                                                        <asp:BoundField DataField="basecode" HeaderText="Base" SortExpression="Base" DataFormatString="{0:c0}" />
-                                                        <asp:BoundField DataField="FosRevenue" HeaderText="FOS P&L" SortExpression="FosRevenue" DataFormatString="{0:c0}" />
-                                                        <asp:BoundField DataField="CasRevenue" HeaderText="CAS P&L" SortExpression="CasRevenue" DataFormatString="{0:c0}" />
-                                                        <asp:BoundField DataField="TotalRevenue" HeaderText="Delta P&L" SortExpression="DelatRev" DataFormatString="{0:c0}" />
+                                                        <asp:BoundField DataField="basecode" HeaderText="Base" SortExpression="Base" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"/>
+                                                        <asp:BoundField DataField="FosRevenue" HeaderText="FOS P&L" SortExpression="FosRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"/>
+                                                        <asp:BoundField DataField="CasRevenue" HeaderText="CAS P&L" SortExpression="CasRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"/>
+                                                        <asp:BoundField DataField="TotalRevenue" HeaderText="Delta P&L" SortExpression="DelatRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"/>
                                                     </Columns>
                                                 </asp:GridView>
                                             </td>
