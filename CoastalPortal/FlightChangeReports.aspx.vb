@@ -143,8 +143,19 @@ Public Class FlightChangeReports
         Dim odb As New OptimizerContext
         Dim fcdrlist As New List(Of FCDRList)
         Dim today = DateAdd("d", -2, DateTime.Now)
+        Dim i As Integer = 1
 
-        fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = _carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.GMTStart).ThenByDescending(Function(c) c.TotalSavings).ToList()
+        fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = _carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
+        If fcdrlist.Count > 1 Then
+            Do While i <> fcdrlist.Count
+                Dim checkme = fcdrlist(i - 1)
+                If fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings Then
+                    fcdrlist.Remove(fcdrlist(i))
+                    i -= 1
+                End If
+                i += 1
+            Loop
+        End If
         gvFCDRList.DataSource = fcdrlist
         gvFCDRList.DataBind()
 

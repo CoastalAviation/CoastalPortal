@@ -162,20 +162,34 @@ Public Class FlightChangeDetail
                 Else
                     Exit Sub
                 End If
-                mrid = db.Database.SqlQuery(Of Integer)("Select Max(ID) from OptimizerRequest where CarrierID= " & carrierprofile.carrierid).First()
 
+                Dim today = DateAdd("d", -2, DateTime.Now)
+
+                fcdrlist = db.FCDRList.Where(Function(c) c.CarrierID = _carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.TotalSavings).ToList()
+                mrid = fcdrlist.Where(Function(b) b.ModelRun = fcdrlist.Max(Function(c) c.ModelRun)).Select(Function(c) c.ModelRunID).FirstOrDefault()
             End If
-
-            fcdrlist = db.FCDRList.Where(Function(c) c.ModelRun = Left(mrid, 5) And c.TotalSavings > 999).ToList()
+            Dim i As Integer = 1
+            fcdrlist = fcdrlist.Where(Function(c) c.ModelRunID = mrid).ToList()
+            fcdrlist = fcdrlist.Where(Function(c) c.ModelRunID = mrid And c.TotalSavings = fcdrlist.Max(Function(bc) bc.TotalSavings)).ToList()
+            If fcdrlist.Count > 1 Then
+                Do While i <> fcdrlist.Count
+                    Dim checkme = fcdrlist(i - 1)
+                    If fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings Then
+                        fcdrlist.Remove(fcdrlist(i))
+                        i -= 1
+                    End If
+                    i += 1
+                Loop
+            End If
             If fcdrlist.Count = 0 Then
                 If CASRecords Is Nothing Then
-                    casRecord = db.CASFlightsOptimizer.Where(Function(x) x.ModelRun = mrid).First()
+                    casRecord = db.CASFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrid).First()
                 Else
-                    casRecord = CASRecords.Where(Function(x) x.ModelRun = mrid).First()
+                    casRecord = CASRecords.Where(Function(x) x.OptimizerRun = mrid).First()
                 End If
 
                 id = casRecord.ID
-                mrid = casRecord.ModelRun
+                mrid = casRecord.OptimizerRun
             Else
                 mrid = fcdrlist(0).ModelRunID.ToString()
             End If
@@ -494,9 +508,9 @@ Public Class FlightChangeDetail
                 gridviewtrips.Rows(i).Cells(FOS_AC).ToolTip = AirTaxi.lookupac(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text))
             End If
             rownumber += 1
-            If IsNumeric(gridviewtrips.Rows(i).Cells(FOS_COST).Text) Then
-                gridviewtrips.Rows(i).Cells(FOS_COST).Text = Convert.ToDecimal(gridviewtrips.Rows(i).Cells(FOS_COST).Text).ToString("c0")
-            End If
+            ' If IsNumeric(gridviewtrips.Rows(i).Cells(FOS_COST).Text) Then
+            ''gridviewtrips.Rows(i).Cells(FOS_COST).Text = Convert.ToDecimal(gridviewtrips.Rows(i).Cells(FOS_COST).Text).ToString("c0")
+            ' End If
             If i > 0 Then
                 currentTail = If(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text))
                 LastTail = If(Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i - 1).Cells(CAS_AC).Text))

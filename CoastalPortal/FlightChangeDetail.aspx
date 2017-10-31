@@ -233,7 +233,7 @@
            }
         </script>
     </telerik:RadCodeBlock>
-<body onload="if (typeof window.opener != 'undefined') window.opener.location.href = this.href; return false;">
+<body ><%-- %>onload="if (typeof window.opener != 'undefined') window.opener.location.href = this.href; return false;"> --%>
     <form id="form1" runat="server">
         <telerik:RadStyleSheetManager ID="RadStyleSheetManager1" runat="server"></telerik:RadStyleSheetManager>
         <telerik:RadScriptManager ID="ScriptManager1" runat="server" EnableTheming="True">
