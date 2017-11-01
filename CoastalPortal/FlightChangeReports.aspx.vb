@@ -68,12 +68,12 @@ Public Class FlightChangeReports
                     _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
                 End If
 
-                Dim oLookup As New PopulateLookups
-                Me.departtime_combo.Items.Clear()
-                dt = oLookup.TimeDD("All")
-                Me.departtime_combo.DataSource = dt.DefaultView
-                Me.departtime_combo.DataBind()
-                Me.departtime_combo.SelectedValue = "09:00 AM"
+                'Dim oLookup As New PopulateLookups
+                'Me.departtime_combo.Items.Clear()
+                'dt = oLookup.TimeDD("All")
+                'Me.departtime_combo.DataSource = dt.DefaultView
+                'Me.departtime_combo.DataBind()
+                'Me.departtime_combo.SelectedValue = "09:00 AM"
 
                 GetTrips()
             Else
