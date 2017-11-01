@@ -320,6 +320,15 @@ Partial Public Class RunOptimizer
     Protected WithEvents chkAssigns As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
+    '''chkFCDRPublish control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkFCDRPublish As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
     '''RadSliderR60Delay control.
     '''</summary>
     '''<remarks>
