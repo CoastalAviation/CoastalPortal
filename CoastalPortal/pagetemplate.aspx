@@ -148,7 +148,7 @@
 			<div class="menu__left">
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
-					<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>
+					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
 				</ul>
 			</div>
@@ -162,7 +162,7 @@
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
 					<li><a href="#">Log Off</a></li>
-					<li><a href="Dashboard.aspx">Operations Dashboard</a></li>
+					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>
 			
@@ -174,18 +174,18 @@
 			
 			<div class="header__title small__padding">
                 <asp:Label ID="lblCarrier" runat="server" Text="TMC"></asp:Label>
-				 &nbsp;OPTIMIZER PORTAL BY COASTAL 
+				 <%--&nbsp;OPTIMIZER PORTAL BY COASTAL--%> 
 			</div>
 			
 			<div class="menu__mobile" id="mainmenu">
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
-					<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>
+					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
 					<li><a href="#">Log Off</a></li>
-					<li><a href="Dashboard.aspx">Operations Dashboard</a></li>
+					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>	
 		</div>	

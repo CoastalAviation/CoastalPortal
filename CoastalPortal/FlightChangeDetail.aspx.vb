@@ -1106,4 +1106,43 @@ Public Class FlightChangeDetail
         'MyBase.VerifyRenderingInServerForm(control)
     End Sub
 
+    Private Sub FlightChangeDetail_PreLoad(sender As Object, e As EventArgs) Handles Me.PreLoad
+
+        Try
+
+            Dim da As New DataAccess
+
+            If Not IsPostBack Then
+                '20171101 - pab - display cleanup
+                'Me.lblCarrier.Text = _urlalias.ToUpper
+                Dim slogotext As String = da.GetSetting(_carrierid, "CompanyLogoText")
+                If slogotext = "" Then slogotext = _urlalias & " Flight Schedule Optimization System"
+                Me.lblCarrier.Text = slogotext.ToUpper
+
+                Me.imglogo.Src = GetImageURLByATSSID(_carrierid, 0, "logo")
+
+                '20171017 - pab - demoair branding
+                If _carrierid = 48 Then
+                    imglogo.Width = 56
+                    imglogo.Style.Remove("position")
+                    imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
+                End If
+            End If
+
+        Catch ex As Exception
+            Dim s As String = ex.Message
+            If Not IsNothing(ex.InnerException) Then
+                s &= "" & ex.InnerException.ToString
+            End If
+            If Not IsNothing(ex.StackTrace) Then
+                s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
+            End If
+            AirTaxi.Insertsys_log(_carrierid, appName, Left(Now & " " & s, 500), "FlightChangeDetail.aspx.vb Page_PreRender", "")
+            SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
+                      appName & " FlightChangeDetail.aspx.vb Page_PreRender error", s, _carrierid)
+
+        End Try
+
+    End Sub
+
 End Class

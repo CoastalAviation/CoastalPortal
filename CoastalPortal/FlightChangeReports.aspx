@@ -147,7 +147,7 @@
 			<div class="menu__left">
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
-					<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>
+					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
 				</ul>
 			</div>
@@ -161,7 +161,7 @@
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
 					<li><a href="#">Log Off</a></li>
-					<li><a href="Dashboard.aspx">Operations Dashboard</a></li>
+					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>
 			
@@ -173,18 +173,18 @@
 			
 			<div class="header__title small__padding">
                 <asp:Label ID="lblCarrier" runat="server" Text="TMC"></asp:Label>
-				 &nbsp;OPTIMIZER PORTAL BY COASTAL 
+				 <%--&nbsp;OPTIMIZER PORTAL BY COASTAL--%> 
 			</div>
 			
 			<div class="menu__mobile" id="mainmenu">
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
-					<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>
+					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
 					<li><a href="#">Log Off</a></li>
-					<li><a href="Dashboard.aspx">Operations Dashboard</a></li>
+					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>	
 		</div>	
@@ -255,7 +255,7 @@
     <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="table__tr" HeaderStyle-CssClass="table__h"
                 HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" >
             <Columns >
-                <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="FCDRPage" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center"/>
+                <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="FCDRPage" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#0066FF" />
                 <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="GMTStart" HeaderText="Model Start" SortExpression="Start" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="deltanonrevmiles" HeaderText="Delta Non Rev Miles" SortExpression="NRM" DataFormatString="{0:N0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>

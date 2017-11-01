@@ -36,7 +36,7 @@
 			<div class="menu__left">
 				<ul>
 					<li><a href="#">Run Optimizer</a></li>
-					<li><a href="#">AOG Recovery</a></li>
+					<%--<li><a href="#">AOG Recovery</a></li>--%>
 					<li><a href="#">Model Run History</a></li>
 				</ul>
 			</div>
@@ -50,7 +50,7 @@
 					<li><a href="#">Review Flight Change Reports</a></li>
 					<li><a href="#">Flight Schedule </a></li>
 					<li><a href="##registration__form">New User</a></li>
-					<li><a href="#">Operations Dashboard</a></li>
+					<%--<li><a href="#">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>
 			
@@ -62,18 +62,18 @@
 			
 			<div class="header__title">
                 <asp:Label ID="lblCarrier" runat="server" Text="TMC"></asp:Label>
-				 &nbsp;OPTIMIZER PORTAL BY COASTAL 
+				 <%--&nbsp;OPTIMIZER PORTAL BY COASTAL--%> 
 			</div>
 	
 			<div class="menu__mobile" id="mainmenu">
 				<ul>
 					<li><a href="#">Run Optimizer</a></li>
-					<li><a href="#">AOG Recovery</a></li>
+					<%--<li><a href="#">AOG Recovery</a></li>--%>
 					<li><a href="#">Model Run History</a></li>
 					<li><a href="#">Review Flight Change Reports</a></li>
 					<li><a href="#">Flight Schedule </a></li>
 					<li><a href="##registration__form">New User</a></li>
-					<li><a href="#">Operations Dashboard</a></li>
+					<%--<li><a href="#">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>	
 		</div>	
@@ -102,8 +102,8 @@
 					</label>
 					<label class="nom">
 						<%--<input type="checkbox" class="checkbox" id="chkbox" />--%>
-                        <asp:CheckBox ID="chkbox" runat="server" class="checkbox" Checked="True"></asp:CheckBox>
-						<label class="labeltxt" for="checkbox">Keep Me Logged In</label>
+                        <asp:CheckBox ID="chkbox" runat="server" class="checkbox" Checked="True" Visible="False"></asp:CheckBox>
+						<label class="labeltxt" for="checkbox" style="visibility: hidden">Keep Me Logged In</label>
 					</label>
 					<label class="nom no">
                         	<%--<a href="#login__password" class="forgot">forgot password</a>--%>

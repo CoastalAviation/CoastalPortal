@@ -107,7 +107,12 @@ Public Class ModelRunHistory
             Dim da As New DataAccess
 
             If Not IsPostBack Then
-                Me.lblCarrier.Text = _urlalias.ToUpper
+                '20171101 - pab - display cleanup
+                'Me.lblCarrier.Text = _urlalias.ToUpper
+                Dim slogotext As String = da.GetSetting(_carrierid, "CompanyLogoText")
+                If slogotext = "" Then slogotext = _urlalias & " Flight Schedule Optimization System"
+                Me.lblCarrier.Text = slogotext.ToUpper
+
                 Me.imglogo.Src = GetImageURLByATSSID(_carrierid, 0, "logo")
 
                 '20171017 - pab - demoair branding
