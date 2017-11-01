@@ -75,7 +75,13 @@ Public Class loginpage
 
             '20161227 - pab - dynamic carrier images
             If Not IsPostBack Then
-                Me.lblCarrier.Text = _urlalias.ToUpper
+                '20171101 - pab - display cleanup
+                'Me.lblCarrier.Text = _urlalias.ToUpper
+                Dim da As New DataAccess
+                Dim slogotext As String = da.GetSetting(_carrierid, "CompanyLogoText")
+                If slogotext = "" Then slogotext = _urlalias & " Flight Schedule Optimization System"
+                Me.lblCarrier.Text = slogotext.ToUpper
+
                 Me.imglogo.Src = GetImageURLByATSSID(_carrierid, 0, "logo")
 
                 Select Case _carrierid

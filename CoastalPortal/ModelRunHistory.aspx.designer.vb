@@ -86,24 +86,6 @@ Partial Public Class ModelRunHistory
     Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
     
     '''<summary>
-    '''aircraft_type_txt_1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents aircraft_type_txt_1 As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''gvServiceProviderMatrix control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents gvServiceProviderMatrix As Global.System.Web.UI.WebControls.GridView
-    
-    '''<summary>
     '''lblMsg control.
     '''</summary>
     '''<remarks>
@@ -113,155 +95,11 @@ Partial Public Class ModelRunHistory
     Protected WithEvents lblMsg As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''lblFlightTimeMsg control.
+    '''GridView1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lblFlightTimeMsg As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''price_summary_1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents price_summary_1 As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''cmdEdit control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents cmdEdit As Global.System.Web.UI.WebControls.Button
-    
-    '''<summary>
-    '''cmdStartOver1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents cmdStartOver1 As Global.System.Web.UI.WebControls.Button
-    
-    '''<summary>
-    '''rblOneWayRoundTrip control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents rblOneWayRoundTrip As Global.System.Web.UI.WebControls.RadioButtonList
-    
-    '''<summary>
-    '''ddllBrokerCompanies control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ddllBrokerCompanies As Global.System.Web.UI.WebControls.DropDownList
-    
-    '''<summary>
-    '''ddllBrokers control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ddllBrokers As Global.System.Web.UI.WebControls.DropDownList
-    
-    '''<summary>
-    '''RadComboBoxACInclude control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents RadComboBoxACInclude As Global.Telerik.Web.UI.RadComboBox
-    
-    '''<summary>
-    '''OriginAddress control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents OriginAddress As Global.Telerik.Web.UI.RadComboBox
-    
-    '''<summary>
-    '''DestinationAddress control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents DestinationAddress As Global.Telerik.Web.UI.RadComboBox
-    
-    '''<summary>
-    '''ddlPassengers control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents ddlPassengers As Global.System.Web.UI.WebControls.TextBox
-    
-    '''<summary>
-    '''depart_date control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents depart_date As Global.Telerik.Web.UI.RadDatePicker
-    
-    '''<summary>
-    '''departtime_combo control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents departtime_combo As Global.System.Web.UI.WebControls.DropDownList
-    
-    '''<summary>
-    '''bttnAddLeg control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents bttnAddLeg As Global.System.Web.UI.WebControls.Button
-    
-    '''<summary>
-    '''lblMsg1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblMsg1 As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''cmdQuote control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents cmdQuote As Global.System.Web.UI.WebControls.Button
-    
-    '''<summary>
-    '''cmdStartOver control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents cmdStartOver As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents GridView1 As Global.System.Web.UI.WebControls.GridView
 End Class

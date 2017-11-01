@@ -5,6 +5,43 @@ Public Class ConnectionStringHelper
     Public Shared usevmdb As Boolean = True
     Public Shared testflag As String = ""
 
+    '20171031 - pab - model run history
+    Public Shared Function GetsqladapterSQLVMConnectionString() As String
+
+
+        If Not testrun Then
+
+            If usevmdb Then Return getglobalconnectionstring("OptimizerDataSource")
+            ' If usevmdb Then Return "Data Source=tcp:optimizersqlvm.cloudapp.net,1433;Initial Catalog=OptimizerWest;Persist Security Info=True;User ID=cas;Password=n621kf!12"
+
+            'providerName = "System.Data.SqlClient"
+        Else
+            Return "Data Source=richarddesktop;Initial Catalog=OptimizerWest;Persist Security Info=True;User ID=sa;Password=n621kf!12;"
+
+        End If
+
+
+    End Function
+
+    '20171031 - pab - model run history
+    Public Shared Function GetsqladapterWestConnectionString() As String
+
+        If Not testrun Then
+
+            Return getglobalconnectionstring("OptimizerDataSource" & ts)
+
+            '   If usevmdb Then Return "Data Source=tcp:optimizersqlvm.cloudapp.net,1433;Initial Catalog=OptimizerWest;Persist Security Info=True;User ID=cas;Password=n621kf!12"
+
+            'Return "Data Source=tcp:b2pqcffmjl.database.windows.net,1433;Initial Catalog=OptimizerWest;Persist Security Info=True;User ID=OptimizerWest@b2pqcffmjl;Password=n621kf!12"
+            'providerName = "System.Data.SqlClient"
+        Else
+            Return "Data Source=richarddesktop;Initial Catalog=OptimizerWest;Persist Security Info=True;User ID=sa;Password=n621kf!12;"
+
+        End If
+
+
+    End Function
+
     '20171030 - pab - run optimizer page
     Public Shared Function GetConnectionStringSQLMKAzure() As String
 

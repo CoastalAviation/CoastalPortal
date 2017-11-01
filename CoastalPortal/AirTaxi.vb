@@ -17,9 +17,9 @@ Public Class AirTaxi
     Public Shared redisdown As DateTime = CDate("7/18/2017 10:00")
 
     '20150921 - move to SDS SQL server
-    Public Shared PortalServer As String = "UATPortalServer"
-    Public Shared PortalData As String = "UATPortalData"
-    Public Shared PortalDriver As String = "UATPortalDriver"
+    Public Shared PortalServer As String = "ProdPortalServer"
+    Public Shared PortalData As String = "ProdPortalData"
+    Public Shared PortalDriver As String = "ProdPortalDriver"
     Public Shared ProdPortalDriver As String = "ProdPortalDriver"
     Public Shared ProdPortalServer As String = "ProdPortalServer"
     Public Shared UATPortalServer As String = "UATPortalServer"
