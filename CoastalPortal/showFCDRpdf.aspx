@@ -1,4 +1,5 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="Dashboard.aspx.vb" Inherits="CoastalPortal.Dashboard" %>
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="showFCDRpdf.aspx.vb" Inherits="CoastalPortal.showFCDRpdf" %>
+
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="asp" %>
 
@@ -6,7 +7,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
-    <title> Dashboard</title>
+    <title> Model Run History</title>
     <link rel="shortcut icon" href="Images/cat.ico" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <link href="style.css" rel="stylesheet" type="text/css" />
@@ -202,12 +203,12 @@
 
 	
 	<div class="form__order2"  id="form_1" runat="server" >
-		<div class="title">Operations Dashboard</div>
+		<div class="title">FCDR Detail</div>
 
-		<div class="title">UNDER CONSTRUCTION</div>
-	
+        <asp:Image ID="imgshowFCDRpdf" runat="server" />
+
 	</div>
-
+		
 </section>
 	
 <footer class="normal">

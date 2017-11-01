@@ -1145,4 +1145,45 @@ Public Class FlightChangeDetail
 
     End Sub
 
+    '20171101 - pab - display cleanup
+    Protected Sub LinkLogOut_Click(sender As Object, e As EventArgs) Handles LinkLogOut.Click
+
+        logout()
+
+    End Sub
+
+    '20171101 - pab - display cleanup
+    Protected Sub LinkLogOut2_Click(sender As Object, e As EventArgs) Handles LinkLogOut2.Click
+
+        logout()
+
+    End Sub
+
+    '20171101 - pab - display cleanup
+    Sub logout()
+
+        If (Request.Browser.Cookies) Then
+            If (Request.Cookies("CASLOGIN") Is Nothing) Then
+                Response.Cookies("CASLOGIN").Expires = DateTime.Now.AddDays(60)
+
+
+                Response.Cookies("CASLOGIN").Item("UNAME") = ""
+                'Write password to the cookie
+                '     Response.Cookies("CASLOGIN").Item("UPASS") = ""
+
+            Else
+                Response.Cookies("CASLOGIN").Item("UNAME") = ""
+                'Write password to the cookie
+                '     Response.Cookies("CASLOGIN").Item("UPASS") = ""
+            End If
+
+        End If
+
+        Session("email") = Nothing
+        Session("username") = Nothing
+
+        Response.Redirect("CustomerLogin.aspx", True)
+
+    End Sub
+
 End Class

@@ -77,8 +77,7 @@ h6 {
 }
 
 body {
-    /*font-family: 'geometriamedium';*/
-    font-family: 'Arial, Helvetica, sans-serif';
+    font-family: 'geometriamedium';
     margin: 0;
     padding: 0;
     color: #333;
@@ -103,40 +102,36 @@ a:hover {
 
 
 @font-face {
-    /*font-family: 'geometriabold';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    /*src: url('fonts/geometria-bold-webfont.eot');
-    src: url('fonts/geometria-bold-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-bold-webfont.sql') format('woff2'), url('fonts/geometria-bold-webfont.woff') format('woff'), url('fonts/geometria-bold-webfont.hxd') format('truetype'), url('fonts/geometria-bold-webfont.svg') format('svg');*/
-    font-weight: bold;
-    font-style: normal;
-}
-
-
-@font-face {
-    /*font-family: 'geometrialight';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    /*src: url('fonts/geometria-light-webfont.eot');
-    src: url('fonts/geometria-light-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-light-webfont.sql') format('woff2'), url('fonts/geometria-light-webfont.woff') format('woff'), url('fonts/geometria-light-webfont.hxd') format('truetype'), url('fonts/geometria-light-webfont.svg') format('svg');*/
-    font-weight: lighter;
-    font-style: normal;
-}
-
-
-@font-face {
-    /*font-family: 'geometriamedium';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    /*src: url('fonts/geometria-medium-webfont.eot');
-    src: url('fonts/geometria-medium-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-medium-webfont.sql') format('woff2'), url('fonts/geometria-medium-webfont.woff') format('woff'), url('fonts/geometria-medium-webfont.hxd') format('truetype'), url('fonts/geometria-medium-webfont.svg') format('svg');*/
+    font-family: 'geometriabold';
+    src: url('fonts/geometria-bold-webfont.eot');
+    src: url('fonts/geometria-bold-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-bold-webfont.sql') format('woff2'), url('fonts/geometria-bold-webfont.woff') format('woff'), url('fonts/geometria-bold-webfont.hxd') format('truetype'), url('fonts/geometria-bold-webfont.svg') format('svg');
     font-weight: normal;
     font-style: normal;
 }
 
 
 @font-face {
-    /*font-family: 'FontAwesome';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    /*src: url('fonts/fontawesome-webfont.eot');
-    src: url('fonts/fontawesome-webfont.eot?#iefix&v=4.5.0') format('embedded-opentype'), url('fonts/fontawesome-webfont.sql') format('woff2'), url('fonts/fontawesome-webfont.woff') format('woff'), url('fonts/fontawesome-webfont.hxd') format('truetype'), url('fonts/fontawesome-webfont.svg') format('svg');*/
+    font-family: 'geometrialight';
+    src: url('fonts/geometria-light-webfont.eot');
+    src: url('fonts/geometria-light-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-light-webfont.sql') format('woff2'), url('fonts/geometria-light-webfont.woff') format('woff'), url('fonts/geometria-light-webfont.hxd') format('truetype'), url('fonts/geometria-light-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'geometriamedium';
+    src: url('fonts/geometria-medium-webfont.eot');
+    src: url('fonts/geometria-medium-webfont.eot?#iefix') format('embedded-opentype'), url('fonts/geometria-medium-webfont.sql') format('woff2'), url('fonts/geometria-medium-webfont.woff') format('woff'), url('fonts/geometria-medium-webfont.hxd') format('truetype'), url('fonts/geometria-medium-webfont.svg') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+@font-face {
+    font-family: 'FontAwesome';
+    src: url('fonts/fontawesome-webfont.eot');
+    src: url('fonts/fontawesome-webfont.eot?#iefix&v=4.5.0') format('embedded-opentype'), url('fonts/fontawesome-webfont.sql') format('woff2'), url('fonts/fontawesome-webfont.woff') format('woff'), url('fonts/fontawesome-webfont.hxd') format('truetype'), url('fonts/fontawesome-webfont.svg') format('svg');
     font-weight: normal;
     font-style: normal;
 }
@@ -175,9 +170,7 @@ html, body {
 }
 
 label select {
-    /*font-family: 'geometrialight';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: lighter;
+    font-family: 'geometrialight';
     font-size: 16px;
     float: left;
     width: 100%;
@@ -219,9 +212,7 @@ label select {
 }
 
 .form__order2 .order_box .search input.txt {
-    /*font-family: 'geometrialight';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: lighter;
+    font-family: 'geometrialight';
     font-size: 16px;
     float: left;
     width: 90%;
@@ -262,8 +253,7 @@ label select {
     }
 
         .form__order2 .order_box .search .sub_title:before {
-            /*font-family: 'FontAwesome';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'FontAwesome';
             font-size: 15px;
             content: '\f041';
             displaY: inline-block;
@@ -289,8 +279,7 @@ label select {
     }
 
 .form__buttons .labeltxt {
-    /*font-family: 'geometriamedium';*/
-    font-family: 'Arial, Helvetica, sans-serif';
+    font-family: 'geometriamedium';
     font-size: 12px;
     text-transform: uppercase;
     float: left;
@@ -331,9 +320,7 @@ label select {
 }
 
 .comment_write .form__buttons .button {
-    /*font-family: 'geometrialight';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: lighter;
+    font-family: 'geometrialight';
     display: inline-block;
     margin: auto;
     background: #F75527;
@@ -383,8 +370,7 @@ label select {
 .menu {
     position: relative;
     z-index: 1;
-    /*font-family: 'geometriamedium';*/
-    font-family: 'Arial, Helvetica, sans-serif';
+    font-family: 'geometriamedium';
     float: left;
     width: 100%
 }
@@ -544,9 +530,7 @@ label select {
 }
 
 .header__title {
-    /*font-family: 'geometrialight';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: lighter;
+    font-family: 'geometrialight';
     font-size: 13px;
     margin: 20px 0 80px 0;
     color: #FFF;
@@ -568,8 +552,7 @@ label select {
 }
 
     .header__title_main big {
-        /*font-family: 'geometriamedium';*/
-        font-family: 'Arial, Helvetica, sans-serif';
+        font-family: 'geometriamedium';
         font-size: 60px;
         color: #FFF;
         text-align: center;
@@ -578,9 +561,7 @@ label select {
     }
 
     .header__title_main small {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         font-size: 20px;
         color: #FFF;
         text-align: center;
@@ -614,8 +595,7 @@ label select {
     }
 
         .box__checkboxes label input {
-            /*font-family: 'bebas_neueregular';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'bebas_neueregular';
             text-transform: uppercase;
             width: 58%;
             float: left;
@@ -712,9 +692,7 @@ label select {
         }
 
             .form__order .order_box .plusminus i {
-                /*font-family: 'geometrialight';*/
-                font-family: 'Arial, Helvetica, sans-serif';
-                font-weight: lighter;
+                font-family: 'geometrialight';
                 font-style: normal;
                 font-size: 20px;
                 cursor: pointer;
@@ -730,8 +708,7 @@ label select {
 
         .form__order .order_box .add {
             float: left;
-            /*font-family: 'geometriamedium';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'geometriamedium';
             font-size: 12px;
             color: #343742;
             text-transform: uppercase;
@@ -779,8 +756,7 @@ label select {
             }
 
             .form__order .aircraft .airlabelwrap .labeltxt {
-                /*font-family: 'geometriamedium';*/
-                font-family: 'Arial, Helvetica, sans-serif';
+                font-family: 'geometriamedium';
                 font-size: 12px;
                 color: #0556a8;
                 text-transform: uppercase;
@@ -828,9 +804,7 @@ label select {
     }
 
     .form__order .button_boxing .button {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         display: inline-block;
         background: #F75527;
         border-radius: 3px;
@@ -849,8 +823,7 @@ label select {
         }
 
     .form__order .button_boxing .button__secont {
-        /*font-family: 'geometriamedium';*/
-        font-family: 'Arial, Helvetica, sans-serif';
+        font-family: 'geometriamedium';
         padding: 15px 25px;
         background: none;
         bordeR: none;
@@ -888,9 +861,7 @@ label select {
     }
 
     .form__order .form label input.txt {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         font-size: 16px;
         float: left;
         width: 90%;
@@ -901,9 +872,7 @@ label select {
     }
 
     .form__order .form label select {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         font-size: 16px;
         float: left;
         width: 100%;
@@ -931,8 +900,7 @@ label select {
     }
 
         .form__order .form label .sub_title:before {
-            /*font-family: 'FontAwesome';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'FontAwesome';
             font-size: 10px;
             content: '\f041';
             displaY: inline-block;
@@ -990,9 +958,7 @@ label select {
 .form__order .title {
     display: block;
     width: 100%;
-    /*font-family: 'geometriabold';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: bold;
+    font-family: 'geometriabold';
     color: #0556a8;
     font-size: 20px;
     text-aligN: center;
@@ -1050,9 +1016,7 @@ label select {
 }
 
     .bg__white .title {
-        /*font-family: 'geometriabold';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: bold;
+        font-family: 'geometriabold';
         color: #0556a8;
         font-size: 20px;
         text-aligN: center;
@@ -1095,9 +1059,7 @@ label select {
     }
 
     .form__order2 .title {
-        /*font-family: 'geometriabold';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: bold;
+        font-family: 'geometriabold';
         color: #0556a8;
         font-size: 20px;
         text-aligN: center;
@@ -1113,9 +1075,7 @@ label select {
     }
 
     .form__order2 .description input {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         font-size: 16px;
         width: 115px;
         background: none;
@@ -1126,9 +1086,7 @@ label select {
 
     .form__order2 .description .button {
         margin: 10px 0px;
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         display: inline-block;
         background: #F75527;
         border-radius: 3px;
@@ -1165,8 +1123,7 @@ label select {
     }
 
         .form__order2 .table_h .h {
-            /*font-family: 'geometriamedium';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'geometriamedium';
             font-weighT: normal;
             text-transform: uppercase;
             displaY: inline-block;
@@ -1218,9 +1175,7 @@ label select {
     }
 
         .form__order2 .form__buttons .button {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             display: inline-block;
             margin: auto;
             background: #F75527;
@@ -1246,9 +1201,7 @@ label select {
             }
 
         .form__order2 .form__buttons .price {
-            /*font-family: 'geometriabold';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: bold;
+            font-family: 'geometriabold';
             position: absolute;
             top: 12px;
             righT: 0;
@@ -1256,8 +1209,7 @@ label select {
         }
 
 .table__tr {
-    /*font-family: 'geometriamedium';*/
-    font-family: 'Arial, Helvetica, sans-serif';
+    font-family: 'geometriamedium';
     font-weighT: normal;
     width: 100%;
     min-width: 680px;
@@ -1365,9 +1317,7 @@ label select {
     }
 
 .title {
-    /*font-family: 'geometriabold';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: bold;
+    font-family: 'geometriabold';
     color: #0556a8;
     font-size: 20px;
     text-aligN: center;
@@ -1425,9 +1375,7 @@ label select {
 }
 
     .addboxing .title {
-        /*font-family: 'geometriabold';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: bold;
+        font-family: 'geometriabold';
         color: #0556a8;
         width: 100%;
         font-size: 20px;
@@ -1447,9 +1395,7 @@ label select {
     }
 
         .addboxing .form label input.txt {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             font-size: 16px;
             float: left;
             width: 90%;
@@ -1476,8 +1422,7 @@ label select {
         }
 
         .addboxing .form label .button {
-            /*font-family: 'geometriamedium';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'geometriamedium';
             display: inline-block;
             text-decoration: none;
             margin: auto;
@@ -1539,9 +1484,7 @@ label select {
         }
 
         .edit_profile .form label input.txt {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             font-size: 16px;
             float: left;
             width: 90%;
@@ -1552,9 +1495,7 @@ label select {
         }
 
         .edit_profile .form label textarea {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             font-size: 16px;
             line-height: 37px;
             float: left;
@@ -1578,9 +1519,7 @@ label select {
         }
 
         .edit_profile .form label select {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             font-size: 16px;
             float: left;
             width: 100%;
@@ -1605,8 +1544,7 @@ label select {
         }
 
         .edit_profile .form label input.button {
-            /*font-family: 'geometriamedium';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'geometriamedium';
             display: inline-block;
             margin: auto;
             padding: 14px 35px;
@@ -1645,9 +1583,7 @@ label select {
 }
 
     .forms_maps .title {
-        /*font-family: 'geometriabold';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: bold;
+        font-family: 'geometriabold';
         color: #0556a8;
         width: 100%;
         font-size: 20px;
@@ -1659,9 +1595,7 @@ label select {
     }
 
     .forms_maps .description {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         margin: auto;
         font-size: 15px;
         line-height: 21px;
@@ -1796,9 +1730,7 @@ label select {
     }
 
         .forms_maps .right__maps_big .right__maps--title {
-            /*font-family: 'geometriabold';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: bold;
+            font-family: 'geometriabold';
             float: left;
             width: 100%;
             color: #0556a8;
@@ -1834,9 +1766,7 @@ label select {
             }
 
             .forms_maps .right__maps_big .form .button {
-                /*font-family: 'geometrialight';*/
-                font-family: 'Arial, Helvetica, sans-serif';
-                font-weight: lighter;
+                font-family: 'geometrialight';
                 display: inline-block;
                 margin: auto;
                 background: #F75527;
@@ -1885,9 +1815,7 @@ label select {
 }
 
 .form_title {
-    /*font-family: 'geometriabold';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: bold;
+    font-family: 'geometriabold';
     display: block;
     text-align: center;
     color: #0556a8;
@@ -1942,9 +1870,7 @@ label select {
         }
 
         .login__box .form label select {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             font-size: 16px;
             float: left;
             width: 100%;
@@ -1955,9 +1881,7 @@ label select {
         }
 
         .login__box .form label input.txt {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             font-size: 16px;
             float: left;
             width: 90%;
@@ -1976,8 +1900,7 @@ label select {
             }
 
         .login__box .form label input.button {
-            /*font-family: 'geometriamedium';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'geometriamedium';
             display: block;
             margin: auto;
             padding: 14px 52px;
@@ -2009,8 +1932,7 @@ label select {
             .login__box .form label .sub_title:before {
                 content: '';
                 displaY: inline-block;
-                /*font-family: 'FontAwesome';*/
-                font-family: 'Arial, Helvetica, sans-serif';
+                font-family: 'FontAwesome';
                 font-size: 10px;
                 height: 9px;
             }
@@ -2036,8 +1958,7 @@ label select {
     }
 
     .login__box .form .labeltxt {
-        /*font-family: 'geometriamedium';*/
-        font-family: 'Arial, Helvetica, sans-serif';
+        font-family: 'geometriamedium';
         font-size: 12px;
         text-transform: uppercase;
     }
@@ -2073,8 +1994,7 @@ label select {
     }
 
     .login__box .form .forgot {
-        /*font-family: 'geometriamedium';*/
-        font-family: 'Arial, Helvetica, sans-serif';
+        font-family: 'geometriamedium';
         font-size: 12px;
         text-aligN: center;
         text-transform: uppercase;
@@ -2118,9 +2038,7 @@ label select {
     }
 
     .article .article__title {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         display: block;
         width: 100%;
         text-align: center;
@@ -2148,9 +2066,7 @@ label select {
 }
 
 .paymentform__box--title {
-    /*font-family: 'geometriabold';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: bold;
+    font-family: 'geometriabold';
     display: block;
     color: #0556a8;
     font-size: 20px;
@@ -2178,8 +2094,7 @@ label select {
 }
 
     .paymentform__box .button__wrap .button {
-        /*font-family: 'geometriamedium';*/
-        font-family: 'Arial, Helvetica, sans-serif';
+        font-family: 'geometriamedium';
         display: block;
         margin: auto;
         padding: 14px 35px;
@@ -2222,9 +2137,7 @@ label select {
 }
 
 .paybox__left input.txt {
-    /*font-family: 'geometrialight';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: lighter;
+    font-family: 'geometrialight';
     font-size: 16px;
     float: left;
     width: 90%;
@@ -2272,8 +2185,7 @@ label select {
 }
 
     .paybox__left .sub_title:before {
-        /*font-family: 'FontAwesome';*/
-        font-family: 'Arial, Helvetica, sans-serif';
+        font-family: 'FontAwesome';
         font-size: 10px;
         content: '\f041';
         displaY: inline-block;
@@ -2328,9 +2240,7 @@ label select {
     }
 
     .paybox__right .card__number input {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         font-size: 16px;
         float: left;
         width: 17%;
@@ -2358,9 +2268,7 @@ label select {
 }
 
     .paybox__right .card__date input {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         font-size: 16px;
         float: right;
         width: 36%;
@@ -2391,9 +2299,7 @@ label select {
 }
 
     .paybox__right .card__cvv input {
-        /*font-family: 'geometrialight';*/
-        font-family: 'Arial, Helvetica, sans-serif';
-        font-weight: lighter;
+        font-family: 'geometrialight';
         font-size: 16px;
         display: block;
         margin: auto;
@@ -2510,8 +2416,7 @@ footer {
 
 .ui-datepicker {
     z-index: 50 !important;
-    /*font-family: 'geometriamedium';*/
-    font-family: 'Arial, Helvetica, sans-serif';
+    font-family: 'geometriamedium';
     width: 190px;
     padding: 20px;
     background: #FFF;
@@ -2638,9 +2543,7 @@ footer {
 .popup--title {
     display: block;
     text-aligN: center;
-    /*font-family: 'geometriabold';*/
-    font-family: 'Arial, Helvetica, sans-serif';
-    font-weight: bold;
+    font-family: 'geometriabold';
     color: #0556a8;
     font-size: 20px;
     text-aligN: center;
@@ -2696,9 +2599,7 @@ footer {
         }
 
         .popup .form label input.txt {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             font-size: 16px;
             float: left;
             width: 90%;
@@ -2709,9 +2610,7 @@ footer {
         }
 
         .popup .form label select {
-            /*font-family: 'geometrialight';*/
-            font-family: 'Arial, Helvetica, sans-serif';
-            font-weight: lighter;
+            font-family: 'geometrialight';
             font-size: 16px;
             float: left;
             width: 100%;
@@ -2726,8 +2625,7 @@ footer {
         }
 
         .popup .form label input.button {
-            /*font-family: 'geometriamedium';*/
-            font-family: 'Arial, Helvetica, sans-serif';
+            font-family: 'geometriamedium';
             display: inline-block;
             margin: auto;
             padding: 14px 35px;
@@ -2773,8 +2671,7 @@ footer {
     }
 
 .popup .labeltxt {
-    /*font-family: 'geometriamedium';*/
-    font-family: 'Arial, Helvetica, sans-serif';
+    font-family: 'geometriamedium';
     font-size: 12px;
     text-transform: uppercase;
     float: left;

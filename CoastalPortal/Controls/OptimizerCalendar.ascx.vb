@@ -18,7 +18,7 @@ Public Class OptimizerCalendar
 
             '20170924 - pab - show dev models
         Else
-            If InStr(Session("username").ToString.ToLower, "@coastalav") > 0 Then
+            If InStr(Session("username").ToString.ToLower, "@coastalav") > 0 Or InStr(Session("email").ToString.ToLower, "@coastalav") > 0 Then
                 Me.lblDev.Visible = True
                 Me.lblDev.Enabled = True
                 Me.chkDev.Visible = True
@@ -58,6 +58,7 @@ Public Class OptimizerCalendar
         '20161222 - pab - fix calendar
         'Dim dt As DataTable = DataAccess.GetFOSOptimizerRunsByCarrierID(_carrierid)
         '20170723 - pab - include r0 models 
+        '20171101 - pab - make showing r0 configurable
         Dim dt As DataTable = DataAccess.GetFOSFlightsBestModels(_carrierid, True)
         rcbModelRun.Items.Clear()
         If Not isdtnullorempty(dt) Then

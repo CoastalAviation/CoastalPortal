@@ -68,6 +68,15 @@ Partial Public Class RunOptimizer
     Protected WithEvents imglogo As Global.System.Web.UI.HtmlControls.HtmlImage
     
     '''<summary>
+    '''LinkLogOut control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents LinkLogOut As Global.System.Web.UI.WebControls.LinkButton
+    
+    '''<summary>
     '''lblCarrier control.
     '''</summary>
     '''<remarks>
@@ -75,6 +84,15 @@ Partial Public Class RunOptimizer
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblCarrier As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''LinkLogOut2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents LinkLogOut2 As Global.System.Web.UI.WebControls.LinkButton
     
     '''<summary>
     '''form_1 control.
@@ -185,6 +203,15 @@ Partial Public Class RunOptimizer
     Protected WithEvents rblModelType As Global.System.Web.UI.WebControls.RadioButtonList
     
     '''<summary>
+    '''chkallowupgrades control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkallowupgrades As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
     '''Label4 control.
     '''</summary>
     '''<remarks>
@@ -293,15 +320,6 @@ Partial Public Class RunOptimizer
     Protected WithEvents chkDetangleCrewIncoming As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
-    '''chkallowupgrades control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents chkallowupgrades As Global.System.Web.UI.WebControls.CheckBox
-    
-    '''<summary>
     '''chkproratecostbyday control.
     '''</summary>
     '''<remarks>
@@ -329,49 +347,13 @@ Partial Public Class RunOptimizer
     Protected WithEvents chkFCDRPublish As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
-    '''RadSliderR60Delay control.
+    '''chkAssignNewTrips control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RadSliderR60Delay As Global.Telerik.Web.UI.RadSlider
-    
-    '''<summary>
-    '''RadSliderFastTurn control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents RadSliderFastTurn As Global.Telerik.Web.UI.RadSlider
-    
-    '''<summary>
-    '''RadSliderCrewWithinX control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents RadSliderCrewWithinX As Global.Telerik.Web.UI.RadSlider
-    
-    '''<summary>
-    '''RadSliderswapwindow control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents RadSliderswapwindow As Global.Telerik.Web.UI.RadSlider
-    
-    '''<summary>
-    '''RadSliderMaxSlideMinutes control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents RadSliderMaxSlideMinutes As Global.Telerik.Web.UI.RadSlider
+    Protected WithEvents chkAssignNewTrips As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
     '''chkDeconflict control.
@@ -444,6 +426,51 @@ Partial Public Class RunOptimizer
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents chkRejects As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''RadSliderR60Delay control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderR60Delay As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderFastTurn control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderFastTurn As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderCrewWithinX control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderCrewWithinX As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderswapwindow control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderswapwindow As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''RadSliderMaxSlideMinutes control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderMaxSlideMinutes As Global.Telerik.Web.UI.RadSlider
     
     '''<summary>
     '''RadSliderDepDelay control.

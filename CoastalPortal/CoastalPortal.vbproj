@@ -219,6 +219,14 @@
     <Content Include="FlightChangeDetail.aspx" />
     <Content Include="FlightChangeReports.aspx" />
     <Content Include="FlightSchedule.aspx" />
+    <Content Include="fonts\fontawesome-webfont.sql" />
+    <Content Include="fonts\fontawesome-webfont.svg" />
+    <Content Include="fonts\geometria-bold-webfont.sql" />
+    <Content Include="fonts\geometria-bold-webfont.svg" />
+    <Content Include="fonts\geometria-light-webfont.sql" />
+    <Content Include="fonts\geometria-light-webfont.svg" />
+    <Content Include="fonts\geometria-medium-webfont.sql" />
+    <Content Include="fonts\geometria-medium-webfont.svg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="ApplicationInsights.config">
@@ -260,6 +268,7 @@
     <Content Include="Scripts\tip_centerwindow.js" />
     <Content Include="Scripts\tip_followscroll.js" />
     <Content Include="Scripts\wz_tooltip.js" />
+    <Content Include="showFCDRpdf.aspx" />
     <Content Include="StyleSheet.css" />
     <Content Include="Styles\Site.css" />
     <Content Include="tip_balloon\b.gif" />
@@ -278,6 +287,19 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
     </Content>
+    <Content Include="fonts\fontawesome-webfont-1.eot" />
+    <Content Include="fonts\fontawesome-webfont.eot" />
+    <Content Include="fonts\fontawesome-webfont.hxd" />
+    <Content Include="fonts\fontawesome-webfont.woff" />
+    <Content Include="fonts\geometria-bold-webfont.eot" />
+    <Content Include="fonts\geometria-bold-webfont.hxd" />
+    <Content Include="fonts\geometria-bold-webfont.woff" />
+    <Content Include="fonts\geometria-light-webfont.eot" />
+    <Content Include="fonts\geometria-light-webfont.hxd" />
+    <Content Include="fonts\geometria-light-webfont.woff" />
+    <Content Include="fonts\geometria-medium-webfont.eot" />
+    <Content Include="fonts\geometria-medium-webfont.hxd" />
+    <Content Include="fonts\geometria-medium-webfont.woff" />
     <None Include="Web References\AWS\service.wsdl" />
     <None Include="Web References\CATMSGQ\msgq.disco" />
     <None Include="Web References\AWS\service.disco" />
@@ -460,6 +482,13 @@
     </Compile>
     <Compile Include="RunOptimizer.aspx.vb">
       <DependentUpon>RunOptimizer.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="showFCDRpdf.aspx.designer.vb">
+      <DependentUpon>showFCDRpdf.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="showFCDRpdf.aspx.vb">
+      <DependentUpon>showFCDRpdf.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Site.Master.designer.vb">

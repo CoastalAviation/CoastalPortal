@@ -226,7 +226,8 @@
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
-					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
+					<%--<li><a href="ModelRunHistory.aspx">Model Run History</a></li>--%>
+					<li><a href="#">Model Run History</a></li>
 				</ul>
 			</div>
 			<div class="logo">
@@ -238,7 +239,8 @@
 				<ul>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
-					<li><a href="#">Log Off</a></li>
+					<%--<li><a href="#">Log Off</a></li>--%>
+                    <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>
@@ -258,10 +260,12 @@
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
-					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
+					<%--<li><a href="ModelRunHistory.aspx">Model Run History</a></li>--%>
+					<li><a href="#">Model Run History</a></li>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
-					<li><a href="#">Log Off</a></li>
+					<%--<li><a href="#">Log Off</a></li>--%>
+                    <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>	
@@ -339,10 +343,13 @@
                         <asp:Label ID="Label3" runat="server" Text="Type Of Model To Run:" Font-Bold="True" Font-Size="Small" ></asp:Label>
                         <br />
                         <asp:RadioButtonList ID="rblModelType" runat="server">
-                            <asp:ListItem Value="Fast"> Fast Run (5 minutes)</asp:ListItem>
-                            <asp:ListItem Value="Schedule"> Schedule Update (20 minutes)</asp:ListItem>
-                            <asp:ListItem Value="Full"> Full Schedule Rebuild (40 minutes)</asp:ListItem>
+                            <asp:ListItem Value="Fast"> Fast Run (5-10 minutes)</asp:ListItem>
+                            <asp:ListItem Value="Schedule"> Schedule Update (20-30 minutes)</asp:ListItem>
+                            <%--<asp:ListItem Value="Full"> Full Schedule Rebuild (40-60 minutes)</asp:ListItem>--%>
                         </asp:RadioButtonList>
+                        <br />
+                        <br />
+                        <asp:CheckBox ID="chkallowupgrades" runat="server" Text=" Allow Upgrades" Font-Names="arial" ToolTip="Allow Upgrades"  Checked="True" />
                         <br />
                     </td>
                 </tr>
@@ -360,7 +367,7 @@
                         <br />
                         <br />
                         <telerik:RadSlider ID="RadSliderAutoPin" runat="server"  OnClientValueChanged="HandleValueAutoPin" OnClientLoad="HandleValueAutoPin" 
-                            MinimumValue="1"  MaximumValue="24" Value="3" ToolTip="Hours before departure to auto-pin flight" DbValue="0" Height="22px" 
+                            MinimumValue="1"  MaximumValue="24" Value="5" ToolTip="Hours before departure to auto-pin flight" DbValue="0" Height="22px" 
                             Length="200" Width="300px" ></telerik:RadSlider>
                         <br />
                         <strong><input type="text" style="width: 22px;" id="upgvalue" readonly="true" value="72" />  Allow upgrades (hours prior to departure)</strong>  
@@ -391,17 +398,17 @@
             </table>
             <asp:Panel ID="pnlAdvancedSettings" runat="server" Width="100%" Visible="False">
                 <table style="width: 100%">
-                <tr>
-                    <td style="width: 50%; vertical-align: top;">
-                        <br />
-                        <asp:Label ID="Label6" runat="server" Text="Advanced Rule Settings:" Font-Bold="True" Font-Size="Small" ></asp:Label>
-                        <br />
-                        <br />
-                    </td>
-                    <td style="width: 50%; vertical-align: top;">
-                        <br />
-                    </td>
-                </tr>
+                    <tr>
+                        <td style="width: 50%; vertical-align: top;">
+                            <br />
+                            <asp:Label ID="Label6" runat="server" Text="Advanced Rule Settings:" Font-Bold="True" Font-Size="Small" ></asp:Label>
+                            <br />
+                            <br />
+                        </td>
+                        <td style="width: 50%; vertical-align: top;">
+                            <br />
+                        </td>
+                    </tr>
                     <tr>
                         <td style="width: 50%; vertical-align: top;">
                             <asp:CheckBox ID="chkCrewRules" runat="server" Text=" Enforce Crew Rules" Font-Names="arial" Checked="True"  />
@@ -419,9 +426,6 @@
                             <asp:CheckBox ID="chkDetangleCrewIncoming" runat="server" Text=" Detangle initial crew" Font-Names="arial" ToolTip="Detangle Incoming Crew Schedule" Checked="True"  />
                             <br />
                             <br />
-                            <asp:CheckBox ID="chkallowupgrades" runat="server" Text=" Allow Upgrades" Font-Names="arial" ToolTip="Allow Upgrades"  />
-                            <br />
-                            <br />
                             <asp:CheckBox ID="chkproratecostbyday" runat="server" Text=" Pro-rate Costs By Day" Font-Names="arial" ToolTip="Pro-rate Costs By Day"  Checked="false" />
                             <br />
                             <br />
@@ -431,6 +435,39 @@
                             <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="false" />
                             <br />
                             <br />
+                            <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />
+                            <br />
+                            <br />
+                        </td>
+                        <td style="width: 50%; vertical-align: top;">
+                            <asp:CheckBox ID="chkDeconflict" runat="server" Text=" DeConflict Initial Model" Font-Names="arial"  Checked="True" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="CheckOverride" runat="server" Text=" Override LPC Driven Time Windows" Font-Names="arial" ToolTip="Let Minutes Between Flights slider override show times driven by LPC, LRC codes" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkValidation" runat="server" Text=" Run Additional Validation" Font-Names="arial" ToolTip="Perform additional model checks on MX overlap" Checked="True" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkScrubAfterModel" runat="server" Text=" Scrub Crew Events Post Model" Font-Names="arial" ToolTip="Perform additional model checks on crew" Checked="False" />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkRebuild" runat="server" Text=" Rebuild Schedule" Font-Names="arial" ToolTip="Detangle Incoming Crew Schedule" Checked="True"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkallowslides" runat="server" Text=" Allow Slides" Font-Names="arial" ToolTip="Allow Slides"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkscrubincoming" runat="server" Text=" Scrub Incoming" Font-Names="arial" ToolTip="Scrub Incoming" Checked="false"  />
+                            <br />
+                            <br />
+                            <asp:CheckBox ID="chkRejects" runat="server" Text="Write Reject Reasons" Font-Names="arial"    />
+                            <br />
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 50%; vertical-align: top;">
                             <strong><input type="text" style="width: 22px;" id="txtspeed" readonly="true" />  Consolidate After X Minutes</strong> 
                             <br />
                             <br />
@@ -470,35 +507,8 @@
                             <telerik:RadSlider ID="RadSliderMaxSlideMinutes" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtMaxSlideMinutes');}" 
                                 OnClientLoad="function(sender,args){rsvalue(sender,args,'txtSwapWindow');}" MinimumValue="0"  MaximumValue="180" 
                                 Value="15" ToolTip="Max Minutes for Slide" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
-
                         </td>
                         <td style="width: 50%; vertical-align: top;">
-                            <asp:CheckBox ID="chkDeconflict" runat="server" Text=" DeConflict Initial Model" Font-Names="arial"  Checked="True" />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="CheckOverride" runat="server" Text=" Override LPC Driven Time Windows" Font-Names="arial" ToolTip="Let Minutes Between Flights slider override show times driven by LPC, LRC codes" />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="chkValidation" runat="server" Text=" Run Additional Validation" Font-Names="arial" ToolTip="Perform additional model checks on MX overlap" Checked="True" />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="chkScrubAfterModel" runat="server" Text=" Scrub Crew Events Post Model" Font-Names="arial" ToolTip="Perform additional model checks on crew" Checked="False" />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="chkRebuild" runat="server" Text=" Rebuild Schedule" Font-Names="arial" ToolTip="Detangle Incoming Crew Schedule" Checked="True"  />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="chkallowslides" runat="server" Text=" Allow Slides" Font-Names="arial" ToolTip="Allow Slides"  />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="chkscrubincoming" runat="server" Text=" Scrub Incoming" Font-Names="arial" ToolTip="Scrub Incoming" Checked="false"  />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="chkRejects" runat="server" Text="Write Reject Reasons" Font-Names="arial"    />
-                            <br />
-                            <br />
-                            <br />
-                            <br />
                             <strong><input type="text" style="width: 22px;" id="txtdepdelay" readonly="true"  />  Departure Delays</strong>  (minutes)
                             <br />
                             <br />
@@ -529,7 +539,6 @@
                             <telerik:RadSlider ID="RadSliderTaxiTime1" runat="server"  OnClientValueChanged="hvtt" OnClientLoad="hvtt" 
                                 MinimumValue="0"  MaximumValue="90" Value="15" ToolTip="Standard taxi time" DbValue="0" Height="22px" 
                                 Length="200" Width="300px" ></telerik:RadSlider>
-
                         </td>
                     </tr>
                 </table>

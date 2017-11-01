@@ -8,24 +8,20 @@
     <link rel="shortcut icon" href="Images/cat.ico" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <link href="css/style.css" rel="stylesheet" type="text/css" />
-    <html xmlns="http://www.w3.org/1999/xhtml">
     <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
     <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
     <style type="text/css">
-    body,td,th {
-	    font-family: Arial, Helvetica, sans-serif;
+        body,td,th {
+	        font-family: Arial, Helvetica, sans-serif;
 	    
-    }
-    body
-    {
-        margin:0px;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 12px;
-        /*background-image:url(Images/SATSair/bg_repeat.gif);*/
-        /*background-repeat:repeat-x;*/
-        /*background-color:#FAFAFA;*/
-    }
+        }
+        body
+        {
+            margin:0px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>

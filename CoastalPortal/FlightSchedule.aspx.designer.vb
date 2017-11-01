@@ -68,6 +68,15 @@ Partial Public Class FlightSchedule
     Protected WithEvents imglogo As Global.System.Web.UI.HtmlControls.HtmlImage
     
     '''<summary>
+    '''LinkLogOut control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents LinkLogOut As Global.System.Web.UI.WebControls.LinkButton
+    
+    '''<summary>
     '''lblCarrier control.
     '''</summary>
     '''<remarks>
@@ -77,6 +86,15 @@ Partial Public Class FlightSchedule
     Protected WithEvents lblCarrier As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
+    '''LinkLogOut2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents LinkLogOut2 As Global.System.Web.UI.WebControls.LinkButton
+    
+    '''<summary>
     '''form_1 control.
     '''</summary>
     '''<remarks>
@@ -84,7 +102,7 @@ Partial Public Class FlightSchedule
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-
+    
     '''<summary>
     '''OptimizerCalendar1 control.
     '''</summary>

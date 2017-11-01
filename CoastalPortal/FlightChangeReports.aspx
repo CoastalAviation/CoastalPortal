@@ -148,7 +148,8 @@
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
-					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
+					<%--<li><a href="ModelRunHistory.aspx">Model Run History</a></li>--%>
+					<li><a href="#">Model Run History</a></li>
 				</ul>
 			</div>
 			<div class="logo">
@@ -160,7 +161,8 @@
 				<ul>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
-					<li><a href="#">Log Off</a></li>
+					<%--<li><a href="#">Log Off</a></li>--%>
+                    <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>
@@ -180,10 +182,12 @@
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
-					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
+					<%--<li><a href="ModelRunHistory.aspx">Model Run History</a></li>--%>
+					<li><a href="#">Model Run History</a></li>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
-					<li><a href="#">Log Off</a></li>
+					<%--<li><a href="#">Log Off</a></li>--%>
+                    <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>	

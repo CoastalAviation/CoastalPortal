@@ -62,9 +62,10 @@ Public Class RunOptimizer
                 Dim startdate As Date = Now.ToUniversalTime
                 Dim enddate As Date
                 startdate = DateAdd(DateInterval.Day, 1, startdate)
-                enddate = DateAdd(DateInterval.Day, 3, startdate)
                 Me.RadDateTimeFrom.SelectedDate = CDate(startdate.ToShortDateString & " 04:00")
-                Me.RaddatetimeTo.SelectedDate = CDate(enddate.ToShortDateString & " 19:00")
+                enddate = DateAdd(DateInterval.Day, 3, CDate(Me.RadDateTimeFrom.SelectedDate))
+                enddate = DateAdd(DateInterval.Hour, 3, enddate)
+                Me.RaddatetimeTo.SelectedDate = enddate
 
                 Me.txtemail.Text = Session("email").ToString
 
@@ -73,7 +74,7 @@ Public Class RunOptimizer
                 RadSliderMBF.Value = 60
                 RadSliderDepDelay.Value = 15
                 ChkBroker.Checked = False
-                RadSliderAutoPin.Value = 3
+                RadSliderAutoPin.Value = 5
                 RadSliderTaxiTime1.Value = 15
                 RadSliderFastTurn.Value = 30
                 RadSliderPrePosition.Value = 0
@@ -89,7 +90,7 @@ Public Class RunOptimizer
                 chkDetangleCrewIncoming.Checked = True
                 RadSliderCrewWithinX.Value = 240
                 chkRebuild.Checked = True
-                chkallowupgrades.Checked = False
+                chkallowupgrades.Checked = True
                 chkallowslides.Checked = False
                 chkproratecostbyday.Checked = False
                 chkscrubincoming.Checked = False
@@ -99,6 +100,8 @@ Public Class RunOptimizer
                 chkAssigns.Checked = False
                 RadSliderMaxSlideMinutes.Value = 0
                 chkFCDRPublish.Checked = False
+                '20171101 - pab - add AssignNewTrips per David - not used by optimzer yet
+                chkAssignNewTrips.Checked = False
 
                 If InStr(Session("email").ToString.ToLower, "@coastal") > 0 Then
                     pnlAdvancedSettings.Visible = True
@@ -369,6 +372,13 @@ Public Class RunOptimizer
                 rs.Fields("PublishFCDR").Value = 0
             End If
 
+            '20171101 - pab - add AssignNewTrips per David - not used by optimzer yet
+            If chkAssignNewTrips.Checked = True Then
+                rs.Fields("AssignNewTrips").Value = 1
+            Else
+                rs.Fields("AssignNewTrips").Value = 0
+            End If
+
             Dim st As New System.TimeSpan
 
             'If Not (IsNothing(RadTimeFrom.SelectedTime)) Then
@@ -509,6 +519,47 @@ Public Class RunOptimizer
         Else
             lblMsg.Text = "Spooling up additional cores ... please expect a five minute delay ... Model Request Submitted at " & Now
         End If
+
+    End Sub
+
+    '20171101 - pab - display cleanup
+    Protected Sub LinkLogOut_Click(sender As Object, e As EventArgs) Handles LinkLogOut.Click
+
+        logout()
+
+    End Sub
+
+    '20171101 - pab - display cleanup
+    Protected Sub LinkLogOut2_Click(sender As Object, e As EventArgs) Handles LinkLogOut2.Click
+
+        logout()
+
+    End Sub
+
+    '20171101 - pab - display cleanup
+    Sub logout()
+
+        If (Request.Browser.Cookies) Then
+            If (Request.Cookies("CASLOGIN") Is Nothing) Then
+                Response.Cookies("CASLOGIN").Expires = DateTime.Now.AddDays(60)
+
+
+                Response.Cookies("CASLOGIN").Item("UNAME") = ""
+                'Write password to the cookie
+                '     Response.Cookies("CASLOGIN").Item("UPASS") = ""
+
+            Else
+                Response.Cookies("CASLOGIN").Item("UNAME") = ""
+                'Write password to the cookie
+                '     Response.Cookies("CASLOGIN").Item("UPASS") = ""
+            End If
+
+        End If
+
+        Session("email") = Nothing
+        Session("username") = Nothing
+
+        Response.Redirect("CustomerLogin.aspx", True)
 
     End Sub
 
