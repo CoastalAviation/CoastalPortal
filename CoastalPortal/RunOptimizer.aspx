@@ -428,6 +428,9 @@
                             <asp:CheckBox ID="chkAssigns" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />
                             <br />
                             <br />
+                            <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="false" />
+                            <br />
+                            <br />
                             <strong><input type="text" style="width: 22px;" id="txtspeed" readonly="true" />  Consolidate After X Minutes</strong> 
                             <br />
                             <br />
@@ -492,6 +495,8 @@
                             <br />
                             <br />
                             <asp:CheckBox ID="chkRejects" runat="server" Text="Write Reject Reasons" Font-Names="arial"    />
+                            <br />
+                            <br />
                             <br />
                             <br />
                             <strong><input type="text" style="width: 22px;" id="txtdepdelay" readonly="true"  />  Departure Delays</strong>  (minutes)

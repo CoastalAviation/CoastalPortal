@@ -377,20 +377,20 @@
 </section>
 
 <section class="article nopadding">
-           <%-- %> <div class="form__order2" id="form_1" runat="server"> --%>
+     <%-- %>    <div class="form__order2" id="form_1" runat="server"> --%>
                 <div class="title">Flight Change Detail Report</div>
                 <div class="title">
                     <asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label>
                 </div>
-               <div style="align-items:center; justify-content:center;margin-left:10px;">
-        <table id="tryme" style="vertical-align: top; width: auto" runat="server">
+    <div style="align-items:center; padding-left:30px">
+        <table id="tryme" runat="server">
             <tr style="vertical-align: top;">
-                <td style="vertical-align: top; padding-right: 4px" class="auto-style15">
-                    <div style="background-color: #ffff; width: auto; font-family: Arial, Helvetica, sans-serif">
-                        <div width="100%">
-                            <asp:ListView ID="lvflightlist" runat="server" ItemType="CoastalPortal.PanelDisplay">
+                <td style="vertical-align: top; padding-right: 4px;" >
+               <%-- %>     <div style="background-color: #ffff; width: auto; font-family: Arial, Helvetica, sans-serif">class="auto-style15"
+                        <div>--%>
+                            <asp:ListView ID="lvflightlist" runat="server" ItemType="CoastalPortal.PanelDisplay" >
                                 <LayoutTemplate>
-                                    <table class="table" style="padding-left: 10px; color: #00ff00">
+                                    <table  style="padding-left: 10px; color: #00ff00">
                                         <thead>
                                             <th></th>
                                         </thead>
@@ -400,7 +400,7 @@
                                     </table>
                                 </LayoutTemplate>
                                 <ItemTemplate>
-                                    <table style="vertical-align: top; width: auto">
+                                    <table style="vertical-align: top;">
                                         <tr>
                                             <td>
                                                 <asp:Label runat="server" Font-Size="Medium" Text="Change in Non Revenue Miles:">
@@ -425,7 +425,7 @@
                                         <tr>
                                             <td>
                                                 <asp:GridView ID="GVGridViewTrips" runat="server" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3"
-                                                    Font-Names="Arial" Font-Size="X-Small" Width="1400px" Style="margin-top: 0px" AutoGenerateColumns="false"
+                                                    Font-Names="Arial" Font-Size="X-Small" Width="1500px" Style="margin-top: 0px;" AutoGenerateColumns="false"
                                                     DataSource="<%#Item.PanelRecord %>" ItemType="CoastalPortal.PanelRecord" OnPreRender="GVGridViewTrips_PreRender">
                                                     <Columns>
                                                         <asp:BoundField DataField="FOSRecord.DepartureAirportICAO" HeaderText="From" SortExpression="From" />
@@ -516,13 +516,12 @@
                                     </table>
                                 </ItemTemplate>
                             </asp:ListView>
-                        </div>
-                    </div>
+                <%-- %>        </div>
+                 </div>--%>
                 </td>
             </tr>
         </table>
-                </div>
-     <%-- %>       </div>--%>
+          </div>
 
         </section>
     </form>

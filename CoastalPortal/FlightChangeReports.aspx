@@ -253,7 +253,7 @@
 		</div>--%>
        <div style="align-items:center; justify-content:center;margin-left:10px;">
     <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="table__tr" HeaderStyle-CssClass="table__h"
-                HeaderStyle-HorizontalAlign ="Center"  ItemType="CoastalPortal.FCDRList">
+                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" >
             <Columns >
                 <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="FCDRPage" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center"/>

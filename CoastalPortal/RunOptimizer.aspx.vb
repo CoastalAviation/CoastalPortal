@@ -98,6 +98,7 @@ Public Class RunOptimizer
                 CheckOverride.Checked = False
                 chkAssigns.Checked = False
                 RadSliderMaxSlideMinutes.Value = 0
+                chkFCDRPublish.Checked = False
 
                 If InStr(Session("email").ToString.ToLower, "@coastal") > 0 Then
                     pnlAdvancedSettings.Visible = True
@@ -355,6 +356,12 @@ Public Class RunOptimizer
                 rs.Fields("CheckCrewRules").Value = 1
             Else
                 rs.Fields("CheckCrewRules").Value = 0
+            End If
+
+            If chkFCDRPublish.Checked = True Then
+                rs.Fields("PublishFCDR").Value = 1
+            Else
+                rs.Fields("PublishFCDR").Value = 0
             End If
 
             Dim st As New System.TimeSpan
