@@ -247,6 +247,7 @@
     <Content Include="Images\wheels_up_logo_blue.png" />
     <Content Include="ModelRunHistory.aspx" />
     <Content Include="My Project\PublishProfiles\CustomProfile.pubxml.user" />
+    <Content Include="pagetemplate.aspx" />
     <Content Include="RunOptimizer.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -444,6 +445,13 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="pagetemplate.aspx.designer.vb">
+      <DependentUpon>pagetemplate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="pagetemplate.aspx.vb">
+      <DependentUpon>pagetemplate.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="PlanningFOS.vb" />
     <Compile Include="PopulateLookups.vb" />

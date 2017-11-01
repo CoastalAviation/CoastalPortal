@@ -1,10 +1,10 @@
 ﻿Imports CoastalPortal.AirTaxi
 Imports Telerik.Web.UI
 
-Public Class ModelRunHistory
+Public Class pagetemplate
     Inherits System.Web.UI.Page
 
-    Private SqlDataSourceOptimizerRequests As New SqlDataSource
+    Private dtflights As New DataTable
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -30,43 +30,61 @@ Public Class ModelRunHistory
 
             End If
 
-            Session("carrierid") = Session("carrierid")
+            '20111121 - pab - convert to single db
+            Dim da As New DataAccess
+            Dim dt As DataTable
 
-            If Session("carrierid") = 0 Then
-                Me.lblMsg.Text = "   Credentials Lost, Please log off, log on"
-                Exit Sub
+            '20120503 - pab - run time improvements - execute on if not postback
+            If Not IsPostBack Then
+
+                Me.gvServiceProviderMatrix.Visible = True
+
+                '20160517 - pab - fix carrierid = 0 preventing quotes
+                If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
+                    _carrierid = 65
+                End If
+
+                '20111121 - pab - convert to single db
+                If IsNothing(_carrierid) Or _carrierid = 0 Then
+                    '20160517 - pab - fix carrierid = 0 preventing quotes
+                    AirTaxi.Insertsys_log(0, appName, Request.Url.Host & " carrierid null or 0 - user " & Session("email").ToString, "Page_Load", "ModelRunHistory.aspx.vb")
+
+                    '20160823 - pab - redirect to logon if carrierid lost
+                    Response.Redirect("CustomerLogin.aspx", True)
+                End If
+
+                '20130930 - pab - change email from
+                If IsNothing(_emailfrom) Then _emailfrom = ""
+                If _emailfrom = "" Then
+                    _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
+                End If
+
+                Dim oLookup As New PopulateLookups
+                Me.departtime_combo.Items.Clear()
+                dt = oLookup.TimeDD("All")
+                Me.departtime_combo.DataSource = dt.DefaultView
+                Me.departtime_combo.DataBind()
+                Me.departtime_combo.SelectedValue = "09:00 AM"
+
+            Else
+                '20131016 - pab - fix session timeout
+                If IsNothing(Session("flights")) And IsNothing(Session("triptype")) Then
+                    lblMsg.Text = da.GetSetting(_carrierid, "TimeoutMessage")
+                    gvServiceProviderMatrix.EmptyDataText = lblMsg.Text
+                    dtflights.Clear()
+                    Me.gvServiceProviderMatrix.DataSource = dtflights
+                    Me.gvServiceProviderMatrix.DataBind()
+                End If
             End If
 
+            '20100608 - pab - add logo to email
+            Session("ApplicationPath") = Request.PhysicalApplicationPath
 
-
-
-            SqlDataSourceOptimizerRequests.ConnectionString = ConnectionStringHelper.GetsqladapterSQLVMConnectionString
-            GridView1.DataSource = SqlDataSourceOptimizerRequests
-
-
-            updategrid()
-
-
-
-            If Not Page.IsPostBack Then
-
-                'RadDateTimeFrom.SelectedDate = DateAdd(DateInterval.Hour, -6, Now.ToUniversalTime)
-
-                'RaddatetimeTo.SelectedDate = DateAdd(DateInterval.Hour, 72, Now.ToUniversalTime)
-
-
-                'RadSliderMBF.Value = 60
-                'RadSliderAvgSpeed.Value = 600
-                'RadSliderDepDelay.Value = 15
-
-
-                'RadSliderUpg.Value = 72
-
-                'RadSliderAutoPin.Value = 90
-                'RadSliderTaxiTime1.Value = 15
-                'RadSliderFastTurn.Value = 30
-
-
+            If Not (IsNothing(Session("flights"))) Then
+                dtflights = Session("flights")
+            Else
+                'chg3641 - 20101008 - pab - fix clearing session variables when going back to request another flight
+                dtflights.Clear()
             End If
 
         Catch ex As Exception
@@ -82,23 +100,6 @@ Public Class ModelRunHistory
         End Try
 
     End Sub
-
-    Function updategrid()
-
-        Dim req As String
-        req = "SELECT top 20 [ID],  status,   [CarrierID]    ,[Description]   ,[GMTStart]     ,[GMTEnd]   FROM [dbo].[OptimizerRequest] where description not like 'Optimizer request %'  and status = 'X' and carrierid = 49 and requestdate > getdate() - 7 order by id desc"
-
-        req = Replace(req, "carrierid = 49", "carrierid = " & Session("carrierid"))
-
-        SqlDataSourceOptimizerRequests.ConnectionString = ConnectionStringHelper.GetsqladapterWestConnectionString
-
-        SqlDataSourceOptimizerRequests.SelectCommand = req
-
-        SqlDataSourceOptimizerRequests.DataBind()
-
-        GridView1.DataBind()
-
-    End Function
 
     Private Sub RunOptimizer_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
 
