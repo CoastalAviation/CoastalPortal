@@ -59,11 +59,23 @@ Public Class OptimizerCalendar
         'Dim dt As DataTable = DataAccess.GetFOSOptimizerRunsByCarrierID(_carrierid)
         '20170723 - pab - include r0 models 
         '20171101 - pab - make showing r0 configurable
-        Dim dt As DataTable = DataAccess.GetFOSFlightsBestModels(_carrierid, True)
+        Dim da As New DataAccess
+        Dim sR0 As String = da.GetSetting(_carrierid, "CalendarShowR0")
+        Dim dt As DataTable
+        If sR0 = "1" Then
+            dt = DataAccess.GetFOSFlightsBestModels(_carrierid, True)
+        Else
+            dt = DataAccess.GetFOSFlightsBestModels(_carrierid, False)
+        End If
         rcbModelRun.Items.Clear()
         If Not isdtnullorempty(dt) Then
             Dim i As Integer = 0
             For i = 0 To dt.Rows.Count - 1
+                '20171101 - pab - only show last 2 days
+                If DateDiff(DateInterval.Hour, dt.Rows(i).Item("ModelStart"), Now) > 48 Then
+                    Exit For
+                End If
+
                 Dim ti As New Telerik.Web.UI.RadComboBoxItem
                 If Not IsDBNull(dt.Rows(i).Item("ModelRunID")) Then
                     ti.Text = Trim(dt.Rows(i).Item("ModelRunID").ToString) & " - " & Trim(dt.Rows(i).Item("ModelStart").ToString)
@@ -83,7 +95,7 @@ Public Class OptimizerCalendar
                     lblModelRunID.Text = Session("fosmodelrunid").ToString & " - " & Session("fosmodelstart")
                 Else
                     '20161222 - pab - fix calendar
-                    Dim da As New DataAccess
+                    'Dim da As New DataAccess
                     Session("fosmodelrunid") = da.GetFOSFlightsBestModelRunID(_carrierid).Trim
                     modelrunid = Session("fosmodelrunid").ToString
                     Session("fosmodelstart") = CDate(dt.Rows(0).Item("ModelStart").ToString)

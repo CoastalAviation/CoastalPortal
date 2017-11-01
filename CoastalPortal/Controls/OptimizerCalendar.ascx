@@ -48,7 +48,7 @@
             <td style="width: 30%">
                 <div align="center">
                     <telerik:RadComboBox ID="rcbModelRun" runat="server" 
-                        EmptyMessage="Select Model Run" Width="80%" AutoPostBack="True">
+                        EmptyMessage="Select Model Run" Width="95%" AutoPostBack="True">
                     </telerik:RadComboBox>
                     <%--&nbsp;&nbsp;
                     <asp:LinkButton ID="LinkButtonLoadReport" runat="server">Load</asp:LinkButton>--%>
