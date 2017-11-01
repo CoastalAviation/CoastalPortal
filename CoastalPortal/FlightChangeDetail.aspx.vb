@@ -80,7 +80,6 @@ Public Class FlightChangeDetail
     Public Const CAS_HA As Integer = 38
     Public Const CAS_LEGBASE As Integer = 39
     Public Const CAS_OE As Integer = 40
-
     Private M_carrier As Integer
     Protected Property MyCarrier As Integer
         Get
@@ -121,11 +120,13 @@ Public Class FlightChangeDetail
         For Each x As String In demandlist
             demandlookup.Add(Trim(x), True)
         Next
-        CreatePDF = Not (Request.QueryString("pdf") Is Nothing)
 
         If Not Request.QueryString("key") Is Nothing Then
             id = Request.QueryString("key")
             fcdrlist = db.FCDRList.Where(Function(c) c.keyid = id).ToList()
+            If fcdrlist.Count = 0 Then
+                CreatePDF = True
+            End If
             If Not Request.QueryString("carrier") Is Nothing Then
                 Session("carrierid") = Request.QueryString("carrier")
             End If
@@ -182,6 +183,7 @@ Public Class FlightChangeDetail
                 Loop
             End If
             If fcdrlist.Count = 0 Then
+                CreatePDF = True
                 If CASRecords Is Nothing Then
                     casRecord = db.CASFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrid).First()
                 Else
@@ -892,16 +894,6 @@ Public Class FlightChangeDetail
             currentTail = If(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text))
             LastTail = If(Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i - 1).Cells(CAS_AC).Text))
             If currentTail <> LastTail Then
-                'Dim row As New GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Alternate)
-                'For zzz = 0 To 1
-                '    Dim cell As New TableCell
-                '    cell.Text = "&nbsp;"
-                '    cell.ColumnSpan = If(zzz = 0, foscount, cascount) '14,13
-                '    'cell.Text = Espace
-                '    row.Cells.Add(cell)
-                'Next
-                'row.Cells(1).Style.Add("border-left", "8px solid white")
-                'row.BackColor = Drawing.Color.FromArgb(0, 147, 111)
                 gridviewtrips.Controls(0).Controls.AddAt(i + maxrows, AddRow(foscount, cascount)) ' This line will insert row at 2nd line
                 maxrows += 1
             End If
@@ -940,8 +932,7 @@ Public Class FlightChangeDetail
             linebreaks(DirectCast(lvflightlist.Items(i).FindControl("GVGridViewTrips"), GridView)) ', DirectCast(lvflightlist.Items(1).FindControl("pnlACType"), Label).Text)
             'GetSavings(lvflightlist.Items(i))
         Next
-        'If CreatePDF Then makeMYPDF(lvflightlist)
-        makeMYPDF()
+        If CreatePDF Then makeMYPDF()
     End Sub
     Function convdate(d As String) As Date
         Dim s As String
