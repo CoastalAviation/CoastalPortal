@@ -181,6 +181,12 @@ Public Class RunOptimizer
             Dim rs As New ADODB.Recordset
             Dim rs2 As New ADODB.Recordset
 
+            Me.lblMsg.Text = ""
+            If Me.txtDescription.Text.Trim = "" Then
+                Me.lblMsg.Text = "Please enter Model Run Description."
+                Me.lblMsg.Focus()
+                Exit Sub
+            End If
 
             If cnsgazure.State = 0 Then
                 cnsgazure.ConnectionString = ConnectionStringHelper.GetConnectionStringSQLMKAzure
