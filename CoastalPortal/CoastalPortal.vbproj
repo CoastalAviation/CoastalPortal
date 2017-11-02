@@ -221,6 +221,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="Controls\FOSFlightsCalendar.ascx" />
     <Content Include="Controls\OptimizerCalendar.ascx" />
+    <Content Include="Controls\OptimizerRunDetail.ascx" />
     <Content Include="CustomerLogin.aspx" />
     <Content Include="Dashboard.aspx" />
     <Content Include="Default.aspx" />
@@ -395,6 +396,13 @@
     </Compile>
     <Compile Include="Controls\OptimizerCalendar.ascx.vb">
       <DependentUpon>OptimizerCalendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\OptimizerRunDetail.ascx.designer.vb">
+      <DependentUpon>OptimizerRunDetail.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OptimizerRunDetail.ascx.vb">
+      <DependentUpon>OptimizerRunDetail.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerLogin.aspx.designer.vb">

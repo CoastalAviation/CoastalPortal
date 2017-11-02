@@ -148,8 +148,8 @@
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
-					<%--<li><a href="ModelRunHistory.aspx">Model Run History</a></li>--%>
-					<li><a href="#">Model Run History</a></li>
+					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
+					<%--<li><a href="#">Model Run History</a></li>--%>
 				</ul>
 			</div>
 			<div class="logo">
@@ -182,8 +182,8 @@
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
-					<%--<li><a href="ModelRunHistory.aspx">Model Run History</a></li>--%>
-					<li><a href="#">Model Run History</a></li>
+					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
+					<%--<li><a href="#">Model Run History</a></li>--%>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
@@ -207,25 +207,47 @@
 		<div class="form__buttons">
                 <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
 		</div>
-
-    	<div class="table grid">
-            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" DataKeyNames="ID" Width="100%">
+	
+        <div class="table grid">
+            <asp:GridView ID="GridView1" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
+                AutoGenerateColumns="False" DataKeyNames="ID"  CssClass="table__tr">
                 <Columns>
-                    <asp:BoundField DataField="ID" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="ID" />
-                    <asp:BoundField DataField="CarrierID" HeaderText="CarrierID" SortExpression="CarrierID" />
-                    <asp:BoundField DataField="Description" HeaderText="Description" SortExpression="Description" />
-                    <asp:BoundField DataField="GMTStart" HeaderText="GMTStart" SortExpression="GMTStart" />
-                    <asp:BoundField DataField="GMTEnd" HeaderText="GMTEnd" SortExpression="GMTEnd" />
-                    <asp:ButtonField CommandName="Base" Text="Base Model" >
-                        <ItemStyle ForeColor="Blue" /></asp:ButtonField>
-                    <asp:ButtonField CommandName="Best" Text="Best Model" >
-                        <ItemStyle ForeColor="Blue" /></asp:ButtonField>
-                    <asp:ButtonField CommandName="Eff" Text="Best Eff" >
-                        <ItemStyle ForeColor="Blue" /></asp:ButtonField>
+                    <asp:TemplateField HeaderText="ID" >
+                        <ItemTemplate><%#DataBinder.Eval(Container.DataItem, "ID")%></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField  HeaderText="CarrierID" Visible="False">
+                        <ItemTemplate><%#DataBinder.Eval(Container.DataItem, "CarrierID")%></ItemTemplate>
+                    </asp:TemplateField> 
+                    <asp:TemplateField  HeaderText="Description">
+                        <ItemTemplate><%#DataBinder.Eval(Container.DataItem, "Description")%></ItemTemplate>
+                    </asp:TemplateField> 
+                    <asp:TemplateField HeaderText="GMT Start" >
+                        <ItemTemplate><%#DataBinder.Eval(Container.DataItem, "GMTStart", "{0:G}")%></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="GMT End" >
+                        <ItemTemplate><%#DataBinder.Eval(Container.DataItem, "GMTEnd", "{0:g}")%></ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField HeaderText="Declared Complete">
+                        <ItemTemplate><%#DataBinder.Eval(Container.DataItem, "declaredcomplete")%></ItemTemplate>
+                    </asp:TemplateField>
+                    <%--<asp:TemplateField HeaderText="Select">
+                        <ItemTemplate>
+                            <asp:linkbutton CommandName="Base" Text="Base" runat="server" ForeColor="Blue"></asp:linkbutton>
+                        </ItemTemplate>
+                    </asp:TemplateField>--%>
+                    <asp:TemplateField HeaderText="Select">
+                        <ItemTemplate>
+                            <asp:linkbutton CommandName="Best" Text="Details" runat="server" ForeColor="Blue"></asp:linkbutton>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <%--<asp:TemplateField HeaderText="Select">
+                        <ItemTemplate>
+                            <asp:linkbutton CommandName="Eff" Text="Eff" runat="server" ForeColor="Blue"></asp:linkbutton>
+                        </ItemTemplate>
+                    </asp:TemplateField>--%>
                 </Columns>
             </asp:GridView>
-		</div>
-	
+        </div>
 	</div>
 
     <%--<div class="form__order">
