@@ -339,11 +339,11 @@ Public Class RunOptimizer
             End If
 
             'If cbRunR0only.Checked = True Then
-            If rblModelType.SelectedValue = "Full" Then
-                rs.Fields("RunR0only").Value = 0
-            Else
-                rs.Fields("RunR0only").Value = 1
-            End If
+            'If rblModelType.SelectedValue = "Full" Then
+            rs.Fields("RunR0only").Value = 0
+            'Else
+            '    rs.Fields("RunR0only").Value = 1
+            'End If
 
             If chkAssigns.Checked = True Then
                 rs.Fields("UseAssigns").Value = 1
