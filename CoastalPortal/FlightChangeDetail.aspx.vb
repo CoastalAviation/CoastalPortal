@@ -642,6 +642,7 @@ Public Class FlightChangeDetail
                 gridviewtrips.Rows(i).Cells(FOS_FT).Text = "L"
                 gridviewtrips.Rows(i).Cells(FOS_FT).BackColor = Drawing.Color.LightGreen
             End If
+            gridviewtrips.Rows(i).Cells(FOS_COST).Font.Bold = True
 
 
             If i > 0 Then
@@ -718,6 +719,7 @@ Public Class FlightChangeDetail
             Else
                 mycolor1 = 0
             End If
+            gridviewtrips.Rows(i).Cells(CAS_COST).Font.Bold = True
 
             Dim xy As String = gridviewtrips.Rows(i).Cells(CAS_LTC).Text
             Dim x As String = gridviewtrips.Rows(i).Cells(CAS_LTC).Text

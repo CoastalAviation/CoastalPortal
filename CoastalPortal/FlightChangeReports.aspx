@@ -251,15 +251,15 @@
 					<li> <asp:Label runat="server" ID="price_one_1" Text="$5200" >  </asp:Label></li>
 					<li> <asp:Label runat="server" ID="price_two_1" Text="$5200" >  </asp:Label></li>
 				</ul> CssClass="table__tr" HeaderStyle-CssClass="table__h"
-			</div> <div style="align-items:center; justify-content:center;margin-left:10px;">
+			</div> <div style="align-items:center; justify-content:center;margin-left:10px;"> 
 
 		</div>	
 		</div>--%>
        <div style="align-items:center; justify-content:center;margin-left:10px;">
-    <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="table__tr" HeaderStyle-CssClass="table__h"
+    <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h"
                 HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" >
             <Columns >
-                <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="FCDRPage" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#0066FF" />
+                <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="PDFLink" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />
                 <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="GMTStart" HeaderText="Model Start" SortExpression="Start" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="deltanonrevmiles" HeaderText="Delta Non Rev Miles" SortExpression="NRM" DataFormatString="{0:N0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
@@ -269,8 +269,12 @@
                 <asp:BoundField DataField="savingsday2" HeaderText="Savings Day 2" SortExpression="Save2" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="priortailnumber" HeaderText="Starting Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
+               <asp:TemplateField HeaderText ="Accept/Reject">
+                    <ItemTemplate>
+                        <Button name="btnacpt" value="accept" >Accept</Button> <Button name="btnacpt" value="reject" >Reject</Button>
+                    </ItemTemplate>
+                </asp:TemplateField>
            </Columns>
-
             </asp:GridView>		
 		</div>
 </div>		

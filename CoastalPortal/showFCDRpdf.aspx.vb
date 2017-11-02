@@ -5,9 +5,8 @@ Public Class showFCDRpdf
     Inherits System.Web.UI.Page
 
     Private dtflights As New DataTable
-
+    Public Property pdffile As String
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
-
         Try
 
             If Session("carrierid") Is Nothing Then
@@ -56,7 +55,12 @@ Public Class showFCDRpdf
                 If _emailfrom = "" Then
                     _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
                 End If
-
+                pdffile = Request.QueryString("pdffile")
+                If pdffile Is Nothing Then
+                    DirectCast(FindControl("iframe-pdf-shower"), HtmlIframe).Src = "~/FCDRpages/" & pdffile
+                    'setme.Src = "~/FCDRpages/" & pdffile
+                    Exit Sub
+                End If
             End If
 
             '20100608 - pab - add logo to email

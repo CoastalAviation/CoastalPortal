@@ -102,13 +102,4 @@ Partial Public Class showFCDRpdf
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-    
-    '''<summary>
-    '''imgshowFCDRpdf control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents imgshowFCDRpdf As Global.System.Web.UI.WebControls.Image
 End Class

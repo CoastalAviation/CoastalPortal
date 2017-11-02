@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head id="Head1" runat="server">
     <title> Model Run History</title>
     <link rel="shortcut icon" href="Images/cat.ico" />
@@ -47,6 +48,7 @@
             combo._raiseClientBlur(e);
             combo._focused = false;
         }
+
     </script>
    </head>
 <body>
@@ -205,7 +207,9 @@
 	<div class="form__order2"  id="form_1" runat="server" >
 		<div class="title">FCDR Detail</div>
 
-        <asp:Image ID="imgshowFCDRpdf" runat="server" />
+    
+
+
 
 	</div>
 		

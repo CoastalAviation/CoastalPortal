@@ -13,7 +13,8 @@ Public Class FlightChangeReports
     Public Const F_SV0 = 5
     Public Const F_SV1 = 6
     Public Const F_SV2 = 7
-    Public Const F_ACC = 8
+    Public Const F_PT = 8
+    Public Const F_ACC = 9
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -77,6 +78,7 @@ Public Class FlightChangeReports
 
                 GetTrips()
             Else
+
                 '20131016 - pab - fix session timeout
 
                 'If IsNothing(Session("flights")) And IsNothing(Session("triptype")) Then
@@ -170,15 +172,21 @@ Public Class FlightChangeReports
         Dim i As Integer = 0
 
         For i = 0 To gvFCDRList.Rows.Count - 1
+            gvFCDRList.Rows(i).Cells(F_KEY).ForeColor = Drawing.Color.Blue
+            gvFCDRList.Rows(i).Cells(F_KEY).BackColor = Drawing.Color.Wheat
             If gvFCDRList.Rows(i).Cells(F_NRM).Text < 0 Then gvFCDRList.Rows(i).Cells(F_NRM).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_SV0).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV0).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_SV1).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV1).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_SV2).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV2).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_TOT).Text < 0 Then gvFCDRList.Rows(i).Cells(F_TOT).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+            If gvFCDRList.Rows(i).Cells(F_ACC + 1).Text <> "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
+            'If gvFCDRList.Rows(i).Cells(F_ACC).Text = "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
+
             For ii = 1 To gvFCDRList.Columns.Count - 1
                 gvFCDRList.Rows(i).Cells(ii).Text = Trim(gvFCDRList.Rows(i).Cells(ii).Text)
             Next
         Next
+        gvFCDRList.Columns(F_ACC).Visible = False
 
     End Sub
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)

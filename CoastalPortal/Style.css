@@ -1208,6 +1208,33 @@ label select {
             font-size: 20px;
         }
 
+/*MArc Add for Grid       color: #808080;
+*/
+.fcdrlist__h {
+    width: 100%;
+    text-align: center;
+    border-bottom: 2px solid #F6EFE6;
+    margin: 0 0 10px 0;
+    color: #000000;
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: bold;
+    border-width: 1px;
+    border-color: black;
+}
+.fcdrlist__tr {
+    font-weighT: normal;
+    text-align:center;
+    width: 100%;
+    min-width: 680px;
+    font-size: 13px;
+    border-collapse: collapse;
+    border-collapse: collapse;
+    border-width: 1px;
+    border-spacing: 0px;
+    border-color: black;
+}
+
 .table__tr {
     font-family: 'geometriamedium';
     font-weighT: normal;
