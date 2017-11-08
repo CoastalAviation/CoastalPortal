@@ -205,7 +205,10 @@
 		<div class="title">Model Run History</div>
 
 		<div class="form__buttons">
-                <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
+            <asp:Button CssClass="button" Text="Current FOS Schedule" runat="server" ToolTip="View Current FOS Schedule" ID="bttnR0" />
+            <br />
+            <br />
+            <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
 		</div>
 	
         <div class="table grid">

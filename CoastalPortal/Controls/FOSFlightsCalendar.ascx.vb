@@ -11,6 +11,12 @@ Public Class FOSFlightsCalendar
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        Dim da As New DataAccess
+
+        '20171107 - pab - show r0
+        Dim br0 As Boolean = False
+        Dim dt As DataTable
+
         '20170126 - pab - fix old tmc models being pulled up
         '20171031 - pab - fix calendar
         'If Session("username") Is Nothing Then
@@ -38,7 +44,6 @@ Public Class FOSFlightsCalendar
             '_CalendarStyle = Me.ddlStyle.SelectedValue
 
             '20140817 - pab - redirect to fos calendar if fos FOSInterface = 'y'
-            Dim da As New DataAccess
             '20170221 - pab - fix page going blank
             Dim setting As String = da.GetSetting(_carrierid, "CalendarStyle")
             If setting = "" Then
@@ -82,7 +87,29 @@ Public Class FOSFlightsCalendar
         '    If IsDate(CType(ctl, HiddenField).Value.Trim) Then _selecteddate = CDate(CType(ctl, HiddenField).Value.Trim)
         'End If
 
+        '20171107 - pab - show r0
+        If Not Request.QueryString("r0") Is Nothing Then
+            If Request.QueryString("r0").ToString = "1" Then
+                br0 = True
+            End If
+        End If
+
         If Not IsPostBack Then
+
+            '20171107 - pab - show r0
+            If br0 = True Then
+                dt = da.GetFOSFlightsBestModels(_carrierid, True)
+                If Not isdtnullorempty(dt) Then
+                    For i As Integer = 0 To dt.Rows.Count - 1
+                        If InStr(dt.Rows(i).Item("modelrunid").ToString, "-R0-") > 0 Then
+                            Session("fosmodelrunid") = dt.Rows(i).Item("modelrunid").ToString.Trim
+                            Session("fosmodelstart") = dt.Rows(i).Item("modelstart")
+                            Session("fosmodelstartfos") = Session("fosmodelstart")
+                            Exit For
+                        End If
+                    Next
+                End If
+            End If
 
             modelrunid = Session("fosmodelrunid").ToString
             If IsNothing(Session("fosmodelstartfos")) Or CDate(Session("fosmodelstartfos").ToString) = CDate("12:00:00 AM") Then Session("fosmodelstartfos") = Session("fosmodelstart")
@@ -113,7 +140,6 @@ Public Class FOSFlightsCalendar
             If IsNothing(Me.to_date.SelectedDate) Then
                 'Dim dateto As Date
                 '20171017 - pab - fix date range
-                Dim da As New DataAccess
                 Dim FOSCalendarDays As Integer = CInt(da.getsettingnumeric(_carrierid, "FOSCalendarDays"))
                 If FOSCalendarDays < 1 Then FOSCalendarDays = 4
                 'Me.to_date.SelectedDate = CDate(DateAdd(DateInterval.Day, 2, CDate(Me.from_date.SelectedDate)).ToShortDateString)

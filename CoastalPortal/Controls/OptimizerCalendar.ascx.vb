@@ -55,6 +55,14 @@ Public Class OptimizerCalendar
             usedevdb = False
         End If
 
+        '20171107 - pab - show r0
+        Dim br0 As Boolean = False
+        If Not Request.QueryString("r0") Is Nothing Then
+            If Request.QueryString("r0").ToString = "1" Then
+                br0 = True
+            End If
+        End If
+
         '20161222 - pab - fix calendar
         'Dim dt As DataTable = DataAccess.GetFOSOptimizerRunsByCarrierID(_carrierid)
         '20170723 - pab - include r0 models 
@@ -62,7 +70,9 @@ Public Class OptimizerCalendar
         Dim da As New DataAccess
         Dim sR0 As String = da.GetSetting(_carrierid, "CalendarShowR0")
         Dim dt As DataTable
-        If sR0 = "1" Then
+        '20171107 - pab - show r0
+        'If sR0 = "1" Then
+        If sR0 = "1" Or br0 = True Then
             dt = DataAccess.GetFOSFlightsBestModels(_carrierid, True)
         Else
             dt = DataAccess.GetFOSFlightsBestModels(_carrierid, False)
@@ -83,6 +93,18 @@ Public Class OptimizerCalendar
                     rcbModelRun.Items.Add(ti)
                 End If
             Next
+
+            '20171107 - pab - show r0
+            If br0 = True Then
+                For n As Integer = 0 To dt.Rows.Count - 1
+                    If InStr(dt.Rows(n).Item("modelrunid").ToString, "-R0-") > 0 Then
+                        Session("fosmodelrunid") = dt.Rows(n).Item("modelrunid").ToString.Trim
+                        Session("fosmodelstart") = dt.Rows(n).Item("modelstart")
+                        Session("fosmodelstartfos") = Session("fosmodelstart")
+                        Exit For
+                    End If
+                Next
+            End If
 
             If Not IsPostBack Then
                 If Session("fosmodelrunid").ToString.Trim <> "" Then

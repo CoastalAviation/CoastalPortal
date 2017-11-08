@@ -225,6 +225,7 @@
     <Content Include="CustomerLogin.aspx" />
     <Content Include="Dashboard.aspx" />
     <Content Include="Default.aspx" />
+    <Content Include="Error_Page.aspx" />
     <Content Include="Error_Page2.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="FlightChangeDetail.aspx" />
@@ -428,6 +429,13 @@
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="Enumerations.vb" />
+    <Compile Include="Error_Page.aspx.designer.vb">
+      <DependentUpon>Error_Page.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Error_Page.aspx.vb">
+      <DependentUpon>Error_Page.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="Error_Page2.aspx.designer.vb">
       <DependentUpon>Error_Page2.aspx</DependentUpon>
     </Compile>
