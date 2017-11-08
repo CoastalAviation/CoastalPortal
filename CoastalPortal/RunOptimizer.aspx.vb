@@ -181,6 +181,12 @@ Public Class RunOptimizer
             Dim rs As New ADODB.Recordset
             Dim rs2 As New ADODB.Recordset
 
+            Me.lblMsg.Text = ""
+            If Me.txtDescription.Text.Trim = "" Then
+                Me.lblMsg.Text = "Please enter Model Run Description."
+                Me.lblMsg.Focus()
+                Exit Sub
+            End If
 
             If cnsgazure.State = 0 Then
                 cnsgazure.ConnectionString = ConnectionStringHelper.GetConnectionStringSQLMKAzure
@@ -339,11 +345,11 @@ Public Class RunOptimizer
             End If
 
             'If cbRunR0only.Checked = True Then
-            If rblModelType.SelectedValue = "Full" Then
-                rs.Fields("RunR0only").Value = 0
-            Else
-                rs.Fields("RunR0only").Value = 1
-            End If
+            'If rblModelType.SelectedValue = "Full" Then
+            rs.Fields("RunR0only").Value = 0
+            'Else
+            '    rs.Fields("RunR0only").Value = 1
+            'End If
 
             If chkAssigns.Checked = True Then
                 rs.Fields("UseAssigns").Value = 1

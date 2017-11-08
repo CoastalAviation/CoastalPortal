@@ -58,6 +58,17 @@ Public Class ConnectionStringHelper
 
     End Function
 
+    Public Shared Function GetConnectionStringSGServer() As String
+
+        If Not testrun Then
+            If usevmdb Then Return getglobalconnectionstring("OptimizerServer" & ts)
+            '  Return "server=tcp:optimizersqlvm.cloudapp.net,1433;database=OptimizerWest;uid=cas;pwd=n621kf!12;Trusted_Connection=False;Encrypt=false;Connection Lifetime=800"
+        Else
+            Return "server=richarddesktop;database=OptimizerWest;uid=sa;pwd=n621kf!12;Connection Lifetime=800"
+        End If
+
+    End Function
+
     '20140523 - pab - change to dynamic optimizer database location
     Shared Function getglobalconnectionstring(connection As String) As String
 

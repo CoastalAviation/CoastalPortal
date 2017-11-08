@@ -135,7 +135,7 @@ Public Class OptimizerCalendar
     '    If i > 0 Then
     '        modelrunid = Left(modelrunid, i - 1)
     '    End If
-    '    Response.Redirect("FlightPlanningOpt.aspx?modelrunid=" & modelrunid)
+    '    Response.Redirect("FlightSchedule.aspx?modelrunid=" & modelrunid)
 
     'End Sub
 
@@ -154,7 +154,7 @@ Public Class OptimizerCalendar
         Session("fosmodelrunid") = modelrunid
         Session("fosmodelrunidcas") = ""
         Session("fosmodelstart") = modelstart
-        Response.Redirect("FlightPlanningOpt.aspx")
+        Response.Redirect("FlightSchedule.aspx")
 
     End Sub
 
