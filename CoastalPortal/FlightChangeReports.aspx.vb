@@ -15,6 +15,7 @@ Public Class FlightChangeReports
     Public Const F_SV2 = 8
     Public Const F_PT = 9
     Public Const F_ACC = 10
+    Public Const F_KEY2 = 12
     Public Const FD_AC = 0
     Public Const FD_TRIP = 1
     Public Const FD_FROM = 2
@@ -48,11 +49,14 @@ Public Class FlightChangeReports
             '20111121 - pab - convert to single db
             Dim da As New DataAccess
             Dim dt As DataTable
+            Dim btnresult As String = Request.Form("btnacpt")
+            Dim btnSelect As String = Request.Form("btnselect")
 
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
-                Me.gvFCDRList.Visible = True
+                gvFCDRList.Visible = True
+
 
                 '20160517 - pab - fix carrierid = 0 preventing quotes
                 If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
@@ -73,9 +77,14 @@ Public Class FlightChangeReports
                 If _emailfrom = "" Then
                     _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
                 End If
+            Else
+                If btnSelect IsNot Nothing Then
+                    getDetail(btnSelect)
+                End If
             End If
-            GetTrips()
-            Dim p = gvFCDRList.SelectedIndex
+            If btnSelect Is Nothing Then btnSelect = ""
+            GetTrips(btnSelect)
+
 
             '20100608 - pab - add logo to email
             Session("ApplicationPath") = Request.PhysicalApplicationPath
@@ -133,7 +142,7 @@ Public Class FlightChangeReports
         End Try
 
     End Sub
-    Public Sub GetTrips()
+    Public Sub GetTrips(Optional ByRef getKey As String = "")
         Dim odb As New OptimizerContext
         Dim fcdrlist As New List(Of FCDRList)
         Dim today = DateAdd("d", -2, DateTime.Now)
@@ -152,15 +161,19 @@ Public Class FlightChangeReports
         End If
         gvFCDRList.DataSource = fcdrlist
         gvFCDRList.DataBind()
-        Dim p = gvFCDRList.SelectedIndex
-        Colorme()
+        Colorme(getKey)
     End Sub
-    Public Sub Colorme()
+    Public Sub Colorme(ByRef GetKey As String)
         Dim i As Integer = 0
 
         For i = 0 To gvFCDRList.Rows.Count - 1
             gvFCDRList.Rows(i).Cells(F_KEY).ForeColor = Drawing.Color.Blue
-            gvFCDRList.Rows(i).Cells(F_KEY).BackColor = Drawing.Color.Wheat
+            If gvFCDRList.Rows(i).Cells(F_KEY2).Text = GetKey And GetKey <> "" Then
+                gvFCDRList.Rows(i).BackColor = Drawing.Color.Aqua
+
+            Else
+                gvFCDRList.Rows(i).Cells(F_KEY).BackColor = Drawing.Color.Wheat
+            End If
             If gvFCDRList.Rows(i).Cells(F_NRM).Text < 0 Then gvFCDRList.Rows(i).Cells(F_NRM).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_SV0).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV0).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_SV1).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV1).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
@@ -174,7 +187,7 @@ Public Class FlightChangeReports
             Next
         Next
         gvFCDRList.Columns(F_ACC).Visible = False
-
+        gvFCDRList.Columns(F_KEY2).Visible = False
     End Sub
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
 
@@ -234,22 +247,16 @@ Public Class FlightChangeReports
         Dim getKey As String ' gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
         getKey = gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
 
-        getDetail()
     End Sub
 
-    Public Sub getDetail()
+    Public Sub getDetail(getKey As String)
         Dim odb As New OptimizerContext
         Dim detailitems As New List(Of FCDRListDetail)
-        Dim getKey As String ' gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
 
         For Each row As GridViewRow In gvFCDRList.Rows
 
-            If row.RowIndex = gvFCDRList.SelectedIndex Then
+            If row.Cells(F_KEY).Text = getKey Then
                 row.BackColor = Drawing.Color.Azure
-                row.ToolTip = String.Empty
-                getKey = gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
-            Else
-                row.ToolTip = "Click to Select this Row"
             End If
         Next
         detailitems = odb.FCDRListDetail.Where(Function(c) c.KeyID = getKey).ToList()

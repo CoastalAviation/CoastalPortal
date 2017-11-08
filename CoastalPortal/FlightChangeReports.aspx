@@ -260,9 +260,16 @@
                <ContentTemplate>
                
     <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" 
-                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" OnSelectedIndexChanged="gvFCDRList_SelectedIndexChanged" AllowPaging="True" PageSize="15" 
-        PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRList_PageIndexChanging" AutoGenerateSelectButton="true" OnPreRender="gvFCDRList_PreRender">
+                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" OnSelectedIndexChanged="gvFCDRList_SelectedIndexChanged" AllowPaging="True" PageSize="10" 
+        PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRList_PageIndexChanging" OnPreRender="gvFCDRList_PreRender">
+        <PagerSettings FirstPageText="First Page" LastPageText="Last Page" />
+        <PagerStyle Font-Size="Medium" />
             <Columns >
+               <asp:TemplateField HeaderText ="Details">
+                    <ItemTemplate>
+                        <Button name="btnselect" value='<%#Eval("keyid") %>' >Detail</Button>
+                    </ItemTemplate>
+                </asp:TemplateField>
                 <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="PDFLink" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />
                 <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="GMTStart" HeaderText="Model Start" SortExpression="Start" ItemStyle-HorizontalAlign="Center"/>
@@ -275,21 +282,22 @@
                 <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
                <asp:TemplateField HeaderText ="Accept/Reject">
                     <ItemTemplate>
-                        <Button name="btnacpt" value="accept" >Accept</Button> <Button name="btnacpt" value="reject" >Reject</Button>
+                        <Button name="btnacpt" value="accept" >Accept</Button>&nbsp;&nbsp; <Button name="btnacpt" value="reject" >Reject</Button>
                     </ItemTemplate>
                 </asp:TemplateField>
-           </Columns>
+                 <asp:BoundField DataField="keyid"  />
+          </Columns>
             </asp:GridView>	
                    </ContentTemplate>
                </asp:UpdatePanel>
            </div>
         	<div class="form__order2"  id="Div1" runat="server" >
-		<div class="title">Change Details</div>
+		<div class="title">Change Details </div>
         <div>
            <asp:UpdatePanel runat="server" ID="DetailPanel">
                <ContentTemplate>
                    <asp:GridView ID="gvFCDRDetail" runat="server" BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h"
-                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound">
+                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound" EmptyDataText="No Revenue trips were added or changed in this Report">
                        <columns>
                            <asp:BoundField Datafield ="AC" HeaderText="Tail Number" SortExpression="AC" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="TripNumber" HeaderText="Trip Number" SortExpression="TripNumber" ItemStyle-HorizontalAlign="Center"/>
