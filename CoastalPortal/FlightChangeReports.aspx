@@ -293,12 +293,12 @@
            </div>
         	<div class="form__order2"  id="Div1" runat="server" >
 		<div class="title">Change Details for Revenue Flights </div>
-        <div>
+        <div style="padding-left:30px">
            <asp:UpdatePanel runat="server" ID="DetailPanel">
                <ContentTemplate>
                    <asp:GridView ID="gvFCDRDetail" runat="server" BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" HeaderStyle-HorizontalAlign="Center"  
                        AllowPaging="True" PageSize="10" PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRDetail_PageIndexChanging" ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound" 
-                       EmptyDataText="No Revenue trips were added or changed in this Report">
+                       EmptyDataText="No Revenue trips were added or changed in this Report" Width="90%">
                                <PagerSettings FirstPageText="First Page" LastPageText="Last Page"  />
                              <PagerStyle Font-Size="Medium" />
                        <columns>
@@ -306,7 +306,7 @@
                            <asp:BoundField Datafield ="DepartDate" HeaderText="Departure Date" SortExpression="DepartDate" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="From_ICAO" HeaderText="From" SortExpression="From" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="To_ICAO" HeaderText="To" SortExpression="To" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="AC" HeaderText="Old Tail" SortExpression="OAC" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="AC" HeaderText="Prior/New Tail" SortExpression="OAC" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="Modification" HeaderText="Result" SortExpression="Result" ItemStyle-HorizontalAlign="Center"/>
                        </columns>
                    </asp:GridView>
