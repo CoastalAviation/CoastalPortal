@@ -5,16 +5,21 @@ Public Class FlightChangeReports
     Inherits System.Web.UI.Page
 
     Private dtflights As New DataTable
-    Public Const F_KEY = 0
-    Public Const F_RUN = 1
-    Public Const F_MDL = 2
-    Public Const F_NRM = 3
-    Public Const F_TOT = 4
-    Public Const F_SV0 = 5
-    Public Const F_SV1 = 6
-    Public Const F_SV2 = 7
-    Public Const F_PT = 8
-    Public Const F_ACC = 9
+    Public Const F_KEY = 1
+    Public Const F_RUN = 2
+    Public Const F_MDL = 3
+    Public Const F_NRM = 4
+    Public Const F_TOT = 5
+    Public Const F_SV0 = 6
+    Public Const F_SV1 = 7
+    Public Const F_SV2 = 8
+    Public Const F_PT = 9
+    Public Const F_ACC = 10
+    Public Const FD_AC = 0
+    Public Const FD_TRIP = 1
+    Public Const FD_FROM = 2
+    Public Const FD_TO = 3
+    Public Const FD_RESULT = 4
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -68,27 +73,9 @@ Public Class FlightChangeReports
                 If _emailfrom = "" Then
                     _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
                 End If
-
-                'Dim oLookup As New PopulateLookups
-                'Me.departtime_combo.Items.Clear()
-                'dt = oLookup.TimeDD("All")
-                'Me.departtime_combo.DataSource = dt.DefaultView
-                'Me.departtime_combo.DataBind()
-                'Me.departtime_combo.SelectedValue = "09:00 AM"
-
-                GetTrips()
-            Else
-
-                '20131016 - pab - fix session timeout
-
-                'If IsNothing(Session("flights")) And IsNothing(Session("triptype")) Then
-                '    lblMsg.Text = da.GetSetting(_carrierid, "TimeoutMessage")
-                '    gvServiceProviderMatrix.EmptyDataText = lblMsg.Text
-                '    dtflights.Clear()
-                '    Me.gvServiceProviderMatrix.DataSource = dtflights
-                '    Me.gvServiceProviderMatrix.DataBind()
-                'End If
             End If
+            GetTrips()
+            Dim p = gvFCDRList.SelectedIndex
 
             '20100608 - pab - add logo to email
             Session("ApplicationPath") = Request.PhysicalApplicationPath
@@ -165,7 +152,7 @@ Public Class FlightChangeReports
         End If
         gvFCDRList.DataSource = fcdrlist
         gvFCDRList.DataBind()
-
+        Dim p = gvFCDRList.SelectedIndex
         Colorme()
     End Sub
     Public Sub Colorme()
@@ -182,7 +169,7 @@ Public Class FlightChangeReports
             If gvFCDRList.Rows(i).Cells(F_ACC + 1).Text <> "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
             'If gvFCDRList.Rows(i).Cells(F_ACC).Text = "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
 
-            For ii = 1 To gvFCDRList.Columns.Count - 1
+            For ii = 2 To gvFCDRList.Columns.Count - 1
                 gvFCDRList.Rows(i).Cells(ii).Text = Trim(gvFCDRList.Rows(i).Cells(ii).Text)
             Next
         Next
@@ -242,4 +229,60 @@ Public Class FlightChangeReports
 
     End Sub
 
+    Protected Sub gvFCDRList_SelectedIndexChanged(sender As Object, e As EventArgs)
+        Dim i = gvFCDRList.SelectedIndex
+        Dim getKey As String ' gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
+        getKey = gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
+
+        getDetail()
+    End Sub
+
+    Public Sub getDetail()
+        Dim odb As New OptimizerContext
+        Dim detailitems As New List(Of FCDRListDetail)
+        Dim getKey As String ' gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
+
+        For Each row As GridViewRow In gvFCDRList.Rows
+
+            If row.RowIndex = gvFCDRList.SelectedIndex Then
+                row.BackColor = Drawing.Color.Azure
+                row.ToolTip = String.Empty
+                getKey = gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
+            Else
+                row.ToolTip = "Click to Select this Row"
+            End If
+        Next
+        detailitems = odb.FCDRListDetail.Where(Function(c) c.KeyID = getKey).ToList()
+        gvFCDRDetail.DataSource = detailitems
+        gvFCDRDetail.DataBind()
+        'If detailitems.Count > 0 Then gvFCDRDetail.Visible = True
+    End Sub
+
+    Protected Sub gvFCDRDetail_DataBound(sender As Object, e As EventArgs)
+        Dim result_txt As String
+        Dim newAC As String
+
+        For i = 0 To gvFCDRDetail.Rows.Count - 1
+            result_txt = gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text
+            newAC = gvFCDRDetail.Rows(i).Cells(FD_AC).Text
+            gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text = If(result_txt <> "Added" And result_txt <> "Removed", newAC & " Moved To " & result_txt, result_txt)
+        Next
+    End Sub
+
+    'Protected Sub gvFCDRList_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvFCDRList.RowCreated
+    '    If e.Row.RowType = DataControlRowType.DataRow Then
+    '        e.Row.Attributes("onclick") = Page.ClientScript.GetPostBackClientHyperlink(gvFCDRDetail, "Select$" & e.Row.RowIndex)
+    '        e.Row.ToolTip = "Click to Select this row"
+    '    End If
+    'End Sub
+
+    Protected Sub gvFCDRList_PageIndexChanging(sender As Object, e As GridViewPageEventArgs)
+        gvFCDRList.PageIndex = e.NewPageIndex
+        GetTrips()
+    End Sub
+
+    Protected Sub gvFCDRList_PreRender(sender As Object, e As EventArgs)
+        Dim p = gvFCDRList.SelectedIndex
+
+    End Sub
 End Class

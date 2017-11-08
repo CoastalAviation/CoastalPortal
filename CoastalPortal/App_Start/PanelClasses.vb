@@ -2816,3 +2816,70 @@ Public Class lookupac_class
         End Set
     End Property
 End Class
+Public Class FCDRListDetail
+    Private m_keyid As String
+    Private m_FlightID As Integer
+    Private m_ac As String
+    Private m_tripnumber As String
+    Private m_fromicao As String
+    Private m_toicao As String
+    Private m_Modification As String
+    Public Property Modification() As String
+        Get
+            Return m_Modification
+        End Get
+        Set(ByVal value As String)
+            m_Modification = value
+        End Set
+    End Property
+    Public Property To_ICAO() As String
+        Get
+            Return m_toicao
+        End Get
+        Set(ByVal value As String)
+            m_toicao = value
+        End Set
+    End Property
+    Public Property From_ICAO() As String
+        Get
+            Return m_fromicao
+        End Get
+        Set(ByVal value As String)
+            m_fromicao = value
+        End Set
+    End Property
+    Public Property TripNumber() As String
+        Get
+            Return m_tripnumber
+        End Get
+        Set(ByVal value As String)
+            m_tripnumber = value
+        End Set
+    End Property
+    Public Property AC() As String
+        Get
+            Return m_ac
+        End Get
+        Set(ByVal value As String)
+            m_ac = value
+        End Set
+    End Property
+    <Key> <Column(Order:=1)>
+    Public Property FlightID() As Integer
+        Get
+            Return m_FlightID
+        End Get
+        Set(ByVal value As Integer)
+            m_FlightID = value
+        End Set
+    End Property
+    <Key> <Column(Order:=0)>
+    Public Property KeyID() As String
+        Get
+            Return m_keyid
+        End Get
+        Set(ByVal value As String)
+            m_keyid = value
+        End Set
+    End Property
+End Class

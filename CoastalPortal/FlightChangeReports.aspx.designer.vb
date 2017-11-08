@@ -113,6 +113,15 @@ Partial Public Class FlightChangeReports
     Protected WithEvents aircraft_type_txt_1 As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
+    '''FCSummary control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents FCSummary As Global.System.Web.UI.UpdatePanel
+    
+    '''<summary>
     '''gvFCDRList control.
     '''</summary>
     '''<remarks>
@@ -120,4 +129,31 @@ Partial Public Class FlightChangeReports
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents gvFCDRList As Global.System.Web.UI.WebControls.GridView
+    
+    '''<summary>
+    '''Div1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Div1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+    
+    '''<summary>
+    '''DetailPanel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents DetailPanel As Global.System.Web.UI.UpdatePanel
+    
+    '''<summary>
+    '''gvFCDRDetail control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents gvFCDRDetail As Global.System.Web.UI.WebControls.GridView
 End Class

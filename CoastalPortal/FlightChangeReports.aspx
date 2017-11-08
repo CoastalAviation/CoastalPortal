@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="FlightChangeReports.aspx.vb" Inherits="CoastalPortal.FlightChangeReports" %>
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="FlightChangeReports.aspx.vb" Inherits="CoastalPortal.FlightChangeReports"  EnableEventValidation="false"%>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="asp" %>
 
@@ -256,8 +256,12 @@
 		</div>	
 		</div>--%>
        <div style="align-items:center; justify-content:center;margin-left:10px;">
-    <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h"
-                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" >
+           <asp:UpdatePanel EnableViewState="false" runat="server" ID="FCSummary">
+               <ContentTemplate>
+               
+    <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" 
+                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" OnSelectedIndexChanged="gvFCDRList_SelectedIndexChanged" AllowPaging="True" PageSize="15" 
+        PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRList_PageIndexChanging" AutoGenerateSelectButton="true" OnPreRender="gvFCDRList_PreRender">
             <Columns >
                 <asp:HyperLinkField DataTextField="keyid" DataNavigateUrlFields="PDFLink" HeaderText="FCDR Key" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />
                 <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center"/>
@@ -275,8 +279,29 @@
                     </ItemTemplate>
                 </asp:TemplateField>
            </Columns>
-            </asp:GridView>		
+            </asp:GridView>	
+                   </ContentTemplate>
+               </asp:UpdatePanel>
+           </div>
+        	<div class="form__order2"  id="Div1" runat="server" >
+		<div class="title">Change Details</div>
+        <div>
+           <asp:UpdatePanel runat="server" ID="DetailPanel">
+               <ContentTemplate>
+                   <asp:GridView ID="gvFCDRDetail" runat="server" BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h"
+                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound">
+                       <columns>
+                           <asp:BoundField Datafield ="AC" HeaderText="Tail Number" SortExpression="AC" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="TripNumber" HeaderText="Trip Number" SortExpression="TripNumber" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="From_ICAO" HeaderText="From" SortExpression="From" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="To_ICAO" HeaderText="To" SortExpression="To" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="Modification" HeaderText="Result" SortExpression="Result" ItemStyle-HorizontalAlign="Center"/>
+                       </columns>
+                   </asp:GridView>
+                   </ContentTemplate>
+               </asp:UpdatePanel>
 		</div>
+                </div>
 </div>		
 </section>
 	

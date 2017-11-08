@@ -32,6 +32,7 @@ Namespace Models
             modelBuilder.Entity(Of optimizerLog).ToTable("OptimizerLog")
             modelBuilder.Entity(Of FCDRList).ToTable("FCDRList")
             modelBuilder.Entity(Of OptimizerRequest).ToTable("OptimizerRequest")
+            modelBuilder.Entity(Of FCDRListDetail).ToTable("FCDRListDetail")
             ' modelBuilder.Entity(Of CASFlightsOptimizerRecord).HasRequired(Function(x) x.WeightClass).WithMany().HasForeignKey(Function(y) New With {y.aircrafttype})
             'modelBuilder.Entity(Of FOSFlightsOptimizerRecord).HasRequired(Function(x) x.WeightClass).WithMany().HasForeignKey(Function(y) New With {y.AircraftType})
 
@@ -44,6 +45,7 @@ Namespace Models
         Public Property OptimizerLog As DbSet(Of optimizerLog)
         Public Property FCDRList As DbSet(Of FCDRList)
         Public Property OptimizerRequest As DbSet(Of OptimizerRequest)
+        Public Property FCDRListDetail As DbSet(Of FCDRListDetail)
     End Class
 
 End Namespace

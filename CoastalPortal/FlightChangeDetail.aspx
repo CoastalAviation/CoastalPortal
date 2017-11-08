@@ -487,6 +487,7 @@
                                                             <ItemStyle Width="30px" ForeColor="#009999"></ItemStyle>
                                                         </asp:ButtonField>
                                                         <asp:BoundField DataField="CASRecord.PriorTail" HeaderText="PT" SortExpression="PT" />
+                                                        <asp:BoundField DataField="PanelKey" HeaderText="ID" SortExpression="ID" />
                                                     </Columns>
                                                     <FooterStyle BackColor="White" ForeColor="#000066" />
                                                     <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />

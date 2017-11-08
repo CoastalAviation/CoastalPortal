@@ -77,9 +77,11 @@ Public Class FlightChangeDetail
     Public Const CAS_BASE As Integer = 35
     Public Const CAS_PIN As Integer = 36
     Public Const CAS_PT As Integer = 37
-    Public Const CAS_HA As Integer = 38
-    Public Const CAS_LEGBASE As Integer = 39
-    Public Const CAS_OE As Integer = 40
+    Public Const RECORD_ID As Integer = 38
+    Public Const CAS_HA As Integer = 39
+    Public Const CAS_LEGBASE As Integer = 40
+    Public Const CAS_OE As Integer = 41
+
     Private M_carrier As Integer
     Protected Property MyCarrier As Integer
         Get
@@ -875,10 +877,12 @@ Public Class FlightChangeDetail
         Next i
 
     End Function
-    Function linebreaks(ByRef gridviewtrips As GridView) ', ACType As String)
+    Function linebreaks(ByRef gridviewtrips As GridView, ByVal FCDRKey As String) ', ACType As String)
         Dim currentTail, LastTail As String
         Dim maxrows As Integer = 1
         Dim foscount, cascount As Integer
+        Dim db As New OptimizerContext
+        Dim FCDRdetail As New List(Of FCDRListDetail)
 
         foscount = 0
         cascount = 0
@@ -895,13 +899,34 @@ Public Class FlightChangeDetail
         For i = 1 To gridviewtrips.Rows.Count - 1
             currentTail = If(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text))
             LastTail = If(Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i - 1).Cells(CAS_AC).Text))
+            If gridviewtrips.Rows(i).Cells(FOS_AC).Text <> gridviewtrips.Rows(i).Cells(CAS_AC).Text Then
+                If gridviewtrips.Rows(i).Cells(FOS_FT).Text = "Rev" Or gridviewtrips.Rows(i).Cells(CAS_FT).Text = "Rev" Then
+                    FCDRdetail.Add(New FCDRListDetail With {.KeyID = FCDRKey, .Modification = gridviewtrips.Rows(i).Cells(FUTURE_TAIL).Text, .FlightID = gridviewtrips.Rows(i).Cells(RECORD_ID).Text,
+                                   .TripNumber = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_TRIP).Text, gridviewtrips.Rows(i).Cells(CAS_TRIP).Text),
+                                   .AC = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_AC).Text, gridviewtrips.Rows(i).Cells(CAS_AC).Text),
+                                   .From_ICAO = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_FROM).Text, gridviewtrips.Rows(i).Cells(CAS_FROM).Text),
+                                   .To_ICAO = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_TO).Text, gridviewtrips.Rows(i).Cells(CAS_TO).Text)})
+                End If
+            End If
+
             If currentTail <> LastTail Then
                 gridviewtrips.Controls(0).Controls.AddAt(i + maxrows, AddRow(foscount, cascount)) ' This line will insert row at 2nd line
                 maxrows += 1
             End If
         Next
+        If db.FCDRListDetail.Where(Function(c) c.KeyID = FCDRKey).Count() = 0 Then
+
+            db.FCDRListDetail.AddRange(FCDRdetail)
+            Try
+                db.SaveChanges()
+            Catch ex As Exception
+
+            End Try
+        End If
+
         gridviewtrips.Controls(0).Controls.AddAt(gridviewtrips.Rows.Count + maxrows, AddRow(foscount, cascount)) ' This line will insert row at 2nd line
         gridviewtrips.Columns(CAS_PT).Visible = False
+        gridviewtrips.Columns(RECORD_ID).Visible = False
     End Function
     Function AddRow(foscount As Integer, cascount As Integer) As GridViewRow
         Dim row As New GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Alternate)
@@ -931,7 +956,7 @@ Public Class FlightChangeDetail
             If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblCostDay2b"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblCostDay2b"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             FOScolorme(DirectCast(lvflightlist.Items(i).FindControl("GVGridViewTrips"), GridView), fcdrcolors.Where(Function(z) z.FCDR_Key = x).Select(Function(z) z).FirstOrDefault()) ', DirectCast(lvflightlist.Items(1).FindControl("pnlACType"), Label).Text)
             CAScolorme(DirectCast(lvflightlist.Items(i).FindControl("GVGridViewTrips"), GridView), fcdrcolors.Where(Function(z) z.FCDR_Key = x).Select(Function(z) z).FirstOrDefault())
-            linebreaks(DirectCast(lvflightlist.Items(i).FindControl("GVGridViewTrips"), GridView)) ', DirectCast(lvflightlist.Items(1).FindControl("pnlACType"), Label).Text)
+            linebreaks(DirectCast(lvflightlist.Items(i).FindControl("GVGridViewTrips"), GridView), x) ', DirectCast(lvflightlist.Items(1).FindControl("pnlACType"), Label).Text)
             'GetSavings(lvflightlist.Items(i))
         Next
         If CreatePDF Then makeMYPDF()
