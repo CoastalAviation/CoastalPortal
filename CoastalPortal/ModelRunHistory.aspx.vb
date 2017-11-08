@@ -327,4 +327,11 @@ Public Class ModelRunHistory
 
     End Sub
 
+    '20171107 - pab - show r0
+    Protected Sub bttnR0_Click(sender As Object, e As EventArgs) Handles bttnR0.Click
+
+        Response.Redirect("FlightSchedule.aspx?r0=1", True)
+
+    End Sub
+
 End Class

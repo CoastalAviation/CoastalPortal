@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class ModelRunHistory
+Partial Public Class Error_Page
     
     '''<summary>
     '''Head1 control.
@@ -104,15 +104,6 @@ Partial Public Class ModelRunHistory
     Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
     
     '''<summary>
-    '''bttnR0 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents bttnR0 As Global.System.Web.UI.WebControls.Button
-    
-    '''<summary>
     '''lblMsg control.
     '''</summary>
     '''<remarks>
@@ -120,13 +111,4 @@ Partial Public Class ModelRunHistory
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblMsg As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''GridView1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents GridView1 As Global.System.Web.UI.WebControls.GridView
 End Class
