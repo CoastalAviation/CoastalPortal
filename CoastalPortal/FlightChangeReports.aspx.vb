@@ -16,11 +16,12 @@ Public Class FlightChangeReports
     Public Const F_PT = 9
     Public Const F_ACC = 10
     Public Const F_KEY2 = 12
-    Public Const FD_AC = 0
-    Public Const FD_TRIP = 1
-    Public Const FD_FROM = 2
-    Public Const FD_TO = 3
-    Public Const FD_RESULT = 4
+    Public Const FD_TRIP = 0
+    Public Const FD_OAC = 1
+    Public Const FD_NAC = 2
+    Public Const FD_FROM = 3
+    Public Const FD_TO = 4
+    Public Const FD_RESULT = 5
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -188,6 +189,7 @@ Public Class FlightChangeReports
         Next
         gvFCDRList.Columns(F_ACC).Visible = False
         gvFCDRList.Columns(F_KEY2).Visible = False
+        gvFCDRList.Columns(F_MDL).Visible = False
     End Sub
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
 
@@ -267,12 +269,13 @@ Public Class FlightChangeReports
 
     Protected Sub gvFCDRDetail_DataBound(sender As Object, e As EventArgs)
         Dim result_txt As String
-        Dim newAC As String
+        Dim OldAC As String
 
         For i = 0 To gvFCDRDetail.Rows.Count - 1
             result_txt = gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text
-            newAC = gvFCDRDetail.Rows(i).Cells(FD_AC).Text
-            gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text = If(result_txt <> "Added" And result_txt <> "Removed", newAC & " Moved To " & result_txt, result_txt)
+            OldAC = gvFCDRDetail.Rows(i).Cells(FD_OAC).Text
+            gvFCDRDetail.Rows(i).Cells(FD_NAC).Text = If(result_txt <> "Added" And result_txt <> "Removed", result_txt, "")
+            gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text = If(result_txt <> "Added" And result_txt <> "Removed", OldAC & " Moved To " & result_txt, result_txt)
         Next
     End Sub
 
