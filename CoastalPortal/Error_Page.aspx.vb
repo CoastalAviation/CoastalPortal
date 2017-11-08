@@ -23,12 +23,12 @@ Public Class Error_Page
             '20120830 - pab - try to fix telerik issue - ddls not working when round trip clicked
             Response.Cache.SetNoStore()
 
-            '20160412 - pab - If Session("email") Is Nothing Then assume timeout and redirect to login page
-            If Session("email") Is Nothing Then
-                'Session.Abandon()
-                Response.Redirect("CustomerLogin.aspx", True)
+            ''20160412 - pab - If Session("email") Is Nothing Then assume timeout and redirect to login page
+            'If Session("email") Is Nothing Then
+            '    'Session.Abandon()
+            '    Response.Redirect("CustomerLogin.aspx", True)
 
-            End If
+            'End If
 
             '20111121 - pab - convert to single db
             Dim da As New DataAccess
@@ -38,8 +38,10 @@ Public Class Error_Page
             If Not IsPostBack Then
 
                 '20160517 - pab - fix carrierid = 0 preventing quotes
-                If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
-                    _carrierid = 65
+                If Not IsNothing(Session("email")) Then
+                    If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
+                        _carrierid = 65
+                    End If
                 End If
 
                 '20111121 - pab - convert to single db

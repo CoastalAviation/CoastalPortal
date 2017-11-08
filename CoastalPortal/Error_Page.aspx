@@ -147,21 +147,21 @@
 		<div class="wrapper">
 			<div class="menu__left">
 				<ul>
-					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
+					<li><a href="#">Run Optimizer</a></li>
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
-					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
+					<li><a href="#">Model Run History</a></li>
 					<%--<li><a href="#">Model Run History</a></li>--%>
 				</ul>
 			</div>
 			<div class="logo">
-				<a href="RunOptimizer.aspx">
+				<a href="#">
 					<img src="~/Images/logo_blue.png" alt="" id="imglogo" runat="server" width="112" />
 				</a>
 			</div>
 			<div class="menu__right">
 				<ul>
-					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
-					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
+					<li><a href="#">Review Flight Change Reports</a></li>
+					<li><a href="#">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
@@ -181,12 +181,12 @@
 			
 			<div class="menu__mobile" id="mainmenu">
 				<ul>
-					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
+					<li><a href="#">Run Optimizer</a></li>
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
-					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
+					<li><a href="#">Model Run History</a></li>
 					<%--<li><a href="#">Model Run History</a></li>--%>
-					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
-					<li><a href="FlightSchedule.aspx">Flight Schedule</a></li>
+					<li><a href="#">Review Flight Change Reports</a></li>
+					<li><a href="#">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
