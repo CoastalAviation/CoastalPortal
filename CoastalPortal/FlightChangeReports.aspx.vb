@@ -17,11 +17,13 @@ Public Class FlightChangeReports
     Public Const F_ACC = 10
     Public Const F_KEY2 = 12
     Public Const FD_TRIP = 0
-    Public Const FD_OAC = 1
-    Public Const FD_NAC = 2
-    Public Const FD_FROM = 3
-    Public Const FD_TO = 4
+    Public Const FD_FROM = 1
+    Public Const FD_TO = 2
+    Public Const FD_DEPART = 3
+    Public Const FD_OAC = 4
     Public Const FD_RESULT = 5
+    Public Const FD_NAC = 6
+
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -244,16 +246,17 @@ Public Class FlightChangeReports
 
     End Sub
 
-    Protected Sub gvFCDRList_SelectedIndexChanged(sender As Object, e As EventArgs)
-        Dim i = gvFCDRList.SelectedIndex
-        Dim getKey As String ' gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
-        getKey = gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
+    'Protected Sub gvFCDRList_SelectedIndexChanged(sender As Object, e As EventArgs)
+    '    Dim i = gvFCDRList.SelectedIndex
+    '    Dim getKey As String ' gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
+    '    getKey = gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
 
-    End Sub
+    'End Sub
 
     Public Sub getDetail(getKey As String)
         Dim odb As New OptimizerContext
         Dim detailitems As New List(Of FCDRListDetail)
+        Session("GetKey") = getKey
 
         For Each row As GridViewRow In gvFCDRList.Rows
 
@@ -274,7 +277,7 @@ Public Class FlightChangeReports
         For i = 0 To gvFCDRDetail.Rows.Count - 1
             result_txt = gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text
             OldAC = gvFCDRDetail.Rows(i).Cells(FD_OAC).Text
-            gvFCDRDetail.Rows(i).Cells(FD_NAC).Text = If(result_txt <> "Added" And result_txt <> "Removed", result_txt, "")
+            ' gvFCDRDetail.Rows(i).Cells(FD_NAC).Text = If(result_txt <> "Added" And result_txt <> "Removed", result_txt, "")
             gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text = If(result_txt <> "Added" And result_txt <> "Removed", OldAC & " Moved To " & result_txt, result_txt)
         Next
     End Sub
@@ -290,9 +293,13 @@ Public Class FlightChangeReports
         gvFCDRList.PageIndex = e.NewPageIndex
         GetTrips()
     End Sub
+    Protected Sub gvFCDRDetail_PageIndexChanging(sender As Object, e As GridViewPageEventArgs)
+        gvFCDRDetail.PageIndex = e.NewPageIndex
+        getDetail(Session("GetKey"))
+    End Sub
+
 
     Protected Sub gvFCDRList_PreRender(sender As Object, e As EventArgs)
         Dim p = gvFCDRList.SelectedIndex
-
     End Sub
 End Class

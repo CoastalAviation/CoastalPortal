@@ -260,12 +260,12 @@
                <ContentTemplate>
                
     <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" 
-                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" OnSelectedIndexChanged="gvFCDRList_SelectedIndexChanged" AllowPaging="True" PageSize="10" 
+                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" AllowPaging="True" PageSize="10" 
         PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRList_PageIndexChanging" OnPreRender="gvFCDRList_PreRender">
-        <PagerSettings FirstPageText="First Page" LastPageText="Last Page" />
+        <PagerSettings FirstPageText="First Page" LastPageText="Last Page" visible="true"/>
         <PagerStyle Font-Size="Medium" />
             <Columns >
-               <asp:TemplateField HeaderText ="Details">
+               <asp:TemplateField HeaderText ="Show Details">
                     <ItemTemplate>
                         <Button name="btnselect" value='<%#Eval("keyid") %>' >Detail</Button>
                     </ItemTemplate>
@@ -273,8 +273,8 @@
                 <asp:HyperLinkField Text="See Schedule" DataNavigateUrlFields="PDFLink" HeaderText="Schedule" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />
                 <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center" />
                 <asp:BoundField DataField="GMTStart" HeaderText="Model Start" SortExpression="Start" ItemStyle-HorizontalAlign="Center" />
-                <asp:BoundField DataField="deltanonrevmiles" HeaderText="Delta RM" SortExpression="NRM" DataFormatString="{0:N0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
-                <asp:BoundField DataField="TotalSavings" HeaderText="TOT SAV" SortExpression="TotalSavings" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="deltanonrevmiles" HeaderText="Delta NRM" SortExpression="NRM" DataFormatString="{0:N0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
+                <asp:BoundField DataField="TotalSavings" HeaderText="TOT SAVE" SortExpression="TotalSavings" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="savingsday0" HeaderText="SAV D0" SortExpression="SaveNow" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="savingsday1" HeaderText="SAV D1" SortExpression="Save1" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="savingsday2" HeaderText="SAV D2" SortExpression="Save2" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
@@ -292,18 +292,21 @@
                </asp:UpdatePanel>
            </div>
         	<div class="form__order2"  id="Div1" runat="server" >
-		<div class="title">Change Details </div>
+		<div class="title">Change Details for Revenue Flights </div>
         <div>
            <asp:UpdatePanel runat="server" ID="DetailPanel">
                <ContentTemplate>
-                   <asp:GridView ID="gvFCDRDetail" runat="server" BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h"
-                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound" EmptyDataText="No Revenue trips were added or changed in this Report">
+                   <asp:GridView ID="gvFCDRDetail" runat="server" BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" HeaderStyle-HorizontalAlign="Center"  
+                       AllowPaging="True" PageSize="10" PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRDetail_PageIndexChanging" ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound" 
+                       EmptyDataText="No Revenue trips were added or changed in this Report">
+                               <PagerSettings FirstPageText="First Page" LastPageText="Last Page"  />
+                             <PagerStyle Font-Size="Medium" />
                        <columns>
                            <asp:BoundField Datafield ="TripNumber" HeaderText="Trip Number" SortExpression="TripNumber" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="AC" HeaderText="Old Tail" SortExpression="OAC" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="Modification" HeaderText="New Tail" SortExpression="NAC" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="DepartDate" HeaderText="Departure Date" SortExpression="DepartDate" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="From_ICAO" HeaderText="From" SortExpression="From" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="To_ICAO" HeaderText="To" SortExpression="To" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="AC" HeaderText="Old Tail" SortExpression="OAC" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="Modification" HeaderText="Result" SortExpression="Result" ItemStyle-HorizontalAlign="Center"/>
                        </columns>
                    </asp:GridView>

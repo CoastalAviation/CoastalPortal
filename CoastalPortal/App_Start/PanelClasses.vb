@@ -2824,6 +2824,15 @@ Public Class FCDRListDetail
     Private m_fromicao As String
     Private m_toicao As String
     Private m_Modification As String
+    Private m_departdate As DateTime
+    Public Property DepartDate() As DateTime
+        Get
+            Return m_departdate
+        End Get
+        Set(ByVal value As DateTime)
+            m_departdate = value
+        End Set
+    End Property
     Public Property Modification() As String
         Get
             Return m_Modification
