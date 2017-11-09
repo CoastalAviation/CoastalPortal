@@ -5,6 +5,90 @@ Public Class ConnectionStringHelper
     Public Shared usevmdb As Boolean = True
     Public Shared testflag As String = ""
 
+    '20171109 - pab - add optimmizer model page
+    Public Shared Function GetCASConnectionStringSQL() As String
+
+        If Not testrun Then
+            Return getglobalconnectionstring("OptimizerDriver")
+            ' Return "Driver={SQL Server Native Client 11.0};server=tcp:optimizersqlvm.cloudapp.net,1433;database=OptimizerWest;uid=cas;Password=n621kf!12;Encrypt=no;"
+        Else
+            Return "Driver={SQL Server Native Client 11.0};Server=RICHARDdesktop;database=OptimizerWest;User ID=sa;Password=n621kf!12;"
+        End If
+
+    End Function
+
+    '20171109 - pab - add optimmizer model page
+    Public Shared Function ReadOnlyDriverConnectionString() As String
+
+        ' Return getglobalconnectionstring("OptimizerServer" & ts)
+        Return getglobalconnectionstring("OptimizerDriverRO" & ts)
+
+    End Function
+
+    '20171109 - pab - add optimmizer model page
+    Public Shared Function ReadOnlyServerConnectionString() As String
+
+        ' Return getglobalconnectionstring("OptimizerServer" & ts)
+        Return getglobalconnectionstring("OptimizerServerRO" & ts)
+
+    End Function
+
+    '20171109 - pab - add optimmizer model page
+    Public Shared Function ReadWriteDriverConnectionString() As String
+
+        ' Return getglobalconnectionstring("OptimizerServer" & ts)
+        Return getglobalconnectionstring("OptimizerDriver" & ts)
+
+    End Function
+
+    '20171109 - pab - add optimmizer model page
+    Public Shared Function GetD2DConnectionString() As String
+
+        'Return "Data Source=(local);Initial Catalog=SuperPortalV3;Persist Security Info=True;User ID=sa;Password=CoastalPass1"
+        If Not testrun Then
+            Return getglobalconnectionstring("OptimizerDriver" & ts)
+            '  Return "Driver={SQL Server Native Client 11.0};server=tcp:optimizersqlvm.cloudapp.net,1433;database=OptimizerWest;uid=cas;Password=n621kf!12;Encrypt=no;"
+        Else
+            Return "Driver={SQL Server Native Client 11.0};Server=RICHARDdesktop;database=OptimizerWest;User ID=sa;Password=n621kf!12;"
+        End If
+
+    End Function
+
+    '20171109 - pab - add optimmizer model page
+    Public Shared Function GetConnectionStringsql() As String
+
+        If Not testrun Then
+
+            If usevmdb Then Return getglobalconnectionstring("OptimizerDriver" & ts)
+            ' If usevmdb Then Return "Driver={SQL Server Native Client 11.0};server=tcp:optimizersqlvm.cloudapp.net,1433;database=OptimizerWest;uid=cas;Password=n621kf!12;Encrypt=no;"
+
+
+            'Return "Driver={SQL Server Native Client 11.0};server=tcp:b2pqcffmjl.database.windows.net,1433;database=OptimizerWest;uid=OptimizerWest@b2pqcffmjl;Password=n621kf!12;Encrypt=yes;"
+        Else
+            Return "Driver={SQL Server Native Client 11.0};Server=RICHARDdesktop;database=OptimizerWest;User ID=sa;Password=n621kf!12;"
+
+        End If
+
+    End Function
+
+    '20171031 - pab - model run history
+    Public Shared Function GetMKConnectionStringsql() As String
+
+        If Not testrun Then
+
+            If usevmdb Then Return getglobalconnectionstring("OptimizerDriver" & ts)
+            ' If usevmdb Then Return "Driver={SQL Server Native Client 11.0};server=tcp:optimizersqlvm.cloudapp.net,1433;database=OptimizerWest;uid=cas;Password=n621kf!12;Encrypt=no;"
+
+
+            'Return "Driver={SQL Server Native Client 11.0};server=tcp:b2pqcffmjl.database.windows.net,1433;database=OptimizerWest;uid=OptimizerWest@b2pqcffmjl;Password=n621kf!12;Encrypt=yes;"
+        Else
+
+            Return "Driver={SQL Server Native Client 11.0};Server=RICHARDdesktop;database=OptimizerWest;User ID=sa;Password=n621kf!12;"
+
+        End If
+
+    End Function
+
     '20171031 - pab - model run history
     Public Shared Function GetsqladapterSQLVMConnectionString() As String
 

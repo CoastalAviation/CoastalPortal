@@ -12,7 +12,7 @@ Option Explicit On
 
 
 Partial Public Class ModelDetails
-    
+
     '''<summary>
     '''Head1 control.
     '''</summary>
@@ -21,7 +21,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents Head1 As Global.System.Web.UI.HtmlControls.HtmlHead
-    
+
     '''<summary>
     '''form1 control.
     '''</summary>
@@ -30,7 +30,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
-    
+
     '''<summary>
     '''RadStyleSheetManager1 control.
     '''</summary>
@@ -39,7 +39,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents RadStyleSheetManager1 As Global.Telerik.Web.UI.RadStyleSheetManager
-    
+
     '''<summary>
     '''ScriptManager1 control.
     '''</summary>
@@ -48,7 +48,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents ScriptManager1 As Global.Telerik.Web.UI.RadScriptManager
-    
+
     '''<summary>
     '''RadAjaxManager1 control.
     '''</summary>
@@ -57,7 +57,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents RadAjaxManager1 As Global.Telerik.Web.UI.RadAjaxManager
-    
+
     '''<summary>
     '''imglogo control.
     '''</summary>
@@ -66,7 +66,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents imglogo As Global.System.Web.UI.HtmlControls.HtmlImage
-    
+
     '''<summary>
     '''LinkLogOut control.
     '''</summary>
@@ -75,7 +75,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents LinkLogOut As Global.System.Web.UI.WebControls.LinkButton
-    
+
     '''<summary>
     '''lblCarrier control.
     '''</summary>
@@ -84,7 +84,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblCarrier As Global.System.Web.UI.WebControls.Label
-    
+
     '''<summary>
     '''LinkLogOut2 control.
     '''</summary>
@@ -93,7 +93,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents LinkLogOut2 As Global.System.Web.UI.WebControls.LinkButton
-    
+
     '''<summary>
     '''form_1 control.
     '''</summary>
@@ -102,7 +102,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-    
+
     '''<summary>
     '''lblModelRunID control.
     '''</summary>
@@ -111,25 +111,7 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblModelRunID As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''OptimizerDetailabc123unm control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents OptimizerDetailabc123unm As Global.Optimizer.OD123
-    
-    '''<summary>
-    '''gvServiceProviderMatrix control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents gvServiceProviderMatrix As Global.System.Web.UI.WebControls.GridView
-    
+
     '''<summary>
     '''lblMsg control.
     '''</summary>
@@ -138,4 +120,49 @@ Partial Public Class ModelDetails
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblMsg As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''pnlPrintAll control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlPrintAll As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''pnlPrintFOS control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlPrintFOS As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''FOSFlights1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents FOSFlights1 As Global.CoastalPortal.FOSFlightsAzureabc123
+
+    '''<summary>
+    '''pnlPrintCAS control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlPrintCAS As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''CASFlights1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents CASFlights1 As Global.CoastalPortal.CasFlightsAzure6
 End Class
