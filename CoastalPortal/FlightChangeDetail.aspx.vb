@@ -1083,7 +1083,7 @@ Public Class FlightChangeDetail
     End Sub
     Sub makeMYPDF()
         Dim DoneFile As String = Server.MapPath("FCDRpages/" + Filename + ".pdf")
-        If File.Exists(DoneFile) Then File.Delete(DoneFile)
+        If File.Exists(DoneFile) Then Exit Sub
 
         Dim htmlString As String
         Dim baseUrl As String = "http://optimizerpanel.com/FCDRpages/"

@@ -162,7 +162,8 @@ Public Class FlightChangeReports
         If fcdrlist.Count > 1 Then
             Do While i <> fcdrlist.Count
                 Dim checkme = fcdrlist(i - 1)
-                If fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings Then
+                If (fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings) Or
+                    (fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).DeltaNonRevMiles = checkme.DeltaNonRevMiles And fcdrlist(i).TotalSavings = checkme.TotalSavings) Then
                     fcdrlist.Remove(fcdrlist(i))
                     i -= 1
                 End If
