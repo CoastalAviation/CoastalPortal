@@ -16,6 +16,7 @@ Public Class FlightChangeReports
     Public Const F_PT = 9
     Public Const F_ACC = 10
     Public Const F_KEY2 = 12
+    Public Const F_TRADE = 13
     Public Const FD_TRIP = 0
     Public Const FD_FROM = 1
     Public Const FD_TO = 2
@@ -84,6 +85,12 @@ Public Class FlightChangeReports
                 If btnSelect IsNot Nothing Then
                     getDetail(btnSelect)
                 End If
+                If btnresult IsNot Nothing Then
+                    Dim i = InStr(btnresult, " ")
+                    Dim action = Left(btnresult, i - 1)
+                    Dim KeyId = Mid(btnresult, i + 1)
+                    AcceptRejectFCDR(KeyId, action)
+                End If
             End If
             If btnSelect Is Nothing Then btnSelect = ""
             GetTrips(btnSelect)
@@ -151,7 +158,7 @@ Public Class FlightChangeReports
         Dim today = DateAdd("d", -2, DateTime.Now)
         Dim i As Integer = 1
 
-        fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = _carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
+        fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = _carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
         If fcdrlist.Count > 1 Then
             Do While i <> fcdrlist.Count
                 Dim checkme = fcdrlist(i - 1)
@@ -173,25 +180,28 @@ Public Class FlightChangeReports
             gvFCDRList.Rows(i).Cells(F_KEY).ForeColor = Drawing.Color.Blue
             If gvFCDRList.Rows(i).Cells(F_KEY2).Text = GetKey And GetKey <> "" Then
                 gvFCDRList.Rows(i).BackColor = Drawing.Color.Aqua
-
             Else
                 gvFCDRList.Rows(i).Cells(F_KEY).BackColor = Drawing.Color.Wheat
             End If
+            If gvFCDRList.Rows(i).Cells(F_TRADE).Text = "True" Then gvFCDRList.Rows(i).BackColor = Drawing.Color.Green
             If gvFCDRList.Rows(i).Cells(F_NRM).Text < 0 Then gvFCDRList.Rows(i).Cells(F_NRM).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_SV0).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV0).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_SV1).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV1).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_SV2).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV2).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If gvFCDRList.Rows(i).Cells(F_TOT).Text < 0 Then gvFCDRList.Rows(i).Cells(F_TOT).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-            If gvFCDRList.Rows(i).Cells(F_ACC + 1).Text <> "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
+            'If gvFCDRList.Rows(i).Cells(F_ACC + 1).Text <> "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
             'If gvFCDRList.Rows(i).Cells(F_ACC).Text = "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
 
             For ii = 2 To gvFCDRList.Columns.Count - 1
-                gvFCDRList.Rows(i).Cells(ii).Text = Trim(gvFCDRList.Rows(i).Cells(ii).Text)
+                If ii <> F_ACC + 1 Then
+                    gvFCDRList.Rows(i).Cells(ii).Text = Trim(gvFCDRList.Rows(i).Cells(ii).Text)
+                End If
             Next
         Next
         gvFCDRList.Columns(F_ACC).Visible = False
         gvFCDRList.Columns(F_KEY2).Visible = False
         gvFCDRList.Columns(F_MDL).Visible = False
+        gvFCDRList.Columns(F_TRADE).Visible = False
     End Sub
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
 
@@ -245,14 +255,30 @@ Public Class FlightChangeReports
         Response.Redirect("CustomerLogin.aspx", True)
 
     End Sub
+    Public Sub AcceptRejectFCDR(action As String, KeyID As String)
+        Dim odb As New OptimizerContext
+        Dim fcdr As New FCDRList
+        'Dim fcdrPartner As 
 
-    'Protected Sub gvFCDRList_SelectedIndexChanged(sender As Object, e As EventArgs)
-    '    Dim i = gvFCDRList.SelectedIndex
-    '    Dim getKey As String ' gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
-    '    getKey = gvFCDRList.Rows(gvFCDRList.SelectedIndex).Cells(F_KEY).Text
+        fcdr = odb.FCDRList.Find(KeyID)
+        If fcdr.isTrade Then
+            'TODO .. Process a trade 
+        Else
 
-    'End Sub
+            fcdr.CarrierAcceptDate = Now
+            fcdr.CarrierAcceptID = Session("username")
+            fcdr.CarrierAcceptStatus = If(action = "accept", "AC", "RJ")
+        End If
 
+        Try
+            odb.SaveChanges()
+        Catch ex As Exception
+        End Try
+
+        If action = "accept" Then
+            'Send Email to those that need it
+        End If
+    End Sub
     Public Sub getDetail(getKey As String)
         Dim odb As New OptimizerContext
         Dim detailitems As New List(Of FCDRListDetail)
@@ -281,13 +307,6 @@ Public Class FlightChangeReports
             gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text = If(result_txt <> "Added" And result_txt <> "Removed", OldAC & " Moved To " & result_txt, result_txt)
         Next
     End Sub
-
-    'Protected Sub gvFCDRList_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvFCDRList.RowCreated
-    '    If e.Row.RowType = DataControlRowType.DataRow Then
-    '        e.Row.Attributes("onclick") = Page.ClientScript.GetPostBackClientHyperlink(gvFCDRDetail, "Select$" & e.Row.RowIndex)
-    '        e.Row.ToolTip = "Click to Select this row"
-    '    End If
-    'End Sub
 
     Protected Sub gvFCDRList_PageIndexChanging(sender As Object, e As GridViewPageEventArgs)
         gvFCDRList.PageIndex = e.NewPageIndex

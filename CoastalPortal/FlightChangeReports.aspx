@@ -267,7 +267,7 @@
             <Columns >
                <asp:TemplateField HeaderText ="Show Details">
                     <ItemTemplate>
-                        <Button name="btnselect" value='<%#Eval("keyid") %>' >Detail</Button>
+                        <button name="btnselect" value='<%#Eval("keyid") %>' >Detail</button>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:HyperLinkField Text="See Schedule" DataNavigateUrlFields="PDFLink" HeaderText="Schedule" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />
@@ -282,11 +282,12 @@
                 <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
                <asp:TemplateField HeaderText ="Accept/Reject">
                     <ItemTemplate>
-                        <Button name="btnacpt" value="accept" >Accept</Button>&nbsp;&nbsp; <Button name="btnacpt" value="reject" >Reject</Button>
+                        <button name="btnacpt" value='<%# "accept" + " " + Eval("keyid") %>' >Accept</button>&nbsp;&nbsp; <button name="btnacpt" value='<%# "reject" + " " + Eval("keyid") %>' >Reject</button>
                     </ItemTemplate>
                 </asp:TemplateField>
                  <asp:BoundField DataField="keyid"  />
-          </Columns>
+                  <asp:BoundField DataField="isTrade"  />
+                </Columns>
             </asp:GridView>	
                    </ContentTemplate>
                </asp:UpdatePanel>
