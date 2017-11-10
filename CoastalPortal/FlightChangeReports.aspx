@@ -267,7 +267,7 @@
             <Columns >
                <asp:TemplateField HeaderText ="Show Details">
                     <ItemTemplate>
-                        <button name="btnselect" value='<%#Eval("keyid") %>' >Detail</button>
+                        <button name="btnselect" value='<%#Eval("keyid") %>' >Change Details</button>
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:HyperLinkField Text="See Schedule" DataNavigateUrlFields="PDFLink" HeaderText="Schedule" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />
