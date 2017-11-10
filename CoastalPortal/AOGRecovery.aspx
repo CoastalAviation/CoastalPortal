@@ -214,7 +214,7 @@
 <footer class="normal">
 	<div class="wrapper">
 		<span class="copyring">
-			<p>© 2017 CoastalAVTech LTD</p>
+			<p>© 2017 Coastal Aviation Software, Inc</p>
 			<p>All Rights Reserved</p>
 		</span>
 		
