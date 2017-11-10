@@ -204,7 +204,7 @@
 	<div class="form__order2"  id="form_1" runat="server" >
 		<div class="title">Review Flight Change Reports</div>
 
-		<div class="title"> <asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label> </div>
+		<div class="title"> <%--<asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label>--%> </div>
 		<%--<div class="table">
 			<div class="table__scroll">
 			<div class="table_h">
@@ -291,15 +291,13 @@
             </asp:GridView>	
                    </ContentTemplate>
                </asp:UpdatePanel>
-           </div>
-        	<div class="form__order2"  id="Div1" runat="server" >
-		<div class="title">Change Details for Revenue Flights </div>
-        <div style="padding-left:30px">
+           <br />
+           <br />
            <asp:UpdatePanel runat="server" ID="DetailPanel">
                <ContentTemplate>
                    <asp:GridView ID="gvFCDRDetail" runat="server" BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" HeaderStyle-HorizontalAlign="Center"  
                        AllowPaging="True" PageSize="10" PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRDetail_PageIndexChanging" ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound" 
-                       EmptyDataText="No Revenue trips were added or changed in this Report" Width="90%">
+                       EmptyDataText="No Revenue trips were added or changed in this Report" Caption="<b>Change Details for Revenue Flights</b>">
                                <PagerSettings FirstPageText="First Page" LastPageText="Last Page"  />
                              <PagerStyle Font-Size="Medium" />
                        <columns>
@@ -313,8 +311,13 @@
                    </asp:GridView>
                    </ContentTemplate>
                </asp:UpdatePanel>
-		</div>
-                </div>
+           </div>
+        	<%--<div class="form__order2"  id="Div1" runat="server" >
+		        <div class="title">Change Details for Revenue Flights</div>
+                <div style="padding-left:30px">
+		        </div>
+            </div>--%>
+
 </div>		
 </section>
 	
