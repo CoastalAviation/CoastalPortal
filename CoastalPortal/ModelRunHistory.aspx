@@ -205,13 +205,33 @@
 		<div class="title">Model Run History</div>
 
 		<div class="form__buttons">
-            <asp:Button CssClass="button" Text="Current FOS Schedule" runat="server" ToolTip="View Current FOS Schedule" ID="bttnR0" />
+            <asp:Button CssClass="button" Text="Display Current FOS Schedule" runat="server" ToolTip="Display Current FOS Schedule" ID="bttnR0" />
             <br />
             <br />
             <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
 		</div>
 	
         <div class="table grid">
+            <asp:GridView ID="GridView2" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
+                AutoGenerateColumns="False" DataKeyNames="ID"  CssClass="table__tr">
+                <Columns>
+                    <asp:BoundField DataField="ID" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="ID" />
+                    <asp:BoundField DataField="CarrierID" HeaderText="CarrierID" SortExpression="CarrierID" Visible="False" />
+                    <asp:BoundField DataField="Description" HeaderText="Description" SortExpression="Description" />
+                    <asp:BoundField DataField="GMTStart" HeaderText="GMT Start" SortExpression="GMTStart" />
+                    <asp:BoundField DataField="GMTEnd" HeaderText="GMT End" SortExpression="GMTEnd" />
+                    <asp:BoundField DataField="DeclaredComplete" HeaderText="Declared Complete" SortExpression="DeclaredComplete" />
+                    <asp:ButtonField CommandName="Base" Text="Base Model" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>
+                    <asp:ButtonField CommandName="Best" Text="Model Details" ><ItemStyle ForeColor="Blue" /></asp:ButtonField>
+                    <asp:ButtonField CommandName="Eff" Text="Best Eff" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>
+                </Columns>
+            </asp:GridView>
+        </div>
+
+        <%--<br />--%>
+        <%--<br />--%>
+
+        <%--<div class="table grid">
             <asp:GridView ID="GridView1" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
                 AutoGenerateColumns="False" DataKeyNames="ID"  CssClass="table__tr">
                 <Columns>
@@ -233,24 +253,24 @@
                     <asp:TemplateField HeaderText="Declared Complete">
                         <ItemTemplate><%#DataBinder.Eval(Container.DataItem, "declaredcomplete")%></ItemTemplate>
                     </asp:TemplateField>
-                    <%--<asp:TemplateField HeaderText="Select">
+                    <asp:TemplateField HeaderText="Select">
                         <ItemTemplate>
                             <asp:linkbutton CommandName="Base" Text="Base" runat="server" ForeColor="Blue"></asp:linkbutton>
                         </ItemTemplate>
-                    </asp:TemplateField>--%>
+                    </asp:TemplateField>
                     <asp:TemplateField HeaderText="Select">
                         <ItemTemplate>
                             <asp:linkbutton CommandName="Best" Text="Details" runat="server" ForeColor="Blue"></asp:linkbutton>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <%--<asp:TemplateField HeaderText="Select">
+                    <asp:TemplateField HeaderText="Select">
                         <ItemTemplate>
                             <asp:linkbutton CommandName="Eff" Text="Eff" runat="server" ForeColor="Blue"></asp:linkbutton>
                         </ItemTemplate>
-                    </asp:TemplateField>--%>
+                    </asp:TemplateField>
                 </Columns>
             </asp:GridView>
-        </div>
+        </div>--%>
 	</div>
 
     <%--<div class="form__order">

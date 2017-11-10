@@ -1,5 +1,7 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="ModelDetails.aspx.vb" Inherits="CoastalPortal.ModelDetails" %>
-<%@ Register src="Controls/OptimizerRunDetail.ascx" tagname="OptimizerDetailc12" tagprefix="uc6" %>
+<%@ Register src="Controls/FOSFlightsAzure.ascx" tagname="FOSFlightsabc" tagprefix="uc1" %>
+<%@ Register src="Controls/CASFlightsAzure.ascx" tagname="CASFlights" tagprefix="uc2" %>
+<%--<%@ Register src="Controls/OptimizerRunDetail.ascx" tagname="OptimizerDetailc12" tagprefix="uc6" %>--%>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="asp" %>
 
@@ -259,133 +261,33 @@ a:link, a:visited
 	<div class="form__order2"  id="form_1" runat="server" >
 		<div class="title">Model <asp:Label runat="server" ID="lblModelRunID" CssClass="title"></asp:Label>&nbsp;Details</div>
 
-		<div class="title">
+		<%--<div class="title">
             <uc6:OptimizerDetailc12 ID="OptimizerDetailabc123unm" runat="server" />
-		</div>
-		<%--<div class="table">
-			<div class="table__scroll">
-			<div class="table_h">
-				<span class="h">Origin</span>
-				<span class="h">Departs</span>
-				<span class="h">Destination</span>
-				<span class="h">Arrives</span>
-				<span class="h col-small">Flight Duration</span>
-				<span class="h col-small">Price</span>
-			</div>
-
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="origin_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="origin_two_1" Text="BEVERLY MUNI (BVY)">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="departs_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="departs_two_1" Text="2/23/16 9:00 AM">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="destination_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="destination_two_1" Text="WESTCHESTER COUNTY (HPN)">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="arrives_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="arrives_two_1" Text="2/23/16 9:29 AM">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item col-small">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="flight_one_1" Text="">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="flight_two_1" Text="00:29">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item col-small">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="price_one_1" Text="$5200" >  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="price_two_1" Text="$5200" >  </asp:Label></li>
-				</ul>
-			</div>
-		</div>	
 		</div>--%>
-    	<div class="table grid">
-            <asp:GridView ID="gvServiceProviderMatrix" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
-            AutoGenerateColumns="False" DataKeyNames="Origin,Departs,Destination,Arrives,Flight Duration,Price"  CssClass="table__tr">
-            <Columns >
-                <%--<asp:BoundField DataField="origin"  HeaderText="origin"  />--%>
-                <%--<asp:BoundField DataField="departs"   HeaderText="departs" />--%>
-                <%--<asp:BoundField DataField="destination"   HeaderText="destination" />--%>
-                <%--<asp:BoundField DataField="arrives"  HeaderText="arrives" />--%>
-                <%--<asp:BoundField DataField="flight_duration"   HeaderText="flight duration" />--%>
-                <%--<asp:BoundField DataField="price"   HeaderText="price" />--%>
-                <asp:TemplateField HeaderText="Select">
-                    <ItemTemplate>
-                        <asp:RadioButton ID="RadioButton1" runat="server" />
-                        <asp:HiddenField ID="HiddenField1" runat="server" Value = '<%#Eval("ID")%>' />
-                    </ItemTemplate>
-                    <ControlStyle Width="5%" />
-                    <ItemStyle Width="5%" />
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Aircraft Type" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "name")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="80px" />--%>
-                    <%--<ItemStyle Width="80px" />--%>
-                </asp:TemplateField>
-                <asp:TemplateField  HeaderText="Origin">
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "OriginFacilityName")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="200px" />--%>
-                    <%--<ItemStyle Width="200px" />--%>
-                </asp:TemplateField> 
-                <asp:TemplateField HeaderText="Departs" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Departs", "{0:G}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField  HeaderText="Destination">
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "DestinationFacilityName")%>
-                    </ItemTemplate>
-                    <%--<ControlStyle Width="200px" />--%>
-                    <%--<ItemStyle Width="200px" />--%>
-                </asp:TemplateField> 
-                <asp:TemplateField HeaderText="Arrives" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Arrives", "{0:g}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Flight Duration" >
-                    <ItemTemplate>
-                        <%#DataBinder.Eval(Container.DataItem, "Flight Duration", "{0:g}")%>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Fuel Stops">
-                    <ItemTemplate> 
-                        <%#DataBinder.Eval(Container.DataItem, "FuelStops")%> 
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText="Price<br />(w/o Tax)">
-                    <ItemTemplate> <%#DataBinder.Eval(Container.DataItem, "Price", "{0:c}")%> </ItemTemplate>
-                    <ItemStyle HorizontalAlign="Right" />
-                    <%--<ControlStyle Width="40px" />--%>
-                    <%--<ItemStyle Width="40px" />--%>
-                </asp:TemplateField>
-            </Columns>
-            </asp:GridView>		
-		</div>
 		<div class="form__buttons">
                 <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
 		</div>
 	
+            <div>
+                <asp:Panel ID="pnlPrintAll" runat="server">
+                    <table>
+                        <tr>
+                            <asp:Panel ID="pnlPrintFOS" runat="server" >
+                                <td style="vertical-align: top"> <uc1:FOSFlightsabc ID="FOSFlights1" runat="server" /></td>
+                            </asp:Panel>                          
+                            <asp:Panel ID="pnlPrintCAS" runat="server" >
+                                <td style="vertical-align: top"><uc2:CASFlights ID="CASFlights1" runat="server" /></td>
+                            </asp:Panel> 
+                        </tr>
+
+                    </table>
+                </asp:Panel>
+            </div>
 	</div>
 		
 </section>
+<%--        <section>
+        </section>--%>
 	
 <footer class="normal">
 	<div class="wrapper">

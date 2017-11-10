@@ -74,7 +74,7 @@ Public Class RunOptimizer
                 RadSliderMBF.Value = 60
                 RadSliderDepDelay.Value = 15
                 ChkBroker.Checked = False
-                RadSliderAutoPin.Value = 5
+                RadSliderAutoPin.Value = 6
                 RadSliderTaxiTime1.Value = 15
                 RadSliderFastTurn.Value = 30
                 RadSliderPrePosition.Value = 0
@@ -99,7 +99,7 @@ Public Class RunOptimizer
                 CheckOverride.Checked = False
                 chkAssigns.Checked = False
                 RadSliderMaxSlideMinutes.Value = 0
-                chkFCDRPublish.Checked = False
+                chkFCDRPublish.Checked = True
                 '20171101 - pab - add AssignNewTrips per David - not used by optimzer yet
                 chkAssignNewTrips.Checked = False
 

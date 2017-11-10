@@ -122,11 +122,11 @@ Partial Public Class ModelRunHistory
     Protected WithEvents lblMsg As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''GridView1 control.
+    '''GridView2 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents GridView1 As Global.System.Web.UI.WebControls.GridView
+    Protected WithEvents GridView2 As Global.System.Web.UI.WebControls.GridView
 End Class

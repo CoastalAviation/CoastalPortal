@@ -117,6 +117,9 @@ Public Class AirTaxi
     Public Shared testrun As Boolean = False
     Public Shared usevmdb As Boolean = True
 
+    '20171109 - pab - add optimmizer model page
+    Public Shared daterangefrom, daterangeto As String
+
     '20171030 - pab - run optimizer page
     Public Shared Function postToServiceBusQueue(ByVal queid As String, ByVal message As String, minutesdelay As Integer) As String
 

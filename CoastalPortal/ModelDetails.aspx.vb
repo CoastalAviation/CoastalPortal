@@ -4,8 +4,6 @@ Imports Telerik.Web.UI
 Public Class ModelDetails
     Inherits System.Web.UI.Page
 
-    Private dtflights As New DataTable
-
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         Try
@@ -44,8 +42,6 @@ Public Class ModelDetails
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
-                Me.gvServiceProviderMatrix.Visible = True
-
                 '20160517 - pab - fix carrierid = 0 preventing quotes
                 If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
                     _carrierid = 65
@@ -66,26 +62,10 @@ Public Class ModelDetails
                     _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
                 End If
 
-            Else
-                '20131016 - pab - fix session timeout
-                If IsNothing(Session("flights")) And IsNothing(Session("triptype")) Then
-                    lblMsg.Text = da.GetSetting(_carrierid, "TimeoutMessage")
-                    gvServiceProviderMatrix.EmptyDataText = lblMsg.Text
-                    dtflights.Clear()
-                    Me.gvServiceProviderMatrix.DataSource = dtflights
-                    Me.gvServiceProviderMatrix.DataBind()
-                End If
             End If
 
             '20100608 - pab - add logo to email
             Session("ApplicationPath") = Request.PhysicalApplicationPath
-
-            If Not (IsNothing(Session("flights"))) Then
-                dtflights = Session("flights")
-            Else
-                'chg3641 - 20101008 - pab - fix clearing session variables when going back to request another flight
-                dtflights.Clear()
-            End If
 
         Catch ex As Exception
             Dim s As String = ex.Message

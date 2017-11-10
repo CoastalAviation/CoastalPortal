@@ -238,9 +238,10 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Controls\CASFlightsAzure.ascx" />
+    <Content Include="Controls\FOSFlightsAzure.ascx" />
     <Content Include="Controls\FOSFlightsCalendar.ascx" />
     <Content Include="Controls\OptimizerCalendar.ascx" />
-    <Content Include="Controls\OptimizerRunDetail.ascx" />
     <Content Include="CustomerLogin.aspx" />
     <Content Include="Dashboard.aspx" />
     <Content Include="Default.aspx" />
@@ -284,6 +285,7 @@
     <Content Include="Images\txt.png" />
     <Content Include="Images\wheels_up_hero-king-excel.jpg" />
     <Content Include="Images\wheels_up_logo_blue.png" />
+    <Content Include="ModelDetails.aspx" />
     <Content Include="ModelRunHistory.aspx" />
     <Content Include="My Project\PublishProfiles\CustomProfile.pubxml.user" />
     <Content Include="pagetemplate.aspx" />
@@ -334,6 +336,11 @@
     <None Include="Web References\AWS\service.wsdl" />
     <None Include="Web References\CATMSGQ\msgq.disco" />
     <None Include="Web References\AWS\service.disco" />
+    <Content Include="Web References\coastalavtech.service\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </Content>
+    <None Include="Web References\coastalavtech.service\service.disco" />
     <Content Include="WebForm1.aspx" />
     <None Include="My Project\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -405,6 +412,20 @@
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="Controls\CASFlightsAzure.ascx.designer.vb">
+      <DependentUpon>CASFlightsAzure.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CASFlightsAzure.ascx.vb">
+      <DependentUpon>CASFlightsAzure.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\FOSFlightsAzure.ascx.designer.vb">
+      <DependentUpon>FOSFlightsAzure.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\FOSFlightsAzure.ascx.vb">
+      <DependentUpon>FOSFlightsAzure.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Controls\FOSFlightsCalendar.ascx.designer.vb">
       <DependentUpon>FOSFlightsCalendar.ascx</DependentUpon>
     </Compile>
@@ -417,13 +438,6 @@
     </Compile>
     <Compile Include="Controls\OptimizerCalendar.ascx.vb">
       <DependentUpon>OptimizerCalendar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\OptimizerRunDetail.ascx.designer.vb">
-      <DependentUpon>OptimizerRunDetail.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\OptimizerRunDetail.ascx.vb">
-      <DependentUpon>OptimizerRunDetail.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerLogin.aspx.designer.vb">
@@ -486,6 +500,13 @@
     </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="ModelDetails.aspx.designer.vb">
+      <DependentUpon>ModelDetails.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ModelDetails.aspx.vb">
+      <DependentUpon>ModelDetails.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ModelRunHistory.aspx.designer.vb">
       <DependentUpon>ModelRunHistory.aspx</DependentUpon>
@@ -568,6 +589,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\coastalavtech.service\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="WebForm1.aspx.designer.vb">
       <DependentUpon>WebForm1.aspx</DependentUpon>
     </Compile>
@@ -606,6 +632,7 @@
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
     </Content>
+    <None Include="Web References\coastalavtech.service\service.wsdl" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -645,6 +672,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>CoastalPortal_CATMSGQ_msgq</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="https://service.coastalavtech.com/service.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\coastalavtech.service\</RelPath>
+      <UpdateFromURL>https://service.coastalavtech.com/service.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CoastalPortal_coastalavtech_service_WebService1</CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
   <PropertyGroup>

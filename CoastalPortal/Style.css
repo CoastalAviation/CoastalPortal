@@ -1235,6 +1235,17 @@ label select {
     border-color: black;
 }
 
+/*pab - format grid caption like title */
+.fcdrlist__tr Caption {
+    font-family: 'geometriabold';
+    color: #0556a8;
+    font-size: 20px;
+    text-aligN: center;
+    font-weighT: normal;
+    text-transform: uppercase;
+    margin-bottom: 25px;
+}
+
 .table__tr {
     font-family: 'geometriamedium';
     font-weighT: normal;

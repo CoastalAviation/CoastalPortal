@@ -344,7 +344,7 @@
                         <br />
                         <asp:RadioButtonList ID="rblModelType" runat="server">
                             <asp:ListItem Value="Fast"> Fast Run (5-10 minutes)</asp:ListItem>
-                            <asp:ListItem Value="Schedule"> Schedule Update (20-30 minutes)</asp:ListItem>
+                            <asp:ListItem Value="Schedule" Selected="True"> Schedule Update (20-30 minutes)</asp:ListItem>
                             <%--<asp:ListItem Value="Full"> Full Schedule Rebuild (40-60 minutes)</asp:ListItem>--%>
                         </asp:RadioButtonList>
                         <br />
@@ -367,7 +367,7 @@
                         <br />
                         <br />
                         <telerik:RadSlider ID="RadSliderAutoPin" runat="server"  OnClientValueChanged="HandleValueAutoPin" OnClientLoad="HandleValueAutoPin" 
-                            MinimumValue="1"  MaximumValue="24" Value="5" ToolTip="Hours before departure to auto-pin flight" DbValue="0" Height="22px" 
+                            MinimumValue="1"  MaximumValue="24" Value="6" ToolTip="Hours before departure to auto-pin flight" DbValue="0" Height="22px" 
                             Length="200" Width="300px" ></telerik:RadSlider>
                         <br />
                         <strong><input type="text" style="width: 22px;" id="upgvalue" readonly="true" value="72" />  Allow upgrades (hours prior to departure)</strong>  
@@ -432,7 +432,7 @@
                             <asp:CheckBox ID="chkAssigns" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />
                             <br />
                             <br />
-                            <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="false" />
+                            <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="True" />
                             <br />
                             <br />
                             <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />

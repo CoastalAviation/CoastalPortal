@@ -44,8 +44,9 @@ Public Class ModelRunHistory
 
 
             SqlDataSourceOptimizerRequests.ConnectionString = ConnectionStringHelper.GetsqladapterSQLVMConnectionString
-            GridView1.DataSource = SqlDataSourceOptimizerRequests
+            'GridView1.DataSource = SqlDataSourceOptimizerRequests
 
+            GridView2.DataSource = SqlDataSourceOptimizerRequests
 
             updategrid()
 
@@ -88,7 +89,8 @@ Public Class ModelRunHistory
 
     Function updategrid()
 
-        Dim req As String = "SELECT top 20 ID, status, CarrierID, Description, GMTStart, GMTEnd, declaredcomplete FROM OptimizerRequest"
+        Dim req As String = "SELECT top 20 ID, status, CarrierID, Description, GMTStart, GMTEnd,"
+        req &= " case when declaredcomplete = 1 then 'True' else 'False' end as declaredcomplete FROM OptimizerRequest"
         req &= " where description not like 'Optimizer request %' and status = 'X' and carrierid = " & Session("carrierid").ToString
         req &= " and requestdate > getdate() - 2 order by id desc"
 
@@ -98,8 +100,9 @@ Public Class ModelRunHistory
 
         SqlDataSourceOptimizerRequests.DataBind()
 
-        GridView1.DataBind()
+        'GridView1.DataBind()
 
+        GridView2.DataBind()
 
     End Function
 
@@ -195,16 +198,160 @@ Public Class ModelRunHistory
 
     End Sub
 
-    Private Sub GridView1_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles GridView1.RowCommand
+    'Private Sub GridView1_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles GridView1.RowCommand
+
+    '    overridemodel = ""
+
+
+
+    '    'Exit Sub
+
+
+
+
+    '    Try
+
+    '        Dim s As String
+    '        Dim si As Integer
+    '        If IsNumeric(e.CommandArgument.ToString) Then si = CInt(e.CommandArgument.ToString)
+
+
+    '        If GridView1.Rows.Count > si Then
+
+    '            Dim customid As String = Trim(GridView1.Rows.Item(si).Cells(0).Text)
+
+    '            Session("customid") = customid
+
+    '            'rk allow up to 7 more line breaks
+    '            '12.2.2013
+
+    '            'remove this additional check  5.9.15
+    '            ' and FOSrevenuelegs = CASrevenuelegs
+
+    '            'added CASrevenuelegs <> 0 5.11.15
+    '            'remove and caslinebreaks <= (foslinebreaks + 7)  ' rk 11.12.15
+    '            '20140512 - pab - add model start and end for calendar
+    '            Dim req As String = "SELECT top 1  right(rtrim(modelrunid), 1) as mt" &
+    '                "  ,[ModelRunID]  ,[CAStotalrevenueexpense]  ,[CASefficiency]  ,ModelStart , [GMTStart], [GMTEnd] FROM [OptimizerLog] l " &
+    '                "left join [OptimizerRequest] r on left(l.[ModelRunID], 5) = r.id where  casrevenuemiles <> 0 and  left(modelrunid, 2) = '28'  and l.carrierid = 49  and " &
+    '                "right(rtrim(modelrunid), 1) = 'C'  and ModelRunID not like '%R0%' and CASrevenuelegs <> 0 and description not like 'Optimizer request %'      and CASrevenueexpense <> 0   order by CAStotalrevenueexpense asc"
+    '            req = Replace(req, "28", customid)
+    '            req = Replace(req, "carrierid = 49", "carrierid = " & Session("carrierid"))
+    '            req = Replace(req, "left(l.[ModelRunID], 5", "left(modelrunid, " & Len(customid))
+    '            req = Replace(req, "left(modelrunid, 2", "left(modelrunid, " & Len(customid))
+
+
+    '            'and ModelRunID not like '%R0%'
+
+    '            Dim cidstring As String = ""
+    '            If Not IsNothing(Session("carrierid")) Then
+    '                If IsNumeric(Session("carrierid")) Then
+    '                    cidstring = Session("carrierid")
+    '                End If
+    '            End If
+    '            req = Replace(req, "abc", cidstring)
+
+
+    '            If e.CommandName.ToString = "Best" Then
+    '                '   req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "and right(rtrim(modelrunid), 1) <> 'C'")
+    '                req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "")
+    '            End If
+
+    '            'If e.CommandName.ToString = "Eff" Then
+    '            '    ' req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "and right(rtrim(modelrunid), 1) <> 'C'")
+    '            '    req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "")
+    '            '    req = Replace(req, "order by CAStotalrevenueexpense asc", "order by CASefficiency desc")
+    '            'End If
+
+
+    '            'If e.CommandName.ToString = "Base" Then
+    '            '    req = Replace(req, "and ModelRunID not like '%R0%'", "")
+
+    '            'End If
+
+
+
+    '            Dim c As Integer
+    '            c = 6
+    '            'If e.CommandName.ToString = "Eff" Then c = 8
+    '            'If e.CommandName.ToString = "Best" Then c = 7
+
+    '            'If e.CommandName.ToString = "Base" Or e.CommandName.ToString = "Eff" Or e.CommandName.ToString = "Best" Then
+    '            If e.CommandName.ToString = "Best" Then
+
+
+    '                Dim rs As New ADODB.Recordset
+
+    '                'If cnsetting.State = 0 Then
+    '                '    cnsetting.ConnectionString = ConnectionStringHelper.GetsqladapterWestConnectionString
+    '                '    cnsetting.Open()
+    '                'End If
+    '                If cnopt.State = 0 Then
+    '                    cnopt.ConnectionString = ConnectionStringHelper.GetConnectionStringSQLMKAzure
+    '                    cnopt.Open()
+    '                End If
+
+    '                If rs.State = 1 Then rs.Close()
+
+    '                'rs.Open(req, cnsetting, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockReadOnly)
+    '                rs.Open(req, cnopt, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockReadOnly)
+
+    '                If Not rs.EOF Then
+
+    '                    modelrunid = Trim(rs.Fields("ModelRunID").Value)
+    '                    '20140512 - pab - add model start for calendar
+    '                    modelstart = CDate(rs.Fields("GMTStart").Value.ToString.Trim).ToShortDateString
+    '                    modelend = CDate(rs.Fields("GMTEnd").Value.ToString).ToShortDateString
+    '                    ' Me.txtUsersTotal.Text = rs.Fields("Count").Value
+    '                    If rs.State = 1 Then rs.Close()
+
+    '                    '20140512 - pab - add model start for calendar
+    '                    Response.Redirect("/ModelDetails.aspx?modelrunid=" & modelrunid & "&modelstart=" & modelstart & "&modelend=" &
+    '                                      modelend, True)
+
+    '                    '     Call LoadCountries (RadComboBox1.Text) Response.Redirect("http://optimizerpanelwest.cloudapp.net/Panel.aspx?modelrunid=" & modelrunid)
+    '                Else
+
+    '                    GridView1.Rows.Item(si).Cells(c).BackColor = Drawing.Color.MediumVioletRed
+
+    '                End If
+
+
+    '                If rs.State = 1 Then rs.Close()
+
+    '            End If
+
+    '        End If
+    '    Catch ex As Exception
+
+    '        If ex.Message <> "Thread was being aborted." Then
+    '            Me.lblMsg.Text = "  Please refresh page and try again"
+    '        End If
+    '    End Try
+
+    'End Sub
+
+    '20171107 - pab - show r0
+    Protected Sub bttnR0_Click(sender As Object, e As EventArgs) Handles bttnR0.Click
+
+        'Response.Redirect("FlightSchedule.aspx?r0=1", True)
+
+        '20171110 - pab - open r0 in New tab
+        Response.Write("<script>window.open ('FlightSchedule.aspx?r0=1','_blank');</script>")
+
+        ''code below for pop-up window
+        'Dim url As String = "FlightSchedule.aspx?r0=1"
+        'Dim s As String = "window.open('" & url + "', 'popup_window', 'width=1200,height=800,left=0,top=0,resizable=yes');"
+        'ClientScript.RegisterStartupScript(Me.GetType(), "script", s, True)
+
+    End Sub
+
+    Private Sub GridView2_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles GridView2.RowCommand
 
         overridemodel = ""
 
 
-
         Exit Sub
-
-
-
 
         Try
 
@@ -213,9 +360,9 @@ Public Class ModelRunHistory
             If IsNumeric(e.CommandArgument.ToString) Then si = CInt(e.CommandArgument.ToString)
 
 
-            If GridView1.Rows.Count > si Then
+            If GridView2.Rows.Count > si Then
 
-                Dim customid As String = Trim(GridView1.Rows.Item(si).Cells(0).Text)
+                Dim customid As String = Trim(GridView2.Rows.Item(si).Cells(0).Text)
 
                 Session("customid") = customid
 
@@ -229,7 +376,7 @@ Public Class ModelRunHistory
                 'remove and caslinebreaks <= (foslinebreaks + 7)  ' rk 11.12.15
                 '20140512 - pab - add model start and end for calendar
                 Dim req As String = "SELECT top 1  right(rtrim(modelrunid), 1) as mt" &
-                    "  ,[ModelRunID]  ,[CAStotalrevenueexpense]  ,[CASefficiency]  ,ModelStart , [GMTStart], [GMTEnd] FROM [OptimizerLog] l " &
+                    "  ,[ModelRunID]  ,[CAStotalrevenueexpense]  ,[CASefficiency]  ,ModelStart , [GMTStart], [GMTEnd] FROM [dbo].[OptimizerLog] l " &
                     "left join [OptimizerRequest] r on left(l.[ModelRunID], 5) = r.id where  casrevenuemiles <> 0 and  left(modelrunid, 2) = '28'  and l.carrierid = 49  and " &
                     "right(rtrim(modelrunid), 1) = 'C'  and ModelRunID not like '%R0%' and CASrevenuelegs <> 0 and description not like 'Optimizer request %'      and CASrevenueexpense <> 0   order by CAStotalrevenueexpense asc"
                 req = Replace(req, "28", customid)
@@ -254,33 +401,32 @@ Public Class ModelRunHistory
                     req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "")
                 End If
 
-                'If e.CommandName.ToString = "Eff" Then
-                '    ' req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "and right(rtrim(modelrunid), 1) <> 'C'")
-                '    req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "")
-                '    req = Replace(req, "order by CAStotalrevenueexpense asc", "order by CASefficiency desc")
-                'End If
+                If e.CommandName.ToString = "Eff" Then
+                    ' req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "and right(rtrim(modelrunid), 1) <> 'C'")
+                    req = Replace(req, "and right(rtrim(modelrunid), 1) = 'C'", "")
+                    req = Replace(req, "order by CAStotalrevenueexpense asc", "order by CASefficiency desc")
+                End If
 
 
-                'If e.CommandName.ToString = "Base" Then
-                '    req = Replace(req, "and ModelRunID not like '%R0%'", "")
+                If e.CommandName.ToString = "Base" Then
+                    req = Replace(req, "and ModelRunID not like '%R0%'", "")
 
-                'End If
+                End If
 
 
 
                 Dim c As Integer
                 c = 6
-                'If e.CommandName.ToString = "Eff" Then c = 8
-                'If e.CommandName.ToString = "Best" Then c = 7
+                If e.CommandName.ToString = "Eff" Then c = 8
+                If e.CommandName.ToString = "Best" Then c = 7
 
-                'If e.CommandName.ToString = "Base" Or e.CommandName.ToString = "Eff" Or e.CommandName.ToString = "Best" Then
-                If e.CommandName.ToString = "Best" Then
+                If e.CommandName.ToString = "Base" Or e.CommandName.ToString = "Eff" Or e.CommandName.ToString = "Best" Then
 
 
                     Dim rs As New ADODB.Recordset
 
                     'If cnsetting.State = 0 Then
-                    '    cnsetting.ConnectionString = ConnectionStringHelper.GetsqladapterWestConnectionString
+                    '    cnsetting.ConnectionString = connectstringsql
                     '    cnsetting.Open()
                     'End If
                     If cnopt.State = 0 Then
@@ -303,12 +449,12 @@ Public Class ModelRunHistory
                         If rs.State = 1 Then rs.Close()
 
                         '20140512 - pab - add model start for calendar
-                        'Response.Redirect("/ModelDetails.aspx?modelrunid=" & modelrunid & "&modelstart=" & modelstart & "&modelend=" & modelend, True)
+                        Response.Redirect("/ModelDetails.aspx?modelrunid=" & modelrunid & "&modelstart=" & modelstart & "&modelend=" & modelend)
 
                         '     Call LoadCountries (RadComboBox1.Text) Response.Redirect("http://optimizerpanelwest.cloudapp.net/Panel.aspx?modelrunid=" & modelrunid)
                     Else
 
-                        GridView1.Rows.Item(si).Cells(c).BackColor = Drawing.Color.MediumVioletRed
+                        GridView2.Rows.Item(si).Cells(c).BackColor = Drawing.Color.MediumVioletRed
 
                     End If
 
@@ -318,19 +464,14 @@ Public Class ModelRunHistory
                 End If
 
             End If
+
         Catch ex As Exception
 
             If ex.Message <> "Thread was being aborted." Then
                 Me.lblMsg.Text = "  Please refresh page and try again"
             End If
+
         End Try
-
-    End Sub
-
-    '20171107 - pab - show r0
-    Protected Sub bttnR0_Click(sender As Object, e As EventArgs) Handles bttnR0.Click
-
-        Response.Redirect("FlightSchedule.aspx?r0=1", True)
 
     End Sub
 
