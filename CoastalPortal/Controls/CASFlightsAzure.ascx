@@ -1,4 +1,4 @@
-﻿<%@ Control Language="vb" AutoEventWireup="false"   Inherits="CasFlightsAzure6" Codebehind="CASFlightsAzure.ascx" %>
+﻿<%@ Control Language="vb" AutoEventWireup="false"   Inherits="CoastalPortal.CasFlightsAzure6" Codebehind="CASFlightsAzure.ascx.vb" %>
 <%@ Import Namespace="System.Web.Services.Description" %>
 
 <%--<%@ Register TagPrefix="eo" Namespace="EO.Web" Assembly="EO.Web" %>--%>

@@ -334,7 +334,15 @@ Public Class ModelRunHistory
     '20171107 - pab - show r0
     Protected Sub bttnR0_Click(sender As Object, e As EventArgs) Handles bttnR0.Click
 
-        Response.Redirect("FlightSchedule.aspx?r0=1", True)
+        'Response.Redirect("FlightSchedule.aspx?r0=1", True)
+
+        '20171110 - pab - open r0 in New tab
+        Response.Write("<script>window.open ('FlightSchedule.aspx?r0=1','_blank');</script>")
+
+        ''code below for pop-up window
+        'Dim url As String = "FlightSchedule.aspx?r0=1"
+        'Dim s As String = "window.open('" & url + "', 'popup_window', 'width=1200,height=800,left=0,top=0,resizable=yes');"
+        'ClientScript.RegisterStartupScript(Me.GetType(), "script", s, True)
 
     End Sub
 
@@ -343,7 +351,7 @@ Public Class ModelRunHistory
         overridemodel = ""
 
 
-        Exit Sub
+        'Exit Sub
 
         Try
 

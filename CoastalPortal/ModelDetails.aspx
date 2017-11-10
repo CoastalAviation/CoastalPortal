@@ -268,10 +268,6 @@ a:link, a:visited
                 <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
 		</div>
 	
-	</div>
-		
-</section>
-        <section>
             <div>
                 <asp:Panel ID="pnlPrintAll" runat="server">
                     <table>
@@ -287,7 +283,11 @@ a:link, a:visited
                     </table>
                 </asp:Panel>
             </div>
-        </section>
+	</div>
+		
+</section>
+<%--        <section>
+        </section>--%>
 	
 <footer class="normal">
 	<div class="wrapper">

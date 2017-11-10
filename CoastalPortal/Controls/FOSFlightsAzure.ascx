@@ -1,4 +1,4 @@
-﻿<%@ Control Language="vb" AutoEventWireup="false" Inherits="FOSFlightsAzureabc123" Codebehind="FOSFlightsAzure.ascx" %>
+﻿<%@ Control Language="vb" AutoEventWireup="false" Inherits="CoastalPortal.FOSFlightsAzureabc123" Codebehind="FOSFlightsAzure.ascx.vb" %>
 
 <%--<%@ Register TagPrefix="eo" Namespace="EO.Web" Assembly="EO.Web" %>--%>
 
