@@ -288,6 +288,8 @@
     <Content Include="Images\txt.png" />
     <Content Include="Images\wheels_up_hero-king-excel.jpg" />
     <Content Include="Images\wheels_up_logo_blue.png" />
+    <Content Include="Images\XOJET-Plane-denim.jpg" />
+    <Content Include="Images\xojet_logo.png" />
     <Content Include="ModelDetails.aspx" />
     <Content Include="ModelRunHistory.aspx" />
     <Content Include="My Project\PublishProfiles\CustomProfile.pubxml.user" />
