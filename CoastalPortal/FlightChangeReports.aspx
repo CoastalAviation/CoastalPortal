@@ -305,8 +305,8 @@
                            <asp:BoundField Datafield ="DepartDate" HeaderText="Departure Date" SortExpression="DepartDate" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="From_ICAO" HeaderText="From" SortExpression="From" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="To_ICAO" HeaderText="To" SortExpression="To" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="AC" HeaderText="Prior/New Tail" SortExpression="OAC" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="Modification" HeaderText="Result" SortExpression="Result" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="AC" HeaderText="Prior Tail" SortExpression="OAC" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="Modification" HeaderText="New Tail" SortExpression="Result" ItemStyle-HorizontalAlign="Center"/>
                        </columns>
                    </asp:GridView>
                    </ContentTemplate>
