@@ -23,7 +23,8 @@ Public Class loginpage
                 '20161227 - pab - default to wheelsup
                 'host = "wheelsup"
                 'host = "tmcjets"
-                host = "jetlinx"
+                'host = "jetlinx"
+                host = "delta"
                 'host = "demoair"
             End If
 
@@ -93,6 +94,11 @@ Public Class loginpage
                     Case 104
                         login.Style.Remove("background-image")
                         login.Style.Add("background-image", "images/jetlinxbackground.jpg")
+
+                        '20171110 - pab - delta
+                    Case 108
+                        login.Style.Remove("background-image")
+                        login.Style.Add("background-image", "images/delta-denim.jpg")
 
                     '20171017 - pab - demoair branding
                     Case 48
