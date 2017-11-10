@@ -2892,3 +2892,194 @@ Public Class FCDRListDetail
         End Set
     End Property
 End Class
+Public Class RejectedFlight
+    Private _id As Integer
+    Private _TripNumber As String
+    Private _DepartureAirport As String
+    Private _ArrivalAirport As String
+    Private _RejectedOn As DateTime
+    Private _Rejected As Boolean
+    Private _TripType As String
+    Private _FromDateGMT As DateTime
+    Private _ToDateGMT As DateTime
+    Private _AircraftRegistration As String
+    Private _CarrierID As Integer
+    Private _Reason As String
+    Private _PriorTail As String
+    Private _Action As String
+    Private _Status As String
+    Private _StatusComment As String
+    Private _CASFOid As Integer
+    Private _PriorTailSavings As String
+    Private _FOSKEY As String
+    Private _Version As String
+    Private _Batch As String
+    Public Property id() As Integer
+        Get
+            Return _id
+        End Get
+        Set(ByVal value As Integer)
+            _id = value
+        End Set
+    End Property
+    Public Property TripNumber() As String
+        Get
+            Return _TripNumber
+        End Get
+        Set(ByVal value As String)
+            _TripNumber = value
+        End Set
+    End Property
+    Public Property DepartureAirport() As String
+        Get
+            Return _DepartureAirport
+        End Get
+        Set(ByVal value As String)
+            _DepartureAirport = value
+        End Set
+    End Property
+    Public Property ArrivalAirport() As String
+        Get
+            Return _ArrivalAirport
+        End Get
+        Set(ByVal value As String)
+            _ArrivalAirport = value
+        End Set
+    End Property
+    Public Property RejectedOn() As DateTime
+        Get
+            Return _RejectedOn
+        End Get
+        Set(ByVal value As DateTime)
+            _RejectedOn = value
+        End Set
+    End Property
+    Public Property Rejected() As Boolean
+        Get
+            Return _Rejected
+        End Get
+        Set(ByVal value As Boolean)
+            _Rejected = value
+        End Set
+    End Property
+    Public Property TripType() As String
+        Get
+            Return _TripType
+        End Get
+        Set(ByVal value As String)
+            _TripType = value
+        End Set
+    End Property
+    Public Property FromDateGMT() As DateTime
+        Get
+            Return _FromDateGMT
+        End Get
+        Set(ByVal value As DateTime)
+            _FromDateGMT = value
+        End Set
+    End Property
+    Public Property ToDateGMT() As DateTime
+        Get
+            Return _ToDateGMT
+        End Get
+        Set(ByVal value As DateTime)
+            _ToDateGMT = value
+        End Set
+    End Property
+    Public Property AircraftRegistration() As String
+        Get
+            Return _AircraftRegistration
+        End Get
+        Set(ByVal value As String)
+            _AircraftRegistration = value
+        End Set
+    End Property
+    Public Property CarrierID() As Integer
+        Get
+            Return _CarrierID
+        End Get
+        Set(ByVal value As Integer)
+            _CarrierID = value
+        End Set
+    End Property
+    Public Property Reason() As String
+        Get
+            Return _Reason
+        End Get
+        Set(ByVal value As String)
+            _Reason = value
+        End Set
+    End Property
+    Public Property PriorTail() As String
+        Get
+            Return _PriorTail
+        End Get
+        Set(ByVal value As String)
+            _PriorTail = value
+        End Set
+    End Property
+    Public Property Action() As String
+        Get
+            Return _Action
+        End Get
+        Set(ByVal value As String)
+            _Action = value
+        End Set
+    End Property
+    Public Property Status() As String
+        Get
+            Return _Status
+        End Get
+        Set(ByVal value As String)
+            _Status = value
+        End Set
+    End Property
+    Public Property StatusComment() As String
+        Get
+            Return _StatusComment
+        End Get
+        Set(ByVal value As String)
+            _StatusComment = value
+        End Set
+    End Property
+    Public Property CASFOid() As Integer
+        Get
+            Return _CASFOid
+        End Get
+        Set(ByVal value As Integer)
+            _CASFOid = value
+        End Set
+    End Property
+    Public Property PriorTailSavings() As String
+        Get
+            Return _PriorTailSavings
+        End Get
+        Set(ByVal value As String)
+            _PriorTailSavings = value
+        End Set
+    End Property
+    Public Property FOSKEY() As String
+        Get
+            Return _FOSKEY
+        End Get
+        Set(ByVal value As String)
+            _FOSKEY = value
+        End Set
+    End Property
+    Public Property Version() As String
+        Get
+            Return _Version
+        End Get
+        Set(ByVal value As String)
+            _Version = value
+        End Set
+    End Property
+    Public Property Batch() As String
+        Get
+            Return _Batch
+        End Get
+        Set(ByVal value As String)
+            _Batch = value
+        End Set
+    End Property
+End Class
