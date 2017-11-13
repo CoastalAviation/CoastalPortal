@@ -112,6 +112,9 @@
                     </div>
 				</div>
 			</div>
+            <div align="right">
+                <asp:Image ID="Image1" runat="server" ImageUrl="~/Images/CATReverse.png" Width="300px"></asp:Image>
+            </div>
 
 
    <%--     			<div id="login__password" class="wraps__form">
@@ -229,7 +232,7 @@
         <footer>
 		<div class="wrapper">
 			<span class="copyring">
-				<p>© 2017 CoastalAVTech LTD</p>
+				<p>© 2017 Coastal Aviation Software, Inc</p>
 				<p>All Rights Reserved</p>
 			</span>
 			
