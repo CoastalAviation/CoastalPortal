@@ -186,6 +186,15 @@ Public Class CarrierProfile
     Private _fosSortOrder As String
     Private _casSortOrder As String
     Private _demandlist As String
+    Private _fcdrpandl As Boolean
+    Public Property FCDRPandL() As Boolean
+        Get
+            Return _fcdrpandl
+        End Get
+        Set(ByVal value As Boolean)
+            _fcdrpandl = value
+        End Set
+    End Property
     Public Property DemandList() As String
         Get
             Return _demandlist
