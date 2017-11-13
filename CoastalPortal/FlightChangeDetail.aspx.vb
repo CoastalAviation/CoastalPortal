@@ -150,8 +150,10 @@ Public Class FlightChangeDetail
                 ACX(0) = Trim(ar)
                 ACX(1) = Trim(pt)
                 casmodelrunid = mrid
+                carrierprofile = db.CarrierProfiles.Find(casRecord.CarrierId)
             Else
                 mrid = fcdrlist(0).ModelRunID.ToString()
+                carrierprofile = db.CarrierProfiles.Find(fcdrlist(0).CarrierID)
             End If
         Else
             If Not Request.QueryString("ModelSavings") Is Nothing Then
@@ -226,10 +228,8 @@ Public Class FlightChangeDetail
         End If
 
         demandlookup.Clear()
-        If Session("Profile") <> "" Then
-            carrierprofile = Session("Profile")
-        Else
-            carrierprofile = db.CarrierProfiles.Where(Function(x) x.carrierid = casRecord.CarrierId).FirstOrDefault()
+        If carrierprofile Is Nothing Then
+            carrierprofile = db.CarrierProfiles.Find(CASRecords(0).CarrierId)
         End If
 
         If fcdrlist.Count = 0 Then
