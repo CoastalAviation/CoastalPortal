@@ -19,14 +19,20 @@ Public Class loginpage
             url = Request.Url.ToString
             host = Request.Url.Host
 
+            '20171114 - pab - redirct to dpj for delta
+            If InStr(host.ToLower, "delta") > 0 Then
+                Response.Redirect("http://dpj.optimizerpanel.com/CustomerLogin", True)
+                Exit Sub
+            End If
+
             If host = "corporateportaluatbeta.cloudapp.net" Or host = "localhost" Then
                 '20161227 - pab - default to wheelsup
                 'host = "wheelsup"
                 'host = "tmcjets"
-                host = "jetlinx"
-                'host = "delta"
+                'host = "jetlinx"
+                'host = "dpj"
                 'host = "xojet"
-                'host = "demoair"
+                host = "demoair"
             End If
 
             If _urlalias Is Nothing Then _urlalias = ""
