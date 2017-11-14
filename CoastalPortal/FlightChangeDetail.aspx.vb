@@ -27,7 +27,7 @@ Public Class FlightChangeDetail
 
     Public fcdrlist As New List(Of FCDRList)
     Public demandlookup As New Dictionary(Of String, Boolean)
-    Private CarrierProfile As New CarrierProfile
+    Private carrierprofile As New CarrierProfile
     Public newTail_Dictionary As New Dictionary(Of String, String)
     Public stest As String
     Public Property calendarcarrierid As String
@@ -103,7 +103,7 @@ Public Class FlightChangeDetail
         Session("FltChange") = "FC"
         Session("FCList") = ""
 
-        Dim carrierprofile As New CarrierProfile
+        'Dim carrierprofile As New CarrierProfile
 
         '  Dim ac1, ac2 As String
         Dim mrid As String = ""
@@ -150,8 +150,10 @@ Public Class FlightChangeDetail
                 ACX(0) = Trim(ar)
                 ACX(1) = Trim(pt)
                 casmodelrunid = mrid
+                carrierprofile = db.CarrierProfiles.Find(casRecord.CarrierId)
             Else
                 mrid = fcdrlist(0).ModelRunID.ToString()
+                carrierprofile = db.CarrierProfiles.Find(fcdrlist(0).CarrierID)
             End If
         Else
             If Not Request.QueryString("ModelSavings") Is Nothing Then
@@ -226,6 +228,9 @@ Public Class FlightChangeDetail
         End If
 
         demandlookup.Clear()
+        If carrierprofile Is Nothing Then
+            carrierprofile = db.CarrierProfiles.Find(CASRecords(0).CarrierId)
+        End If
 
         If fcdrlist.Count = 0 Then
             enumerate(ACX(0), id, mrid, ACX(1))
@@ -378,7 +383,7 @@ Public Class FlightChangeDetail
 
 
         fcdrlist.Add(New FCDRList With {.CASRecordList = CasIDList, .FOSRecordList = FosIdList, .ModelRunID = model, .PriorTailNumber = starttail, .DeltaNonRevMiles = CInt(fnrm - cnrm),
-                    .TotalSavings = totalcost, .SavingsDay0 = dcostday0, .SavingsDay1 = dcostday1, .SavingsDay2 = dcostday2, .keyid = fcdrkey, .ModelRun = mrid, .GMTStart = GMTStart, .CarrierID = CarrierProfile.carrierid})
+                    .TotalSavings = totalcost, .SavingsDay0 = dcostday0, .SavingsDay1 = dcostday1, .SavingsDay2 = dcostday2, .keyid = fcdrkey, .ModelRun = mrid, .GMTStart = GMTStart, .CarrierID = carrierprofile.carrierid})
 
         Try
             db.FCDRList.AddRange(fcdrlist)
@@ -464,17 +469,18 @@ Public Class FlightChangeDetail
             BaseList = (From a In FosList Select Trim(a.BaseCode)).Distinct().ToList()
             BaseList = BaseList.Union((From a In CasList Select Trim(a.BaseCode)).Distinct().ToList()).ToList()
 
-            For Each x As String In BaseList
-                Dim CasRev, Fosrev As Decimal
-                CasRev = 0
-                Fosrev = 0
-                For Each dd As String In TripList
-                    Fosrev += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Trim(a.BaseCode) = Trim(x) Select a.PandL).FirstOrDefault())
-                    CasRev += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Trim(a.BaseCode) = Trim(x) Select a.PandL).FirstOrDefault())
+            If carrierprofile.FCDRPandL Then
+                For Each x As String In BaseList
+                    Dim CasRev, Fosrev As Decimal
+                    CasRev = 0
+                    Fosrev = 0
+                    For Each dd As String In TripList
+                        Fosrev += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Trim(a.BaseCode) = Trim(x) Select a.PandL).FirstOrDefault())
+                        CasRev += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Trim(a.BaseCode) = Trim(x) Select a.PandL).FirstOrDefault())
+                    Next
+                    baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = CasRev, .FosRevenue = Fosrev})
                 Next
-                baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = CasRev, .FosRevenue = Fosrev})
-            Next
-
+            End If
             GridViewSource.Add(New PanelDisplay With {.FCDR_Key = fcdr.keyid, .dcostday0 = fcdr.SavingsDay0, .dcostday1 = fcdr.SavingsDay1, .dcostday2 = fcdr.SavingsDay2, .TailNumber = fcdr.PriorTailNumber, .RevenueRecords = baserev,
                                                         .NRM = CDbl(fcdr.DeltaNonRevMiles), .PanelRecord = Panellist.ToList(), .ModelNumber = fcdr.ModelRunID, .TotalSavings = fcdr.TotalSavings})
 
