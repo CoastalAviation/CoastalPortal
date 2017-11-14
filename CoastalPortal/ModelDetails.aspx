@@ -256,14 +256,7 @@ a:link, a:visited
 </section>
 	
 <section class="article nopadding">
-
-	
-	<div class="form__order2"  id="form_1" runat="server" >
 		<div class="title">Model <asp:Label runat="server" ID="lblModelRunID" CssClass="title"></asp:Label>&nbsp;Details</div>
-
-		<%--<div class="title">
-            <uc6:OptimizerDetailc12 ID="OptimizerDetailabc123unm" runat="server" />
-		</div>--%>
 		<div class="form__buttons">
                 <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
 		</div>
@@ -283,7 +276,14 @@ a:link, a:visited
                     </table>
                 </asp:Panel>
             </div>
-	</div>
+
+	
+	<%--<div class="form__order2"  id="form_1" runat="server" >--%>
+
+		<%--<div class="title">
+            <uc6:OptimizerDetailc12 ID="OptimizerDetailabc123unm" runat="server" />
+		</div>--%>
+	<%--</div>--%>
 		
 </section>
 <%--        <section>
