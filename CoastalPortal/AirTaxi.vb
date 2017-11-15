@@ -36,8 +36,9 @@ Public Class AirTaxi
     'Public Shared connectstring As String = "PROVIDER=MSDASQL;driver={SQL Server};server=(local);uid=sa;password=CoastalPass1;database=Portal"
     'Public Shared connectstringfaa As String = "PROVIDER=MSDASQL;driver={SQL Server};server=(local);uid=sa;password=CoastalPass1;database=SuperPortalV3"
     'Public Shared ConnectionStringHelper.GetCASConnectionStringSQL As String = "Data Source=(local);Initial Catalog=Portal;Persist Security Info=True;User ID=sa;Password=CoastalPass1"
-    Public Shared connectstring As String = ConnectionStringHelper.getglobalconnectionstring(PortalServer)
     'Public Shared connectstringfaa As String = ConnectionStringHelper.GetCASConnectionString()
+
+    Public Shared connectstring As String = ConnectionStringHelper.getglobalconnectionstring(PortalServer)
     Public Shared connectstringsql As String = ConnectionStringHelper.getglobalconnectionstring(PortalDriver)
 
     '20140523 - pab - change to dynamic optimizer database location
@@ -121,7 +122,9 @@ Public Class AirTaxi
     Public Shared daterangefrom, daterangeto As String
 
     '20171030 - pab - run optimizer page
-    Public Shared Function postToServiceBusQueue(ByVal queid As String, ByVal message As String, minutesdelay As Integer) As String
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+    Public Shared Function postToServiceBusQueue(ByVal queid As String, ByVal message As String, minutesdelay As Integer,
+                                                 ByVal _carrierid As Integer) As String
 
         Dim tf As String
         tf = Trim(UCase(ConnectionStringHelper.ts))
@@ -263,7 +266,8 @@ again:
             filename = ServiceTypeID.ToString & ".pdf"
 
         Else
-            filename = da.GetSetting(_carrierid, "CompanyLogo")
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            filename = da.GetSetting(carrierid, "CompanyLogo")
             If filename = "" Then filename = "images/no_aircraft_photo.gif"
 
             ''20171007 - pab - jetlinx branding
@@ -453,11 +457,19 @@ done:
 
 
     '20101105 - pab - add code for aliases
-    Shared Sub geturlaliasandconnections(ByVal host As String)
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+    Shared Function geturlaliasandconnections(ByVal host As String) As ArrayList
 
         Dim da As New DataAccess
         Dim urlalias As String
         Dim dbstring As String
+
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        Dim alist As New ArrayList
+        Dim _carrierid As Integer = 0
+        Dim _urlalias As String = ""
+        Dim connectstring As String = ""
+        Dim connectstringsql As String = ""
 
         Try
 
@@ -513,8 +525,16 @@ done:
             connectstring = ConnectionStringHelper.getglobalconnectionstring(PortalServer)
             connectstringsql = ConnectionStringHelper.getglobalconnectionstring(PortalDriver)
 
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            alist.Add(_carrierid.ToString)
+            alist.Add(_urlalias)
+            alist.Add(connectstring)
+            alist.Add(connectstringsql)
+
             '20130328 - pab - problems addine new carrier - add logging to debug
             Insertsys_log(_carrierid, appName, "host - " & host & "; _urlalias - " & _urlalias & "; _carrierid - " & _carrierid, "geturlaliasandconnections", "AirTaxi.vb")
+
+            Return alist
 
         Catch ex As Exception
             Dim s As String = ex.Message
@@ -527,10 +547,11 @@ done:
             'SendEmail("CharterSales@coastalavtech.com", "rkane@coastalaviationsoftware.com", appName & " AirTaxi.vb geturlaliasandconnections Error", s, 0)
             SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
                       " AirTaxi.vb geturlaliasandconnections Error", s, _carrierid)
+            Return Nothing
 
         End Try
 
-    End Sub
+    End Function
 
     '20140224 - pab - add threading
     Public Shared Sub Insertsys_log(
@@ -726,7 +747,8 @@ done:
         End Try
     End Function
 
-    Shared Function myflightrecs(ByRef userid As String) As String
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+    Shared Function myflightrecs(ByRef userid As String, ByRef _carrierid As Integer) As String
 
 
 

@@ -264,6 +264,7 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="home.aspx" />
     <Content Include="Images\arrow.png" />
     <Content Include="Images\aw snap.PNG" />
     <Content Include="Images\bg2.jpg" />
@@ -294,6 +295,7 @@
     <Content Include="ModelRunHistory.aspx" />
     <Content Include="My Project\PublishProfiles\CustomProfile.pubxml.user" />
     <Content Include="pagetemplate.aspx" />
+    <Content Include="QuoteTrip.aspx" />
     <Content Include="RunOptimizer.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -506,6 +508,13 @@
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="home.aspx.designer.vb">
+      <DependentUpon>home.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="home.aspx.vb">
+      <DependentUpon>home.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="ModelDetails.aspx.designer.vb">
       <DependentUpon>ModelDetails.aspx</DependentUpon>
     </Compile>
@@ -549,6 +558,13 @@
     </Compile>
     <Compile Include="PlanningFOS.vb" />
     <Compile Include="PopulateLookups.vb" />
+    <Compile Include="QuoteTrip.aspx.designer.vb">
+      <DependentUpon>QuoteTrip.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="QuoteTrip.aspx.vb">
+      <DependentUpon>QuoteTrip.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="RunOptimizer.aspx.designer.vb">
       <DependentUpon>RunOptimizer.aspx</DependentUpon>
     </Compile>

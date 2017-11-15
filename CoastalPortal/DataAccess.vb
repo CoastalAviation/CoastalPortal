@@ -62,7 +62,9 @@ Public Class DataAccess
             '20131002 - pab - change email from
             'SendEmail("info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " DataAccess.vb Insertsys_log Error", s, _carrierid)
             '20131024 - pab - fix duplicate emails
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb Insert_sys_log Error", s, _carrierid)
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                      " DataAccess.vb Insert_sys_log Error", s, CarrierID)
             Return 0
         Finally
             If oConn.State = ConnectionState.Open Then
@@ -184,7 +186,8 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "Insert_Email_Queue", "DataAccess.vb")
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(CarrierID, appName, s, "Insert_Email_Queue", "DataAccess.vb")
             Return 0
         Finally
             If oConn.State = ConnectionState.Open Then
@@ -224,11 +227,12 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetProviderByAlias", "DataAccess.vb")
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(0, appName, s, "GetProviderByAlias", "DataAccess.vb")
             '20131002 - pab - change email from
             'SendEmail("info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " DataAccess.vb GetProviderByAlias Error", s, _carrierid)
             '20131024 - pab - fix duplicate emails
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetProviderByAlias Error", s, _carrierid)
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetProviderByAlias Error", s, 0)
             Return Nothing
         Finally
             If oConn.State = ConnectionState.Open Then
@@ -353,11 +357,12 @@ Public Class DataAccess
             Dim s As String = "parms - CarrierID " & CarrierID & "; setting " & setting & vbCr & vbLf & ex.Message
             If Not IsNothing(ex.InnerException) Then s &= " - " & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetSetting", "DataAccess.vb")
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(CarrierID, appName, s, "GetSetting", "DataAccess.vb")
             '20131002 - pab - change email from
             'SendEmail("info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " DataAccess.vb GetSetting Error", s, _carrierid)
             '20131024 - pab - fix duplicate emails
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetSetting Error", s, _carrierid)
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetSetting Error", s, CarrierID)
             Return String.Empty
 
         Finally
@@ -424,8 +429,10 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetDSTbyDate", "DataAccess.vb")
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetDSTbyDate Error", s, _carrierid)
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(0, appName, s, "GetDSTbyDate", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                      " DataAccess.vb GetDSTbyDate Error", s, 0)
         End Try
 
         Return dt
@@ -505,8 +512,9 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetCASFlightsACType Error", s, _carrierid)
-            Insertsys_log(_carrierid, appName, s, "GetCASFlightsACType", "DataAccess.vb")
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetCASFlightsACType Error", s, CarrierID)
+            Insertsys_log(CarrierID, appName, s, "GetCASFlightsACType", "DataAccess.vb")
         End Try
 
         Return dt
@@ -557,9 +565,10 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
             SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
-                      " DataAccess.vb GetFOSFlightsBestModels Error", s, _carrierid)
-            Insertsys_log(_carrierid, appName, s, "GetFOSFlightsBestModels", "DataAccess.vb")
+                      " DataAccess.vb GetFOSFlightsBestModels Error", s, CarrierID)
+            Insertsys_log(CarrierID, appName, s, "GetFOSFlightsBestModels", "DataAccess.vb")
         End Try
 
         Return dt
@@ -657,8 +666,10 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetFOSFlightsCalendarByCarrierIDDateOffset", "DataAccess.vb")
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetFOSFlightsCalendarByCarrierIDDateOffset Error", s, _carrierid)
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(CarrierID, appName, s, "GetFOSFlightsCalendarByCarrierIDDateOffset", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                      " DataAccess.vb GetFOSFlightsCalendarByCarrierIDDateOffset Error", s, CarrierID)
         End Try
 
         Return dt
@@ -712,8 +723,10 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetFOSFlightsCalendarCrewDate", "DataAccess.vb")
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetFOSFlightsCalendarCrewDate Error", s, _carrierid)
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(CarrierID, appName, s, "GetFOSFlightsCalendarCrewDate", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                      " DataAccess.vb GetFOSFlightsCalendarCrewDate Error", s, CarrierID)
         End Try
 
         Return dt
@@ -754,20 +767,21 @@ Public Class DataAccess
                 aircraftTypeServiceSpecID & vbCr & vbLf & vbCr & vbLf & ex.InnerException.InnerException.Message
             'If Not IsNothing(ex.InnerException) Then s &= " - " & ex.InnerException.ToString
             'If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetAircraftTypeServiceSpecsByIDProd", "DataAccess.vb")
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(CarrierID, appName, s, "GetAircraftTypeServiceSpecsByIDProd", "DataAccess.vb")
             '20131002 - pab - change email from
             'SendEmail("info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " DataAccess.vb GetAircraftTypeServiceSpecsByIDProd Error", s, _carrierid)
             '20131024 - pab - fix duplicate emails
             SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
-                      " DataAccess.vb GetAircraftTypeServiceSpecsByIDProd DbUpdateException Error", s, _carrierid)
+                      " DataAccess.vb GetAircraftTypeServiceSpecsByIDProd DbUpdateException Error", s, CarrierID)
             Return Nothing
 
         Catch ex As System.Data.Entity.Validation.DbEntityValidationException
             Dim s As String = "DbEntityValidationException error -parms - CarrierID " & CarrierID & "; aircraftTypeServiceSpecID " &
                 aircraftTypeServiceSpecID & vbCr & vbLf & vbCr & vbLf & ex.Message
-            Insertsys_log(_carrierid, appName, s, "GetAircraftTypeServiceSpecsByIDProd", "DataAccess.vb")
+            Insertsys_log(CarrierID, appName, s, "GetAircraftTypeServiceSpecsByIDProd", "DataAccess.vb")
             SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
-                      " DataAccess.vb GetAircraftTypeServiceSpecsByIDProd DbEntityValidationException Error", s, _carrierid)
+                      " DataAccess.vb GetAircraftTypeServiceSpecsByIDProd DbEntityValidationException Error", s, CarrierID)
             Return Nothing
 
         Finally
@@ -817,11 +831,13 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetAircraftByRegistrationProd", "DataAccess.vb")
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(CarrierID, appName, s, "GetAircraftByRegistrationProd", "DataAccess.vb")
             '20131002 - pab - change email from
             'SendEmail("info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " DataAccess.vb GetAircraftByRegistrationProd Error", s, _carrierid)
             '20131024 - pab - fix duplicate emails
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetAircraftByRegistrationProd Error", s, _carrierid)
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                      " DataAccess.vb GetAircraftByRegistrationProd Error", s, CarrierID)
         End Try
 
         Return dt
@@ -870,11 +886,13 @@ Public Class DataAccess
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetFOSOptimizerRequestByID", "DataAccess.vb")
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Insertsys_log(CarrierID, appName, s, "GetFOSOptimizerRequestByID", "DataAccess.vb")
             '20131002 - pab - change email from
             'SendEmail("info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " DataAccess.vb GetFOSOptimizerRequestByID Error", s, _carrierid)
             '20131024 - pab - fix duplicate emails
-            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb GetFOSOptimizerRequestByID Error", s, _carrierid)
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                      " DataAccess.vb GetFOSOptimizerRequestByID Error", s, CarrierID)
         End Try
 
         Return dt
