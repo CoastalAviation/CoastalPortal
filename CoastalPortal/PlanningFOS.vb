@@ -10,11 +10,12 @@ Public Class PlanningFOS
     '20170106 - pab - no crew flagged as m
     '20170721 - pab - jlx - show bkr
     '20170913 - pab - add cost and leg type code to mouseover
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
     Shared Function FormatRowWeekly(ByVal startDateRange As DateTime, ByVal endDateRange As DateTime, ByVal FlightID As String, ByVal AircraftID As Integer,
                        ByVal Registration As String, ByRef DepartureAirport As String, ByVal DepartureTime As DateTime, ByRef ArrivalAirport As String,
                        ByVal ArrivalTime As DateTime, ByVal FlightType As String, ByRef previousArrivalAirport As String, ByVal passengers As Integer,
                        ByVal seatsavailable As Integer, ByVal rownumber As Integer, ByVal PilotStatus As String, ByRef FOSCalendarDays As Integer,
-                       ByRef timezone As String, ByVal legtypecode As String, ByVal basecode As String, ByRef cost As Integer) As ArrayList
+                       ByRef timezone As String, ByVal legtypecode As String, ByVal basecode As String, ByRef cost As Integer, ByVal _carrierid As Integer) As ArrayList
 
         AirTaxi.post_timing("PlanningFOS FormatRowWeekly start  " & Now.ToString)
 
@@ -47,7 +48,7 @@ Public Class PlanningFOS
         'Dim p As New Planning
         'Dim CssClass As String = p.GetCssClass(FlightType, PilotStatus)
         '20170106 - pab - no crew flagged as m
-        Dim CssClass As String = GetCssClass(FlightType, PilotStatus, legtypecode)
+        Dim CssClass As String = GetCssClass(FlightType, PilotStatus, legtypecode, _carrierid)
         Dim mouseover As String = String.Empty
         Dim alignment As String = String.Empty
 
@@ -342,11 +343,12 @@ Public Class PlanningFOS
     '20140818 - pab - make text display more like fos
     '20161227 - pab - fix calendar - wu flight detail not numeric
     '20170106 - pab - no crew flagged as m
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
     Shared Function FormatRowWeeklyText(ByVal startDateRange As DateTime, ByVal endDateRange As DateTime, ByVal FlightID As String, ByVal AircraftID As Integer,
                         ByVal Registration As String, ByVal DepartureAirport As String, ByVal DepartureTime As DateTime, ByVal ArrivalAirport As String,
                         ByVal ArrivalTime As DateTime, ByVal FlightType As String, ByVal previousArrivalAirport As String, ByVal passengers As Integer,
                         ByVal seatsavailable As Integer, ByVal rownumber As Integer, ByVal flightdtl As String, ByVal PilotStatus As String,
-                        ByRef RequesterName As String, ByRef bFlightInfoOnly As Boolean, ByVal legtypecode As String) As ArrayList
+                        ByRef RequesterName As String, ByRef bFlightInfoOnly As Boolean, ByVal legtypecode As String, ByVal _carrierid As Integer) As ArrayList
 
         AirTaxi.post_timing("PlanningFOS FormatRowWeeklyText start  " & Now.ToString)
 
@@ -378,7 +380,7 @@ Public Class PlanningFOS
         'Dim p As New Planning
         'Dim CssClass As String = p.GetCssClass(FlightType, PilotStatus)
         '20170106 - pab - no crew flagged as m
-        Dim CssClass As String = GetCssClass(FlightType, PilotStatus, legtypecode)
+        Dim CssClass As String = GetCssClass(FlightType, PilotStatus, legtypecode, _carrierid)
         'Dim alignment As String = String.Empty
 
         Dim n As Long = 0
@@ -407,9 +409,9 @@ Public Class PlanningFOS
         'Dim days As Long = DateDiff(DateInterval.Day, DepartureTime, ArrivalTime)
         Dim days As Long = 0
         If DepartureTime < startDateRange Then
-            days = DateDiff(DateInterval.Day, cdate(startDateRange.ToString("d")), cdate(ArrivalTime.ToString("d")))
+            days = DateDiff(DateInterval.Day, CDate(startDateRange.ToString("d")), CDate(ArrivalTime.ToString("d")))
         Else
-            days = DateDiff(DateInterval.Day, cdate(DepartureTime.ToString("d")), cdate(ArrivalTime.ToString("d")))
+            days = DateDiff(DateInterval.Day, CDate(DepartureTime.ToString("d")), CDate(ArrivalTime.ToString("d")))
         End If
 
         Dim flightsummary As String = ""
@@ -422,8 +424,9 @@ Public Class PlanningFOS
                     '20110208 - pab - pilot calendar changes 
                     '20140818 - pab - make text display more like fos
                     '20170323 - pab - use legtypecode for swap instead of airport per Richard
-                    flightsummary = FormatFlightSummaryText(DepartureAirport, DepartureTime, ArrivalAirport, ArrivalTime, FlightID, flightdtl,
-                        seatsavailable, Registration, FlightType, rownumber, i, PilotStatus, RequesterName, bFlightInfoOnly, legtypecode)
+                    flightsummary = FormatFlightSummaryText(DepartureAirport, DepartureTime, ArrivalAirport, ArrivalTime, FlightID,
+                        flightdtl, seatsavailable, Registration, FlightType, rownumber, i, PilotStatus, RequesterName, bFlightInfoOnly,
+                        legtypecode, _carrierid)
                     td(i) = td(i) & flightsummary
                 Else
                     Do While days > 0
@@ -431,7 +434,7 @@ Public Class PlanningFOS
                         '20170323 - pab - use legtypecode for swap instead of airport per Richard
                         flightsummary = FormatFlightSummaryText(DepartureAirport, DepartureTime, ArrivalAirport, DateAdd(DateInterval.Minute, -1,
                             block(i + 1)), FlightID, flightdtl, seatsavailable, Registration, FlightType, rownumber, i, PilotStatus, RequesterName,
-                            bFlightInfoOnly, legtypecode)
+                            bFlightInfoOnly, legtypecode, _carrierid)
                         td(i) = td(i) & flightsummary
                         DepartureTime = block(i + 1)
                         i = i + 1
@@ -441,8 +444,9 @@ Public Class PlanningFOS
                     If i >= block.Length - 1 Then Exit For
                     '20140818 - pab - make text display more like fos
                     '20170323 - pab - use legtypecode for swap instead of airport per Richard
-                    flightsummary = FormatFlightSummaryText(DepartureAirport, DepartureTime, ArrivalAirport, ArrivalTime, FlightID, flightdtl,
-                        seatsavailable, Registration, FlightType, rownumber, i, PilotStatus, RequesterName, bFlightInfoOnly, legtypecode)
+                    flightsummary = FormatFlightSummaryText(DepartureAirport, DepartureTime, ArrivalAirport, ArrivalTime, FlightID,
+                        flightdtl, seatsavailable, Registration, FlightType, rownumber, i, PilotStatus, RequesterName, bFlightInfoOnly,
+                        legtypecode, _carrierid)
                     td(i) = td(i) & flightsummary
                 End If
                 Exit For
@@ -462,10 +466,11 @@ Public Class PlanningFOS
     '20140818 - pab - make text display more like fos
     '20161227 - pab - fix calendar - wu flight detail not numeric
     '20170323 - pab - use legtypecode for swap instead of airport per Richard
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
     Shared Function FormatFlightSummaryText(ByVal DepartureAirport As String, ByVal DepartureTime As DateTime, ByVal ArrivalAirport As String,
             ByVal ArrivalTime As DateTime, ByVal FlightID As String, ByVal flightdtl As String, ByVal seatsavailable As Integer,
             ByVal Registration As String, ByVal FlightType As String, ByVal rownumber As Integer, ByVal cell As Integer, ByVal PilotStatus As String,
-            ByRef RequesterName As String, ByRef bFlightInfoOnly As Boolean, ByVal legtypecode As String) As String
+            ByRef RequesterName As String, ByRef bFlightInfoOnly As Boolean, ByVal legtypecode As String, ByVal _carrierid As Integer) As String
 
         AirTaxi.post_timing("PlanningFOS FormatFlightSummaryText start  " & Now.ToString)
 
@@ -715,7 +720,8 @@ Public Class PlanningFOS
     End Function
 
     '20170106 - pab - no crew flagged as m
-    Shared Function GetCssClass(ByVal FlightType As String, ByVal PilotStatus As String, ByVal legtypecode As String) As String
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+    Shared Function GetCssClass(ByVal FlightType As String, ByVal PilotStatus As String, ByVal legtypecode As String, ByVal _carrierid As Integer) As String
 
         '20170915 - pab - add more color codes for restricted an pinned flights
         If legtypecode = "OWRT" Or legtypecode = "OWGN" Or legtypecode = "CHWH" Or legtypecode = "OWNR" Then

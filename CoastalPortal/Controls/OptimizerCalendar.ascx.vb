@@ -36,15 +36,24 @@ Public Class OptimizerCalendar
             Session("fosmodelrunid") = ""
         End If
 
-        If _carrierid = 0 Then
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If CInt(Session("carrierid")) = 0 Then
             '20170126 - pab - no more tmc
             'Dim host As String = "tmcjets."
             Dim host As String = "wheelsup."
-            geturlaliasandconnections(host)
-            Session("urlalias") = _urlalias
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            'geturlaliasandconnections(host)
+            Dim alist As ArrayList = geturlaliasandconnections(host)
+            If Not IsNothing(alist) Then
+                If alist.Count >= 3 Then
+                    Session("carrierid") = CInt(alist.Item(0))
+                    'Session("urlalias") = _urlalias
+                    Session("urlalias") = alist.Item(1)
+                End If
+            End If
 
             '20160908 - pab - carrierid getting lost - set as session variable
-            Session("carrierid") = _carrierid
+            'Session("carrierid") = _carrierid
 
         End If
 
@@ -68,14 +77,14 @@ Public Class OptimizerCalendar
         '20170723 - pab - include r0 models 
         '20171101 - pab - make showing r0 configurable
         Dim da As New DataAccess
-        Dim sR0 As String = da.GetSetting(_carrierid, "CalendarShowR0")
+        Dim sR0 As String = da.GetSetting(CInt(Session("carrierid")), "CalendarShowR0")
         Dim dt As DataTable
         '20171107 - pab - show r0
         'If sR0 = "1" Then
         If sR0 = "1" Or br0 = True Then
-            dt = DataAccess.GetFOSFlightsBestModels(_carrierid, True)
+            dt = DataAccess.GetFOSFlightsBestModels(CInt(Session("carrierid")), True)
         Else
-            dt = DataAccess.GetFOSFlightsBestModels(_carrierid, False)
+            dt = DataAccess.GetFOSFlightsBestModels(CInt(Session("carrierid")), False)
         End If
         rcbModelRun.Items.Clear()
         If Not isdtnullorempty(dt) Then
@@ -118,7 +127,7 @@ Public Class OptimizerCalendar
                 Else
                     '20161222 - pab - fix calendar
                     'Dim da As New DataAccess
-                    Session("fosmodelrunid") = da.GetFOSFlightsBestModelRunID(_carrierid).Trim
+                    Session("fosmodelrunid") = da.GetFOSFlightsBestModelRunID(CInt(Session("carrierid"))).Trim
                     modelrunid = Session("fosmodelrunid").ToString
                     Session("fosmodelstart") = CDate(dt.Rows(0).Item("ModelStart").ToString)
 
@@ -137,7 +146,7 @@ Public Class OptimizerCalendar
             lblModelDesc.Text = ""
             i = InStr(lblModelRunID.Text, "-")
             If 1 > 0 Then
-                dt = DataAccess.GetFOSOptimizerRequestByID(_carrierid, CInt(Left(lblModelRunID.Text, i - 1)))
+                dt = DataAccess.GetFOSOptimizerRequestByID(CInt(Session("carrierid")), CInt(Left(lblModelRunID.Text, i - 1)))
                 If Not isdtnullorempty(dt) Then
                     lblModelDesc.Text = dt.Rows(0).Item("description").ToString.Trim
                 End If

@@ -13,11 +13,12 @@ Public Class RunOptimizer
         Try
 
             If Session("carrierid") Is Nothing Then
-                Insertsys_log(_carrierid, appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
+                '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+                Insertsys_log(0, appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
                     "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; ToString - " & Request.Url.ToString, "Page_Load" &
                     "; Session(carrierid) - null", "RunOptimizer.aspx.vb")
             Else
-                Insertsys_log(_carrierid, appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
+                Insertsys_log(CInt(Session("carrierid")), appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
                     "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; ToString - " & Request.Url.ToString, "Page_Load" &
                     "; Session(carrierid) - " & Session("carrierid").ToString, "RunOptimizer.aspx.vb")
             End If
@@ -40,12 +41,13 @@ Public Class RunOptimizer
             If Not IsPostBack Then
 
                 '20160517 - pab - fix carrierid = 0 preventing quotes
-                If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
-                    _carrierid = 65
+                If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And CInt(Session("carrierid")) = 0 Then
+
+                    Session("carrierid") = 65
                 End If
 
                 '20111121 - pab - convert to single db
-                If IsNothing(_carrierid) Or _carrierid = 0 Then
+                If IsNothing(CInt(Session("carrierid"))) Or CInt(Session("carrierid")) = 0 Then
                     '20160517 - pab - fix carrierid = 0 preventing quotes
                     AirTaxi.Insertsys_log(0, appName, Request.Url.Host & " carrierid null or 0 - user " & Session("email").ToString, "Page_Load", "RunOptimizer.aspx.vb")
 
@@ -56,7 +58,7 @@ Public Class RunOptimizer
                 '20130930 - pab - change email from
                 If IsNothing(_emailfrom) Then _emailfrom = ""
                 If _emailfrom = "" Then
-                    _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
+                    _emailfrom = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
 
                 Dim startdate As Date = Now.ToUniversalTime
@@ -119,9 +121,9 @@ Public Class RunOptimizer
             If s <> "Thread was being aborted." Then
                 If Not IsNothing(ex.InnerException) Then s &= " - " & ex.InnerException.ToString
                 If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
-                AirTaxi.InsertEmailQueue(_carrierid, "CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", "",
+                AirTaxi.InsertEmailQueue(CInt(Session("carrierid")), "CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", "",
                     "RunOptimizer.aspx.vb Page_Load error", s, False, "", "", "", False)
-                AirTaxi.Insertsys_log(_carrierid, appName, s, "Page_Load", "RunOptimizer.aspx.vb")
+                AirTaxi.Insertsys_log(CInt(Session("carrierid")), appName, s, "Page_Load", "RunOptimizer.aspx.vb")
             End If
 
         End Try
@@ -137,14 +139,16 @@ Public Class RunOptimizer
             If Not IsPostBack Then
                 '20171101 - pab - display cleanup
                 'Me.lblCarrier.Text = _urlalias.ToUpper
-                Dim slogotext As String = da.GetSetting(_carrierid, "CompanyLogoText")
-                If slogotext = "" Then slogotext = _urlalias & " Flight Schedule Optimization System"
+                '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+                Dim slogotext As String = da.GetSetting(CInt(Session("carrierid")), "CompanyLogoText")
+                '20171115 - pab - fix carriers changing midstream - change _urlalias to Session("urlalias")
+                If slogotext = "" Then slogotext = Session("urlalias").ToString & " Flight Schedule Optimization System"
                 Me.lblCarrier.Text = slogotext.ToUpper
 
-                Me.imglogo.Src = GetImageURLByATSSID(_carrierid, 0, "logo")
+                Me.imglogo.Src = GetImageURLByATSSID(CInt(Session("carrierid")), 0, "logo")
 
                 '20171017 - pab - demoair branding
-                If _carrierid = 48 Then
+                If CInt(Session("carrierid")) = 48 Then
                     imglogo.Width = 56
                     imglogo.Style.Remove("position")
                     imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
@@ -156,8 +160,8 @@ Public Class RunOptimizer
             If Not IsNothing(ex.InnerException) Then s &= "" & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
-                      appName & " RunOptimizer.aspx.vb Page_PreRender error", s, _carrierid)
-            AirTaxi.Insertsys_log(_carrierid, appName, Left(Now & " " & s, 500), "RunOptimizer.aspx.vb Page_PreRender", "")
+                      appName & " RunOptimizer.aspx.vb Page_PreRender error", s, CInt(Session("carrierid")))
+            AirTaxi.Insertsys_log(CInt(Session("carrierid")), appName, Left(Now & " " & s, 500), "RunOptimizer.aspx.vb Page_PreRender", "")
 
         End Try
 
@@ -453,7 +457,8 @@ Public Class RunOptimizer
 
             If Not rs.EOF Then
                 runid = rs.Fields("id").Value
-                postToServiceBusQueue("OPTREQUEST", "OPTIMIZERREQUEST[" & runid & "]", 0)
+                '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+                postToServiceBusQueue("OPTREQUEST", "OPTIMIZERREQUEST[" & runid & "]", 0, CInt(Session("carrierid")))
             End If
 
             If runid <> 0 And Session("carrierid") <> 0 Then

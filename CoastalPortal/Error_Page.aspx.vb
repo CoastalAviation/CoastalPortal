@@ -11,11 +11,12 @@ Public Class Error_Page
         Try
 
             If Session("carrierid") Is Nothing Then
-                Insertsys_log(_carrierid, appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
+                '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+                Insertsys_log(0, appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
                     "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; ToString - " & Request.Url.ToString, "Page_Load" &
                     "; Session(carrierid) - null", "Error_Page.aspx.vb")
             Else
-                Insertsys_log(_carrierid, appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
+                Insertsys_log(CInt(Session("carrierid")), appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
                     "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; ToString - " & Request.Url.ToString, "Page_Load" &
                     "; Session(carrierid) - " & Session("carrierid").ToString, "Error_Page.aspx.vb")
             End If
@@ -39,13 +40,13 @@ Public Class Error_Page
 
                 '20160517 - pab - fix carrierid = 0 preventing quotes
                 If Not IsNothing(Session("email")) Then
-                    If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And _carrierid = 0 Then
-                        _carrierid = 65
+                    If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And CInt(Session("carrierid")) = 0 Then
+                        Session("carrierid") = 65
                     End If
                 End If
 
                 '20111121 - pab - convert to single db
-                If IsNothing(_carrierid) Or _carrierid = 0 Then
+                If IsNothing(CInt(Session("carrierid"))) Or CInt(Session("carrierid")) = 0 Then
                     '20160517 - pab - fix carrierid = 0 preventing quotes
                     AirTaxi.Insertsys_log(0, appName, Request.Url.Host & " carrierid null or 0 - user " & Session("email").ToString, "Page_Load", "Error_Page.aspx.vb")
 
@@ -56,7 +57,7 @@ Public Class Error_Page
                 '20130930 - pab - change email from
                 If IsNothing(_emailfrom) Then _emailfrom = ""
                 If _emailfrom = "" Then
-                    _emailfrom = da.GetSetting(_carrierid, "emailsentfrom")
+                    _emailfrom = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
 
             End If
@@ -76,8 +77,8 @@ Public Class Error_Page
             If s <> "Thread was being aborted." Then
                 If Not IsNothing(ex.InnerException) Then s &= " - " & ex.InnerException.ToString
                 If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
-                AirTaxi.Insertsys_log(_carrierid, appName, s, "Page_Load", "Error_Page.aspx.vb")
-                AirTaxi.InsertEmailQueue(_carrierid, "CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", "",
+                AirTaxi.Insertsys_log(CInt(Session("carrierid")), appName, s, "Page_Load", "Error_Page.aspx.vb")
+                AirTaxi.InsertEmailQueue(CInt(Session("carrierid")), "CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", "",
                     "Error_Page.aspx.vb Page_Load error", s, False, "", "", "", False)
             End If
 
@@ -94,14 +95,16 @@ Public Class Error_Page
             If Not IsPostBack Then
                 '20171101 - pab - display cleanup
                 'Me.lblCarrier.Text = _urlalias.ToUpper
-                Dim slogotext As String = da.GetSetting(_carrierid, "CompanyLogoText")
-                If slogotext = "" Then slogotext = _urlalias & " Flight Schedule Optimization System"
+                '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+                Dim slogotext As String = da.GetSetting(CInt(Session("carrierid")), "CompanyLogoText")
+                '20171115 - pab - fix carriers changing midstream - change _urlalias to Session("urlalias")
+                If slogotext = "" Then slogotext = Session("urlalias").ToString & " Flight Schedule Optimization System"
                 Me.lblCarrier.Text = slogotext.ToUpper
 
-                Me.imglogo.Src = GetImageURLByATSSID(_carrierid, 0, "logo")
+                Me.imglogo.Src = GetImageURLByATSSID(CInt(Session("carrierid")), 0, "logo")
 
                 '20171017 - pab - demoair branding
-                If _carrierid = 48 Then
+                If CInt(Session("carrierid")) = 48 Then
                     imglogo.Width = 56
                     imglogo.Style.Remove("position")
                     imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
@@ -116,9 +119,9 @@ Public Class Error_Page
             If Not IsNothing(ex.StackTrace) Then
                 s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             End If
-            AirTaxi.Insertsys_log(_carrierid, appName, Left(Now & " " & s, 500), "Error_Page.aspx.vb Page_PreRender", "")
+            AirTaxi.Insertsys_log(CInt(Session("carrierid")), appName, Left(Now & " " & s, 500), "Error_Page.aspx.vb Page_PreRender", "")
             SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
-                      appName & " Error_Page.aspx.vb Page_PreRender error", s, _carrierid)
+                      appName & " Error_Page.aspx.vb Page_PreRender error", s, CInt(Session("carrierid")))
 
         End Try
 

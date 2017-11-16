@@ -10,7 +10,8 @@ Public Class loginpage
         Dim url As String = ""
         Dim host As String = ""
 
-        Insertsys_log(_carrierid, appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost & 
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        Insertsys_log(CInt(Session("carrierid")), appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
             "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; Request - " & Request.Url.ToString, "Page_Load", "CustomerLogin.aspx.vb")
 
         Try
@@ -19,43 +20,63 @@ Public Class loginpage
             url = Request.Url.ToString
             host = Request.Url.Host
 
+            '20171114 - pab - redirct to dpj for delta
+            If InStr(host.ToLower, "delta") > 0 Then
+                Response.Redirect("http://dpj.optimizerpanel.com/CustomerLogin", True)
+                Exit Sub
+            End If
+
             If host = "corporateportaluatbeta.cloudapp.net" Or host = "localhost" Then
                 '20161227 - pab - default to wheelsup
                 'host = "wheelsup"
                 'host = "tmcjets"
-                host = "jetlinx"
-                'host = "delta"
+                'host = "jetlinx"
+                host = "dpj"
                 'host = "xojet"
                 'host = "demoair"
             End If
 
-            If _urlalias Is Nothing Then _urlalias = ""
+            '20171115 - pab - fix carriers changing midstream - change _urlalias to Session("urlalias")
+            If Session("urlalias") Is Nothing Then Session("urlalias") = ""
 
             '20101129 - pab - force last connection to close when starting new session
             If cnsetting.State = 1 Then cnsetting.Close()
 
-            geturlaliasandconnections(host)
-            Session("urlalias") = _urlalias
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            'geturlaliasandconnections(host)
+            Dim alist As ArrayList = geturlaliasandconnections(host)
+            If Not IsNothing(alist) Then
+                If alist.Count >= 3 Then
+                    Session("carrierid") = CInt(alist.Item(0))
+                    'Session("urlalias") = _urlalias
+                    Session("urlalias") = alist.Item(1)
+                    Session("connectstring") = alist.Item(2)
+                    _carrierid = Session("carrierid")
+                    _urlalias = Session("urlalias")
+                    connectstring = Session("connectstring")
+                End If
+            End If
 
             '20160908 - pab - carrierid getting lost - set as session variable
-            Session("carrierid") = _carrierid
+            'Session("carrierid") = _carrierid
 
             '20171018 - pab - fix invalid alias
-            If _carrierid = 0 Or _urlalias = "" Or InStr(_urlalias.ToLower, "personiflyadmin") > 0 Then
+            If CInt(Session("carrierid")) = 0 Or Session("urlalias").ToString = "" Or InStr(Session("urlalias").ToString.ToLower, "personiflyadmin") > 0 Then
                 Session("reset") = "T"
-                Insertsys_log(_carrierid, appName, "carrier not resolved; carrierid - " & _carrierid & "; _urlalias - " & _urlalias & "; host - " & host & "; connectstring - " & connectstring, "Page_Load", "Default.aspx.vb")
+                Insertsys_log(CInt(Session("carrierid")), appName, "carrier not resolved; carrierid - " & CInt(Session("carrierid")) &
+                    "; urlalias - " & Session("urlalias").ToString & "; host - " & host & "; connectstring - " & Session("connectstring").ToString, "Page_Load", "Default.aspx.vb")
                 Response.Redirect("error_page2.aspx", True)
                 Exit Sub
             End If
 
-            Insertsys_log(_carrierid, appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
+            Insertsys_log(CInt(Session("carrierid")), appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
                 "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; Request - " & Request.Url.ToString, "Page_Load", "CustomerLogin.aspx.vb")
 
             Dim da As New DataAccess
-            companylogo = Replace(da.GetSetting(_carrierid, "companylogo").ToLower, "images/", "")
+            companylogo = Replace(da.GetSetting(CInt(Session("carrierid")), "companylogo").ToLower, "images/", "")
 
             '20101104 - pab - remove hardcoded value
-            Title = da.GetSetting(_carrierid, "CompanyName") & Title
+            Title = da.GetSetting(CInt(Session("carrierid")), "CompanyName") & Title
 
         Catch ex As Exception
             Dim s As String = "url " & url & "; host " & host & vbNewLine & ex.Message
@@ -80,51 +101,64 @@ Public Class loginpage
                 '20171101 - pab - display cleanup
                 'Me.lblCarrier.Text = _urlalias.ToUpper
                 Dim da As New DataAccess
-                Dim slogotext As String = da.GetSetting(_carrierid, "CompanyLogoText")
-                If slogotext = "" Then slogotext = _urlalias & " Flight Schedule Optimization System"
+                '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+                Dim slogotext As String = da.GetSetting(CInt(Session("carrierid")), "CompanyLogoText")
+                '20171115 - pab - fix carriers changing midstream - change _urlalias to Session("urlalias")
+                If slogotext = "" Then slogotext = Session("urlalias").ToString & " Flight Schedule Optimization System"
                 Me.lblCarrier.Text = slogotext.ToUpper
 
-                Me.imglogo.Src = GetImageURLByATSSID(_carrierid, 0, "logo")
+                Me.imglogo.Src = GetImageURLByATSSID(CInt(Session("carrierid")), 0, "logo")
 
-                Select Case _carrierid
-                    Case 100
-                        login.Style.Remove("background-image")
-                        login.Style.Add("background-image", "images/wheels_up_hero-king-excel.jpg")
+                '20171114 - pab - remove hardcoded image names
+                Dim simage As String = da.GetSetting(CInt(Session("carrierid")), "background-image")
+                If simage = "" Then simage = "images/bg2.jpg"
+                login.Style.Remove("background-image")
+                login.Style.Add("background-image", simage)
+                If CInt(Session("carrierid")) = 48 Then
+                    imglogo.Width = 56
+                    imglogo.Style.Remove("position")
+                    imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
+                End If
 
-                    '20171007 - pab - jetlinx branding
-                    Case 104
-                        login.Style.Remove("background-image")
-                        login.Style.Add("background-image", "images/jetlinxbackground.jpg")
+                'Select Case _carrierid
+                '    Case 100
+                '        login.Style.Remove("background-image")
+                '        login.Style.Add("background-image", "images/wheels_up_hero-king-excel.jpg")
 
-                        '20171110 - pab - delta
-                    Case 108
-                        login.Style.Remove("background-image")
-                        login.Style.Add("background-image", "images/delta-denim.jpg")
+                '    '20171007 - pab - jetlinx branding
+                '    Case 104
+                '        login.Style.Remove("background-image")
+                '        login.Style.Add("background-image", "images/jetlinxbackground.jpg")
 
-                        '20171110 - pab - xo
-                    Case 49
-                        login.Style.Remove("background-image")
-                        login.Style.Add("background-image", "images/XOJET-Plane-denim.jpg")
+                '        '20171110 - pab - delta
+                '    Case 108
+                '        login.Style.Remove("background-image")
+                '        login.Style.Add("background-image", "images/delta-denim.jpg")
 
-                    '20171017 - pab - demoair branding
-                    Case 48
-                        login.Style.Remove("background-image")
-                        login.Style.Add("background-image", "images/bg2.jpg")
-                        imglogo.Width = 56
-                        imglogo.Style.Remove("position")
-                        imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
+                '        '20171110 - pab - xo
+                '    Case 49
+                '        login.Style.Remove("background-image")
+                '        login.Style.Add("background-image", "images/XOJET-Plane-denim.jpg")
 
-                    Case 65
-                        login.Style.Remove("background-image")
-                        login.Style.Add("background-image", "images/bg3.jpg")
-                        '20171025 - pab - fix tmc branding
-                        imglogo.Src = "images/logo.png"
+                '    '20171017 - pab - demoair branding
+                '    Case 48
+                '        login.Style.Remove("background-image")
+                '        login.Style.Add("background-image", "images/bg2.jpg")
+                '        imglogo.Width = 56
+                '        imglogo.Style.Remove("position")
+                '        imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
 
-                    Case Else
-                        login.Style.Remove("background-image")
-                        login.Style.Add("background-image", "images/bg3.jpg")
+                '    Case 65
+                '        login.Style.Remove("background-image")
+                '        login.Style.Add("background-image", "images/bg3.jpg")
+                '        '20171025 - pab - fix tmc branding
+                '        imglogo.Src = "images/logo.png"
 
-                End Select
+                '    Case Else
+                '        login.Style.Remove("background-image")
+                '        login.Style.Add("background-image", "images/bg2.jpg")
+
+                'End Select
             End If
 
 
@@ -161,6 +195,10 @@ Public Class loginpage
             awclookup.Add(Trim(x.AircraftType), Trim(x.AircraftWeightClass))
         Next
         'LoginUser = pdb.Members.FirstOrDefault()
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        Dim _carrierid = 0
+        If Not IsNothing(Session("carrierid")) Then _carrierid = CInt(Session("carrierid"))
+
         LoginUser = pdb.Members.Where(Function(x) Trim(x.Email).ToUpper = username And Trim(x.PIN) = Password And Trim(x.CarrierID) = _carrierid).FirstOrDefault()
         'If Not rs.EOF Then
         If LoginUser IsNot Nothing Then
@@ -199,7 +237,7 @@ Public Class loginpage
                 If LoginUser.UserType = "A" Then
                     'login successful
                     Session("usertype") = LoginUser.UserType
-                    Session.Timeout = CInt(da.GetSetting(_carrierid, "SessionTimeout")) 'rk 10.18.2010 set session timeout as seteting
+                    Session.Timeout = CInt(da.GetSetting(CInt(Session("carrierid")), "SessionTimeout")) 'rk 10.18.2010 set session timeout as seteting
                 Else
                     Session("usertype") = "M"
 
@@ -426,7 +464,8 @@ Public Class loginpage
 
 
         req = "SELECT * FROM members WHERE email = '" & Me.txtEmail.Text & "' and pin = '" & Me.txtPin.Text & "'"
-        req &= " and carrierid = " & _carrierid
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        req &= " and carrierid = " & CInt(Session("carrierid"))
 
 
 
@@ -516,7 +555,7 @@ Public Class loginpage
             Dim da As New DataAccess
             If rs.Fields("usertype").Value = "A" Then
                 'login successful
-                Session.Timeout = CInt(da.GetSetting(_carrierid, "SessionTimeout")) 'rk 10.18.2010 set session timeout as seteting
+                Session.Timeout = CInt(da.GetSetting(CInt(Session("carrierid")), "SessionTimeout")) 'rk 10.18.2010 set session timeout as seteting
 
                 '20101129 - pab - display menu if admin
                 '20160410 - pab - selworthy integration
@@ -579,7 +618,8 @@ Public Class loginpage
         Me.txtmsg.Text = Me.txtmsg.Text & vbCr & vbLf
 
         Dim myf As String
-        myf = CStr(myflightrecs(Session("email")))
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        myf = CStr(myflightrecs(Session("email"), CInt(Session("carrierid"))))
 
         Me.txtmsg.Text = Me.txtmsg.Text & myf
 
@@ -590,7 +630,7 @@ Public Class loginpage
         '** rk 9.5.2010 check if pilot
         Dim isapilot As Boolean = False
         req = "SELECT * FROM pilots WHERE pilotemail = '" & Me.txtEmail.Text & "' "
-        req &= " and carrierid = " & _carrierid
+        req &= " and carrierid = " & CInt(Session("carrierid"))
         rs.Open(req, cnsetting, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockOptimistic)
         If Not rs.EOF Then isapilot = True
         Session("isapilot") = "YES"
@@ -641,7 +681,8 @@ Public Class loginpage
         Dim req As String
 
         req = "SELECT * FROM members WHERE email = '" & Me.txtEmail.Text & "'"
-        req &= " and carrierid = " & _carrierid
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        req &= " and carrierid = " & CInt(Session("carrierid"))
 
 
 
@@ -685,17 +726,17 @@ Public Class loginpage
         'send email
         'Dim cea As New EmailAgent
 
-        Dim emailSubject As String = da.GetSetting(_carrierid, "CompanyName") & " is sending you your pin"
+        Dim emailSubject As String = da.GetSetting(CInt(Session("carrierid")), "CompanyName") & " is sending you your pin"
 
         Dim emailBody As String = ""
 
-        emailBody = "Hello," & ControlChars.CrLf & "Your pin for the " & da.GetSetting(_carrierid, "CompanyName") & " service is: " & Session("pin")
+        emailBody = "Hello," & ControlChars.CrLf & "Your pin for the " & da.GetSetting(CInt(Session("carrierid")), "CompanyName") & " service is: " & Session("pin")
 
         ' cea.SendEmail("info@coastalaviationsoftware.com", "", Me.txtEmail.Text.Trim, emailSubject, emailBody)
 
         '20120807 - pab - write to email queue
         '20131024 - pab - fix duplicate emails
-        SendEmail("info@coastalaviationsoftware.com", Me.txtEmail.Text.Trim, "", emailSubject, emailBody, _carrierid)
+        SendEmail("info@coastalaviationsoftware.com", Me.txtEmail.Text.Trim, "", emailSubject, emailBody, CInt(Session("carrierid")))
 
 
         Me.txtmsg.Text = ("Your pin has been emailed to you.")
