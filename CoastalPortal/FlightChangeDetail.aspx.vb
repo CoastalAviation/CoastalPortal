@@ -382,7 +382,7 @@ Public Class FlightChangeDetail
 
 
 
-        fcdrlist.Add(New FCDRList With {.CASRecordList = CasIDList, .FOSRecordList = FosIdList, .ModelRunID = model, .PriorTailNumber = starttail, .DeltaNonRevMiles = CInt(fnrm - cnrm),
+        fcdrlist.Add(New FCDRList With {.CASRecordList = CasIDList, .FOSRecordList = FosIdList, .ModelRunID = model, .PriorTailNumber = starttail, .DeltaNonRevMiles = CInt(fnrm - cnrm), .CarrierAcceptStatus = "NA", .isTrade = False,
                     .TotalSavings = totalcost, .SavingsDay0 = dcostday0, .SavingsDay1 = dcostday1, .SavingsDay2 = dcostday2, .keyid = fcdrkey, .ModelRun = mrid, .GMTStart = GMTStart, .CarrierID = carrierprofile.carrierid})
 
         Try
@@ -476,7 +476,7 @@ Public Class FlightChangeDetail
                     Fosrev = 0
                     For Each dd As String In TripList
                         Fosrev += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Trim(a.BaseCode) = Trim(x) Select a.PandL).FirstOrDefault())
-                        CasRev += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Trim(a.BaseCode) = Trim(x) Select a.PandL).FirstOrDefault())
+                        CasRev += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Trim(a.BaseCode) = Trim(x) Select a.ProRatedRevenue).Sum())
                     Next
                     baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = CasRev, .FosRevenue = Fosrev})
                 Next
@@ -920,6 +920,17 @@ Public Class FlightChangeDetail
                 maxrows += 1
             End If
         Next
+        'Dim ck As Integer = 1
+        'If FCDRdetail.Count > 1 Then
+        '    Do While ck <> FCDRdetail.Count
+        '        If FCDRdetail.Where(Function(a) Trim(a.Modification) = Trim(FCDRdetail(ck).AC) And Trim(a.From_ICAO) = Trim(FCDRdetail(ck).From_ICAO) And Trim(a.To_ICAO) = Trim(FCDRdetail(ck).To_ICAO)).Count > 0 Then
+        '            'remove from the list
+        '            FCDRdetail.Remove(FCDRdetail(ck))
+        '            ck -= 1
+        '        End If
+        '        ck += 1
+        '    Loop
+        'End If
         If db.FCDRListDetail.Where(Function(c) c.KeyID = FCDRKey).Count() = 0 Then
 
             db.FCDRListDetail.AddRange(FCDRdetail)

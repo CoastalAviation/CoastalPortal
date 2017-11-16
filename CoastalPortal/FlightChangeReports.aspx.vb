@@ -307,6 +307,8 @@ Public Class FlightChangeReports
             ' gvFCDRDetail.Rows(i).Cells(FD_NAC).Text = If(result_txt <> "Added" And result_txt <> "Removed", result_txt, "")
             gvFCDRDetail.Rows(i).Cells(FD_RESULT).Text = If(result_txt <> "Added" And result_txt <> "Removed", result_txt, "")
         Next
+
+
     End Sub
 
     Protected Sub gvFCDRList_PageIndexChanging(sender As Object, e As GridViewPageEventArgs)
