@@ -62,6 +62,7 @@ Public Class AirTaxi
     Public Shared _carrierid As Integer
 
     Public Shared _emailfrom As String
+    Public Shared _emailfromquote As String
 
     '20101105 - pab - add code for aliases
     Public Shared _urlalias As String
@@ -107,6 +108,7 @@ Public Class AirTaxi
 
     Public Shared caslinebreaks As Integer
 
+    Public Shared ocp As Double
 
     '20171027 - pab - calendar
     'Public Shared modelrunid As String
@@ -120,6 +122,114 @@ Public Class AirTaxi
 
     '20171109 - pab - add optimmizer model page
     Public Shared daterangefrom, daterangeto As String
+
+    Public Shared ip As String
+    Public Shared distance_text As String = ""
+
+    Public Shared _waittime As Decimal
+    Public Shared _landingfees As Decimal
+    Public Shared _taxes As Decimal
+    Public Shared _internationalfees As Decimal
+    Public Shared _fuelsurcharges As Decimal
+    Public Shared _crewovernight As Decimal
+    Public Shared _aircraftname As String
+    Public Shared _aircraftlogo As String
+    Public Shared _totalprice As Decimal
+
+    'rk 10302010 add taxes to quote editor
+    Public Shared _segmentfee As Decimal
+
+    '20101027 - pab - add return to base bucket
+    Public Shared _rtbcost As Decimal
+
+    '20110214 - pab - more calendar changes
+    Public Shared _CalendarCombinedView As Boolean
+
+    '20160726 - pab - add redis session state - fix serializable error
+    <Serializable()> Partial Public Class LatLong
+
+        Private LatitudeField As Double
+        Private LongitudeField As Double
+
+        '''<remarks/>
+        Public Property Latitude() As Double
+            Get
+                Return Me.LatitudeField
+            End Get
+            Set(ByVal value As Double)
+                Me.LatitudeField = value
+            End Set
+        End Property
+
+        Public Property Longitude() As Double
+            Get
+                Return Me.LongitudeField
+            End Get
+            Set(ByVal value As Double)
+                Me.LongitudeField = value
+            End Set
+        End Property
+
+    End Class
+
+    '20160622 - pab - check for overlapping flights
+    Shared Function traveltime(ByVal d As Integer, ByVal bIntl As Boolean) As Integer
+
+        Try
+
+            Dim da As New DataAccess
+            Dim _airSpeed As Double = 0
+            Dim t As Long
+            Dim currentplane As Integer = 0
+            Dim dt_priceTable As DataTable = da.GetAircraftTypeServiceSpecsByWeightClass(_carrierid, "L")
+            Dim FlightTimeSwag As Double = dt_priceTable.Rows(currentplane)("FlightTimeSwag")
+            Dim longrangedistance As Integer = CInt(dt_priceTable.Rows(currentplane)("longrangedistance") * 1.15077945)
+            Dim dtAPD As DataTable = da.GetFuelSpeedByDistance(_carrierid, dt_priceTable.Rows(currentplane)("currtype"), "")
+            Dim fuelstops As Integer = 0
+            Dim FuelStopMinutes As Integer = 30
+            Dim CustomsTurnAroundMins As Integer = 30
+
+            _airSpeed = CInt(dt_priceTable.Rows(currentplane)("Blockspeed")) * 1.15077945
+
+            If dtAPD.Rows.Count <> 0 Then
+                For i As Integer = 0 To dtAPD.Rows.Count - 1
+                    If d >= dtAPD.Rows(i)("RangeLow") And d <= dtAPD.Rows(i)("RangeHigh") Then
+                        _airSpeed = dtAPD.Rows(i)("speed") * 1.15077945
+                        Exit For
+                    End If
+                Next i
+            End If
+
+            t = CInt((d / _airSpeed) * 60)
+            t = t + (t * FlightTimeSwag) 'add an optional percentage to each flight time calculation
+
+            If d > longrangedistance Then
+                fuelstops = CInt(Math.Ceiling(d / longrangedistance)) - 1
+                If fuelstops > 0 Then
+                    t = t + (fuelstops * FuelStopMinutes)
+                End If
+            End If
+
+            If CustomsTurnAroundMins > 0 And bIntl Then
+                t = CInt(t) + CustomsTurnAroundMins
+            End If
+
+            '20160909 - pab - adjust departure times to allow for quick turns when flight times are unknown to user
+            'If t < 120 Then t = 120
+
+            traveltime = CInt(t)
+
+        Catch ex As Exception
+            Dim s As String = ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            Insertsys_log(_carrierid, AirTaxi.appName, Left(Now & " " & s, 500), "traveltime", "AirTaxi.vb")
+
+            Return 120
+
+        End Try
+
+    End Function
 
     '20171030 - pab - run optimizer page
     '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
@@ -172,6 +282,291 @@ again:
         End Try
 
     End Function
+
+    '20120807 - pab - write to email queue
+    Shared Function SendEmailLogo(ByVal recipient As String, ByVal emailcc As String, ByVal bcc As String, ByVal sender As String, ByVal subject As String, ByVal body As String,
+            ByVal attachments As Generic.Stack(Of System.Net.Mail.Attachment), ByVal isBodyHtml As Boolean, ByVal ApplicationPath As String, ByVal CarrierID As Integer,
+            ByVal aircraftlogo As String, ByVal serviceprovider As String, ByVal showcarrier As Boolean, ByVal attachment As String) As Boolean
+
+        SendEmailLogo = False
+
+        Try
+
+            '20120807 - pab - write to email queue
+            'Dim message As New MailMessage()
+
+
+
+            ''set the addresses
+            ''New MailAddress("noreply@Door2DoorAir.com", "reservations@Door2DoorAir.com"), New MailAddress(recipient)
+            'message.From = New MailAddress(sender)
+            'message.To.Add(recipient)
+
+            ''set the content
+            'message.Subject = subject
+
+            ''first we create the Plain Text part
+            'Dim plainView As AlternateView = AlternateView.CreateAlternateViewFromString(Replace(body, "<img src=cid:companylogo>", ""), Nothing, "text/plain")
+
+            ''then we create the Html part
+            ''to embed images, we need to use the prefix 'cid' in the img src value
+            ''the cid value will map to the Content-Id of a Linked resource.
+            ''thus <img src='cid:companylogo'> will map to a LinkedResource with a ContentId of 'companylogo'
+            'Dim htmlView As AlternateView = AlternateView.CreateAlternateViewFromString(body, Nothing, "text/html")
+
+            ''create the LinkedResource (embedded image)
+            'Dim path As String = ApplicationPath
+
+            ''rk 11/8/2010 check if logo setup correctly
+            'If File.Exists(path & companylogo) Then
+            '    Dim logo As New LinkedResource(path & companylogo)
+            '    logo.ContentId = "companylogo"
+            '    'add the LinkedResource to the appropriate view
+            '    htmlView.LinkedResources.Add(logo)
+            'End If
+
+            ''rk 11/8/2010 check if logo setup correctly
+            'If File.Exists(path & _aircraftlogo) Then
+            '    Dim logo2 As New LinkedResource(path & _aircraftlogo)
+            '    logo2.ContentId = "aircraftlogo"
+            '    'add the LinkedResource to the appropriate view
+            '    htmlView.LinkedResources.Add(logo2)
+            'End If
+
+            ''add the views
+            'message.AlternateViews.Add(plainView)
+            'message.AlternateViews.Add(htmlView)
+
+
+            'If bcc.Trim().Length > 0 Then
+            '    message.Bcc.Add(bcc.Trim().Replace(" ", ",").Replace(";", ","))
+            'End If
+
+            ''add attachments if included 
+            'If attachments IsNot Nothing Then
+            '    For Each currAttachment As Attachment In attachments
+            '        message.Attachments.Add(currAttachment)
+            '    Next
+            'End If
+
+            'message.Subject = subject
+            ''message.Body = body
+
+            'message.CC.Add("rkane@coastalaviationsoftware.com")
+            'message.CC.Add("pbaumgart@coastalaviationsoftware.com")
+            ''20110425 - pab - remove Carolyn 
+            ''message.CC.Add("ckeating@coastalaviationsoftware.com")
+
+            'message.IsBodyHtml = isBodyHtml
+
+            ''define smtp server client
+            'Dim da As New DataAccess
+            'Dim client As New SmtpClient(da.GetSetting(_carrierid, "smtpServer"))
+
+            'client.Send(message)
+
+            'Return True
+
+            Dim da As New DataAccess
+            Dim providerlogo As String = da.GetSysSettingByProvider(CarrierID, "CompanyLogo", serviceprovider)
+            Dim personiflylogo As String = "images\Personifly_clear.png"
+            Dim logo As String = String.Empty
+
+            If showcarrier Then
+                If providerlogo <> "" Then
+                    logo = providerlogo
+                End If
+            Else
+                logo = personiflylogo
+            End If
+
+            Dim logo2 As String = String.Empty
+            If aircraftlogo <> "" Then
+                logo2 = aircraftlogo
+            End If
+
+            '20131024 - pab - fix duplicate emails
+            'Dim emailcc As String = String.Empty
+            'If InStr(recipient.ToLower, "rkane@coastalaviationsoftware.com") = 0 Then
+            '    emailcc = "rkane@coastalaviationsoftware.com"
+            'End If
+            'If InStr(recipient.ToLower, "pbaumgart@coastalaviationsoftware.com") = 0 Then
+            '    If emailcc = "" Then
+            '        emailcc = "pbaumgart@coastalaviationsoftware.com"
+            '    Else
+            '        emailcc &= "; pbaumgart@coastalaviationsoftware.com"
+            '    End If
+            'End If
+            ''20120113 - pab - send confirmations to David
+            'If InStr(subject, "Flight Purchase Confirmation") > 0 Then
+            '    If emailcc = "" Then
+            '        emailcc = "dhackett@coastalaviationsoftware.com"
+            '    Else
+            '        emailcc &= "; dhackett@coastalaviationsoftware.com"
+            '    End If
+            'End If
+            ''20120113 - pab - send Provider Notifications to Richard and Paula
+            'If InStr(subject, "Provider Notification New Flight Request") > 0 Then
+            '    If emailcc = "" Then
+            '        emailcc = "rkane@coastalaviationsoftware.com; pbaumgart@coastalaviationsoftware.com"
+            '    Else
+            '        If InStr(emailcc.ToLower, "rkane@coastalaviationsoftware.com") = 0 And InStr(bcc.ToLower, "rkane@coastalaviationsoftware.com") = 0 And _
+            '                InStr(recipient.ToLower, "rkane@coastalaviationsoftware.com") = 0 Then
+            '            emailcc &= "; rkane@coastalaviationsoftware.com"
+            '        End If
+            '        If InStr(emailcc.ToLower, "pbaumgart@coastalaviationsoftware.com") = 0 And InStr(bcc.ToLower, "pbaumgart@coastalaviationsoftware.com") = 0 _
+            '                And InStr(recipient.ToLower, "pbaumgart@coastalaviationsoftware.com") = 0 Then
+            '            emailcc &= "; pbaumgart@coastalaviationsoftware.com"
+            '        End If
+            '    End If
+            'End If
+            If InStr(recipient, "rkane@coastalaviationsoftware.com") = 0 And InStr(recipient, "pbaumgart@coastalaviationsoftware.com") = 0 Then
+                If emailcc = "" Then
+                    emailcc = "rkane@coastalaviationsoftware.com; pbaumgart@coastalaviationsoftware.com"
+                Else
+                    emailcc &= "; rkane@coastalaviationsoftware.com; pbaumgart@coastalaviationsoftware.com"
+                End If
+            ElseIf InStr(recipient, "pbaumgart@coastalaviationsoftware.com") = 0 Then
+                If emailcc = "" Then
+                    emailcc = "pbaumgart@coastalaviationsoftware.com"
+                Else
+                    emailcc &= "; pbaumgart@coastalaviationsoftware.com"
+                End If
+            ElseIf InStr(recipient, "rkane@coastalaviationsoftware.com") = 0 Then
+                If emailcc = "" Then
+                    emailcc = "rkane@coastalaviationsoftware.com"
+                Else
+                    emailcc &= "; rkane@coastalaviationsoftware.com"
+                End If
+            End If
+
+            InsertEmailQueue(CarrierID, sender, recipient, emailcc, bcc, subject, body, isBodyHtml, attachment, logo, logo2, showcarrier)
+
+            SendEmailLogo = True
+
+            'Catch ex As System.Net.Mail.SmtpException
+            '    AirTaxi.post_timing(ex.ToString)
+            '    Return ex.ToString
+        Catch ex As Exception
+            Return ex.ToString
+
+            Dim s As String = ex.Message
+            If Not IsNothing(ex.InnerException) Then
+                s &= " - " & ex.InnerException.ToString
+            End If
+            If Not IsNothing(ex.StackTrace) Then
+                s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
+            End If
+            Insertsys_log(CarrierID, appName, s, "SendEmailLogo", "AirTaxi.vb")
+
+        End Try
+    End Function
+
+    '20141121 - pab - rewrite quoteworker routine
+    Shared Function dtflightstoxml(ByVal dtflights As DataTable) As String
+
+        Dim dr As DataRow
+        Dim xmlflights As String = "<dtflights>"
+
+        For n As Integer = 0 To dtflights.Rows.Count - 1
+            dr = dtflights.Rows(n)
+            xmlflights &= "<row" & n & ">"
+            'xmlflights &= "<Origin>" & dr.Item("Origin").ToString & "</Origin>"
+            'xmlflights &= "<Departs>" & dr.Item("Departs").ToString & "</Departs>"
+            'xmlflights &= "<Destination>" & dr.Item("Destination").ToString & "</Destination>"
+            For n2 As Integer = 0 To dtflights.Columns.Count - 1
+                xmlflights &= "<" & dtflights.Columns(n2).ColumnName.ToString & ">" & dr.Item(n2).ToString & "</" & dtflights.Columns(n2).ColumnName.ToString & ">"
+            Next
+            xmlflights &= "</row" & n & ">"
+        Next
+
+        xmlflights &= "</dtflights>"
+
+        dtflightstoxml = xmlflights
+
+    End Function
+
+    Shared Function recordquotexml(ByVal dt As DataTable, ByVal origairport As String, ByVal DestAirport As String, ByVal quote As Double, ByVal outboundreturn As String, ByVal price As Double, ByVal PriceExplanation As String, ByVal portal As String, ByVal email As String, ByVal flightdate As String, ByVal provider As String, ByVal ip As String) As String
+
+
+        'Dim portal As String = Session("portal")
+        'Dim email As String = Session("email")
+        If Trim(email) = "" Then
+            email = "not entered"
+        End If
+
+
+
+        ' Inherits System.Web.UI.Page
+        '20100222 - pab - use global shared connection
+        'Dim cn As New ADODB.Connection
+        Dim rs As New ADODB.Recordset
+
+
+        '20100222 - pab - use global shared connection
+        'If cn.State = 1 Then cn.Close()
+        'If cn.State = 0 Then
+        '    cn.ConnectionString = connectstring
+        '    cn.Open()
+        'End If
+        If cnsetting.State = 0 Then
+            cnsetting.ConnectionString = ConnectionStringHelper.GetCASConnectionStringSQL
+            cnsetting.Open()
+        End If
+
+        '-- ~DHA commented out to see if record will save... 20100721
+        'If rs.State = 1 Then rs.Close()
+
+
+        Dim req As String
+
+        '20120807 - pab - use dataaccess to insert
+        'req = "SELECT * "
+        'req = req & "FROM sys_quotes_dt WHERE 1 = 2"
+
+        ''20100222 - pab - use global shared connection
+        ''rs.Open(req, cn, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockOptimistic)
+        'rs.Open(req, cnsetting, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockOptimistic)
+
+        'rs.AddNew()
+
+        'rs.Fields("carrierid").Value = _carrierid
+        'rs.Fields("QuoteDateTime").Value = Month(Now) & "/" & Day(Now) & "/" & Year(Now)
+
+        ''rs.Fields("dataxml3").Value = dt.WriteXmlSchema
+
+        'dt.TableName = "SaveQuote"
+
+        'Dim sw As New StringWriter
+        'Dim s As String
+        'dt.WriteXml(sw, XmlWriteMode.WriteSchema)
+        's = sw.ToString
+        'rs.Fields("QuoteXML").Value = sw
+        'rs.Fields("ModifiedOn").Value = Now
+        'rs.Fields("Modifiedby").Value = ""
+
+        'rs.Update()
+        'rs.Close()
+        'req = "SELECT * "
+        'req = req & "FROM sys_quotes_dt "
+        'req &= " where carrierid = " & _carrierid & " order by quotenumber desc"
+
+        ''20100222 - pab - use global shared connection
+        ''rs.Open(req, cn, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockOptimistic)
+        'rs.Open(req, cnsetting, ADODB.CursorTypeEnum.adOpenDynamic, ADODB.LockTypeEnum.adLockReadOnly)
+
+        'Dim qn As Integer = 0
+        'If Not rs.EOF Then
+        '    qn = rs.Fields("quotenumber").Value
+        'End If
+
+        'recordquotexml = qn
+
+        dt.TableName = "dtflights"
+        recordquotexml = DataAccess.recordquotexml(dt, origairport, DestAirport, quote, outboundreturn, price, PriceExplanation, portal, email, flightdate, provider, ip, _carrierid)
+
+    End Function
+
 
     '20171030 - pab - run optimizer page
     Shared Function sendemailtemplate(targetemail As String, subject As String, b As String, carrierid As Integer)
@@ -228,6 +623,230 @@ again:
             End Try
 
         End If
+
+
+    End Function
+
+    '20131223 - pab - add carrier specific quotes for admin portal
+    Shared Function Create_dtflights() As DataTable
+
+        Dim dtmodel As New DataTable
+
+        '21020511 - pab - dim below overrode dtflights definition for the class
+        'Dim dtflights As New DataTable
+        Dim dc As DataColumn
+
+        dc = New DataColumn("ID", System.Type.GetType("System.Int32"))
+        dc.AutoIncrement = True
+        dc.AutoIncrementSeed = 0
+        dc.AutoIncrementStep = 1
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Service Provider", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Origin", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("OriginFacilityName", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Departs", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Destination", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("DestinationFacilityName", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Arrives", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Flight Duration", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        '20141117 - pab - quoteworker routine rewrite
+        'dc = New DataColumn("Minutes", System.Type.GetType("System.Int32"))
+        dc = New DataColumn("Minutes", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Price", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        ' rk 10/20/2010 add quote editor
+        dc = New DataColumn("PriceEdit", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        '20081218 - pab - add additional fees
+        dc = New DataColumn("PriceExplanationDetail", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("ShowPriceExplanation", System.Type.GetType("System.Boolean"))
+        dtmodel.Columns.Add(dc)
+
+        '20141117 - pab - quoteworker routine rewrite
+        'dc = New DataColumn("EmptyLeg", System.Type.GetType("System.Int32"))
+        dc = New DataColumn("EmptyLeg", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("AircraftType", System.Type.GetType("System.Int32"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("WeightClass", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("dbname", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("aircraftlogo", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Name", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("FAQPageURL", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        ''20111212 - pab - return table for itinerary
+        'dc = New DataColumn("Itinerary", System.Type.GetType("System.String"))
+        'dtmodel.Columns.Add(dc)
+
+        '20120125 - pab - add carrier logo
+        dc = New DataColumn("carrierlogo", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        '20120403 - pab - add fuel stops, pets, smoking
+        dc = New DataColumn("FuelStops", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Pets", System.Type.GetType("System.Boolean"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("Smoking", System.Type.GetType("System.Boolean"))
+        dtmodel.Columns.Add(dc)
+
+        '20120525 - pab - add certifications
+        dc = New DataColumn("certifications", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        '20120619 - pab - add wifi
+        dc = New DataColumn("WiFi", System.Type.GetType("System.Boolean"))
+        dtmodel.Columns.Add(dc)
+
+        '20120709 - pab - add lav, power
+        dc = New DataColumn("EnclosedLav", System.Type.GetType("System.Boolean"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("PowerAvailable", System.Type.GetType("System.Boolean"))
+        dtmodel.Columns.Add(dc)
+
+        '20131118 - pab - add more fields to aircraft
+        dc = New DataColumn("InflightEntertainment", System.Type.GetType("System.Boolean"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("ManufactureDate", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        '20140219 - pab - owner confirmation
+        dc = New DataColumn("OwnerConfirmation", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        '20140620 - pab - quote from admin portal
+        dc = New DataColumn("EmptyLegPricing", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        '20141020 - pab - rewrite quote routine
+        dc = New DataColumn("legcode", System.Type.GetType("System.String"))
+        dtmodel.Columns.Add(dc)
+
+        dc = New DataColumn("quoteID", System.Type.GetType("System.Int32"))
+        dtmodel.Columns.Add(dc)
+
+        ''20130204 - pab - show weight class under aircraft picture
+        'dc = New DataColumn("WeightClassTitle", System.Type.GetType("System.String"))
+        'dtmodel.Columns.Add(dc)
+
+        Return dtmodel
+
+    End Function
+
+    '20100323 - pab - add airport pax fees
+    Shared Function isflightintl(ByVal orig As String, ByVal dest As String) As Boolean
+
+        isflightintl = False
+        If orig = "" Or dest = "" Then Exit Function
+
+        Try
+
+            Dim da As New DataAccess
+            Dim dt_AirportState As DataTable = da.GetAirportStateByLocationID(orig)
+            Dim State As String = ""
+
+            'rk 7.12.2011 handle if no rows returned
+            If dt_AirportState.Rows.Count = 0 Then
+                isflightintl = True
+                Exit Function
+            End If
+
+            If Not IsDBNull(dt_AirportState.Rows(0)("Region")) Then
+                If dt_AirportState.Rows(0)("Region").ToString.ToUpper.Trim = "INTL" Then
+                    isflightintl = True
+                    Exit Function
+                End If
+            End If
+
+            If Not IsDBNull(dt_AirportState.Rows(0)("State")) Then
+                State = dt_AirportState.Rows(0)("State").ToString.ToUpper.Trim
+                Select Case State
+                    Case "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID",
+                            "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC",
+                            "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD",
+                            "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"
+                        isflightintl = False
+
+                    Case Else
+                        isflightintl = True
+                        Exit Function
+                End Select
+            End If
+
+            dt_AirportState = da.GetAirportStateByLocationID(dest)
+
+
+            'rk 7.12.2011 handle if no rows returned
+            If dt_AirportState.Rows.Count = 0 Then
+                isflightintl = True
+                Exit Function
+            End If
+
+
+            If Not IsDBNull(dt_AirportState.Rows(0)("Region")) Then
+                If dt_AirportState.Rows(0)("Region").ToString.ToUpper.Trim = "INTL" Then
+                    isflightintl = True
+                    Exit Function
+                End If
+            End If
+
+            If Not IsDBNull(dt_AirportState.Rows(0)("State")) Then
+                State = dt_AirportState.Rows(0)("State").ToString.ToUpper.Trim
+                Select Case State
+                    Case "AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "HI", "IA", "ID",
+                            "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MS", "MT", "NC",
+                            "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "RI", "SC", "SD",
+                            "TN", "TX", "UT", "VA", "VT", "WA", "WI", "WV", "WY"
+                        isflightintl = False
+
+                    Case Else
+                        isflightintl = True
+                        Exit Function
+                End Select
+            End If
+
+        Catch
+            isflightintl = False
+            Exit Function
+        End Try
 
 
     End Function
@@ -880,6 +1499,32 @@ done:
         timing = timing & Now.Second & ": " & s & vbCr & vbLf & vbCr & vbLf
 
     End Sub
+
+    Shared Function closesttobase(ByVal CarrierID As Integer, ByVal base1 As String, ByVal base2 As String, ByVal airport As String) As String
+
+        Dim b1, b2 As Double
+        Dim oMapping As New Mapping
+
+        b1 = oMapping.GetRoundEarthDistanceBetweenLocations("pbaumgart@ctgi.com", "123", CarrierID, base1, airport)
+        b2 = oMapping.GetRoundEarthDistanceBetweenLocations("pbaumgart@ctgi.com", "123", CarrierID, base2, airport)
+        If b1 < b2 Then
+            closesttobase = base1
+        Else
+            closesttobase = base2
+        End If
+
+    End Function
+
+    '20160225 - pab - quote multi-leg trips
+    Shared Function IsBool(ByVal data As String) As Boolean
+        Dim result As Boolean = True
+        Try
+            Boolean.Parse(data)
+        Catch generatedExceptionName As FormatException
+            result = False
+        End Try
+        Return result
+    End Function
 
     '20120320 - pab - changes for azure
     Shared Function isdtnullorempty(ByRef dt As DataTable) As Boolean

@@ -255,7 +255,8 @@ Public Class loginpage
         End If
 
 
-        Session("IsLoggedIn") = False
+        '20171117 - pab - skip home page and go straight to quoting - do not pass go
+        'Session("IsLoggedIn") = False
         Dim path As String
 
         path = Me.Application.Item("path")

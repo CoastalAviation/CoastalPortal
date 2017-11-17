@@ -95,13 +95,13 @@ Partial Public Class QuoteTrip
     Protected WithEvents LinkLogOut2 As Global.System.Web.UI.WebControls.LinkButton
     
     '''<summary>
-    '''pnlQuotes control.
+    '''pnlQuote control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents pnlQuotes As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents pnlQuote As Global.System.Web.UI.WebControls.Panel
     
     '''<summary>
     '''form_1 control.

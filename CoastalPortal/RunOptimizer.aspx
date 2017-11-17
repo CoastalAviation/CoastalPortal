@@ -351,6 +351,9 @@
                         <br />
                         <asp:CheckBox ID="chkallowupgrades" runat="server" Text=" Allow Upgrades" Font-Names="arial" ToolTip="Allow Upgrades"  Checked="True" />
                         <br />
+                        <br />
+                        <asp:CheckBox ID="chkAssigns" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />
+                        <br />
                     </td>
                 </tr>
                 <tr>
@@ -427,9 +430,6 @@
                             <br />
                             <br />
                             <asp:CheckBox ID="chkproratecostbyday" runat="server" Text=" Pro-rate Costs By Day" Font-Names="arial" ToolTip="Pro-rate Costs By Day"  Checked="false" />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="chkAssigns" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />
                             <br />
                             <br />
                             <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="True" />

@@ -212,6 +212,15 @@ Partial Public Class RunOptimizer
     Protected WithEvents chkallowupgrades As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
+    '''chkAssigns control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkAssigns As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
     '''Label4 control.
     '''</summary>
     '''<remarks>
@@ -327,15 +336,6 @@ Partial Public Class RunOptimizer
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents chkproratecostbyday As Global.System.Web.UI.WebControls.CheckBox
-    
-    '''<summary>
-    '''chkAssigns control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents chkAssigns As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
     '''chkFCDRPublish control.
