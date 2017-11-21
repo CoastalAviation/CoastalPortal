@@ -6,6 +6,10 @@ Public Class ModelDetails
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("fosmodelrunid")) Then Session("fosmodelrunid") = ""
+        Dim modelrunid As String = Session("fosmodelrunid").ToString
+
         Try
 
             If Session("carrierid") Is Nothing Then

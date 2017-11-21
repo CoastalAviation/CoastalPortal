@@ -67,6 +67,10 @@ Public Class ModelDetailPanel
         If IsNothing(Session("carrierid")) Then Exit Sub
         Dim ws As New coastalavtech.service.WebService1
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
+
         calendarcypher = ws.createcypher(Session("defaultemail"))
         calendarcarrierid = Session("carrierid")
         'calendarcypher = "Testcypher"
@@ -188,7 +192,11 @@ Public Class ModelDetailPanel
         Dim databaseFROM As String = "TMCProduction" 'Me.txtDBFrom.Text
 
         '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
         Dim carrierid As Integer = CInt(Session("carrierid"))
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
+        Dim daterangefrom, daterangeto As Date
 
         If cnoptimizer.State = 1 Then cnoptimizer.Close()
         If cnoptimizer.State = 0 Then
@@ -210,6 +218,10 @@ Public Class ModelDetailPanel
 
                 daterangefrom = rs.Fields("gmtstart").Value
                 daterangeto = rs.Fields("gmtend").Value
+
+                '20171121 - pab - fix carriers changing midstream - change to Session variables
+                Session("daterangefrom") = daterangefrom
+                Session("daterangeto") = daterangeto
             End If
 
             If carrierid = JETLINX Then
@@ -460,6 +472,7 @@ Public Class ModelDetailPanel
         Dim desc As Label
 
         '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = Session("carrierid")
 
         Try
@@ -821,6 +834,7 @@ Public Class ModelDetailPanel
         mycolor = Drawing.Color.Aquamarine
 
         '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = Session("carrierid")
 
 
@@ -1289,6 +1303,7 @@ Public Class ModelDetailPanel
         Insertsys_log(Session("carrierid"), appName, "CASFlightsAzure.ascx colorme end Get Pinned " & Now, "", "")
 
         '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = Session("carrierid")
 
 

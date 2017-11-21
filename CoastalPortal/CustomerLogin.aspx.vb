@@ -77,7 +77,8 @@ Public Class loginpage
                 "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; Request - " & Request.Url.ToString, "Page_Load", "CustomerLogin.aspx.vb")
 
             Dim da As New DataAccess
-            companylogo = Replace(da.GetSetting(CInt(Session("carrierid")), "companylogo").ToLower, "images/", "")
+            '20171121 - pab - fix carriers changing midstream - change to Session variables
+            'companylogo = Replace(da.GetSetting(CInt(Session("carrierid")), "companylogo").ToLower, "images/", "")
 
             '20101104 - pab - remove hardcoded value
             Title = da.GetSetting(CInt(Session("carrierid")), "CompanyName") & Title

@@ -26,6 +26,11 @@ Public Class FOSFlightsCalendar
             Exit Sub
         End If
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim modelrunid As String = ""
+        If IsNothing(Session("usedevdb")) Then Session("usedevdb") = False
+        Dim usedevdb As Boolean = CBool(Session("usedevdb"))
+
         If IsNothing(Session("flightplanningdefaultdate")) Then
             'adjust from gmt
             Session("flightplanningdefaultdate") = DateAdd(DateInterval.Hour, -4, Now).ToString("d")
@@ -99,7 +104,7 @@ Public Class FOSFlightsCalendar
 
             '20171107 - pab - show r0
             If br0 = True Then
-                dt = da.GetFOSFlightsBestModels(CInt(Session("carrierid")), True)
+                dt = da.GetFOSFlightsBestModels(CInt(Session("carrierid")), True, usedevdb)
                 If Not isdtnullorempty(dt) Then
                     For i As Integer = 0 To dt.Rows.Count - 1
                         If InStr(dt.Rows(i).Item("modelrunid").ToString, "-R0-") > 0 Then
@@ -244,15 +249,16 @@ Public Class FOSFlightsCalendar
         '        Exit For
         '    End If
         'Next
-        If IsNothing(_CalendarTimeZone) Then
-            _CalendarTimeZone = "GMT"
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("CalendarTimeZone")) Then
+            Session("CalendarTimeZone") = "GMT"
 
             If da.GetSetting(CInt(Session("carrierid")), "CalendarTimeZone") <> "" Then
-                _CalendarTimeZone = da.GetSetting(CInt(Session("carrierid")), "CalendarTimeZone")
+                Session("CalendarTimeZone") = da.GetSetting(CInt(Session("carrierid")), "CalendarTimeZone")
             End If
             '20171027 - pab - calendar
             'ddlStyle.SelectedValue = _CalendarTimeZone
-            rcTimeZone.SelectedValue = _CalendarTimeZone
+            rcTimeZone.SelectedValue = Session("CalendarTimeZone").ToString
         End If
 
     End Sub
@@ -303,6 +309,10 @@ Public Class FOSFlightsCalendar
 
         AirTaxi.post_timing("FOSFlightsCalendar binddata start  " & Now.ToString)
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("usedevdb")) Then Session("usedevdb") = False
+        Dim usedevdb As Boolean = CBool(Session("usedevdb"))
+
         tblFlightPlanningWeekly.Rows.Clear()
 
         '20170312 - pab - use calendar from and to
@@ -349,27 +359,27 @@ Public Class FOSFlightsCalendar
         '20170317 - pab - fix calendar
         If ModelRunID = "" Then
             '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
-            ModelRunID = da.GetFOSFlightsBestModelRunID(CInt(Session("carrierid")))
+            ModelRunID = da.GetFOSFlightsBestModelRunID(CInt(Session("carrierid")), usedevdb)
         End If
 
         '20140416 - pab - add select time zone
         'Dim ds As DataTable = da.GetFOSFlightsCalendarByCarrierIDDate(_carrierid, ModelRunID, startDate)
-        Dim ds As DataTable = da.GetFOSFlightsCalendarByCarrierIDDateOffset(CInt(Session("carrierid")), ModelRunID, startDate, offset)
+        Dim ds As DataTable = da.GetFOSFlightsCalendarByCarrierIDDateOffset(CInt(Session("carrierid")), ModelRunID, startDate, offset, usedevdb)
 
         For i As Integer = 1 To 3
             If Not ds Is Nothing Then
                 If ds.Rows.Count > 0 Then
                     Exit For
                 End If
-                ds = da.GetFOSFlightsCalendarByCarrierIDDateOffset(CInt(Session("carrierid")), ModelRunID, startDate, offset)
+                ds = da.GetFOSFlightsCalendarByCarrierIDDateOffset(CInt(Session("carrierid")), ModelRunID, startDate, offset, usedevdb)
 
             Else
-                ds = da.GetFOSFlightsCalendarByCarrierIDDateOffset(CInt(Session("carrierid")), ModelRunID, startDate, offset)
+                ds = da.GetFOSFlightsCalendarByCarrierIDDateOffset(CInt(Session("carrierid")), ModelRunID, startDate, offset, usedevdb)
 
             End If
         Next
 
-        Dim dtcrew As DataTable = da.GetFOSFlightsCalendarCrewDate(CInt(Session("carrierid")), ModelRunID, startDate)
+        Dim dtcrew As DataTable = da.GetFOSFlightsCalendarCrewDate(CInt(Session("carrierid")), ModelRunID, startDate, usedevdb)
 
         If Not ds Is Nothing Then
             If ds.Rows.Count > 0 Then
@@ -423,7 +433,7 @@ Public Class FOSFlightsCalendar
                         '20170102 - pab - fix calendar
                         '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
                         AddFleetPlanningRowsWeekly(startDate, CDate(endDate.ToString("d")), ds, dtcrew, FOSCalendarDays, timezone, offset,
-                                                   CInt(Session("carrierid")))
+                                                   CInt(Session("carrierid")), False)
 
                     '20140901 = pab - add 5 and 7 day views
                     Case "3 Days", "5", "7", "2", "3", "4", "6"
@@ -467,7 +477,8 @@ Public Class FOSFlightsCalendar
                         '20170102 - pab - fix calendar
                         '20170203 - pab - fix calendar
                         'AddFleetPlanningRowsWeekly(startDate, CDate(endDate.ToString("d")), ds, dtcrew, FOSCalendarDays, timezone, offset)
-                        AddFleetPlanningRowsWeekly(startDate, endDate, ds, dtcrew, FOSCalendarDays, timezone, offset, CInt(Session("carrierid")))
+                        AddFleetPlanningRowsWeekly(startDate, endDate, ds, dtcrew, FOSCalendarDays, timezone, offset,
+                                                   CInt(Session("carrierid")), False)
 
                         ''Dim buttonToolTip As New ToolTip()
                         ''buttonToolTip.ToolTipTitle = "Tooltip"
@@ -520,7 +531,7 @@ Public Class FOSFlightsCalendar
                         endDate = CDate(endDate.ToString("d") & " 23:59")
                         AirTaxi.post_timing("date range  " & startDate & " - " & endDate)
                         AddFleetPlanningRowsWeekly(startDate, CDate(endDate.ToString("d")), ds, dtcrew, FOSCalendarDays, timezone, offset,
-                                                   CInt(Session("carrierid")))
+                                                   CInt(Session("carrierid")), False)
 
                 End Select
 
@@ -634,7 +645,8 @@ Public Class FOSFlightsCalendar
     '20170102 - pab - fix calendar
     '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
     Private Sub AddFleetPlanningRowsWeekly(ByVal startDateRange As DateTime, ByVal endDateRange As DateTime, ByVal dt_planning As DataTable,
-            ByVal dtcrew As DataTable, ByVal FOSCalendarDays As Integer, ByRef timezone As String, ByVal offset As Integer, ByVal _carrierid As Integer)
+            ByVal dtcrew As DataTable, ByVal FOSCalendarDays As Integer, ByRef timezone As String, ByVal offset As Integer,
+            ByVal carrierid As Integer, ByVal CalendarDetailVisible As Boolean)
 
         'FlightID
         'AircraftID
@@ -803,7 +815,7 @@ Public Class FOSFlightsCalendar
                                 '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
                                 tdtext = FormatRowWeekly(startDateRange, endDateRange, "0", 0, "", previousArrivalICAO, previousArrivalTime, previousArrivalICAO,
                                           CDate(endDateRange.ToString("d") & " 11:59PM"), "", previousArrivalICAO, passengers, seatsavailable,
-                                          rownumber, "", FOSCalendarDays, timezone, "", basecode, 0, _carrierid)
+                                          rownumber, "", FOSCalendarDays, timezone, "", basecode, 0, carrierid)
 
                                 '20130710 - pab - FOS calendar
                                 'For i = 1 To td.Length - 1
@@ -975,7 +987,7 @@ Public Class FOSFlightsCalendar
                                 tdtext = FormatRowWeekly(startDateRange, endDateRange, dr2("FlightDetail").ToString.Trim, CInt(dr2("aircraftid")), CStr(dr2("Registration")),
                                     CStr(dr2("departureairport")), CDate(dr2("departuretime")), CStr(dr2("arrivalairport")), CDate(dr2("arrivaltime")),
                                     CStr(dr2("flighttype")), "", passengers, seatsavailable, rownumber, "A", FOSCalendarDays, timezone, dr2("legtypecode").ToString.Trim,
-                                    dr2("basecode").ToString.Trim, CInt(dr2("cost")), _carrierid)
+                                    dr2("basecode").ToString.Trim, CInt(dr2("cost")), carrierid)
                                 For i = 1 To FOSCalendarDays
                                     tdcrew(i).Text &= tdtext(i - 1).ToString
                                 Next
@@ -1000,7 +1012,7 @@ Public Class FOSFlightsCalendar
                         Next
 
                         '20170106 - pab - no crew flagged as m
-                        previousCssClass = GetCssClass("", "", "", _carrierid)
+                        previousCssClass = GetCssClass("", "", "", carrierid)
                         previousFlightType = ""
                         previousDepartureTime = Nothing
                         previousArrivalTime = Nothing
@@ -1322,7 +1334,7 @@ Public Class FOSFlightsCalendar
                                     '20170913 - pab - add cost and leg type code to mouseover
                                     tdtext = FormatRowWeekly(startDateRange, endDateRange, "0", 0, previousRegistration, previousArrivalICAO,
                                           previousArrivalTime, UCase(dr("DepartureICAO").ToString.Trim), startTime, "", previousArrivalICAO,
-                                          passengers, seatsavailable, rownumber, "", FOSCalendarDays, timezone, "", basecode, 0, _carrierid)
+                                          passengers, seatsavailable, rownumber, "", FOSCalendarDays, timezone, "", basecode, 0, carrierid)
                                 Else
                                     '20140416 - pab - add select time zone
                                     '20161227 - pab - fix calendar - wu flight detail not numeric
@@ -1331,7 +1343,7 @@ Public Class FOSFlightsCalendar
                                     '20170913 - pab - add cost and leg type code to mouseover
                                     tdtext = FormatRowWeekly(startDateRange, endDateRange, "0", 0, previousRegistration, UCase(dr("DepartureICAO").ToString.Trim),
                                           previousArrivalTime, UCase(dr("DepartureICAO").ToString.Trim), startTime, "", UCase(dr("DepartureICAO").ToString.Trim),
-                                          passengers, seatsavailable, rownumber, "", FOSCalendarDays, timezone, "", basecode, 0, _carrierid)
+                                          passengers, seatsavailable, rownumber, "", FOSCalendarDays, timezone, "", basecode, 0, carrierid)
                                 End If
 
                                 '20130710 - pab - FOS calendar
@@ -1356,7 +1368,7 @@ Public Class FOSFlightsCalendar
                             tdtext = FormatRowWeeklyText(startDateRange, endDateRange, dr("FlightDetail").ToString.Trim, AircraftID, dr("Registration").ToString,
                                   UCase(dr("DepartureICAO").ToString.Trim), startTime, UCase(dr("ArrivalICAO").ToString.Trim), endTime, dr("FlightType").ToString,
                                   previousArrivalICAO, passengers, CInt(dr("seatsavailable").ToString), rownumber, flightdtl, "", dr("RequesterName").ToString.Trim,
-                                  bFlightInfoOnly, dr("legtypecode").ToString.Trim, _carrierid)
+                                  bFlightInfoOnly, dr("legtypecode").ToString.Trim, carrierid)
                             bFlightInfoOnly = True
                             previousDepartTime = startTime
                         Else
@@ -1373,7 +1385,7 @@ Public Class FOSFlightsCalendar
                                 tdtext = FormatRowWeekly(startDateRange, endDateRange, dr("FlightDetail").ToString.Trim, AircraftID, dr("Registration").ToString,
                                     UCase(dr("DepartureICAO").ToString.Trim), startTime, UCase(dr("ArrivalICAO").ToString.Trim), endTime, dr("FlightType").ToString,
                                     previousArrivalICAO, passengers, CInt(dr("seatsavailable").ToString), rownumber, "", FOSCalendarDays, timezone,
-                                    dr("legtypecode").ToString.Trim, dr("basecode").ToString.Trim, CInt(dr("cost")), _carrierid)
+                                    dr("legtypecode").ToString.Trim, dr("basecode").ToString.Trim, CInt(dr("cost")), carrierid)
                             End If
                         End If
 
@@ -1407,7 +1419,7 @@ Public Class FOSFlightsCalendar
                 previousArrivalAirport = UCase(dr("ArrivalAirport").ToString.Trim)
                 previousArrivalICAO = UCase(dr("ArrivalICAO").ToString.Trim)
                 '20170106 - pab - no crew flagged as m
-                previousCssClass = GetCssClass(dr("FlightType").ToString.Trim.ToUpper, "", dr("legtypecode").ToString.Trim, _carrierid)
+                previousCssClass = GetCssClass(dr("FlightType").ToString.Trim.ToUpper, "", dr("legtypecode").ToString.Trim, carrierid)
                 '20140818 - pab - make text display more like fos
                 'previousflightid = CInt(dr("flightid").ToString.Trim)
                 '20161227 - pab - fix calendar - wu flight detail not numeric
@@ -1443,7 +1455,7 @@ Public Class FOSFlightsCalendar
                         '20170913 - pab - add cost and leg type code to mouseover
                         tdtext = FormatRowWeekly(startDateRange, endDateRange, "0", 0, "", previousArrivalICAO, previousArrivalTime, previousArrivalICAO,
                                   CDate(endDateRange.ToString("d") & " 11:59PM"), "", previousArrivalICAO, passengers, seatsavailable,
-                                  rownumber, "", FOSCalendarDays, timezone, "", basecode, 0, _carrierid)
+                                  rownumber, "", FOSCalendarDays, timezone, "", basecode, 0, carrierid)
 
                         '20130710 - pab - FOS calendar
                         'For i = 1 To td.Length - 1
@@ -1496,7 +1508,7 @@ Public Class FOSFlightsCalendar
 
                 rownumber = rownumber + 1
                 tr.ID = "trw" & rownumber
-                If _CalendarDetailVisible = True Then
+                If CalendarDetailVisible = True Then
                     tr.Style.Add("visibility", "visible")
                 Else
                     tr.Style.Add("visibility", "collapse")
@@ -1641,7 +1653,8 @@ exitsub:
     Private Sub rcTimeZone_SelectedIndexChanged(sender As Object, e As EventArgs) Handles rcTimeZone.SelectedIndexChanged
 
         Session("fosmodelstartfos") = Session("fosmodelstart")
-        BindData(modelrunid)
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        BindData(Session("fosmodelrunid").ToString)
 
     End Sub
 
@@ -1657,7 +1670,8 @@ exitsub:
     Protected Sub rcStyle_SelectedIndexChanged(sender As Object, e As EventArgs) Handles rcStyle.SelectedIndexChanged
 
         Session("CalendarStyle") = rcStyle.SelectedValue
-        BindData(modelrunid)
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        BindData(Session("fosmodelrunid").ToString)
 
     End Sub
 
@@ -1685,7 +1699,8 @@ exitsub:
         Else
             Session("CalendarStyle") = rcStyle.SelectedValue
         End If
-        BindData(modelrunid)
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        BindData(Session("fosmodelrunid").ToString)
 
     End Sub
 
@@ -1720,7 +1735,8 @@ exitsub:
         Else
             Session("fosmodelstartfos") = from_date.SelectedDate
         End If
-        BindData(modelrunid)
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        BindData(Session("fosmodelrunid").ToString)
 
     End Sub
 

@@ -114,7 +114,10 @@ Public Class FlightChangeDetail
         Dim casRecord As CASFlightsOptimizerRecord
 
         '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        If IsNothing(Session("casmodelrunid")) Then Session("casmodelrunid") = ""
         Dim carrierid As Integer = Session("carrierid")
+        Dim casmodelrunid As String = Session("casmodelrunid")
 
         FOSRecords = Session("FOS")
         CASRecords = Session("CAS")
@@ -540,6 +543,7 @@ Public Class FlightChangeDetail
         Dim allColors(colorsArray.Length) As KnownColor
 
         '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = Session("carrierid")
 
         Array.Copy(colorsArray, allColors, colorsArray.Length)
@@ -742,6 +746,7 @@ Public Class FlightChangeDetail
         Dim d, r As Double
 
         '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = Session("carrierid")
 
 
@@ -1185,6 +1190,8 @@ Public Class FlightChangeDetail
     Private Sub FlightChangeDetail_PreLoad(sender As Object, e As EventArgs) Handles Me.PreLoad
 
         '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
         Dim carrierid As Integer = Session("carrierid")
         Dim urlalias As String = Session("urlalias")
 

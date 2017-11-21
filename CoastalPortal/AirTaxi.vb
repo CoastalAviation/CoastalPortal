@@ -73,11 +73,12 @@ Public Class AirTaxi
     Public Shared cnsetting As New ADODB.Connection
 
     'rk 6.7.2010 configure name and logo
-    Public Shared companyname As String
-    Public Shared companylogo As String
-    Public Shared companysplash As String
-    Public Shared companywelcomeleft As String
-    Public Shared companywelcomeright As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    'Public Shared companyname As String
+    'Public Shared companylogo As String
+    'Public Shared companysplash As String
+    'Public Shared companywelcomeleft As String
+    'Public Shared companywelcomeright As String
     Public Shared changecolor_dictionary As New Dictionary(Of String, String)
     Public Shared fstart_dictionary As New Dictionary(Of String, String)
     Public Shared aclookup_dictionary As New Dictionary(Of String, String)
@@ -93,15 +94,16 @@ Public Class AirTaxi
     Public Const WHEELSUP As Integer = 100
     Public Const TMC As Integer = 65
 
-    Public Shared _fosmodelstartfos As Date
-    Public Shared modelrunid As String
-    Public Shared cascalendarmodelid As String
-    Public Shared casmodelrunid As String = ""
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    'Public Shared _fosmodelstartfos As Date
+    'Public Shared modelrunid As String
+    'Public Shared cascalendarmodelid As String
+    'Public Shared casmodelrunid As String = ""
 
-    Public Shared _fosmodelrunid As String
-    Public Shared _fosmodelrunidcas As String
-    Public Shared _fosmodelstart As Date
-    Public Shared _fosmodelend As Date
+    'Public Shared _fosmodelrunid As String
+    'Public Shared _fosmodelrunidcas As String
+    'Public Shared _fosmodelstart As Date
+    'Public Shared _fosmodelend As Date
     Public Shared overridemodel As String
     Public Shared AC1 As String
     Public Shared AC2 As String
@@ -115,38 +117,39 @@ Public Class AirTaxi
 
     '20171027 - pab - calendar
     'Public Shared modelrunid As String
-    Public Shared _CalendarTimeZone As String
-    Public Shared _CalendarDetailVisible As Boolean
-    Public Shared usedevdb As Boolean = False
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    'Public Shared _CalendarTimeZone As String
+    'Public Shared _CalendarDetailVisible As Boolean
+    'Public Shared usedevdb As Boolean = False
 
-    '20171030 - pab - run optimizer page
-    Public Shared testrun As Boolean = False
-    Public Shared usevmdb As Boolean = True
+    ''20171030 - pab - run optimizer page
+    'Public Shared testrun As Boolean = False
+    'Public Shared usevmdb As Boolean = True
 
-    '20171109 - pab - add optimmizer model page
-    Public Shared daterangefrom, daterangeto As String
+    ''20171109 - pab - add optimmizer model page
+    'Public Shared daterangefrom, daterangeto As String
 
-    Public Shared ip As String
-    Public Shared distance_text As String = ""
+    'Public Shared ip As String
+    'Public Shared distance_text As String = ""
 
-    Public Shared _waittime As Decimal
-    Public Shared _landingfees As Decimal
-    Public Shared _taxes As Decimal
-    Public Shared _internationalfees As Decimal
-    Public Shared _fuelsurcharges As Decimal
-    Public Shared _crewovernight As Decimal
-    Public Shared _aircraftname As String
-    Public Shared _aircraftlogo As String
-    Public Shared _totalprice As Decimal
+    'Public Shared _waittime As Decimal
+    'Public Shared _landingfees As Decimal
+    'Public Shared _taxes As Decimal
+    'Public Shared _internationalfees As Decimal
+    'Public Shared _fuelsurcharges As Decimal
+    'Public Shared _crewovernight As Decimal
+    'Public Shared _aircraftname As String
+    'Public Shared _aircraftlogo As String
+    'Public Shared _totalprice As Decimal
 
-    'rk 10302010 add taxes to quote editor
-    Public Shared _segmentfee As Decimal
+    ''rk 10302010 add taxes to quote editor
+    'Public Shared _segmentfee As Decimal
 
-    '20101027 - pab - add return to base bucket
-    Public Shared _rtbcost As Decimal
+    ''20101027 - pab - add return to base bucket
+    'Public Shared _rtbcost As Decimal
 
-    '20110214 - pab - more calendar changes
-    Public Shared _CalendarCombinedView As Boolean
+    ''20110214 - pab - more calendar changes
+    'Public Shared _CalendarCombinedView As Boolean
 
     '20160726 - pab - add redis session state - fix serializable error
     <Serializable()> Partial Public Class LatLong
@@ -239,7 +242,7 @@ Public Class AirTaxi
     '20171030 - pab - run optimizer page
     '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
     Public Shared Function postToServiceBusQueue(ByVal queid As String, ByVal message As String, minutesdelay As Integer,
-                                                 ByVal carrierid As Integer) As String
+                                                 ByVal carrierid As Integer, ByVal testrun As Boolean) As String
 
         Dim tf As String
         tf = Trim(UCase(ConnectionStringHelper.ts))
@@ -269,7 +272,7 @@ again:
                     DataAccess.Insert_sys_log(carrierid, "Error PostToServiceBusQueue 20 retries " & postToServiceBusQueue,
                         Trim(queid) & Trim(UCase(ConnectionStringHelper.testflag)) & " " & Now, "PostToServiceBusQueue cds", "Post")
                     sendemailtemplate("5612397068@txt.att.net", "unable to post after 20 retries", "queid " & queid & "msg " &
-                        message, carrierid)
+                        message, carrierid, testrun)
 
                 End If
 
@@ -579,7 +582,9 @@ again:
 
 
     '20171030 - pab - run optimizer page
-    Shared Function sendemailtemplate(targetemail As String, subject As String, b As String, carrierid As Integer)
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Shared Function sendemailtemplate(targetemail As String, subject As String, b As String, carrierid As Integer,
+                                      Optional ByVal testrun As Boolean = False)
 
 
         b = Replace(b, "...", "</br>")
@@ -624,7 +629,7 @@ again:
 
             Try
                 ' Dim ws As New coastalavtech.service.WebService1
-                Dim ws As New aws.WebService1
+                Dim ws As New AWS.WebService1
                 ws.SendEmail("pbaumgart@ctgi.com", "123", carrierid, targetemail, "",
                        "optimizer@coastalaviationsoftware.com", subject, body, True, "", carrierlogo, True, "")
             Catch ex As Exception

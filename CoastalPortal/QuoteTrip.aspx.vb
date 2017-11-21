@@ -1893,6 +1893,10 @@ Public Class QuoteTrip
         '20111229 - pab
         AirTaxi.post_timing("Page_Load Start  " & Now.ToString)
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim ip As String = ""
+        Dim internationalfees As Double = 0
+
         Try
 
             '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
@@ -2035,12 +2039,13 @@ Public Class QuoteTrip
                 End If
 
                 'rk 6.7.2010 load company branding
-                companyname = da.GetSetting(CInt(Session("carrierid")), "companyname")
-                '20150119 - pab - use blob storage for carrier logos and aircraft images instead of sql
-                'companylogo = da.GetSetting(_carrierid, "companylogo")
-                companysplash = da.GetSetting(CInt(Session("carrierid")), "companysplash")
-                companywelcomeleft = da.GetSetting(CInt(Session("carrierid")), "companywelcomeleft")
-                companywelcomeright = da.GetSetting(CInt(Session("carrierid")), "companywelcomeright")
+                '20171121 - pab - fix carriers changing midstream - change to Session variables
+                'companyname = da.GetSetting(CInt(Session("carrierid")), "companyname")
+                ''20150119 - pab - use blob storage for carrier logos and aircraft images instead of sql
+                ''companylogo = da.GetSetting(_carrierid, "companylogo")
+                'companysplash = da.GetSetting(CInt(Session("carrierid")), "companysplash")
+                'companywelcomeleft = da.GetSetting(CInt(Session("carrierid")), "companywelcomeleft")
+                'companywelcomeright = da.GetSetting(CInt(Session("carrierid")), "companywelcomeright")
 
                 '20140220 - pab - cleanup code
                 'lblwelcome.Text = companyname
@@ -2106,6 +2111,7 @@ Public Class QuoteTrip
                 End If
 
                 ip = Request.UserHostAddress
+                Session("ip") = ip
                 '20140414 - pab - add acg indicator for logging and tracking
                 '20150317 - pab - remove acg branding
                 'If _acg <> "" Then ip &= "/?acg=" & _acg
@@ -2923,7 +2929,7 @@ Public Class QuoteTrip
                     AirTaxi.post_timing("fees at dest  " & Now.ToString)
                     '20100323 - pab - add airport pax fees
                     'Dim x As String = feesatairport(_destAirportCode)
-                    Dim x As String = feesatairport(_destAirportCode, True, bIntl, CInt(Session("carrierid")))
+                    Dim x As String = feesatairport(_destAirportCode, True, bIntl, CInt(Session("carrierid")), internationalfees)
                     AirTaxi.post_timing("fees at dest complete " & Now.ToString)
                     If _pricefees > 100 Then
                         Me.lblMsg.Text = "Please Note!  Landing Fees at " & _destAirportCode & " are $" & _pricefees & " and may have long delays - consider another airport on price and time" & vbCr & vbLf
@@ -2940,7 +2946,7 @@ Public Class QuoteTrip
                     AirTaxi.post_timing("fees at orig  " & Now.ToString)
                     '20100323 - pab - add airport pax fees
                     'Dim x As String = feesatairport(_origAirportCode)
-                    Dim x As String = feesatairport(_origAirportCode, False, bIntl, CInt(Session("carrierid")))
+                    Dim x As String = feesatairport(_origAirportCode, False, bIntl, CInt(Session("carrierid")), internationalfees)
                     AirTaxi.post_timing("fees at orig complete  " & Now.ToString)
                     If _pricefees > 100 Then
                         'chg3612 - 20100915 - pab - fix fees message
@@ -3114,6 +3120,8 @@ Public Class QuoteTrip
 
             Dim ma As Integer ', d As Double, t As Double
 
+            '20171121 - pab - fix carriers changing midstream - change to Session variables
+            Dim distance_text As String = ""
 
             '20160521 - pab - fix error - no row at position 0
             If Not isdtnullorempty(dt_priceTable) Then
@@ -4721,6 +4729,10 @@ Public Class QuoteTrip
         '    End If
         '    i = i - 1
         'Loop
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If Not IsNothing("ip") Then Session("ip") = ""
+        Dim ip As String = Session("ip").ToString
 
         '20101214 - pab - fix error when dtflights has no rows
         If dtflights.Rows.Count = 0 Then
@@ -9076,7 +9088,8 @@ Public Class QuoteTrip
 
     '20100323 - pab - add dest airport pax fees
     'Function feesatairport(ByVal airport As String) As String
-    Function feesatairport(ByVal airport As String, ByVal bdest As Boolean, ByVal bintl As Boolean, ByVal carrierid As Integer) As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Function feesatairport(ByVal airport As String, ByVal bdest As Boolean, ByVal bintl As Boolean, ByVal carrierid As Integer, ByVal internationalfees As Double) As String
 
         If airport = "" Then
 
@@ -9155,13 +9168,13 @@ Public Class QuoteTrip
             pedetail = pedetail & "Custom Fees " & airportname & " are " & Math.Round(customsfee, 2) & vbCr & vbLf
             pedetail = pedetail & vbCr & vbLf
             '   _pricefees = _pricefees + customsfee
-            _internationalfees = _internationalfees + customsfee
+            internationalfees = internationalfees + customsfee
 
             'rlk 11/4/2010 add security fee on destination to destination bucket
             pedetail = pedetail & "Security Fees " & airportname & " are " & Math.Round(SecurityFee, 2) & vbCr & vbLf
             pedetail = pedetail & vbCr & vbLf
             '   _pricefees = _pricefees + customsfee
-            _internationalfees = _internationalfees + SecurityFee
+            internationalfees = internationalfees + SecurityFee
 
             '20101102 - pab - finx intl fees
             _customs = customsfee
@@ -9229,7 +9242,7 @@ Public Class QuoteTrip
 
             '20101109 - pab - SegmentFeeIntl is per pax
             '_internationalfees = _internationalfees + SegmentFeeIntl
-            _internationalfees = _internationalfees + (SegmentFeeIntl * _passengers)
+            internationalfees = internationalfees + (SegmentFeeIntl * _passengers)
 
             '20101102 - pab - finx intl fees
             '20101109 - pab - SegmentFeeIntl is per pax

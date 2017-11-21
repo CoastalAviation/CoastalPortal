@@ -359,6 +359,10 @@ Public Class ModelRunHistory
 
         Exit Sub
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("fosmodelrunid")) Then Session("fosmodelrunid") = ""
+        Dim modelrunid As String = Session("fosmodelrunid").ToString
+
         Try
 
             Dim s As String

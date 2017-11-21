@@ -462,7 +462,7 @@ Public Class RunOptimizer
             If Not rs.EOF Then
                 runid = rs.Fields("id").Value
                 '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
-                postToServiceBusQueue("OPTREQUEST", "OPTIMIZERREQUEST[" & runid & "]", 0, CInt(Session("carrierid")))
+                postToServiceBusQueue("OPTREQUEST", "OPTIMIZERREQUEST[" & runid & "]", 0, CInt(Session("carrierid")), False)
             End If
 
             If runid <> 0 And Session("carrierid") <> 0 Then

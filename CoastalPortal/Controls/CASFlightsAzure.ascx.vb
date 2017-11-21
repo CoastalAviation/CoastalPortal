@@ -1052,9 +1052,13 @@ acskip:
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        Session("carrierid") = Session("carrierid")
+        'Session("carrierid") = Session("carrierid")
 
         If IsNothing(Session("carrierid")) Then Exit Sub
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
 
         Dim ws As New coastalavtech.service.WebService1
 
@@ -1354,6 +1358,11 @@ acskip:
         If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = CInt(Session("carrierid"))
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
+        Dim daterangefrom, daterangeto As Date
+
         If cnoptimizer.State = 1 Then cnoptimizer.Close()
         If cnoptimizer.State = 0 Then
             cnoptimizer.ConnectionString = ConnectionStringHelper.ReadOnlyDriverConnectionString
@@ -1374,6 +1383,10 @@ acskip:
 
                 daterangefrom = rs.Fields("gmtstart").Value
                 daterangeto = rs.Fields("gmtend").Value
+
+                '20171121 - pab - fix carriers changing midstream - change to Session variables
+                Session("daterangefrom") = daterangefrom
+                Session("daterangefrom") = daterangeto
             End If
 
             If carrierid = JETLINX Then
@@ -1609,6 +1622,11 @@ acskip:
     End Sub
 
     Protected Sub AcceptAll_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles radbtnAcceptAll.Click
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
+
         If cascalendarmodelid <> "" Then
             Session("AcceptModelID") = cascalendarmodelid
         End If
@@ -2671,6 +2689,11 @@ done:
 
 
     Protected Sub cmdRecovery_Click(sender As Object, e As EventArgs) Handles cmdRecovery.Click
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
+
         Response.Redirect("panel.aspx?modelrunid=" & normalizemodelrunid(cascalendarmodelid))
     End Sub
 
@@ -2713,6 +2736,12 @@ done:
         Dim rs As New ADODB.Recordset
         Dim req As String
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim daterangefrom, daterangeto As Date
+        If IsNothing(Session("daterangefrom")) Then Session("daterangefrom") = daterangefrom
+        If IsNothing(Session("daterangeto")) Then Session("daterangeto") = daterangeto
+        daterangefrom = Session("daterangefrom")
+        daterangeto = Session("daterangeto")
 
         If cn.State = 1 Then cn.Close()
         If cn.State = 0 Then
@@ -2909,11 +2938,16 @@ done:
 
         ' req = "select * FROM [OptimizerWest].[dbo].[CASFlightsOptimizer] where [OptimizerRun] = '8527-5/27/2015-R16-33C-4' and (aircraftregistration = 'N506UP' or aircraftregistration = 'N805UP')"
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim daterangeto As Date
 
         Dim dfrom As String
 
         dfrom = DateAdd(DateInterval.Day, 1, CDate(Now))
         daterangeto = DateAdd(DateInterval.Day, 6, CDate(Now))
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Session("daterangeto") = daterangeto
 
         req = Replace(req, "2015-10-08", dfrom)
         req = Replace(req, "2015-10-11", daterangeto)
@@ -3280,7 +3314,15 @@ done:
     Protected Sub cmdSlideReport_Click(sender As Object, e As EventArgs) Handles cmdSlideReport.Click
         '   sendemailtemplate("dhackett@coastalavtech.com,rkane@coastalavtech.com", " PrePosition Report " & modelrunid, cmdSlideReport.ToolTip, 100)
 
-        sendemailtemplate("dhacket@coastalavtech.com,bill.pickel@gamaaviation.com,mitchell.papontos@gamaaviation.com,jason.oakland@gamaaviation.com,Joshua.Stevens@gamaaviation.com,Valerie.Marma@gamaaviation.com,Anthony.McCoy@gamaaviation.com,Natalie.Caruso@gamaaviation.com,Jason.Baxter@gamaaviation.com,Robert.Petovello@gamaaviation.com,Steven.Saviour@gamaaviation.com", " PrePosition Report " & lblmodelid.Text, cmdSlideReport.ToolTip, 100)
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If Not IsNothing(Session("carrierid")) Then
+            Select Case CInt(Session("carrierid"))
+                Case WHEELSUP
+                    sendemailtemplate("dhacket@coastalavtech.com,bill.pickel@gamaaviation.com,mitchell.papontos@gamaaviation.com,jason.oakland@gamaaviation.com,Joshua.Stevens@gamaaviation.com,Valerie.Marma@gamaaviation.com,Anthony.McCoy@gamaaviation.com,Natalie.Caruso@gamaaviation.com,Jason.Baxter@gamaaviation.com,Robert.Petovello@gamaaviation.com,Steven.Saviour@gamaaviation.com", " PrePosition Report " & lblmodelid.Text, cmdSlideReport.ToolTip, 100)
+                Case Else
+                    sendemailtemplate("dhacket@coastalavtech.com", " PrePosition Report " & lblmodelid.Text, cmdSlideReport.ToolTip, 100)
+            End Select
+        End If
 
 
     End Sub

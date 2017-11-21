@@ -6,7 +6,8 @@ Public Class ConnectionStringHelper
     Public Shared testflag As String = ""
 
     '20171109 - pab - add optimmizer model page
-    Public Shared Function GetCASConnectionStringSQL() As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Shared Function GetCASConnectionStringSQL(Optional ByVal testrun As Boolean = False) As String
 
         If Not testrun Then
             Return getglobalconnectionstring("OptimizerDriver")
@@ -42,7 +43,8 @@ Public Class ConnectionStringHelper
     End Function
 
     '20171109 - pab - add optimmizer model page
-    Public Shared Function GetD2DConnectionString() As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Shared Function GetD2DConnectionString(Optional ByVal testrun As Boolean = False) As String
 
         'Return "Data Source=(local);Initial Catalog=SuperPortalV3;Persist Security Info=True;User ID=sa;Password=CoastalPass1"
         If Not testrun Then
@@ -55,7 +57,8 @@ Public Class ConnectionStringHelper
     End Function
 
     '20171109 - pab - add optimmizer model page
-    Public Shared Function GetConnectionStringsql() As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Shared Function GetConnectionStringsql(Optional ByVal testrun As Boolean = False) As String
 
         If Not testrun Then
 
@@ -72,7 +75,8 @@ Public Class ConnectionStringHelper
     End Function
 
     '20171031 - pab - model run history
-    Public Shared Function GetMKConnectionStringsql() As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Shared Function GetMKConnectionStringsql(Optional ByVal testrun As Boolean = False) As String
 
         If Not testrun Then
 
@@ -90,7 +94,8 @@ Public Class ConnectionStringHelper
     End Function
 
     '20171031 - pab - model run history
-    Public Shared Function GetsqladapterSQLVMConnectionString() As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Shared Function GetsqladapterSQLVMConnectionString(Optional ByVal testrun As Boolean = False) As String
 
 
         If Not testrun Then
@@ -108,7 +113,8 @@ Public Class ConnectionStringHelper
     End Function
 
     '20171031 - pab - model run history
-    Public Shared Function GetsqladapterWestConnectionString() As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Shared Function GetsqladapterWestConnectionString(Optional ByVal testrun As Boolean = False) As String
 
         If Not testrun Then
 
@@ -127,7 +133,8 @@ Public Class ConnectionStringHelper
     End Function
 
     '20171030 - pab - run optimizer page
-    Public Shared Function GetConnectionStringSQLMKAzure() As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Shared Function GetConnectionStringSQLMKAzure(Optional ByVal testrun As Boolean = False) As String
 
         If Not testrun Then
 
@@ -142,7 +149,8 @@ Public Class ConnectionStringHelper
 
     End Function
 
-    Public Shared Function GetConnectionStringSGServer() As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Shared Function GetConnectionStringSGServer(Optional ByVal testrun As Boolean = False) As String
 
         If Not testrun Then
             If usevmdb Then Return getglobalconnectionstring("OptimizerServer" & ts)
