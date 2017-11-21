@@ -113,6 +113,9 @@ Public Class FlightChangeDetail
         Dim mrcustom As String
         Dim casRecord As CASFlightsOptimizerRecord
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = Session("carrierid")
+
         FOSRecords = Session("FOS")
         CASRecords = Session("CAS")
         carrierprofile = Session("Profile")
@@ -171,7 +174,7 @@ Public Class FlightChangeDetail
 
                 Dim today = DateAdd("d", -2, DateTime.Now)
 
-                fcdrlist = db.FCDRList.Where(Function(c) c.CarrierID = _carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.TotalSavings).ToList()
+                fcdrlist = db.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.TotalSavings).ToList()
                 mrid = fcdrlist.Where(Function(b) b.ModelRun = fcdrlist.Max(Function(c) c.ModelRun)).Select(Function(c) c.ModelRunID).FirstOrDefault()
             End If
             Dim i As Integer = 1
@@ -536,6 +539,9 @@ Public Class FlightChangeDetail
         [Enum].GetValues(GetType(KnownColor))
         Dim allColors(colorsArray.Length) As KnownColor
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = Session("carrierid")
+
         Array.Copy(colorsArray, allColors, colorsArray.Length)
 
         '   _carrierid = Session("carrierid")
@@ -545,7 +551,7 @@ Public Class FlightChangeDetail
         rownumber = 0
         For i = 0 To gridviewtrips.Rows.Count - 1
             If gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "" Then
-                gridviewtrips.Rows(i).Cells(FOS_AC).ToolTip = AirTaxi.lookupac(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text))
+                gridviewtrips.Rows(i).Cells(FOS_AC).ToolTip = AirTaxi.lookupac(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text), carrierid)
             End If
             rownumber += 1
             If IsNumeric(gridviewtrips.Rows(i).Cells(FOS_COST).Text) Then
@@ -735,6 +741,9 @@ Public Class FlightChangeDetail
 
         Dim d, r As Double
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = Session("carrierid")
+
 
         Dim i As Integer
         For i = 0 To gridviewtrips.Rows.Count - 1
@@ -910,7 +919,7 @@ Public Class FlightChangeDetail
 
             'added plane lookup info back in rk 7.20.17
             If gridviewtrips.Rows(i).Cells(CAS_AC).Text <> "" Then
-                gridviewtrips.Rows(i).Cells(CAS_AC).ToolTip = AirTaxi.lookupac(gridviewtrips.Rows(i).Cells(CAS_AC).Text)
+                gridviewtrips.Rows(i).Cells(CAS_AC).ToolTip = AirTaxi.lookupac(gridviewtrips.Rows(i).Cells(CAS_AC).Text, carrierid)
             End If
         Next i
 
@@ -1175,6 +1184,10 @@ Public Class FlightChangeDetail
 
     Private Sub FlightChangeDetail_PreLoad(sender As Object, e As EventArgs) Handles Me.PreLoad
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = Session("carrierid")
+        Dim urlalias As String = Session("urlalias")
+
         Try
 
             Dim da As New DataAccess
@@ -1182,14 +1195,14 @@ Public Class FlightChangeDetail
             If Not IsPostBack Then
                 '20171101 - pab - display cleanup
                 'Me.lblCarrier.Text = _urlalias.ToUpper
-                Dim slogotext As String = da.GetSetting(_carrierid, "CompanyLogoText")
-                If slogotext = "" Then slogotext = _urlalias & " Flight Schedule Optimization System"
+                Dim slogotext As String = da.GetSetting(carrierid, "CompanyLogoText")
+                If slogotext = "" Then slogotext = urlalias & " Flight Schedule Optimization System"
                 Me.lblCarrier.Text = slogotext.ToUpper
 
-                Me.imglogo.Src = GetImageURLByATSSID(_carrierid, 0, "logo")
+                Me.imglogo.Src = GetImageURLByATSSID(carrierid, 0, "logo")
 
                 '20171017 - pab - demoair branding
-                If _carrierid = 48 Then
+                If carrierid = 48 Then
                     imglogo.Width = 56
                     imglogo.Style.Remove("position")
                     imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
@@ -1204,9 +1217,9 @@ Public Class FlightChangeDetail
             If Not IsNothing(ex.StackTrace) Then
                 s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             End If
-            AirTaxi.Insertsys_log(_carrierid, appName, Left(Now & " " & s, 500), "FlightChangeDetail.aspx.vb Page_PreRender", "")
-            SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
-                      appName & " FlightChangeDetail.aspx.vb Page_PreRender error", s, _carrierid)
+            AirTaxi.Insertsys_log(carrierid, appName, s, "FlightChangeDetail.aspx.vb Page_PreRender", "")
+            SendEmail("chartersales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "",
+                      appName & " FlightChangeDetail.aspx.vb Page_PreRender error", s, carrierid)
 
         End Try
 

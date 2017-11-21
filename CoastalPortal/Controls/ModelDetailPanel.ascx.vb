@@ -127,6 +127,9 @@ Public Class ModelDetailPanel
         Dim HAList As New List(Of String)
         Dim mrcustom As String = normalizemodelrunid(modelrunid)
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = CInt(Session("carrierid"))
+
         FosList = db.FOSFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrcustom).OrderBy(Function(y) y.AC).ThenBy(Function(y) y.DepartureDateGMT).ToList()
         CasList = db.CASFlightsOptimizer.Where(Function(x) x.OptimizerRun = modelrunid).OrderBy(Function(y) y.AircraftRegistration).ThenBy(Function(y) y.DepartureTime).ToList()
         Session("FOS") = FosList
@@ -147,8 +150,8 @@ Public Class ModelDetailPanel
                 Panellist.Add(i)
             End If
         Next
-        If _carrierid <> JETLINX Then
-            If _carrierid = WHEELSUP Then
+        If carrierid <> JETLINX Then
+            If carrierid = WHEELSUP Then
                 ACList = (From a In Panellist Select a.ACType).Distinct().ToList()
                 GridViewSource = (From x In ACList Select New PanelDisplay With {.AircraftType = x, .PanelRecord = (From y In Panellist Where y.ACType = x Select y).OrderBy(Function(r) r.TailNumber).ThenBy(Function(r) r.DateTimeGMT).ToList()}).ToList()
                 For Each x As PanelDisplay In GridViewSource
@@ -184,7 +187,8 @@ Public Class ModelDetailPanel
         Dim req As String
         Dim databaseFROM As String = "TMCProduction" 'Me.txtDBFrom.Text
 
-        _carrierid = Session("carrierid")
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = CInt(Session("carrierid"))
 
         If cnoptimizer.State = 1 Then cnoptimizer.Close()
         If cnoptimizer.State = 0 Then
@@ -208,14 +212,14 @@ Public Class ModelDetailPanel
                 daterangeto = rs.Fields("gmtend").Value
             End If
 
-            If _carrierid = JETLINX Then
+            If carrierid = JETLINX Then
 
                 req = "SELECT top 1 * FROM [OptimizerLog]  where casrevenuemiles <> 0   and  customrunnumber = '8183'   and CASrevenueexpense <> 0 and carrierid = abc order by CAStotalrevenueexpense  "
                 req = Replace(req, "8183", customid)
                 req = Replace(req, "abc", Session("carrierid"))
                 'rk 10.20.2012 grab the lowest of the two models
 
-            ElseIf _carrierid = WHEELSUP Then
+            ElseIf carrierid = WHEELSUP Then
 
                 req = "SELECT top 1 * FROM [OptimizerLog]  where casrevenuemiles <> 0 and  left (modelrunid, 4) = '8183' and caslinebreaks <= (foslinebreaks + 7)  and  modelrunid not like '%Q-%' and ModelRunID not like '%R11%' and ModelRunID not like '%R12%'   and ModelRunID not like '%R0%'  and CASrevenueexpense <> 0 and carrierid = abc and FOSrevenuelegs - 25 <= CASrevenuelegs order by CAStotalrevenueexpense asc"
                 req = Replace(req, "8183", customid)
@@ -258,8 +262,8 @@ Public Class ModelDetailPanel
         s = Replace(s, "abc", modelrunid)
         s = Replace(s, "ghi", Session("carrierid"))
 
-        If _carrierid <> JETLINX Then
-            If _carrierid = WHEELSUP Then
+        If carrierid <> JETLINX Then
+            If carrierid = WHEELSUP Then
                 s = s & "order by ac, [FROM GMT] asc  "
             Else
                 s = s & "  order by base, [type], ac, [FROM GMT] asc  "
@@ -279,8 +283,8 @@ Public Class ModelDetailPanel
                 s = Replace(s, "abc", modelrunid)
                 s = Replace(s, "ghi", Session("carrierid"))
 
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & "order by AircraftRegistration, departuretime asc  "
                     Else
                         s = s & " order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -304,8 +308,8 @@ Public Class ModelDetailPanel
                 s = Replace(s, "def", DropDownTripNumbers.SelectedItem.Value)
                 s = Replace(s, "ghi", Session("carrierid"))
 
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & " order by tripnumber, departuretime asc "
                     Else
                         s = s & " order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -330,8 +334,8 @@ Public Class ModelDetailPanel
                 s = Replace(s, "abc", modelrunid)
                 s = Replace(s, "ghi", Session("carrierid"))
 
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & "order by AircraftRegistration, departuretime asc  "
                     Else
                         s = s & "  order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -353,8 +357,8 @@ Public Class ModelDetailPanel
                 s = Replace(s, "abc", modelrunid)
                 s = Replace(s, "ghi", Session("carrierid"))
 
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & "order by AircraftRegistration, departuretime asc  "
                     Else
                         s = s & "  order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -378,8 +382,8 @@ Public Class ModelDetailPanel
                 s = Replace(s, "ghi", Session("carrierid"))
 
                 s = Replace(s, "where aircrafttype = 'H80X'", "where (AircraftType = 'H80H' or AircraftType = 'H850')")
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & "order by AircraftRegistration, departuretime asc  "
                     Else
                         s = s & "  order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -413,8 +417,8 @@ Public Class ModelDetailPanel
             s = Replace(s, "abc", modelrunid)
             s = Replace(s, "ghi", Session("carrierid"))
 
-            If _carrierid <> JETLINX Then
-                If _carrierid = WHEELSUP Then
+            If carrierid <> JETLINX Then
+                If carrierid = WHEELSUP Then
                     s = s & "order by AircraftRegistration, departuretime asc  "
                 Else
                     s = s & "  order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -454,7 +458,9 @@ Public Class ModelDetailPanel
 
         Dim tst As Label
         Dim desc As Label
-        _carrierid = Session("carrierid")
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = Session("carrierid")
 
         Try
             If overridemodel = "" Then
@@ -495,13 +501,13 @@ Public Class ModelDetailPanel
             End If
 
             'rk 7.30.14 replace default model
-            If _carrierid = WHEELSUP Then
+            If carrierid = WHEELSUP Then
                 req = "SELECT top 1 [ModelRunID], [DeltaExpense], [DeltaNRM], [CASlinebreaks], [CASefficiency], [FOSlinebreaks], [FOSefficiency], deltaexpense1, deltaexpense2, deltaexpense3, deltaexpense4, Viewed  ,[EffCAS1],  [EffCAS2]  ,[EffCAS3]  ,[EffCAS4] ,[Efffos1],  [Efffos2]  ,[Efffos3]  ,[Efffos4]  FROM [OptimizerLog]  where casrevenuemiles <> 0 and  left (modelrunid, 3) = '347' and caslinebreaks <= (foslinebreaks + 7)  and ModelRunID not like '%R11%' and ModelRunID not like '%R12%'    and ModelRunID not like '%R0%'  and CASrevenueexpense <> 0 and FOSrevenuelegs - 25 <= CASrevenuelegs and carrierid = abc order by CAStotalrevenueexpense asc"
                 req = Replace(req, "347", customid)
                 req = Replace(req, "(modelrunid, 3)", "(modelrunid, " & Len(customid) & ")")
                 req = Replace(req, "abc", Session("carrierid"))
 
-            ElseIf _carrierid <> JETLINX Then
+            ElseIf carrierid <> JETLINX Then
                 req = "SELECT top 1 [ModelRunID], [DeltaExpense], [DeltaNRM], [CASlinebreaks], [CASefficiency], [FOSlinebreaks], [FOSefficiency], deltaexpense1, deltaexpense2, deltaexpense3, deltaexpense4, Viewed  ,[EffCAS1],  [EffCAS2]  ,[EffCAS3]  ,[EffCAS4] ,[Efffos1],  [Efffos2]  ,[Efffos3]  ,[Efffos4]  FROM [OptimizerLog]  where casrevenuemiles <> 0 and  customrunnumber = '347'    and  modelrunid not like '%Q-%'   and carrierid = abc  order by deltaexpense desc"
                 req = Replace(req, "347", customid)
                 req = Replace(req, "abc", Session("carrierid"))
@@ -559,9 +565,9 @@ Public Class ModelDetailPanel
                     "  ,ltrim(rtrim([AC])) as [AC]       ,ltrim(rtrim([AircraftType])) as [Type]  , ltrim(rtrim([dhcost])) as cost, ltrim(rtrim([DeadHead])) as [DeadHead], ltrim(rtrim(tripnumber)) as tripnumber " &
                     " ,ltrim(rtrim([legratecode])) as [LRC] ,ltrim(rtrim([legpurposecode])) as [LPC] ,ltrim(rtrim([legtypecode])) as [LTC] , ltrim(rtrim([PIC])) as [PIC], ltrim(rtrim([SIC])) as [SIC]      ,  [tripcost]  ,[triprevenue], [pandl]         FROM [FOSFlightsOptimizer]  where ac = 'def' and  OptimizerRun = 'abc'  and legstate <> '5'   and carrierid = 'ghi' "
                 s = Replace(s, "def", DropDownNNumbers.SelectedItem.Value)
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & "  order by   aircrafttype, AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & " order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -579,9 +585,9 @@ Public Class ModelDetailPanel
                     "   ,ltrim(rtrim([AC])) as [AC]       ,ltrim(rtrim([AircraftType])) as [Type]  , ltrim(rtrim([dhcost])) as cost, ltrim(rtrim([DeadHead])) as [DeadHead], ltrim(rtrim(tripnumber)) as tripnumber " &
                     "  ,ltrim(rtrim([legratecode])) as [LRC] ,ltrim(rtrim([legpurposecode])) as [LPC] ,ltrim(rtrim([legtypecode])) as [LTC] , ltrim(rtrim([PIC])) as [PIC], ltrim(rtrim([SIC])) as [SIC]      ,  [tripcost]  ,[triprevenue], [pandl]       FROM [FOSFlightsOptimizer]  where tripnumber = 'def' and  OptimizerRun = 'abc'  and legstate <> '5'    and carrierid = 'ghi' "
                 s = Replace(s, "def", DropDownTripNumbers.SelectedItem.Value)
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & "  order by   aircrafttype, AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & "order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -599,9 +605,9 @@ Public Class ModelDetailPanel
                     "    ,ltrim(rtrim([AC])) as [AC]       ,ltrim(rtrim([AircraftType])) as [Type]  , ltrim(rtrim([dhcost])) as cost, ltrim(rtrim([DeadHead])) as [DeadHead], ltrim(rtrim(tripnumber)) as tripnumber " &
                     "  ,ltrim(rtrim([legratecode])) as [LRC] ,ltrim(rtrim([legpurposecode])) as [LPC] ,ltrim(rtrim([legtypecode])) as [LTC],  ltrim(rtrim([PIC])) as [PIC], ltrim(rtrim([SIC])) as [SIC]     ,  [tripcost]  ,[triprevenue], [pandl]       FROM [FOSFlightsOptimizer]  where DepartureAirporticao = 'def' and  OptimizerRun = 'abc'  and legstate <> '5'     and carrierid = 'ghi' "
                 s = Replace(s, "def", DropDownOriginAirports.SelectedItem.Value)
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & " order by  ltrim(rtrim([AircraftType])),  AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & "order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -619,9 +625,9 @@ Public Class ModelDetailPanel
                     "   ,ltrim(rtrim([AC])) as [AC]       ,ltrim(rtrim([AircraftType])) as [Type]  , ltrim(rtrim([dhcost])) as cost, ltrim(rtrim([DeadHead])) as [DeadHead], ltrim(rtrim(tripnumber)) as tripnumber " &
                     "   ,ltrim(rtrim([legratecode])) as [LRC] ,ltrim(rtrim([legpurposecode])) as [LPC] ,ltrim(rtrim([legtypecode])) as [LTC] , ltrim(rtrim([PIC])) as [PIC], ltrim(rtrim([SIC])) as [SIC]    ,  [tripcost]  ,[triprevenue], [pandl]        FROM [FOSFlightsOptimizer]  where ArrivalAirporticao = 'def' and  OptimizerRun = 'abc'  and legstate <> '5'    and carrierid = 'ghi' "
                 s = Replace(s, "def", DropDownDestAirports.SelectedItem.Value)
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & "  order by   aircrafttype, AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & "order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -643,9 +649,9 @@ Public Class ModelDetailPanel
                 s = Replace(s, "def", DropDownFleetType.SelectedItem.Value)
                 s = Replace(s, "where AircraftType = 'H80X'", "where (AircraftType = 'H80H' or AircraftType = 'H850')")
 
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & "  order by   aircrafttype, AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & "order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -675,9 +681,9 @@ Public Class ModelDetailPanel
             s = Replace(s, "aclist", ss)
             s = Replace(s, "def", AC1)
             s = Replace(s, "zqg", AC2)
-            If _carrierid <> JETLINX Then
+            If carrierid <> JETLINX Then
                 s = s & "  order by   aircrafttype, AC, datetimegmt  "
-            ElseIf _carrierid = WHEELSUP Then
+            ElseIf carrierid = WHEELSUP Then
                 s = s & "order by AC, datetimegmt  "
             Else
                 s = s & " order by base,  AC, datetimegmt  "
@@ -814,7 +820,8 @@ Public Class ModelDetailPanel
         Dim mycolor As System.Drawing.Color
         mycolor = Drawing.Color.Aquamarine
 
-        _carrierid = Session("carrierid")
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = Session("carrierid")
 
 
 
@@ -831,7 +838,7 @@ Public Class ModelDetailPanel
         Dim i As Integer
         For i = 0 To gridviewtrips.Rows.Count - 1
             If gridviewtrips.Rows(i).Cells(8).Text <> "" Then
-                gridviewtrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(gridviewtrips.Rows(i).Cells(8).Text)
+                gridviewtrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(gridviewtrips.Rows(i).Cells(8).Text, carrierid)
             End If
 
             If gridviewtrips.Rows(i).Cells(0).Text = "KMMU" Then
@@ -1252,12 +1259,12 @@ Public Class ModelDetailPanel
         For Each dcf As DataControlField In gridviewtrips.Columns
             Select Case dcf.HeaderText.ToUpper
                 Case "P&L"
-                    If _carrierid = WHEELSUP Then dcf.Visible = True
+                    If carrierid = WHEELSUP Then dcf.Visible = True
 
                 Case "OE"
-                    If _carrierid <> WHEELSUP Then dcf.Visible = True
+                    If carrierid <> WHEELSUP Then dcf.Visible = True
                 Case "HA"
-                    dcf.Visible = _carrierid <> WHEELSUP
+                    dcf.Visible = carrierid <> WHEELSUP
             End Select
         Next
     End Function
@@ -1281,7 +1288,8 @@ Public Class ModelDetailPanel
         Dim dt As DataTable = DataAccess.GetPinnedFlights(req)
         Insertsys_log(Session("carrierid"), appName, "CASFlightsAzure.ascx colorme end Get Pinned " & Now, "", "")
 
-        _carrierid = Session("carrierid")
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim carrierid As Integer = Session("carrierid")
 
 
         Dim dv_pinned As DataView = dt.DefaultView
@@ -1826,7 +1834,7 @@ acskip:
             End If
             'added plane lookup info back in rk 7.20.17
             If gridviewtrips.Rows(i).Cells(8).Text <> "" Then
-                gridviewtrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(gridviewtrips.Rows(i).Cells(8).Text)
+                gridviewtrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(gridviewtrips.Rows(i).Cells(8).Text, carrierid)
             End If
         Next i
 
@@ -1841,10 +1849,10 @@ acskip:
             Next z
         End If
 
-        'If _carrierid = WHEELSUP Then
+        'If carrierid = WHEELSUP Then
         '    gridviewtrips.Columns(CAS_PANDL).Visible = True
         '    gridviewtrips.Columns(CAS_REVENUE).Visible = True
-        'ElseIf _carrierid = JETLINX Then
+        'ElseIf carrierid = JETLINX Then
         '    gridviewtrips.Columns(CAS_WC).Visible = True
         '    gridviewtrips.Columns(CAS_BASE).Visible = True
         'Else
