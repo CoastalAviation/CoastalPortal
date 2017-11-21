@@ -21,393 +21,393 @@ Public Class home2
     '20160909 - pab - adjust departure times to allow for quick turns when flight times are unknown to user
     Private TurnAroundMinutes As Integer
 
-    ''20161028 - drive time
-    'Private latLongorig As LatLong
-    'Private latLongdest As LatLong
+    '20161028 - drive time
+    Private latLongorig As LatLong
+    Private latLongdest As LatLong
 
     '20160125 - pab - fix airport dropdowns
-    'Sub loadairports(ByVal airport As String, ByVal comboname As String)
+    Sub loadairports(ByVal airport As String, ByVal comboname As String)
 
-    '    Try
-    '        Dim miles As Integer = 0
-    '        Dim airportcount As Integer = 0
-    '        Dim MinRunwayLength As Integer = 2800
-    '        Dim fromloc As String = String.Empty
-    '        Dim dt As New DataTable()
-    '        Dim da As New DataAccess
-    '        Dim ds As New DataSet
-    '        Dim slocations As String = String.Empty
+        Try
+            Dim miles As Integer = 0
+            Dim airportcount As Integer = 0
+            Dim MinRunwayLength As Integer = 2800
+            Dim fromloc As String = String.Empty
+            Dim dt As New DataTable()
+            Dim da As New DataAccess
+            Dim ds As New DataSet
+            Dim slocations As String = String.Empty
 
-    '        AirTaxi.post_timing("home.aspx.vb loadairports start  " & Now.ToString)
+            AirTaxi.post_timing("home.aspx.vb loadairports start  " & Now.ToString)
 
-    '        miles = DataAccess.getsettingnumeric(_carrierid, "AirportDistance")
-    '        airportcount = DataAccess.getsettingnumeric(_carrierid, "AirportListCount")
-    '        MinRunwayLength = DataAccess.getsettingnumeric(_carrierid, "MinRunwayLength")
+            miles = DataAccess.getsettingnumeric(_carrierid, "AirportDistance")
+            airportcount = DataAccess.getsettingnumeric(_carrierid, "AirportListCount")
+            MinRunwayLength = DataAccess.getsettingnumeric(_carrierid, "MinRunwayLength")
 
-    '        If miles = 0 Then miles = 50 '25 mi radius
-    '        If airportcount = 0 Then airportcount = 25
-    '        If MinRunwayLength = 0 Then MinRunwayLength = 2800
+            If miles = 0 Then miles = 50 '25 mi radius
+            If airportcount = 0 Then airportcount = 25
+            If MinRunwayLength = 0 Then MinRunwayLength = 2800
 
-    '        If comboname = "OriginAddress" Then
-    '            Me.OriginAddress.Items.Clear()
-    '        ElseIf comboname = "DestinationAddress" Then
-    '            Me.DestinationAddress.Items.Clear()
-    '        End If
+            If comboname = "OriginAddress" Then
+                Me.OriginAddress.Items.Clear()
+            ElseIf comboname = "DestinationAddress" Then
+                Me.DestinationAddress.Items.Clear()
+            End If
 
-    '        Dim adapter As New SqlDataAdapter("", ConnectionStringHelper.GetCASConnectionString)
+            Dim adapter As New SqlDataAdapter("", ConnectionStringHelper.getglobalconnectionstring(PortalServer))
 
-    '        fromloc = airport.ToUpper
+            fromloc = airport.ToUpper
 
-    '        Select Case Len(airport)
-    '            Case 1, 2
-    '                'too short to look up
-    '                Exit Sub
+            Select Case Len(airport)
+                Case 1, 2
+                    'too short to look up
+                    Exit Sub
 
-    '            Case 3
-    '                '20161031 - pab - drive time
-    '                adapter.SelectCommand.CommandText = ("SELECT  rtrim(name) + ' (' + rtrim(icao) +  ')' as airport,  rtrim(name) as facilityname, " &
-    '                    "rtrim(icao) as icao, rtrim(iata) as locationid , 0 as miles,cast(lat as float) as latitude,cast(long as float) as longitude from ICAO_IATA_2 i WHERE iata LIKE @text + '%'")
+                Case 3
+                    '20161031 - pab - drive time
+                    adapter.SelectCommand.CommandText = ("SELECT  rtrim(name) + ' (' + rtrim(icao) +  ')' as airport,  rtrim(name) as facilityname, " &
+                        "rtrim(icao) as icao, rtrim(iata) as locationid , 0 as miles,cast(lat as float) as latitude,cast(long as float) as longitude from ICAO_IATA_2 i WHERE iata LIKE @text + '%'")
 
-    '                adapter.SelectCommand.Parameters.AddWithValue("@text", fromloc)
-    '                adapter.Fill(dt)
+                    adapter.SelectCommand.Parameters.AddWithValue("@text", fromloc)
+                    adapter.Fill(dt)
 
-    '            Case 4
-    '                '                   	SELECT rtrim(name) + ' (' + rtrim(icao) +  ')' as airport,  rtrim(name) as facilityname, rtrim(icao) as icao, rtrim(iata) as locationid , 0 as miles 
-    '                'from ICAO_IATA_2 i 
-    '                'WHERE icao = @text 
-    '                If Left(airport, 1).ToUpper = "K" Then
-    '                    '20161031 - pab - drive time
-    '                    adapter.SelectCommand.CommandText = ("SELECT  rtrim(name) + ' (' + rtrim(icao) +  ')' as airport,  rtrim(name) as facilityname, " &
-    '                    "rtrim(icao) as icao, rtrim(iata) as locationid , 0 as miles,cast(lat as float) as latitude,cast(long as float) as longitude from ICAO_IATA_2 WHERE icao  = @text")
-    '                Else
-    '                    '20160228 - pab - add more caribbean countries
-    '                    '20161025 - pab - add bermuda
-    '                    '20161031 - pab - drive time
-    '                    adapter.SelectCommand.CommandText = ("SELECT  rtrim(name) + ' (' + rtrim(icao) +  ')' as airport,  rtrim(name) as facilityname, " &
-    '                      "rtrim(icao) as icao, rtrim(iata) as locationid , 0 as miles,cast(lat as float) as latitude,cast(long as float) as longitude from ICAO_IATA_2 i left join NfdcFacilities nf on i.iata = nf.locationid " &
-    '                      "WHERE (icao  LIKE '%' + @text + '%' OR iata LIKE @text + '%' OR name LIKE @text + '%') and iata <> ''  and (region <> 'INTL' or " &
-    '                      "country in ('bahamas','VG','VI','BS','Jamaica','AN','AG','PR','CAN','CA','DO','HN','HT','JM','KY','TC','AG','AB','AN','GP','KN','LC','TT','VC','VG','MX','BM')) ")
-    '                End If
+                Case 4
+                    '                   	SELECT rtrim(name) + ' (' + rtrim(icao) +  ')' as airport,  rtrim(name) as facilityname, rtrim(icao) as icao, rtrim(iata) as locationid , 0 as miles 
+                    'from ICAO_IATA_2 i 
+                    'WHERE icao = @text 
+                    If Left(airport, 1).ToUpper = "K" Then
+                        '20161031 - pab - drive time
+                        adapter.SelectCommand.CommandText = ("SELECT  rtrim(name) + ' (' + rtrim(icao) +  ')' as airport,  rtrim(name) as facilityname, " &
+                        "rtrim(icao) as icao, rtrim(iata) as locationid , 0 as miles,cast(lat as float) as latitude,cast(long as float) as longitude from ICAO_IATA_2 WHERE icao  = @text")
+                    Else
+                        '20160228 - pab - add more caribbean countries
+                        '20161025 - pab - add bermuda
+                        '20161031 - pab - drive time
+                        adapter.SelectCommand.CommandText = ("SELECT  rtrim(name) + ' (' + rtrim(icao) +  ')' as airport,  rtrim(name) as facilityname, " &
+                          "rtrim(icao) as icao, rtrim(iata) as locationid , 0 as miles,cast(lat as float) as latitude,cast(long as float) as longitude from ICAO_IATA_2 i left join NfdcFacilities nf on i.iata = nf.locationid " &
+                          "WHERE (icao  LIKE '%' + @text + '%' OR iata LIKE @text + '%' OR name LIKE @text + '%') and iata <> ''  and (region <> 'INTL' or " &
+                          "country in ('bahamas','VG','VI','BS','Jamaica','AN','AG','PR','CAN','CA','DO','HN','HT','JM','KY','TC','AG','AB','AN','GP','KN','LC','TT','VC','VG','MX','BM')) ")
+                    End If
 
-    '                adapter.SelectCommand.Parameters.AddWithValue("@text", fromloc)
-    '                adapter.Fill(dt)
+                    adapter.SelectCommand.Parameters.AddWithValue("@text", fromloc)
+                    adapter.Fill(dt)
 
-    '            Case Else
-    '                'if this looks like a geographic place instead of an airport name ... 
-    '                '20161028 - drive time
-    '                dt = findairports(airport, MinRunwayLength, miles, airportcount, comboname)
+                Case Else
+                    'if this looks like a geographic place instead of an airport name ... 
+                    '20161028 - drive time
+                    dt = findairports(airport, MinRunwayLength, miles, airportcount, comboname)
 
-    '                If Not (IsNothing(dt)) Then
+                    If Not (IsNothing(dt)) Then
 
-    '                    '20161031 - pab - fix double loading - done below
-    '                    'additemradcombobox(dt, "", "", airportcount, comboname)
-    '                    'If dt.Rows.Count < 6 Then Insertsys_log(_carrierid, appName, "findairports returned < 6 - from loc " & airport & _
-    '                    '    "; MinRunwayLength " & MinRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "loadairports", _
-    '                    '    "home.aspx.vb")
+                        '20161031 - pab - fix double loading - done below
+                        'additemradcombobox(dt, "", "", airportcount, comboname)
+                        'If dt.Rows.Count < 6 Then Insertsys_log(_carrierid, appName, "findairports returned < 6 - from loc " & airport & _
+                        '    "; MinRunwayLength " & MinRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "loadairports", _
+                        '    "home.aspx.vb")
 
-    '                Else
-    '                    If IsNumeric(airport.Trim) And Len(airport.Trim) = 5 Then
-    '                        Dim ti As New Telerik.Web.UI.RadComboBoxItem
-    '                        ti.Text = "Zip Code not found"
-    '                        ti.Value = ""
-    '                        Me.OriginAddress.Items.Add(ti)
-    '                    End If
-    '                End If
+                    Else
+                        If IsNumeric(airport.Trim) And Len(airport.Trim) = 5 Then
+                            Dim ti As New Telerik.Web.UI.RadComboBoxItem
+                            ti.Text = "Zip Code not found"
+                            ti.Value = ""
+                            Me.OriginAddress.Items.Add(ti)
+                        End If
+                    End If
 
-    '        End Select
+            End Select
 
-    '        If Not isdtnullorempty(dt) Then
-    '            '20161031 - pab - drive time
-    '            '20170523 - pab - fix ddl not populating - different name
-    '            'If comboname = "RadComboBox1" Then
-    '            If comboname = "RadComboBox1" Or comboname = "OriginAddress" Then
-    '                If IsNothing(latLongorig) Then
-    '                    Dim ll As New LatLong
-    '                    ll.Latitude = dt.Rows(0).Item("latitude")
-    '                    ll.Longitude = dt.Rows(0).Item("Longitude")
-    '                    latLongorig = ll
-    '                End If
-    '            Else
-    '                If IsNothing(latLongdest) Then
-    '                    Dim ll As New LatLong
-    '                    ll.Latitude = dt.Rows(0).Item("latitude")
-    '                    ll.Longitude = dt.Rows(0).Item("Longitude")
-    '                    latLongdest = ll
-    '                End If
-    '            End If
-    '            If dt.Rows.Count = 1 Then
-    '                ds = da.GetAirportInformationByAirportCode(dt.Rows(0).Item("locationid"))
-    '                If Not IsNothing(ds) Then
-    '                    If Not isdtnullorempty(ds.Tables(0)) Then
-    '                        dt = da.GetMajorAirportsByLatitudeLongitude(ds.Tables(0).Rows(0).Item("Latitude"), ds.Tables(0).Rows(0).Item("Longitude"),
-    '                                MinRunwayLength, miles, airportcount)
-    '                        If dt.Rows.Count < 6 Then Insertsys_log(_carrierid, appName, "hardcoded script returned < 6 - to loc " & fromloc & "; lat " &
-    '                            ds.Tables(0).Rows(0).Item("Latitude") & "; long " & ds.Tables(0).Rows(0).Item("Longitude"), "loadairports",
-    '                            "home.aspx.vb")
-    '                    End If
-    '                End If
-    '            End If
+            If Not isdtnullorempty(dt) Then
+                '20161031 - pab - drive time
+                '20170523 - pab - fix ddl not populating - different name
+                'If comboname = "RadComboBox1" Then
+                If comboname = "RadComboBox1" Or comboname = "OriginAddress" Then
+                    If IsNothing(latLongorig) Then
+                        Dim ll As New LatLong
+                        ll.Latitude = dt.Rows(0).Item("latitude")
+                        ll.Longitude = dt.Rows(0).Item("Longitude")
+                        latLongorig = ll
+                    End If
+                Else
+                    If IsNothing(latLongdest) Then
+                        Dim ll As New LatLong
+                        ll.Latitude = dt.Rows(0).Item("latitude")
+                        ll.Longitude = dt.Rows(0).Item("Longitude")
+                        latLongdest = ll
+                    End If
+                End If
+                If dt.Rows.Count = 1 Then
+                    ds = da.GetAirportInformationByAirportCode(dt.Rows(0).Item("locationid"))
+                    If Not IsNothing(ds) Then
+                        If Not isdtnullorempty(ds.Tables(0)) Then
+                            dt = da.GetMajorAirportsByLatitudeLongitude(ds.Tables(0).Rows(0).Item("Latitude"), ds.Tables(0).Rows(0).Item("Longitude"),
+                                    MinRunwayLength, miles, airportcount)
+                            If dt.Rows.Count < 6 Then Insertsys_log(_carrierid, appName, "hardcoded script returned < 6 - to loc " & fromloc & "; lat " &
+                                ds.Tables(0).Rows(0).Item("Latitude") & "; long " & ds.Tables(0).Rows(0).Item("Longitude"), "loadairports",
+                                "home.aspx.vb")
+                        End If
+                    End If
+                End If
 
-    '            If dt.Rows.Count > 0 Then slocations = additemradcombobox(dt, slocations, fromloc, airportcount, comboname)
+                If dt.Rows.Count > 0 Then slocations = additemradcombobox(dt, slocations, fromloc, airportcount, comboname)
 
-    '        Else
-    '            '20160126 - pab - checked failed lookups, add if not found
-    '            dt = da.GetLocationLookupFail(airport)
-    '            If Not isdtnullorempty(dt) Then
-    '                If dt.Rows.Count > 0 Then
-    '                    For i As Integer = 0 To dt.Rows.Count - 1
-    '                        If dt.Rows(i).Item("latitude") <> 0 And dt.Rows(i).Item("longitude") <> 0 Then
-    '                            dt = da.GetMajorAirportsByLatitudeLongitude(dt.Rows(i).Item("Latitude"), dt.Rows(i).Item("Longitude"), _
-    '                                MinRunwayLength, miles, airportcount)
-    '                            slocations = additemradcombobox(dt, slocations, fromloc, airportcount, comboname)
-    '                            Exit For
-    '                        End If
-    '                    Next
-    '                Else
-    '                    da.InsertLocationLookupFail(airport)
-    '                End If
+            Else
+                '20160126 - pab - checked failed lookups, add if not found
+                dt = da.GetLocationLookupFail(airport)
+                If Not isdtnullorempty(dt) Then
+                    If dt.Rows.Count > 0 Then
+                        For i As Integer = 0 To dt.Rows.Count - 1
+                            If dt.Rows(i).Item("latitude") <> 0 And dt.Rows(i).Item("longitude") <> 0 Then
+                                dt = da.GetMajorAirportsByLatitudeLongitude(dt.Rows(i).Item("Latitude"), dt.Rows(i).Item("Longitude"),
+                                    MinRunwayLength, miles, airportcount)
+                                slocations = additemradcombobox(dt, slocations, fromloc, airportcount, comboname)
+                                Exit For
+                            End If
+                        Next
+                    Else
+                        da.InsertLocationLookupFail(airport)
+                    End If
 
-    '            Else
-    '                da.InsertLocationLookupFail(airport)
-    '            End If
-    '        End If
+                Else
+                    da.InsertLocationLookupFail(airport)
+                End If
+            End If
 
-    '    Catch ex As Exception
-    '        Dim serr As String = ex.Message
-    '        If Not IsNothing(ex.InnerException) Then serr &= "; " & ex.InnerException.ToString
-    '        If Not IsNothing(ex.StackTrace) Then serr &= vbNewLine & vbNewLine & ex.StackTrace.ToString
-    '        AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " home2.aspx loadairports Error",
-    '            serr, _carrierid)
-    '        AirTaxi.Insertsys_log(_carrierid, AirTaxi.appName, serr, "home2.aspx", "loadairports")
+        Catch ex As Exception
+            Dim serr As String = ex.Message
+            If Not IsNothing(ex.InnerException) Then serr &= "; " & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then serr &= vbNewLine & vbNewLine & ex.StackTrace.ToString
+            AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " home2.aspx loadairports Error",
+                serr, _carrierid)
+            AirTaxi.Insertsys_log(_carrierid, AirTaxi.appName, serr, "home2.aspx", "loadairports")
 
-    '    End Try
+        End Try
 
-    '    If comboname = "OriginAddress" Then
-    '        Me.OriginAddress.Items.Insert(0, New RadComboBoxItem("- Select airport below -"))
-    '    ElseIf comboname = "DestinationAddress" Then
-    '        Me.DestinationAddress.Items.Insert(0, New RadComboBoxItem("- Select airport below -"))
-    '    End If
+        If comboname = "OriginAddress" Then
+            Me.OriginAddress.Items.Insert(0, New RadComboBoxItem("- Select airport below -"))
+        ElseIf comboname = "DestinationAddress" Then
+            Me.DestinationAddress.Items.Insert(0, New RadComboBoxItem("- Select airport below -"))
+        End If
 
-    '    AirTaxi.post_timing("home.aspx.vb loadairports end  " & Now.ToString)
+        AirTaxi.post_timing("home.aspx.vb loadairports end  " & Now.ToString)
 
-    'End Sub
+    End Sub
 
     '20160125 - pab - fix airport dropdowns
-    'Function additemradcombobox(dt As DataTable, items As String, fromloc As String, airportcount As Integer, ByVal comboname As String) As String
+    Function additemradcombobox(dt As DataTable, items As String, fromloc As String, airportcount As Integer, ByVal comboname As String) As String
 
-    '    additemradcombobox = items
+        additemradcombobox = items
 
-    '    '20161031 - pab - drive time
-    '    Dim latlongto As New LatLong
-    '    Dim drivetime As Integer = 0
-    '    Dim wp As Integer = 0
-    '    Dim dc As New DataColumn("drivetime", System.Type.GetType("System.Int32"))
-    '    dt.Columns.Add(dc)
-    '    For i = 0 To dt.Rows.Count - 1
-    '        drivetime = 0
-    '        '20161108 - tmc doesn't need drive time per David
-    '        If _carrierid <> 65 Then
-    '            latlongto.Latitude = dt.Rows(i).Item("latitude")
-    '            latlongto.Longitude = dt.Rows(i).Item("Longitude")
-    '            '20170523 - pab - fix ddl not populating - different name
-    '            'If comboname = "RadComboBox1" Then
-    '            If comboname = "RadComboBox1" Or comboname = "OriginAddress" Then
-    '                If latLongorig.Latitude <> latlongto.Latitude Or latLongorig.Longitude <> latlongto.Longitude Then
-    '                    '20170523 - pab - fix error - Operator '<>' is not defined for type 'DBNull' and string "".
-    '                    If IsDBNull(dt.Rows(i).Item("locationid")) Then
-    '                        drivetime = Mapping.GetDriveTime(latLongorig, latlongto, "")
-    '                        '20161101 - pab - travel time too high per David
-    '                    ElseIf dt.Rows(i).Item("locationid") <> "" Then
-    '                        '20170901 - pab - fix distance if airport code entered
-    '                        If dt.Rows(i).Item("locationid").ToString.ToUpper <> fromloc.ToUpper And
-    '                                    dt.Rows(i).Item("icao").ToString.Trim.ToUpper <> fromloc.ToUpper Then
-    '                            drivetime = Mapping.GetDriveTime(latLongorig, latlongto, dt.Rows(i).Item("locationid"))
-    '                            '20161107 - pab - fix bad durations - ida airport code not found - returns ida, iowa
-    '                            'If drivetime >= 9999999 Then
-    '                            If drivetime >= 300 Then
-    '                                drivetime = Mapping.GetDriveTime(latLongorig, latlongto, "")
-    '                            End If
-    '                        End If
-    '                    Else
-    '                        drivetime = Mapping.GetDriveTime(latLongorig, latlongto, "")
-    '                    End If
-    '                End If
-    '            Else
-    '                If latLongdest.Latitude <> latlongto.Latitude Or latLongdest.Longitude <> latlongto.Longitude Then
-    '                    '20170523 - pab - fix error - Operator '<>' is not defined for type 'DBNull' and string "".
-    '                    If IsDBNull(dt.Rows(i).Item("locationid")) Then
-    '                        drivetime = Mapping.GetDriveTime(latLongorig, latlongto, "")
-    '                        '20161101 - pab - travel time too high per David
-    '                    ElseIf dt.Rows(i).Item("locationid") <> "" Then
-    '                        '20170901 - pab - fix distance if airport code entered
-    '                        If dt.Rows(i).Item("locationid").ToString.ToUpper <> fromloc.ToUpper And
-    '                                    dt.Rows(i).Item("icao").ToString.Trim.ToUpper <> fromloc.ToUpper Then
-    '                            drivetime = Mapping.GetDriveTime(latLongdest, latlongto, dt.Rows(i).Item("locationid"))
-    '                            '20161107 - pab - fix bad durations - ida airport code not found - returns ida, iowa
-    '                            'If drivetime >= 9999999 Then
-    '                            If drivetime >= 300 Then
-    '                                drivetime = Mapping.GetDriveTime(latLongdest, latlongto, "")
-    '                            End If
-    '                        End If
-    '                    Else
-    '                        drivetime = Mapping.GetDriveTime(latLongdest, latlongto, "")
-    '                    End If
-    '                End If
-    '            End If
-    '        End If
-    '        dt.Rows(i).Item("drivetime") = drivetime
-    '    Next
-    '    Dim sortExp As String = "drivetime,miles"
-    '    Dim drarray() As DataRow
-    '    drarray = dt.Select(Nothing, sortExp, DataViewRowState.CurrentRows)
+        '20161031 - pab - drive time
+        Dim latlongto As New LatLong
+        Dim drivetime As Integer = 0
+        Dim wp As Integer = 0
+        Dim dc As New DataColumn("drivetime", System.Type.GetType("System.Int32"))
+        dt.Columns.Add(dc)
+        For i = 0 To dt.Rows.Count - 1
+            drivetime = 0
+            '20161108 - tmc doesn't need drive time per David
+            If _carrierid <> 65 Then
+                latlongto.Latitude = dt.Rows(i).Item("latitude")
+                latlongto.Longitude = dt.Rows(i).Item("Longitude")
+                '20170523 - pab - fix ddl not populating - different name
+                'If comboname = "RadComboBox1" Then
+                If comboname = "RadComboBox1" Or comboname = "OriginAddress" Then
+                    If latLongorig.Latitude <> latlongto.Latitude Or latLongorig.Longitude <> latlongto.Longitude Then
+                        '20170523 - pab - fix error - Operator '<>' is not defined for type 'DBNull' and string "".
+                        If IsDBNull(dt.Rows(i).Item("locationid")) Then
+                            drivetime = Mapping.GetDriveTime(latLongorig, latlongto, "")
+                            '20161101 - pab - travel time too high per David
+                        ElseIf dt.Rows(i).Item("locationid") <> "" Then
+                            '20170901 - pab - fix distance if airport code entered
+                            If dt.Rows(i).Item("locationid").ToString.ToUpper <> fromloc.ToUpper And
+                                        dt.Rows(i).Item("icao").ToString.Trim.ToUpper <> fromloc.ToUpper Then
+                                drivetime = Mapping.GetDriveTime(latLongorig, latlongto, dt.Rows(i).Item("locationid"))
+                                '20161107 - pab - fix bad durations - ida airport code not found - returns ida, iowa
+                                'If drivetime >= 9999999 Then
+                                If drivetime >= 300 Then
+                                    drivetime = Mapping.GetDriveTime(latLongorig, latlongto, "")
+                                End If
+                            End If
+                        Else
+                            drivetime = Mapping.GetDriveTime(latLongorig, latlongto, "")
+                        End If
+                    End If
+                Else
+                    If latLongdest.Latitude <> latlongto.Latitude Or latLongdest.Longitude <> latlongto.Longitude Then
+                        '20170523 - pab - fix error - Operator '<>' is not defined for type 'DBNull' and string "".
+                        If IsDBNull(dt.Rows(i).Item("locationid")) Then
+                            drivetime = Mapping.GetDriveTime(latLongorig, latlongto, "")
+                            '20161101 - pab - travel time too high per David
+                        ElseIf dt.Rows(i).Item("locationid") <> "" Then
+                            '20170901 - pab - fix distance if airport code entered
+                            If dt.Rows(i).Item("locationid").ToString.ToUpper <> fromloc.ToUpper And
+                                        dt.Rows(i).Item("icao").ToString.Trim.ToUpper <> fromloc.ToUpper Then
+                                drivetime = Mapping.GetDriveTime(latLongdest, latlongto, dt.Rows(i).Item("locationid"))
+                                '20161107 - pab - fix bad durations - ida airport code not found - returns ida, iowa
+                                'If drivetime >= 9999999 Then
+                                If drivetime >= 300 Then
+                                    drivetime = Mapping.GetDriveTime(latLongdest, latlongto, "")
+                                End If
+                            End If
+                        Else
+                            drivetime = Mapping.GetDriveTime(latLongdest, latlongto, "")
+                        End If
+                    End If
+                End If
+            End If
+            dt.Rows(i).Item("drivetime") = drivetime
+        Next
+        Dim sortExp As String = "drivetime,miles"
+        Dim drarray() As DataRow
+        drarray = dt.Select(Nothing, sortExp, DataViewRowState.CurrentRows)
 
-    '    'For i = 0 To dt.Rows.Count - 1
-    '    For i = 0 To drarray.Count - 1
-    '        Dim dr As DataRow = drarray(i)
-    '        Dim ti As New Telerik.Web.UI.RadComboBoxItem
+        'For i = 0 To dt.Rows.Count - 1
+        For i = 0 To drarray.Count - 1
+            Dim dr As DataRow = drarray(i)
+            Dim ti As New Telerik.Web.UI.RadComboBoxItem
 
-    '        'If Trim(dt.Rows(i).Item("locationid").ToString).ToUpper = "07FA" Then
-    '        '    ti.Text = Trim(dt.Rows(i).Item("facilityname").ToString) & " (" & Trim(dt.Rows(i).Item("locationid").ToString) & ")"
-    '        '    ti.Value = "OCA"
-    '        'ElseIf Trim(dt.Rows(i).Item("icao").ToString) = "" Then
-    '        '    ti.Text = Trim(dt.Rows(i).Item("facilityname").ToString) & " (" & Trim(dt.Rows(i).Item("locationid").ToString) & ")"
-    '        '    ti.Value = Trim(dt.Rows(i).Item("locationid").ToString)
-    '        'Else
-    '        '    ti.Text = Trim(dt.Rows(i).Item("facilityname").ToString) & " (" & Trim(dt.Rows(i).Item("icao").ToString) & ")"
-    '        '    ti.Value = Trim(dt.Rows(i).Item("locationid").ToString)
-    '        'End If
-    '        If Trim(dr("locationid").ToString).ToUpper = "07FA" Then
-    '            ti.Text = Trim(dr("facilityname").ToString) & " (" & Trim(dr("locationid").ToString) & ")"
-    '            ti.Value = "OCA"
-    '        ElseIf Trim(dr("icao").ToString) = "" Then
-    '            ti.Text = Trim(dr("facilityname").ToString) & " (" & Trim(dr("locationid").ToString) & ")"
-    '            ti.Value = Trim(dr("locationid").ToString)
-    '        Else
-    '            ti.Text = Trim(dr("facilityname").ToString) & " (" & Trim(dr("icao").ToString) & ")"
-    '            ti.Value = Trim(dr("locationid").ToString)
-    '        End If
+            'If Trim(dt.Rows(i).Item("locationid").ToString).ToUpper = "07FA" Then
+            '    ti.Text = Trim(dt.Rows(i).Item("facilityname").ToString) & " (" & Trim(dt.Rows(i).Item("locationid").ToString) & ")"
+            '    ti.Value = "OCA"
+            'ElseIf Trim(dt.Rows(i).Item("icao").ToString) = "" Then
+            '    ti.Text = Trim(dt.Rows(i).Item("facilityname").ToString) & " (" & Trim(dt.Rows(i).Item("locationid").ToString) & ")"
+            '    ti.Value = Trim(dt.Rows(i).Item("locationid").ToString)
+            'Else
+            '    ti.Text = Trim(dt.Rows(i).Item("facilityname").ToString) & " (" & Trim(dt.Rows(i).Item("icao").ToString) & ")"
+            '    ti.Value = Trim(dt.Rows(i).Item("locationid").ToString)
+            'End If
+            If Trim(dr("locationid").ToString).ToUpper = "07FA" Then
+                ti.Text = Trim(dr("facilityname").ToString) & " (" & Trim(dr("locationid").ToString) & ")"
+                ti.Value = "OCA"
+            ElseIf Trim(dr("icao").ToString) = "" Then
+                ti.Text = Trim(dr("facilityname").ToString) & " (" & Trim(dr("locationid").ToString) & ")"
+                ti.Value = Trim(dr("locationid").ToString)
+            Else
+                ti.Text = Trim(dr("facilityname").ToString) & " (" & Trim(dr("icao").ToString) & ")"
+                ti.Value = Trim(dr("locationid").ToString)
+            End If
 
-    '        If dr("drivetime") > 3 Then
-    '            ti.Text &= "; " & dr("drivetime") & " minutes drive time"
-    '        End If
+            If dr("drivetime") > 3 Then
+                ti.Text &= "; " & dr("drivetime") & " minutes drive time"
+            End If
 
-    '        If dt.Rows(i).Item("miles") > 0 Then
-    '            ti.Text &= "; " & dt.Rows(i).Item("miles") & " air miles"
-    '        End If
-    '        ti.ForeColor = Drawing.Color.Black
+            If dt.Rows(i).Item("miles") > 0 Then
+                ti.Text &= "; " & dt.Rows(i).Item("miles") & " air miles"
+            End If
+            ti.ForeColor = Drawing.Color.Black
 
-    '        If InStr(additemradcombobox, ti.Value) = 0 Then
-    '            '20160426 - pab - make like door2door
-    '            'If comboname = "OriginAddress" Then
-    '            '    If OriginAddress.Items.Count >= airportcount Then Exit For
-    '            'ElseIf comboname = "DestinationAddress" Then
-    '            '    If DestinationAddress.Items.Count >= airportcount Then Exit For
-    '            'End If
-    '            Select Case comboname
-    '                Case "OriginAddress"
-    '                    If OriginAddress.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress2"
-    '                    If OriginAddress2.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress3"
-    '                    If OriginAddress3.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress4"
-    '                    If OriginAddress4.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress5"
-    '                    If OriginAddress5.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress6"
-    '                    If OriginAddress6.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress7"
-    '                    If OriginAddress7.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress8"
-    '                    If OriginAddress8.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress9"
-    '                    If OriginAddress9.Items.Count >= airportcount Then Exit For
-    '                Case "OriginAddress10"
-    '                    If OriginAddress10.Items.Count >= airportcount Then Exit For
+            If InStr(additemradcombobox, ti.Value) = 0 Then
+                '20160426 - pab - make like door2door
+                'If comboname = "OriginAddress" Then
+                '    If OriginAddress.Items.Count >= airportcount Then Exit For
+                'ElseIf comboname = "DestinationAddress" Then
+                '    If DestinationAddress.Items.Count >= airportcount Then Exit For
+                'End If
+                Select Case comboname
+                    Case "OriginAddress"
+                        If OriginAddress.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress2"
+                        If OriginAddress2.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress3"
+                        If OriginAddress3.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress4"
+                        If OriginAddress4.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress5"
+                        If OriginAddress5.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress6"
+                        If OriginAddress6.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress7"
+                        If OriginAddress7.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress8"
+                        If OriginAddress8.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress9"
+                        If OriginAddress9.Items.Count >= airportcount Then Exit For
+                    Case "OriginAddress10"
+                        If OriginAddress10.Items.Count >= airportcount Then Exit For
 
-    '                Case "DestinationAddress"
-    '                    If DestinationAddress.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress2"
-    '                    If DestinationAddress2.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress3"
-    '                    If DestinationAddress3.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress4"
-    '                    If DestinationAddress4.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress5"
-    '                    If DestinationAddress5.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress6"
-    '                    If DestinationAddress6.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress7"
-    '                    If DestinationAddress7.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress8"
-    '                    If DestinationAddress8.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress9"
-    '                    If DestinationAddress9.Items.Count >= airportcount Then Exit For
-    '                Case "DestinationAddress10"
-    '                    If DestinationAddress10.Items.Count >= airportcount Then Exit For
-    '            End Select
+                    Case "DestinationAddress"
+                        If DestinationAddress.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress2"
+                        If DestinationAddress2.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress3"
+                        If DestinationAddress3.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress4"
+                        If DestinationAddress4.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress5"
+                        If DestinationAddress5.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress6"
+                        If DestinationAddress6.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress7"
+                        If DestinationAddress7.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress8"
+                        If DestinationAddress8.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress9"
+                        If DestinationAddress9.Items.Count >= airportcount Then Exit For
+                    Case "DestinationAddress10"
+                        If DestinationAddress10.Items.Count >= airportcount Then Exit For
+                End Select
 
-    '            'If (InStr(dt.Rows(i).Item("icao").ToString, fromloc) > 0 Or InStr("(" & ti.Text & ")", fromloc) > 0) And fromloc <> "" Then
-    '            '    ti.ForeColor = Drawing.Color.Red
-    '            'End If
-    '            If (InStr(dr("icao").ToString, fromloc) > 0 Or InStr("(" & ti.Text & ")", fromloc) > 0) And fromloc <> "" Then
-    '                ti.ForeColor = Drawing.Color.Red
-    '            End If
-    '            '20160426 - pab - make like door2door
-    '            'If comboname = "OriginAddress" Then
-    '            '    OriginAddress.Items.Add(ti)
-    '            'ElseIf comboname = "DestinationAddress" Then
-    '            '    DestinationAddress.Items.Add(ti)
-    '            'End If
-    '            Select Case comboname
-    '                Case "OriginAddress"
-    '                    OriginAddress.Items.Add(ti)
-    '                Case "OriginAddress2"
-    '                    OriginAddress2.Items.Add(ti)
-    '                Case "OriginAddress3"
-    '                    OriginAddress3.Items.Add(ti)
-    '                Case "OriginAddress4"
-    '                    OriginAddress4.Items.Add(ti)
-    '                Case "OriginAddress5"
-    '                    OriginAddress5.Items.Add(ti)
-    '                Case "OriginAddress6"
-    '                    OriginAddress6.Items.Add(ti)
-    '                Case "OriginAddress7"
-    '                    OriginAddress7.Items.Add(ti)
-    '                Case "OriginAddress8"
-    '                    OriginAddress8.Items.Add(ti)
-    '                Case "OriginAddress9"
-    '                    OriginAddress9.Items.Add(ti)
-    '                Case "OriginAddress10"
-    '                    OriginAddress10.Items.Add(ti)
+                'If (InStr(dt.Rows(i).Item("icao").ToString, fromloc) > 0 Or InStr("(" & ti.Text & ")", fromloc) > 0) And fromloc <> "" Then
+                '    ti.ForeColor = Drawing.Color.Red
+                'End If
+                If (InStr(dr("icao").ToString, fromloc) > 0 Or InStr("(" & ti.Text & ")", fromloc) > 0) And fromloc <> "" Then
+                    ti.ForeColor = Drawing.Color.Red
+                End If
+                '20160426 - pab - make like door2door
+                'If comboname = "OriginAddress" Then
+                '    OriginAddress.Items.Add(ti)
+                'ElseIf comboname = "DestinationAddress" Then
+                '    DestinationAddress.Items.Add(ti)
+                'End If
+                Select Case comboname
+                    Case "OriginAddress"
+                        OriginAddress.Items.Add(ti)
+                    Case "OriginAddress2"
+                        OriginAddress2.Items.Add(ti)
+                    Case "OriginAddress3"
+                        OriginAddress3.Items.Add(ti)
+                    Case "OriginAddress4"
+                        OriginAddress4.Items.Add(ti)
+                    Case "OriginAddress5"
+                        OriginAddress5.Items.Add(ti)
+                    Case "OriginAddress6"
+                        OriginAddress6.Items.Add(ti)
+                    Case "OriginAddress7"
+                        OriginAddress7.Items.Add(ti)
+                    Case "OriginAddress8"
+                        OriginAddress8.Items.Add(ti)
+                    Case "OriginAddress9"
+                        OriginAddress9.Items.Add(ti)
+                    Case "OriginAddress10"
+                        OriginAddress10.Items.Add(ti)
 
-    '                Case "DestinationAddress"
-    '                    DestinationAddress.Items.Add(ti)
-    '                Case "DestinationAddress2"
-    '                    DestinationAddress2.Items.Add(ti)
-    '                Case "DestinationAddress3"
-    '                    DestinationAddress3.Items.Add(ti)
-    '                Case "DestinationAddress4"
-    '                    DestinationAddress4.Items.Add(ti)
-    '                Case "DestinationAddress5"
-    '                    DestinationAddress5.Items.Add(ti)
-    '                Case "DestinationAddress6"
-    '                    DestinationAddress6.Items.Add(ti)
-    '                Case "DestinationAddress7"
-    '                    DestinationAddress7.Items.Add(ti)
-    '                Case "DestinationAddress8"
-    '                    DestinationAddress8.Items.Add(ti)
-    '                Case "DestinationAddress9"
-    '                    DestinationAddress9.Items.Add(ti)
-    '                Case "DestinationAddress10"
-    '                    DestinationAddress10.Items.Add(ti)
-    '            End Select
+                    Case "DestinationAddress"
+                        DestinationAddress.Items.Add(ti)
+                    Case "DestinationAddress2"
+                        DestinationAddress2.Items.Add(ti)
+                    Case "DestinationAddress3"
+                        DestinationAddress3.Items.Add(ti)
+                    Case "DestinationAddress4"
+                        DestinationAddress4.Items.Add(ti)
+                    Case "DestinationAddress5"
+                        DestinationAddress5.Items.Add(ti)
+                    Case "DestinationAddress6"
+                        DestinationAddress6.Items.Add(ti)
+                    Case "DestinationAddress7"
+                        DestinationAddress7.Items.Add(ti)
+                    Case "DestinationAddress8"
+                        DestinationAddress8.Items.Add(ti)
+                    Case "DestinationAddress9"
+                        DestinationAddress9.Items.Add(ti)
+                    Case "DestinationAddress10"
+                        DestinationAddress10.Items.Add(ti)
+                End Select
 
-    '            additemradcombobox &= ti.Value & ";"
-    '        End If
-    '    Next
+                additemradcombobox &= ti.Value & ";"
+            End If
+        Next
 
-    'End Function
+    End Function
 
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
 
@@ -448,172 +448,172 @@ Public Class home2
 
     End Sub
 
-    ''20150511 - pab - fix airport list too short
-    ''20161028 - drive time
-    'Function findairports(ByVal a As String, ByVal minRunwayLength As Integer, ByVal miles As Integer, ByVal airportcount As Integer,
-    '        ByVal comboname As String) As DataTable
+    '20150511 - pab - fix airport list too short
+    '20161028 - drive time
+    Function findairports(ByVal a As String, ByVal minRunwayLength As Integer, ByVal miles As Integer, ByVal airportcount As Integer,
+            ByVal comboname As String) As DataTable
 
-    '    AirTaxi.post_timing("home.aspx.vb findairports start  " & Now.ToString)
+        AirTaxi.post_timing("home.aspx.vb findairports start  " & Now.ToString)
 
-    '    Dim omapping As New WebRole1.Mapping
+        Dim omapping As New CoastalPortal.Mapping
 
-    '    'System.Diagnostics.Debug.WriteLine("Check Orig Lat  " & Now.ToString)
+        'System.Diagnostics.Debug.WriteLine("Check Orig Lat  " & Now.ToString)
 
-    '    Dim latLong2 As New LatLong
+        Dim latLong2 As New LatLong
 
-    '    Try
+        Try
 
-    '        '20120621 - pab - default country to USA if not iata or icao
-    '        'Dim b As String = String.Empty
-    '        '20150427 - pab - fix spaces sometimes being converted - geocode mapping location invalid - boca%20raton
-    '        If InStr(a, "%20") > 0 Then a = Replace(a, "%20", " ")
-    '        Dim da As New DataAccess
-    '        If Len(a.Trim) = 3 Then
-    '            '20120831 - pab - fix APA (Centennial CO) not being found
-    '            'b = fname(a)
-    '            ''text passed in is not airport iata
-    '            'If a = b Then a &= ", US"
-    '            Dim ds As DataSet
-    '            ds = da.GetAirportInformationByAirportCode(a.Trim.ToUpper)
-    '            If Not IsNothing(ds) Then
-    '                If Not isdtnullorempty(ds.Tables(0)) Then
-    '                    latLong2.Latitude = CDbl(ds.Tables(0).Rows(0).Item("latitude"))
-    '                    latLong2.Longitude = CDbl(ds.Tables(0).Rows(0).Item("longitude"))
-    '                End If
-    '            End If
-    '        ElseIf Len(a.Trim) = 4 Then
-    '            'If Left(a.Trim.ToUpper, 1) = "K" Then
-    '            '    Dim da As New DataAccess
-    '            '    Dim ds As DataSet = da.GetIATAcodebyICAO(a.Trim)
-    '            '    If ds.Tables.Count > 0 Then
-    '            '        If ds.Tables(0).Rows.Count > 0 Then
-    '            '            'text passed in is icao
-    '            '        Else
-    '            '            a &= ", US"
-    '            '        End If
-    '            '    Else
-    '            '        a &= ", US"
-    '            '    End If
-    '            'End If
+            '20120621 - pab - default country to USA if not iata or icao
+            'Dim b As String = String.Empty
+            '20150427 - pab - fix spaces sometimes being converted - geocode mapping location invalid - boca%20raton
+            If InStr(a, "%20") > 0 Then a = Replace(a, "%20", " ")
+            Dim da As New DataAccess
+            If Len(a.Trim) = 3 Then
+                '20120831 - pab - fix APA (Centennial CO) not being found
+                'b = fname(a)
+                ''text passed in is not airport iata
+                'If a = b Then a &= ", US"
+                Dim ds As DataSet
+                ds = da.GetAirportInformationByAirportCode(a.Trim.ToUpper)
+                If Not IsNothing(ds) Then
+                    If Not isdtnullorempty(ds.Tables(0)) Then
+                        latLong2.Latitude = CDbl(ds.Tables(0).Rows(0).Item("latitude"))
+                        latLong2.Longitude = CDbl(ds.Tables(0).Rows(0).Item("longitude"))
+                    End If
+                End If
+            ElseIf Len(a.Trim) = 4 Then
+                'If Left(a.Trim.ToUpper, 1) = "K" Then
+                '    Dim da As New DataAccess
+                '    Dim ds As DataSet = da.GetIATAcodebyICAO(a.Trim)
+                '    If ds.Tables.Count > 0 Then
+                '        If ds.Tables(0).Rows.Count > 0 Then
+                '            'text passed in is icao
+                '        Else
+                '            a &= ", US"
+                '        End If
+                '    Else
+                '        a &= ", US"
+                '    End If
+                'End If
 
-    '            '20120831 - pab - fix APA (Centennial CO) not being found
-    '            Dim dt As DataTable
-    '            dt = da.GetAirportInformationByICAO(a.Trim.ToUpper)
-    '            If Not isdtnullorempty(dt) Then
-    '                latLong2.Latitude = CDbl(dt.Rows(0).Item("latitude"))
-    '                latLong2.Longitude = CDbl(dt.Rows(0).Item("longitude"))
-    '            End If
+                '20120831 - pab - fix APA (Centennial CO) not being found
+                Dim dt As DataTable
+                dt = da.GetAirportInformationByICAO(a.Trim.ToUpper)
+                If Not isdtnullorempty(dt) Then
+                    latLong2.Latitude = CDbl(dt.Rows(0).Item("latitude"))
+                    latLong2.Longitude = CDbl(dt.Rows(0).Item("longitude"))
+                End If
 
-    '            '20150625 - pab - add zip code table lookup to reduce bing mapping issues
-    '        ElseIf Len(a.Trim) = 5 And IsNumeric(a.Trim) Then
-    '            Dim dt As DataTable
-    '            dt = da.GetZIPCodes(a.Trim.ToUpper)
-    '            If Not isdtnullorempty(dt) Then
-    '                latLong2.Latitude = CDbl(dt.Rows(0).Item("latitude"))
-    '                latLong2.Longitude = CDbl(dt.Rows(0).Item("longitude"))
-    '            End If
+                '20150625 - pab - add zip code table lookup to reduce bing mapping issues
+            ElseIf Len(a.Trim) = 5 And IsNumeric(a.Trim) Then
+                Dim dt As DataTable
+                dt = da.GetZIPCodes(a.Trim.ToUpper)
+                If Not isdtnullorempty(dt) Then
+                    latLong2.Latitude = CDbl(dt.Rows(0).Item("latitude"))
+                    latLong2.Longitude = CDbl(dt.Rows(0).Item("longitude"))
+                End If
 
-    '        Else
-    '            '20150424 - pab - fix locations not being found 
-    '            If InStr(a.Trim, ",") > 0 Then
-    '                'check for incomplete address entry
-    '                Dim s As String = Mid(a, InStr(a.Trim, ",") + 1).Trim
-    '                If Len(s) < 2 Then
-    '                    Return Nothing
-    '                End If
+            Else
+                '20150424 - pab - fix locations not being found 
+                If InStr(a.Trim, ",") > 0 Then
+                    'check for incomplete address entry
+                    Dim s As String = Mid(a, InStr(a.Trim, ",") + 1).Trim
+                    If Len(s) < 2 Then
+                        Return Nothing
+                    End If
 
-    '            ElseIf InStr(a.Trim, ",") = 0 And InStr(a.Trim, " ") = 0 Then
-    '                '20120823 - pab - oakland, ca not showing up in ddl when US appended to text. location set to somewhere in IL
-    '                'a &= ", US"
-    '            End If
-    '        End If
+                ElseIf InStr(a.Trim, ",") = 0 And InStr(a.Trim, " ") = 0 Then
+                    '20120823 - pab - oakland, ca not showing up in ddl when US appended to text. location set to somewhere in IL
+                    'a &= ", US"
+                End If
+            End If
 
-    '        '20120831 - pab - fix APA (Centennial CO) not being found
-    '        'latLong2 = omapping.GeoCodeText(a)    'oMapping.GeocodeAddress(a.Trim, AddressCaptureVertical1.OriginCity.Trim, Me.AddressCaptureVertical1.OriginState, Me.AddressCaptureVertical1.OriginZip.Trim, Me.AddressCaptureVertical1.OriginCountry.Trim)
-    '        If IsNothing(latLong2) Then
-    '            latLong2 = omapping.GeoCodeText(a) 'oMapping.GeocodeAddress(a.Trim, AddressCaptureVertical1.OriginCity.Trim, Me.AddressCaptureVertical1.OriginState, Me.AddressCaptureVertical1.OriginZip.Trim, Me.AddressCaptureVertical1.OriginCountry.Trim)
-    '        ElseIf latLong2.Latitude = 0 Then
-    '            '20150625 - pab - add zip code table lookup to reduce bing mapping issues
-    '            If Len(a.Trim) = 5 And IsNumeric(a.Trim) Then
-    '                'assume invalid zip code and exit
-    '                Insertsys_log(_carrierid, appName, "invalid zip code - " & a, "findairports", "home.aspx.vb")
-    '                Return Nothing
-    '            Else
-    '                latLong2 = omapping.GeoCodeText(a) 'oMapping.GeocodeAddress(a.Trim, AddressCaptureVertical1.OriginCity.Trim, Me.AddressCaptureVertical1.OriginState, Me.AddressCaptureVertical1.OriginZip.Trim, Me.AddressCaptureVertical1.OriginCountry.Trim)
-    '            End If
-    '        End If
+            '20120831 - pab - fix APA (Centennial CO) not being found
+            'latLong2 = omapping.GeoCodeText(a)    'oMapping.GeocodeAddress(a.Trim, AddressCaptureVertical1.OriginCity.Trim, Me.AddressCaptureVertical1.OriginState, Me.AddressCaptureVertical1.OriginZip.Trim, Me.AddressCaptureVertical1.OriginCountry.Trim)
+            If IsNothing(latLong2) Then
+                latLong2 = omapping.GeoCodeText(a) 'oMapping.GeocodeAddress(a.Trim, AddressCaptureVertical1.OriginCity.Trim, Me.AddressCaptureVertical1.OriginState, Me.AddressCaptureVertical1.OriginZip.Trim, Me.AddressCaptureVertical1.OriginCountry.Trim)
+            ElseIf latLong2.Latitude = 0 Then
+                '20150625 - pab - add zip code table lookup to reduce bing mapping issues
+                If Len(a.Trim) = 5 And IsNumeric(a.Trim) Then
+                    'assume invalid zip code and exit
+                    Insertsys_log(_carrierid, appName, "invalid zip code - " & a, "findairports", "home.aspx.vb")
+                    Return Nothing
+                Else
+                    latLong2 = omapping.GeoCodeText(a) 'oMapping.GeocodeAddress(a.Trim, AddressCaptureVertical1.OriginCity.Trim, Me.AddressCaptureVertical1.OriginState, Me.AddressCaptureVertical1.OriginZip.Trim, Me.AddressCaptureVertical1.OriginCountry.Trim)
+                End If
+            End If
 
-    '        '20090107 - pab - mappoint subscription error - don't return value
-    '        If latLong2 Is Nothing Then
-    '            '20150422 - pab - add logging - lookup is flaky
-    '            Insertsys_log(_carrierid, appName, "geocode mapping location not found - " & a &
-    '            "; MinRunwayLength " & minRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "findairports", "home.aspx.vb")
+            '20090107 - pab - mappoint subscription error - don't return value
+            If latLong2 Is Nothing Then
+                '20150422 - pab - add logging - lookup is flaky
+                Insertsys_log(_carrierid, appName, "geocode mapping location not found - " & a &
+                "; MinRunwayLength " & minRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "findairports", "home.aspx.vb")
 
-    '        Else
-    '            If latLong2.Latitude = 0 Then
-    '                '  Me.bttnGetFlights.Enabled = True
-    '                '  Me.lblmsg.Text = "Is the originating city/state spelled correctly?"
-    '                ' Me.lblmsg.Visible = True
-    '                '  Me.AddressCaptureVertical1.Focus()
+            Else
+                If latLong2.Latitude = 0 Then
+                    '  Me.bttnGetFlights.Enabled = True
+                    '  Me.lblmsg.Text = "Is the originating city/state spelled correctly?"
+                    ' Me.lblmsg.Visible = True
+                    '  Me.AddressCaptureVertical1.Focus()
 
-    '                '20150422 - pab - add logging - lookup is flaky
-    '                Insertsys_log(_carrierid, appName, "geocode mapping location invalid - " & a &
-    '                "; MinRunwayLength " & minRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "findairports", "home.aspx.vb")
+                    '20150422 - pab - add logging - lookup is flaky
+                    Insertsys_log(_carrierid, appName, "geocode mapping location invalid - " & a &
+                    "; MinRunwayLength " & minRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "findairports", "home.aspx.vb")
 
-    '                Return Nothing 'Exit Function
-    '            Else
-    '                '20100622 - pab - fix floating point error
-    '                latLong2.Latitude = Math.Round(latLong2.Latitude, 13)
-    '                latLong2.Longitude = Math.Round(latLong2.Longitude, 13)
-    '                'Session("origlat") = latLong2
-    '                'Session("origplace") = a
-    '                'System.Diagnostics.Debug.WriteLine(latLong2.ToString & "Orig Lat  " & Now.ToString)
+                    Return Nothing 'Exit Function
+                Else
+                    '20100622 - pab - fix floating point error
+                    latLong2.Latitude = Math.Round(latLong2.Latitude, 13)
+                    latLong2.Longitude = Math.Round(latLong2.Longitude, 13)
+                    'Session("origlat") = latLong2
+                    'Session("origplace") = a
+                    'System.Diagnostics.Debug.WriteLine(latLong2.ToString & "Orig Lat  " & Now.ToString)
 
-    '            End If
-    '        End If
+                End If
+            End If
 
-    '        '20161028 - drive time
-    '        '20170523 - pab - fix ddl not populating - different name
-    '        'If comboname = "RadComboBox1" Then
-    '        If comboname = "RadComboBox1" Or comboname = "OriginAddress" Then
-    '            latLongorig = latLong2
-    '        Else
-    '            latLongdest = latLong2
-    '        End If
-
-
-    '        Dim o As New DataTable
-    '        '20150511 - pab - fix airport list too short
-    '        '20170623 - pab - fix object not set
-    '        If Not IsNothing(latLong2) Then
-    '            o = GetAirportsLatLong(latLong2, minRunwayLength, miles, airportcount)
-
-    '            If isdtnullorempty(o) Then
-    '                Insertsys_log(_carrierid, appName, "GetAirportsLatLong returned no records - lat " & latLong2.Latitude.ToString &
-    '                    "; long " & latLong2.Longitude.ToString & "; MinRunwayLength " & minRunwayLength & "; miles " & miles &
-    '                    "; airportcount " & airportcount, "findairports", "home.aspx.vb")
-    '            End If
-
-    '        End If
-
-    '        AirTaxi.post_timing("home.aspx.vb findairports end  " & Now.ToString)
-
-    '        Return o
+            '20161028 - drive time
+            '20170523 - pab - fix ddl not populating - different name
+            'If comboname = "RadComboBox1" Then
+            If comboname = "RadComboBox1" Or comboname = "OriginAddress" Then
+                latLongorig = latLong2
+            Else
+                latLongdest = latLong2
+            End If
 
 
-    '    Catch ex As Exception
-    '        Dim serr As String = "parms a - " & a & vbCr & vbLf & ex.Message
-    '        If Not IsNothing(ex.InnerException) Then serr &= "; " & ex.InnerException.ToString
-    '        If Not IsNothing(ex.StackTrace) Then serr &= vbNewLine & vbNewLine & ex.StackTrace.ToString
-    '        AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " home2.aspx findairports Error",
-    '                            serr, _carrierid)
-    '        AirTaxi.Insertsys_log(0, AirTaxi.appName, serr, "home2.aspx findairports", "")
+            Dim o As New DataTable
+            '20150511 - pab - fix airport list too short
+            '20170623 - pab - fix object not set
+            If Not IsNothing(latLong2) Then
+                o = GetAirportsLatLong(latLong2, minRunwayLength, miles, airportcount)
 
-    '        Return Nothing
+                If isdtnullorempty(o) Then
+                    Insertsys_log(_carrierid, appName, "GetAirportsLatLong returned no records - lat " & latLong2.Latitude.ToString &
+                        "; long " & latLong2.Longitude.ToString & "; MinRunwayLength " & minRunwayLength & "; miles " & miles &
+                        "; airportcount " & airportcount, "findairports", "home.aspx.vb")
+                End If
 
-    '    End Try
+            End If
 
-    'End Function
+            AirTaxi.post_timing("home.aspx.vb findairports end  " & Now.ToString)
+
+            Return o
+
+
+        Catch ex As Exception
+            Dim serr As String = "parms a - " & a & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then serr &= "; " & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then serr &= vbNewLine & vbNewLine & ex.StackTrace.ToString
+            AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " home2.aspx findairports Error",
+                                serr, _carrierid)
+            AirTaxi.Insertsys_log(0, AirTaxi.appName, serr, "home2.aspx findairports", "")
+
+            Return Nothing
+
+        End Try
+
+    End Function
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -1538,41 +1538,41 @@ Public Class home2
 
 
     '20150511 - pab - fix airport list too short
-    'Private Function GetAirportsLatLong(ByVal latlong As LatLong, ByVal minRunwayLength As Integer, ByVal miles As Integer, _
-    '        ByVal airportcount As Integer) As DataTable
+    Private Function GetAirportsLatLong(ByVal latlong As LatLong, ByVal minRunwayLength As Integer, ByVal miles As Integer,
+            ByVal airportcount As Integer) As DataTable
 
-    '    AirTaxi.post_timing("home.aspx.vb getairports start  " & Now.ToString)
+        AirTaxi.post_timing("home.aspx.vb getairports start  " & Now.ToString)
 
-    '    Dim oMapping As New Mapping
+        Dim oMapping As New Mapping
 
-    '    Dim ds As DataSet = Nothing
+        Dim ds As DataSet = Nothing
 
-    '    Dim maxRunwayLength As Integer = 0
+        Dim maxRunwayLength As Integer = 0
 
-    '    Dim da As New DataAccess
-    '    'find nearby airports
-    '    '20150511 - pab - fix airport list too short
-    '    ds = da.GetNearestAirportsByLatitudeLongitudeWithinDistance(latlong.Latitude, latlong.Longitude, minRunwayLength, miles, airportcount)
+        Dim da As New DataAccess
+        'find nearby airports
+        '20150511 - pab - fix airport list too short
+        ds = da.GetNearestAirportsByLatitudeLongitudeWithinDistance(latlong.Latitude, latlong.Longitude, minRunwayLength, miles, airportcount)
 
-    '    Dim dt As New DataTable
-    '    dt = ds.Tables(0)
+        Dim dt As New DataTable
+        dt = ds.Tables(0)
 
-    '    '20150507 - pab - add more logging for lookup issue
-    '    If Not isdtnullorempty(dt) Then
-    '        If dt.Rows.Count < 6 Then
-    '            Insertsys_log(_carrierid, appName, "lookup returned  < 6 - lat " & latlong.Latitude & "; long " & latlong.Longitude & _
-    '                "; minRunwayLength " & minRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "GetAirportsLatLong", "home.aspx.vb")
-    '        End If
-    '    Else
-    '        Insertsys_log(_carrierid, appName, "lookup returned no results - lat " & latlong.Latitude & "; long " & latlong.Longitude & _
-    '            "; minRunwayLength " & minRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "GetAirportsLatLong", "home.aspx.vb")
-    '    End If
+        '20150507 - pab - add more logging for lookup issue
+        If Not isdtnullorempty(dt) Then
+            If dt.Rows.Count < 6 Then
+                Insertsys_log(_carrierid, appName, "lookup returned  < 6 - lat " & latlong.Latitude & "; long " & latlong.Longitude &
+                    "; minRunwayLength " & minRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "GetAirportsLatLong", "home.aspx.vb")
+            End If
+        Else
+            Insertsys_log(_carrierid, appName, "lookup returned no results - lat " & latlong.Latitude & "; long " & latlong.Longitude &
+                "; minRunwayLength " & minRunwayLength & "; miles " & miles & "; airportcount " & airportcount, "GetAirportsLatLong", "home.aspx.vb")
+        End If
 
-    '    AirTaxi.post_timing("home.aspx.vb getairports end  " & Now.ToString)
+        AirTaxi.post_timing("home.aspx.vb getairports end  " & Now.ToString)
 
-    '    Return dt
+        Return dt
 
-    'End Function
+    End Function
 
     '20120628 - pab - add one way/round trip radio buttons
     Private Sub rblOneWayRoundTrip_SelectedIndexChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles rblOneWayRoundTrip.SelectedIndexChanged
@@ -1588,249 +1588,249 @@ Public Class home2
 
     End Sub
 
-    ''20120628 - pab - add one way/round trip radio buttons
-    'Private Sub DisplayBoxBasedRadioBtns()
+    '20120628 - pab - add one way/round trip radio buttons
+    Private Sub DisplayBoxBasedRadioBtns()
 
-    '    If Request.QueryString.Count = 0 Then
-    '        'Me.depart_txt.Text = DateAdd(DateInterval.Day, 1, Now).ToShortDateString
-    '        Me.depart_date.SelectedDate = CDate(DateAdd(DateInterval.Day, 1, Now).ToShortDateString)
-    '        Me.departtime_combo.SelectedIndex = Me.departtime_combo.Items.IndexOf(Me.departtime_combo.Items.FindByText("09:00 AM"))
+        If Request.QueryString.Count = 0 Then
+            'Me.depart_txt.Text = DateAdd(DateInterval.Day, 1, Now).ToShortDateString
+            Me.depart_date.SelectedDate = CDate(DateAdd(DateInterval.Day, 1, Now).ToShortDateString)
+            Me.departtime_combo.SelectedIndex = Me.departtime_combo.Items.IndexOf(Me.departtime_combo.Items.FindByText("09:00 AM"))
 
-    '    Else
-    '        If Not IsNothing(Request.QueryString("legs")) Then
-    '            'Me.depart_txt.Text = DateAdd(DateInterval.Day, 1, Now).ToShortDateString
-    '            Me.depart_date.SelectedDate = CDate(DateAdd(DateInterval.Day, 1, Now).ToShortDateString)
-    '            Me.departtime_combo.SelectedIndex = Me.departtime_combo.Items.IndexOf(Me.departtime_combo.Items.FindByText("09:00 AM"))
+        Else
+            If Not IsNothing(Request.QueryString("legs")) Then
+                'Me.depart_txt.Text = DateAdd(DateInterval.Day, 1, Now).ToShortDateString
+                Me.depart_date.SelectedDate = CDate(DateAdd(DateInterval.Day, 1, Now).ToShortDateString)
+                Me.departtime_combo.SelectedIndex = Me.departtime_combo.Items.IndexOf(Me.departtime_combo.Items.FindByText("09:00 AM"))
 
-    '        Else
+            Else
 
-    '            If Not IsNothing(Request.QueryString("leaveDate")) Then
-    '                'Me.depart_txt.Text = Request.QueryString("leaveDate").ToString
-    '                Me.depart_date.SelectedDate = Request.QueryString("leaveDate").ToString
-    '            Else
-    '                'Me.depart_txt.Text = DateAdd(DateInterval.Day, 1, Now).ToShortDateString
-    '                Me.depart_date.SelectedDate = CDate(DateAdd(DateInterval.Day, 1, Now).ToShortDateString)
-    '            End If
+                If Not IsNothing(Request.QueryString("leaveDate")) Then
+                    'Me.depart_txt.Text = Request.QueryString("leaveDate").ToString
+                    Me.depart_date.SelectedDate = Request.QueryString("leaveDate").ToString
+                Else
+                    'Me.depart_txt.Text = DateAdd(DateInterval.Day, 1, Now).ToShortDateString
+                    Me.depart_date.SelectedDate = CDate(DateAdd(DateInterval.Day, 1, Now).ToShortDateString)
+                End If
 
-    '            'If Not IsNothing(Request.QueryString("returnDate")) Then
-    '            '    Me.calReturn.SelectedDate = CDate(Request.QueryString("returnDate"))
-    '            'Else
-    '            '    Me.calReturn.SelectedDate = CDate(DateAdd(DateInterval.Day, 2, Now).ToShortDateString)
-    '            'End If
+                'If Not IsNothing(Request.QueryString("returnDate")) Then
+                '    Me.calReturn.SelectedDate = CDate(Request.QueryString("returnDate"))
+                'Else
+                '    Me.calReturn.SelectedDate = CDate(DateAdd(DateInterval.Day, 2, Now).ToShortDateString)
+                'End If
 
-    '            If Not IsNothing(Request.QueryString("leaveTime")) Then
-    '                Me.departtime_combo.SelectedIndex = _
-    '                Me.departtime_combo.Items.IndexOf( _
-    '                    Me.departtime_combo.Items.FindByText(Request.QueryString("returnTime"))) + 1
-    '            Else
-    '                Me.departtime_combo.SelectedIndex = Me.departtime_combo.Items.IndexOf(Me.departtime_combo.Items.FindByText("09:00 AM"))
-    '            End If
+                If Not IsNothing(Request.QueryString("leaveTime")) Then
+                    Me.departtime_combo.SelectedIndex =
+                    Me.departtime_combo.Items.IndexOf(
+                        Me.departtime_combo.Items.FindByText(Request.QueryString("returnTime"))) + 1
+                Else
+                    Me.departtime_combo.SelectedIndex = Me.departtime_combo.Items.IndexOf(Me.departtime_combo.Items.FindByText("09:00 AM"))
+                End If
 
-    '            'If Not IsNothing(Request.QueryString("leaveTime")) Then
-    '            '    Me.ddlTimeReturn.SelectedIndex = _
-    '            '    Me.ddlTimeReturn.Items.IndexOf( _
-    '            '        Me.ddlTimeReturn.Items.FindByText(Request.QueryString("returnTime")))
-    '            'Else
-    '            '    Me.ddlTimeReturn.SelectedIndex = Me.ddlTimeReturn.Items.IndexOf(Me.ddlTimeReturn.Items.FindByText("05:00 PM"))
-    '            'End If
+                'If Not IsNothing(Request.QueryString("leaveTime")) Then
+                '    Me.ddlTimeReturn.SelectedIndex = _
+                '    Me.ddlTimeReturn.Items.IndexOf( _
+                '        Me.ddlTimeReturn.Items.FindByText(Request.QueryString("returnTime")))
+                'Else
+                '    Me.ddlTimeReturn.SelectedIndex = Me.ddlTimeReturn.Items.IndexOf(Me.ddlTimeReturn.Items.FindByText("05:00 PM"))
+                'End If
 
-    '            ''20160310 - pab - fix empty fields after multileg quote
-    '            'If CDate(Me.calReturn.SelectedDate.ToShortDateString & " " & ddlTimeReturn.Text) < DateAdd(DateInterval.Minute, 90, _
-    '            '        CDate(Me.calLeave.SelectedDate.ToShortDateString & " " & ddlTimeLeave.Text)) Then
-    '            '    Me.calReturn.SelectedDate = CDate(DateAdd(DateInterval.Day, 1, Me.calLeave.SelectedDate).ToShortDateString)
-    '            'End If
+                ''20160310 - pab - fix empty fields after multileg quote
+                'If CDate(Me.calReturn.SelectedDate.ToShortDateString & " " & ddlTimeReturn.Text) < DateAdd(DateInterval.Minute, 90, _
+                '        CDate(Me.calLeave.SelectedDate.ToShortDateString & " " & ddlTimeLeave.Text)) Then
+                '    Me.calReturn.SelectedDate = CDate(DateAdd(DateInterval.Day, 1, Me.calLeave.SelectedDate).ToShortDateString)
+                'End If
 
-    '        End If
+            End If
 
-    '    End If
+        End If
 
-    '    Select Case Me.rblOneWayRoundTrip.SelectedValue
-    '        Case "RoundTrip"
-    '            Dim ssender As String
+        Select Case Me.rblOneWayRoundTrip.SelectedValue
+            Case "RoundTrip"
+                Dim ssender As String
 
-    '            If Me.pnlLeg10.Visible = True Then
-    '                ssender = "bttnRemoveLeg10"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg10.Visible = True Then
+                    ssender = "bttnRemoveLeg10"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg9.Visible = True Then
-    '                ssender = "bttnRemoveLeg9"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg9.Visible = True Then
+                    ssender = "bttnRemoveLeg9"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg8.Visible = True Then
-    '                ssender = "bttnRemoveLeg8"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg8.Visible = True Then
+                    ssender = "bttnRemoveLeg8"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg7.Visible = True Then
-    '                ssender = "bttnRemoveLeg7"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg7.Visible = True Then
+                    ssender = "bttnRemoveLeg7"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg6.Visible = True Then
-    '                ssender = "bttnRemoveLeg6"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg6.Visible = True Then
+                    ssender = "bttnRemoveLeg6"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg5.Visible = True Then
-    '                ssender = "bttnRemoveLeg5"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg5.Visible = True Then
+                    ssender = "bttnRemoveLeg5"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg4.Visible = True Then
-    '                ssender = "bttnRemoveLeg4"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg4.Visible = True Then
+                    ssender = "bttnRemoveLeg4"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg3.Visible = True Then
-    '                ssender = "bttnRemoveLeg3"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg3.Visible = True Then
+                    ssender = "bttnRemoveLeg3"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg2.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
-    '            End If
+                If Me.pnlLeg2.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
+                End If
 
-    '            If Me.DestinationAddress.SelectedValue.ToString <> "" Then
-    '                Me.OriginAddress2.Text = Me.DestinationAddress.SelectedValue.ToString
-    '            End If
+                If Me.DestinationAddress.SelectedValue.ToString <> "" Then
+                    Me.OriginAddress2.Text = Me.DestinationAddress.SelectedValue.ToString
+                End If
 
-    '            If Me.OriginAddress.SelectedValue.ToString <> "" Then
-    '                Me.DestinationAddress2.Text = Me.OriginAddress.SelectedValue.ToString
-    '            End If
+                If Me.OriginAddress.SelectedValue.ToString <> "" Then
+                    Me.DestinationAddress2.Text = Me.OriginAddress.SelectedValue.ToString
+                End If
 
-    '            Session("triptype") = "R"
-    '            Session("showcal") = "Y"
+                Session("triptype") = "R"
+                Session("showcal") = "Y"
 
-    '            '20160117 - pab - quote multi-leg trips
-    '        Case "MultiLeg"
-    '            Session("triptype") = "M"
-    '            Session("showcal") = "N"
-    '            'pnlOneWayRT.Visible = False
-    '            'pnlMultiLeg.Visible = True
+                '20160117 - pab - quote multi-leg trips
+            Case "MultiLeg"
+                Session("triptype") = "M"
+                Session("showcal") = "N"
+                'pnlOneWayRT.Visible = False
+                'pnlMultiLeg.Visible = True
 
-    '            If Me.pnlLeg10.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                If Me.pnlLeg10.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress9.Text <> "" Then
-    '                    Me.OriginAddress10.Text = Me.DestinationAddress9.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress9.Text <> "" Then
+                        Me.OriginAddress10.Text = Me.DestinationAddress9.SelectedValue.ToString
+                    End If
 
-    '            ElseIf Me.pnlLeg9.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                ElseIf Me.pnlLeg9.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress8.Text <> "" Then
-    '                    Me.OriginAddress9.Text = Me.DestinationAddress8.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress8.Text <> "" Then
+                        Me.OriginAddress9.Text = Me.DestinationAddress8.SelectedValue.ToString
+                    End If
 
-    '            ElseIf Me.pnlLeg8.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                ElseIf Me.pnlLeg8.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress7.Text <> "" Then
-    '                    Me.OriginAddress8.Text = Me.DestinationAddress7.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress7.Text <> "" Then
+                        Me.OriginAddress8.Text = Me.DestinationAddress7.SelectedValue.ToString
+                    End If
 
-    '            ElseIf Me.pnlLeg7.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                ElseIf Me.pnlLeg7.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress6.Text <> "" Then
-    '                    Me.OriginAddress7.Text = Me.DestinationAddress6.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress6.Text <> "" Then
+                        Me.OriginAddress7.Text = Me.DestinationAddress6.SelectedValue.ToString
+                    End If
 
-    '            ElseIf Me.pnlLeg6.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                ElseIf Me.pnlLeg6.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress5.Text <> "" Then
-    '                    Me.OriginAddress6.Text = Me.DestinationAddress5.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress5.Text <> "" Then
+                        Me.OriginAddress6.Text = Me.DestinationAddress5.SelectedValue.ToString
+                    End If
 
-    '            ElseIf Me.pnlLeg5.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                ElseIf Me.pnlLeg5.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress4.Text <> "" Then
-    '                    Me.OriginAddress5.Text = Me.DestinationAddress4.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress4.Text <> "" Then
+                        Me.OriginAddress5.Text = Me.DestinationAddress4.SelectedValue.ToString
+                    End If
 
-    '            ElseIf Me.pnlLeg4.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                ElseIf Me.pnlLeg4.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress3.Text <> "" Then
-    '                    Me.OriginAddress4.Text = Me.DestinationAddress3.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress3.Text <> "" Then
+                        Me.OriginAddress4.Text = Me.DestinationAddress3.SelectedValue.ToString
+                    End If
 
-    '            ElseIf Me.pnlLeg3.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                ElseIf Me.pnlLeg3.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress2.Text <> "" Then
-    '                    Me.OriginAddress3.Text = Me.DestinationAddress2.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress2.Text <> "" Then
+                        Me.OriginAddress3.Text = Me.DestinationAddress2.SelectedValue.ToString
+                    End If
 
-    '            ElseIf Me.pnlLeg2.Visible = False Then
-    '                bttnAddLeg_Click(Nothing, Nothing)
+                ElseIf Me.pnlLeg2.Visible = False Then
+                    bttnAddLeg_Click(Nothing, Nothing)
 
-    '                If Me.DestinationAddress.SelectedValue.ToString <> "" Then
-    '                    Me.OriginAddress2.Text = Me.DestinationAddress.SelectedValue.ToString
-    '                End If
+                    If Me.DestinationAddress.SelectedValue.ToString <> "" Then
+                        Me.OriginAddress2.Text = Me.DestinationAddress.SelectedValue.ToString
+                    End If
 
-    '            End If
+                End If
 
-    '        Case "OneWay"
-    '            Session("triptype") = "O"
-    '            Session("showcal") = "Y"
+            Case "OneWay"
+                Session("triptype") = "O"
+                Session("showcal") = "Y"
 
-    '            Dim ssender As String
+                Dim ssender As String
 
-    '            If Me.pnlLeg10.Visible = True Then
-    '                ssender = "bttnRemoveLeg10"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg10.Visible = True Then
+                    ssender = "bttnRemoveLeg10"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg9.Visible = True Then
-    '                ssender = "bttnRemoveLeg9"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg9.Visible = True Then
+                    ssender = "bttnRemoveLeg9"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg8.Visible = True Then
-    '                ssender = "bttnRemoveLeg8"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg8.Visible = True Then
+                    ssender = "bttnRemoveLeg8"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg7.Visible = True Then
-    '                ssender = "bttnRemoveLeg7"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg7.Visible = True Then
+                    ssender = "bttnRemoveLeg7"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg6.Visible = True Then
-    '                ssender = "bttnRemoveLeg6"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg6.Visible = True Then
+                    ssender = "bttnRemoveLeg6"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg5.Visible = True Then
-    '                ssender = "bttnRemoveLeg5"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg5.Visible = True Then
+                    ssender = "bttnRemoveLeg5"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg4.Visible = True Then
-    '                ssender = "bttnRemoveLeg4"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg4.Visible = True Then
+                    ssender = "bttnRemoveLeg4"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg3.Visible = True Then
-    '                ssender = "bttnRemoveLeg3"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg3.Visible = True Then
+                    ssender = "bttnRemoveLeg3"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '            If Me.pnlLeg2.Visible = True Then
-    '                ssender = "bttnRemoveLeg2"
-    '                removeleg(Nothing, Nothing, ssender)
-    '            End If
+                If Me.pnlLeg2.Visible = True Then
+                    ssender = "bttnRemoveLeg2"
+                    removeleg(Nothing, Nothing, ssender)
+                End If
 
-    '        Case Else
+            Case Else
 
-    '    End Select
+        End Select
 
-    'End Sub
+    End Sub
 
     ''20140310 - pab - acg background image
     'Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
@@ -3297,196 +3297,196 @@ Public Class home2
 
     'End Sub
 
-    'Protected Sub bttnAddLeg_Click(sender As Object, e As EventArgs) Handles bttnAddLeg.Click
+    Protected Sub bttnAddLeg_Click(sender As Object, e As EventArgs) Handles bttnAddLeg.Click
 
-    '    Dim broundtrip As Boolean = False
+        Dim broundtrip As Boolean = False
 
-    '    lblMsg.Text = ""
+        lblMsg.Text = ""
 
-    '    If Me.pnlLeg10.Visible = True Then
-    '        lblMsg.Text = "Maximum number of legs added"
-    '        Exit Sub
-    '    End If
+        If Me.pnlLeg10.Visible = True Then
+            lblMsg.Text = "Maximum number of legs added"
+            Exit Sub
+        End If
 
-    '    Dim sdate As Date
-    '    Dim n As Integer = 0
-    '    If Me.pnlLeg2.Visible = False Then
-    '        If Me.DestinationAddress.SelectedValue.trim <> "" Then
-    '            Me.OriginAddress2.Text = Me.DestinationAddress.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress.Text.trim <> "" Then
-    '            Me.OriginAddress2.Text = Me.DestinationAddress.Text.trim
-    '        End If
-    '        If Me.OriginAddress2.Text.trim <> "" Then loadairports(Me.OriginAddress2.Text.trim, "OriginAddress2")
-    '        If Not IsNothing(Me.depart_date.SelectedDate) Then
-    '            n = Me.departtime_combo.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date2.SelectedDate = sdate
-    '        Me.departtime_combo2.SelectedIndex = n
-    '        Me.pnlLeg2.Visible = True
-    '        '20160913 - pab - fix radio button
-    '        'broundtrip = True
+        Dim sdate As Date
+        Dim n As Integer = 0
+        If Me.pnlLeg2.Visible = False Then
+            If Me.DestinationAddress.SelectedValue.Trim <> "" Then
+                Me.OriginAddress2.Text = Me.DestinationAddress.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress.Text.Trim <> "" Then
+                Me.OriginAddress2.Text = Me.DestinationAddress.Text.Trim
+            End If
+            If Me.OriginAddress2.Text.Trim <> "" Then loadairports(Me.OriginAddress2.Text.Trim, "OriginAddress2")
+            If Not IsNothing(Me.depart_date.SelectedDate) Then
+                n = Me.departtime_combo.SelectedIndex
+                sdate = nextlegdate(Me.depart_date.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date2.SelectedDate = sdate
+            Me.departtime_combo2.SelectedIndex = n
+            Me.pnlLeg2.Visible = True
+            '20160913 - pab - fix radio button
+            'broundtrip = True
 
-    '    ElseIf Me.pnlLeg3.Visible = False Then
-    '        If Me.DestinationAddress2.SelectedValue.trim <> "" Then 
-    '            Me.OriginAddress3.Text = Me.DestinationAddress2.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress2.Text.trim <> "" Then
-    '            Me.OriginAddress3.Text = Me.DestinationAddress2.Text.trim
-    '        End If
-    '        If Me.OriginAddress3.Text.trim <> "" Then loadairports(Me.OriginAddress3.Text.trim, "OriginAddress3")
-    '        If Not IsNothing(Me.depart_date2.SelectedDate) Then
-    '            n = Me.departtime_combo2.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date2.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date3.SelectedDate = sdate
-    '        Me.departtime_combo3.SelectedIndex = n
-    '        Me.pnlLeg3.Visible = True
+        ElseIf Me.pnlLeg3.Visible = False Then
+            If Me.DestinationAddress2.SelectedValue.Trim <> "" Then
+                Me.OriginAddress3.Text = Me.DestinationAddress2.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress2.Text.Trim <> "" Then
+                Me.OriginAddress3.Text = Me.DestinationAddress2.Text.Trim
+            End If
+            If Me.OriginAddress3.Text.Trim <> "" Then loadairports(Me.OriginAddress3.Text.Trim, "OriginAddress3")
+            If Not IsNothing(Me.depart_date2.SelectedDate) Then
+                n = Me.departtime_combo2.SelectedIndex
+                sdate = nextlegdate(Me.depart_date2.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date3.SelectedDate = sdate
+            Me.departtime_combo3.SelectedIndex = n
+            Me.pnlLeg3.Visible = True
 
-    '    ElseIf Me.pnlLeg4.Visible = False Then
-    '        If Me.DestinationAddress3.SelectedValue.trim <> "" Then 
-    '            Me.OriginAddress4.Text = Me.DestinationAddress3.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress3.Text.trim <> "" Then
-    '            Me.OriginAddress4.Text = Me.DestinationAddress3.Text.trim
-    '        End If
-    '        If Me.OriginAddress4.Text.trim <> "" Then loadairports(Me.OriginAddress4.Text.trim, "OriginAddress4")
-    '        If Not IsNothing(Me.depart_date3.SelectedDate) Then
-    '            n = Me.departtime_combo3.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date3.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date4.SelectedDate = sdate
-    '        Me.departtime_combo4.SelectedIndex = n
-    '        Me.pnlLeg4.Visible = True
+        ElseIf Me.pnlLeg4.Visible = False Then
+            If Me.DestinationAddress3.SelectedValue.Trim <> "" Then
+                Me.OriginAddress4.Text = Me.DestinationAddress3.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress3.Text.Trim <> "" Then
+                Me.OriginAddress4.Text = Me.DestinationAddress3.Text.Trim
+            End If
+            If Me.OriginAddress4.Text.Trim <> "" Then loadairports(Me.OriginAddress4.Text.Trim, "OriginAddress4")
+            If Not IsNothing(Me.depart_date3.SelectedDate) Then
+                n = Me.departtime_combo3.SelectedIndex
+                sdate = nextlegdate(Me.depart_date3.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date4.SelectedDate = sdate
+            Me.departtime_combo4.SelectedIndex = n
+            Me.pnlLeg4.Visible = True
 
-    '    ElseIf Me.pnlLeg5.Visible = False Then
-    '        If Me.DestinationAddress4.SelectedValue.trim <> "" Then 
-    '            Me.OriginAddress5.Text = Me.DestinationAddress4.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress4.Text.trim <> "" Then
-    '            Me.OriginAddress5.Text = Me.DestinationAddress4.Text.trim
-    '        End If
-    '        If Me.OriginAddress5.Text.trim <> "" Then loadairports(Me.OriginAddress5.Text.trim, "OriginAddress5")
-    '        If Not IsNothing(Me.depart_date4.SelectedDate) Then
-    '            n = Me.departtime_combo4.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date4.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date5.SelectedDate = sdate
-    '        Me.departtime_combo5.SelectedIndex = n
-    '        Me.pnlLeg5.Visible = True
+        ElseIf Me.pnlLeg5.Visible = False Then
+            If Me.DestinationAddress4.SelectedValue.Trim <> "" Then
+                Me.OriginAddress5.Text = Me.DestinationAddress4.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress4.Text.Trim <> "" Then
+                Me.OriginAddress5.Text = Me.DestinationAddress4.Text.Trim
+            End If
+            If Me.OriginAddress5.Text.Trim <> "" Then loadairports(Me.OriginAddress5.Text.Trim, "OriginAddress5")
+            If Not IsNothing(Me.depart_date4.SelectedDate) Then
+                n = Me.departtime_combo4.SelectedIndex
+                sdate = nextlegdate(Me.depart_date4.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date5.SelectedDate = sdate
+            Me.departtime_combo5.SelectedIndex = n
+            Me.pnlLeg5.Visible = True
 
-    '    ElseIf Me.pnlLeg6.Visible = False Then
-    '        If Me.DestinationAddress5.SelectedValue.trim <> "" Then 
-    '            Me.OriginAddress6.Text = Me.DestinationAddress5.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress5.Text.trim <> "" Then
-    '            Me.OriginAddress6.Text = Me.DestinationAddress5.Text.trim
-    '        End If
-    '        If Me.OriginAddress6.Text.trim <> "" Then loadairports(Me.OriginAddress6.Text.trim, "OriginAddress6")
-    '        If Not IsNothing(Me.depart_date5.SelectedDate) Then
-    '            n = Me.departtime_combo5.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date5.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date6.SelectedDate = sdate
-    '        Me.departtime_combo6.SelectedIndex = n
-    '        Me.pnlLeg6.Visible = True
+        ElseIf Me.pnlLeg6.Visible = False Then
+            If Me.DestinationAddress5.SelectedValue.Trim <> "" Then
+                Me.OriginAddress6.Text = Me.DestinationAddress5.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress5.Text.Trim <> "" Then
+                Me.OriginAddress6.Text = Me.DestinationAddress5.Text.Trim
+            End If
+            If Me.OriginAddress6.Text.Trim <> "" Then loadairports(Me.OriginAddress6.Text.Trim, "OriginAddress6")
+            If Not IsNothing(Me.depart_date5.SelectedDate) Then
+                n = Me.departtime_combo5.SelectedIndex
+                sdate = nextlegdate(Me.depart_date5.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date6.SelectedDate = sdate
+            Me.departtime_combo6.SelectedIndex = n
+            Me.pnlLeg6.Visible = True
 
-    '    ElseIf Me.pnlLeg7.Visible = False Then
-    '        If Me.DestinationAddress6.SelectedValue.trim <> "" Then 
-    '            Me.OriginAddress7.Text = Me.DestinationAddress6.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress6.Text.trim <> "" Then
-    '            Me.OriginAddress7.Text = Me.DestinationAddress6.Text.trim
-    '        End If
-    '        If Me.OriginAddress7.Text.trim <> "" Then loadairports(Me.OriginAddress7.Text.trim, "OriginAddress7")
-    '        If Not IsNothing(Me.depart_date6.SelectedDate) Then
-    '            n = Me.departtime_combo6.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date6.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date7.SelectedDate = sdate
-    '        Me.departtime_combo7.SelectedIndex = n
-    '        Me.pnlLeg7.Visible = True
+        ElseIf Me.pnlLeg7.Visible = False Then
+            If Me.DestinationAddress6.SelectedValue.Trim <> "" Then
+                Me.OriginAddress7.Text = Me.DestinationAddress6.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress6.Text.Trim <> "" Then
+                Me.OriginAddress7.Text = Me.DestinationAddress6.Text.Trim
+            End If
+            If Me.OriginAddress7.Text.Trim <> "" Then loadairports(Me.OriginAddress7.Text.Trim, "OriginAddress7")
+            If Not IsNothing(Me.depart_date6.SelectedDate) Then
+                n = Me.departtime_combo6.SelectedIndex
+                sdate = nextlegdate(Me.depart_date6.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date7.SelectedDate = sdate
+            Me.departtime_combo7.SelectedIndex = n
+            Me.pnlLeg7.Visible = True
 
-    '    ElseIf Me.pnlLeg8.Visible = False Then
-    '        If Me.DestinationAddress7.SelectedValue.trim <> "" Then 
-    '            Me.OriginAddress8.Text = Me.DestinationAddress7.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress7.Text.trim <> "" Then
-    '            Me.OriginAddress8.Text = Me.DestinationAddress7.Text.trim
-    '        End If
-    '        If Me.OriginAddress8.Text.trim <> "" Then loadairports(Me.OriginAddress8.Text.trim, "OriginAddress8")
-    '        If Not IsNothing(Me.depart_date7.SelectedDate) Then
-    '            n = Me.departtime_combo7.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date7.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date8.SelectedDate = sdate
-    '        Me.departtime_combo8.SelectedIndex = n
-    '        Me.pnlLeg8.Visible = True
+        ElseIf Me.pnlLeg8.Visible = False Then
+            If Me.DestinationAddress7.SelectedValue.Trim <> "" Then
+                Me.OriginAddress8.Text = Me.DestinationAddress7.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress7.Text.Trim <> "" Then
+                Me.OriginAddress8.Text = Me.DestinationAddress7.Text.Trim
+            End If
+            If Me.OriginAddress8.Text.Trim <> "" Then loadairports(Me.OriginAddress8.Text.Trim, "OriginAddress8")
+            If Not IsNothing(Me.depart_date7.SelectedDate) Then
+                n = Me.departtime_combo7.SelectedIndex
+                sdate = nextlegdate(Me.depart_date7.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date8.SelectedDate = sdate
+            Me.departtime_combo8.SelectedIndex = n
+            Me.pnlLeg8.Visible = True
 
-    '    ElseIf Me.pnlLeg9.Visible = False Then
-    '        If Me.DestinationAddress8.SelectedValue.trim <> "" Then 
-    '            Me.OriginAddress9.Text = Me.DestinationAddress8.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress8.Text.trim <> "" Then
-    '            Me.OriginAddress9.Text = Me.DestinationAddress8.Text.trim
-    '        End If
-    '        If Me.OriginAddress9.Text.trim <> "" Then loadairports(Me.OriginAddress9.Text.trim, "OriginAddress9")
-    '        If Not IsNothing(Me.depart_date8.SelectedDate) Then
-    '            n = Me.departtime_combo8.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date8.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date9.SelectedDate = sdate
-    '        Me.departtime_combo9.SelectedIndex = n
-    '        Me.pnlLeg9.Visible = True
+        ElseIf Me.pnlLeg9.Visible = False Then
+            If Me.DestinationAddress8.SelectedValue.Trim <> "" Then
+                Me.OriginAddress9.Text = Me.DestinationAddress8.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress8.Text.Trim <> "" Then
+                Me.OriginAddress9.Text = Me.DestinationAddress8.Text.Trim
+            End If
+            If Me.OriginAddress9.Text.Trim <> "" Then loadairports(Me.OriginAddress9.Text.Trim, "OriginAddress9")
+            If Not IsNothing(Me.depart_date8.SelectedDate) Then
+                n = Me.departtime_combo8.SelectedIndex
+                sdate = nextlegdate(Me.depart_date8.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date9.SelectedDate = sdate
+            Me.departtime_combo9.SelectedIndex = n
+            Me.pnlLeg9.Visible = True
 
-    '    ElseIf Me.pnlLeg10.Visible = False Then
-    '        If Me.DestinationAddress9.SelectedValue.trim <> "" Then 
-    '            Me.OriginAddress10.Text = Me.DestinationAddress9.SelectedValue.ToString.trim
-    '        elseIf Me.DestinationAddress9.Text.trim <> "" Then
-    '            Me.OriginAddress10.Text = Me.DestinationAddress9.Text.trim
-    '        End If
-    '        If Me.OriginAddress10.Text.trim <> "" Then loadairports(Me.OriginAddress10.Text.trim, "OriginAddress10")
-    '        If Not IsNothing(Me.depart_date9.SelectedDate) Then
-    '            n = Me.departtime_combo9.SelectedIndex
-    '            sdate = nextlegdate(Me.depart_date9.SelectedDate, n)
-    '        Else
-    '            sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
-    '            n = 37 ' "09:00 AM"
-    '        End If
-    '        Me.depart_date10.SelectedDate = sdate
-    '        Me.departtime_combo10.SelectedIndex = n
-    '        Me.pnlLeg10.Visible = True
+        ElseIf Me.pnlLeg10.Visible = False Then
+            If Me.DestinationAddress9.SelectedValue.Trim <> "" Then
+                Me.OriginAddress10.Text = Me.DestinationAddress9.SelectedValue.ToString.Trim
+            ElseIf Me.DestinationAddress9.Text.Trim <> "" Then
+                Me.OriginAddress10.Text = Me.DestinationAddress9.Text.Trim
+            End If
+            If Me.OriginAddress10.Text.Trim <> "" Then loadairports(Me.OriginAddress10.Text.Trim, "OriginAddress10")
+            If Not IsNothing(Me.depart_date9.SelectedDate) Then
+                n = Me.departtime_combo9.SelectedIndex
+                sdate = nextlegdate(Me.depart_date9.SelectedDate, n)
+            Else
+                sdate = DateAdd(DateInterval.Day, 2, CDate(Now.ToShortDateString))
+                n = 37 ' "09:00 AM"
+            End If
+            Me.depart_date10.SelectedDate = sdate
+            Me.departtime_combo10.SelectedIndex = n
+            Me.pnlLeg10.Visible = True
 
-    '    End If
+        End If
 
-    '    '20160429 - pab - change trip type if one way or round trip
-    '    '20160913 - pab - fix radio button
-    '    'If Session("triptype") <> "M" And broundtrip = False Then
-    '    If Session("triptype") <> "M" Then
-    '        Session("triptype") = "M"
-    '        Session("showcal") = "Y"
+        '20160429 - pab - change trip type if one way or round trip
+        '20160913 - pab - fix radio button
+        'If Session("triptype") <> "M" And broundtrip = False Then
+        If Session("triptype") <> "M" Then
+            Session("triptype") = "M"
+            Session("showcal") = "Y"
 
-    '        Me.rblOneWayRoundTrip.SelectedIndex = 2
-    '    End If
+            Me.rblOneWayRoundTrip.SelectedIndex = 2
+        End If
 
-    'End Sub
+    End Sub
 
     '20160808 - pab - fix next depart date
     Function nextlegdate(ByVal departdate As Date, ByRef timeindex As Integer) As Date

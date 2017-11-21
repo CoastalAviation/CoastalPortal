@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="true" CodeBehind="home.aspx.vb" Inherits="WebRole1.home2" EnableViewStateMac="false" EnableSessionState="true" EnableEventValidation="false" ValidateRequest="false" %>
+﻿<%@ Page Language="vb" AutoEventWireup="true" CodeBehind="home.aspx.vb" Inherits="CoastalPortal.home2" EnableViewStateMac="false" EnableSessionState="true" EnableEventValidation="false" ValidateRequest="false" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="asp" %>
 <%@ Register assembly="Telerik.Web.UI" namespace="Telerik.Web.UI" tagprefix="telerik" %>
 

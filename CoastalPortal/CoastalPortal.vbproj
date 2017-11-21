@@ -54,6 +54,10 @@
     <Reference Include="AjaxControlToolkit, Version=17.1.1.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <HintPath>..\packages\AjaxControlToolkit.17.1.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
     </Reference>
+    <Reference Include="AntiXSSLibrary, Version=3.1.3524.16873, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\AntiXSSLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
@@ -265,7 +269,6 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="home.aspx" />
     <Content Include="Images\arrow.png" />
     <Content Include="Images\aw snap.PNG" />
     <Content Include="Images\bg2.jpg" />
@@ -324,6 +327,11 @@
     <Content Include="tip_balloon\stemt.gif" />
     <Content Include="tip_balloon\t.gif" />
     <Content Include="tip_balloon\tip_balloon.js" />
+    <Content Include="Web References\AviationWebService1_10\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </Content>
+    <None Include="Web References\AviationWebService1_10\service.disco" />
     <Content Include="Web References\AWS\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
@@ -341,6 +349,7 @@
     <Content Include="fonts\geometria-medium-webfont.eot" />
     <Content Include="fonts\geometria-medium-webfont.hxd" />
     <Content Include="fonts\geometria-medium-webfont.woff" />
+    <None Include="Web References\AviationWebService1_10\service.wsdl" />
     <None Include="Web References\AWS\service.wsdl" />
     <None Include="Web References\CATMSGQ\msgq.disco" />
     <None Include="Web References\AWS\service.disco" />
@@ -391,6 +400,9 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AircraftPerformance\FuelSpeedByDistance.vb" />
+    <Compile Include="AircraftPerformance\FuelSpeedByHour.vb" />
+    <Compile Include="AircraftPerformance\RangeByPassenger.vb" />
     <Compile Include="AirTaxi.vb" />
     <Compile Include="AOGRecovery.aspx.designer.vb">
       <DependentUpon>AOGRecovery.aspx</DependentUpon>
@@ -519,16 +531,11 @@
       <DependentUpon>FlightSchedule.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="geocoderest.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="home.aspx.designer.vb">
-      <DependentUpon>home.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="home.aspx.vb">
-      <DependentUpon>home.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="Mapping.vb" />
     <Compile Include="ModelDetails.aspx.designer.vb">
       <DependentUpon>ModelDetails.aspx</DependentUpon>
     </Compile>
@@ -586,6 +593,7 @@
       <DependentUpon>RunOptimizer.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="SaveQuoteInfo.vb" />
     <Compile Include="showFCDRpdf.aspx.designer.vb">
       <DependentUpon>showFCDRpdf.aspx</DependentUpon>
     </Compile>
@@ -614,6 +622,11 @@
     <Compile Include="Site.Mobile.Master.designer.vb">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="Web References\AviationWebService1_10\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="Web References\AWS\Reference.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -629,6 +642,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
+    <Compile Include="Web References\GeoCode\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
     <Compile Include="WebForm1.aspx.designer.vb">
       <DependentUpon>WebForm1.aspx</DependentUpon>
     </Compile>
@@ -636,6 +654,7 @@
       <DependentUpon>WebForm1.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="WebServiceConnections.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\licenses.licx" />
@@ -668,6 +687,30 @@
       <LastGenOutput>Reference.vb</LastGenOutput>
     </Content>
     <None Include="Web References\coastalavtech.service\service.wsdl" />
+    <Content Include="Web References\GeoCode\GeocodeResponse.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </Content>
+    <None Include="Web References\GeoCode\GeocodeService.wsdl" />
+    <None Include="Web References\GeoCode\GeocodeService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\GeoCode\GeocodeService1.wsdl" />
+    <None Include="Web References\GeoCode\GeocodeService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\GeoCode\GeocodeService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\GeoCode\GeocodeService3.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\GeoCode\GeocodeService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Web References\GeoCode\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -697,6 +740,17 @@
       <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>CoastalPortal_AWS_WebService1</CachedSettingsPropName>
     </WebReferenceUrl>
+    <WebReferenceUrl Include="http://169.47.243.164/service.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\AviationWebService1_10\</RelPath>
+      <UpdateFromURL>http://169.47.243.164/service.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CoastalPortal_AviationWebService1_10_WebService1</CachedSettingsPropName>
+    </WebReferenceUrl>
     <WebReferenceUrl Include="http://casmsgq.coastalavtech.com/msgq.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
       <RelPath>Web References\CATMSGQ\</RelPath>
@@ -707,6 +761,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>CoastalPortal_CATMSGQ_msgq</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://dev.virtualearth.net/webservices/v1/metadata/geocodeservice/geocodeservice.wsdl">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\GeoCode\</RelPath>
+      <UpdateFromURL>http://dev.virtualearth.net/webservices/v1/metadata/geocodeservice/geocodeservice.wsdl</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CoastalPortal_GeoCode_GeocodeService</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="https://service.coastalavtech.com/service.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
