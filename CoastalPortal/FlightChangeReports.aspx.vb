@@ -311,7 +311,7 @@ Public Class FlightChangeReports
                 row.BackColor = Drawing.Color.Azure
             End If
         Next
-        detailitems = odb.FCDRListDetail.Where(Function(c) c.KeyID = getKey).ToList()
+        detailitems = odb.FCDRListDetail.Where(Function(c) Trim(c.KeyID) = Trim(getKey)).ToList()
         gvFCDRDetail.DataSource = detailitems
         gvFCDRDetail.DataBind()
         'If detailitems.Count > 0 Then gvFCDRDetail.Visible = True

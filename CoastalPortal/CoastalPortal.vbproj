@@ -245,6 +245,7 @@
     <Content Include="Controls\CASFlightsAzure.ascx" />
     <Content Include="Controls\FOSFlightsAzure.ascx" />
     <Content Include="Controls\FOSFlightsCalendar.ascx" />
+    <Content Include="Controls\ModelDetailPanel.ascx" />
     <Content Include="Controls\OptimizerCalendar.ascx" />
     <Content Include="CustomerLogin.aspx" />
     <Content Include="Dashboard.aspx" />
@@ -298,7 +299,6 @@
     <Content Include="ModelRunHistory.aspx" />
     <Content Include="My Project\PublishProfiles\CustomProfile.pubxml.user" />
     <Content Include="pagetemplate.aspx" />
-    <Content Include="QuoteTrip.aspx" />
     <Content Include="RunOptimizer.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -431,6 +431,12 @@
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="Controls\AcceptRejectChange.aspx.designer.vb">
+      <DependentUpon>AcceptRejectChange.aspx.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AcceptRejectChange.aspx.vb">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="Controls\CASFlightsAzure.ascx.designer.vb">
       <DependentUpon>CASFlightsAzure.ascx</DependentUpon>
     </Compile>
@@ -450,6 +456,13 @@
     </Compile>
     <Compile Include="Controls\FOSFlightsCalendar.ascx.vb">
       <DependentUpon>FOSFlightsCalendar.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ModelDetailPanel.ascx.designer.vb">
+      <DependentUpon>ModelDetailPanel.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ModelDetailPanel.ascx.vb">
+      <DependentUpon>ModelDetailPanel.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\OptimizerCalendar.ascx.designer.vb">
@@ -565,13 +578,6 @@
     </Compile>
     <Compile Include="PlanningFOS.vb" />
     <Compile Include="PopulateLookups.vb" />
-    <Compile Include="QuoteTrip.aspx.designer.vb">
-      <DependentUpon>QuoteTrip.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="QuoteTrip.aspx.vb">
-      <DependentUpon>QuoteTrip.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
     <Compile Include="RunOptimizer.aspx.designer.vb">
       <DependentUpon>RunOptimizer.aspx</DependentUpon>
     </Compile>
