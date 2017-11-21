@@ -81,6 +81,7 @@ Public Class FlightChangeDetail
     Public Const CAS_HA As Integer = 39
     Public Const CAS_LEGBASE As Integer = 40
     Public Const CAS_OE As Integer = 41
+    Public Property DepartDate As DateTime
 
     Private M_carrier As Integer
     Protected Property MyCarrier As Integer
@@ -466,21 +467,50 @@ Public Class FlightChangeDetail
                 i.Starttail = If(Chktail = Trim(fcdr.PriorTailNumber), "True", "False")
             Next
             Panellist = (From a In Panellist Select a).OrderByDescending(Function(x) x.Starttail).ThenBy(Function(x) x.TailNumber).ThenBy(Function(x) x.DateTimeGMT).Distinct().ToList()
-            BaseList = (From a In FosList Select Trim(a.BaseCode)).Distinct().ToList()
-            BaseList = BaseList.Union((From a In CasList Select Trim(a.BaseCode)).Distinct().ToList()).ToList()
+            BaseList = (From a In FosList Select Right(Trim(a.BaseCode), 3)).Distinct().ToList()
+            BaseList = BaseList.Union((From a In CasList Where a.ProRatedRevenue > 0 Select Right(Trim(a.LegBaseCode), 3)).Distinct().ToList()).ToList()
+
+            Dim ii As Integer = 0
+
 
             If carrierprofile.FCDRPandL Then
                 For Each x As String In BaseList
-                    Dim CasRev, Fosrev As Decimal
-                    CasRev = 0
+                    Dim CasRev, Fosrev, BasePremiumRev As Decimal
+                    BasePremiumRev = 0
                     Fosrev = 0
+                    CasRev = 0
                     For Each dd As String In TripList
-                        Fosrev += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Trim(a.BaseCode) = Trim(x) Select a.PandL).FirstOrDefault())
-                        CasRev += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Trim(a.BaseCode) = Trim(x) Select a.ProRatedRevenue).Sum())
+                        Fosrev += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.PandL).FirstOrDefault())
+                        CasRev += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.PandL).FirstOrDefault())
+                        BasePremiumRev = CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost * 0.2).Sum())
+                        BasePremiumRev = -CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost * 0.2).Sum())
+                        CasRev += BasePremiumRev
                     Next
                     baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = CasRev, .FosRevenue = Fosrev})
                 Next
             End If
+            Dim CurrentTail, LastTail As String
+            Dim Newtail As Boolean = True
+            Dim ck As Integer = 0
+            If Panellist.Count > 1 Then
+                Do While ck <> Panellist.Count - 1
+                    CurrentTail = If(Panellist(ck + 1).FOSRecord Is Nothing, Trim(Panellist(ck + 1).CASRecord.AircraftRegistration), Trim(Panellist(ck + 1).FOSRecord.AC))
+                    LastTail = If(Panellist(ck).FOSRecord Is Nothing, Trim(Panellist(ck).CASRecord.AircraftRegistration), Trim(Panellist(ck).FOSRecord.AC))
+                    If CurrentTail <> LastTail Then Newtail = True
+                    If CurrentTail = LastTail And Newtail Then
+                        If Panellist(ck).FOSRecord IsNot Nothing And Panellist(ck).CASRecord IsNot Nothing Then
+                            If Panellist(ck + 1).FOSRecord IsNot Nothing And Panellist(ck + 1).CASRecord IsNot Nothing Then
+                                Panellist.Remove(Panellist(ck))
+                                ck -= 1
+                            End If
+                        Else
+                            Newtail = False
+                        End If
+                    End If
+                    ck += 1
+                Loop
+            End If
+
             GridViewSource.Add(New PanelDisplay With {.FCDR_Key = fcdr.keyid, .dcostday0 = fcdr.SavingsDay0, .dcostday1 = fcdr.SavingsDay1, .dcostday2 = fcdr.SavingsDay2, .TailNumber = fcdr.PriorTailNumber, .RevenueRecords = baserev,
                                                         .NRM = CDbl(fcdr.DeltaNonRevMiles), .PanelRecord = Panellist.ToList(), .ModelNumber = fcdr.ModelRunID, .TotalSavings = fcdr.TotalSavings})
 
@@ -508,7 +538,7 @@ Public Class FlightChangeDetail
 
         Array.Copy(colorsArray, allColors, colorsArray.Length)
 
-        _carrierid = Session("carrierid")
+        '   _carrierid = Session("carrierid")
         Dim account, rownumber As Integer
         Dim currentTail, LastTail As String
         Dim i As Integer
@@ -676,6 +706,7 @@ Public Class FlightChangeDetail
 
             For z = 2 To 5
                 If IsDate(gridviewtrips.Rows(i).Cells(z).Text) Then
+                    DepartDate = gridviewtrips.Rows(i).Cells(z).Text
                     Dim departgmt As Date = CDate(gridviewtrips.Rows(i).Cells(z).Text)
                     gridviewtrips.Rows(i).Cells(z).Text = Trim(departgmt.ToString("MM'/'dd' 'HH':'mm"))
                 End If
@@ -694,7 +725,7 @@ Public Class FlightChangeDetail
         Dim req As String
         Dim currentTail, LastTail, LastFosTail, LastCasTail As String
 
-        _carrierid = Session("carrierid")
+        '  _carrierid = Session("carrierid")
 
         Dim colorsArray As System.Array =
         [Enum].GetValues(GetType(KnownColor))
@@ -837,6 +868,7 @@ Public Class FlightChangeDetail
             End If
 
             If IsDate(gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text) Then
+                DepartDate = gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text
                 Dim gmt As Date = DateTime.UtcNow
                 Dim departgmt As Date = CDate(gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text)
                 gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text = Trim(departgmt.ToString("MM'/'dd' 'HH':'mm"))
@@ -905,32 +937,32 @@ Public Class FlightChangeDetail
         For i = 1 To gridviewtrips.Rows.Count - 1
             currentTail = If(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text))
             LastTail = If(Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i - 1).Cells(CAS_AC).Text))
-            If gridviewtrips.Rows(i).Cells(FOS_AC).Text <> gridviewtrips.Rows(i).Cells(CAS_AC).Text Then
-                If gridviewtrips.Rows(i).Cells(FOS_FT).Text = "Rev" Or gridviewtrips.Rows(i).Cells(CAS_FT).Text = "Rev" Then
-                    FCDRdetail.Add(New FCDRListDetail With {.KeyID = FCDRKey, .Modification = gridviewtrips.Rows(i).Cells(FUTURE_TAIL).Text, .FlightID = gridviewtrips.Rows(i).Cells(RECORD_ID).Text,
+            If Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text) Then
+                If Trim(gridviewtrips.Rows(i).Cells(FOS_FT).Text) = "Rev" Or Trim(gridviewtrips.Rows(i).Cells(CAS_FT).Text) = "Rev" Then
+                    FCDRdetail.Add(New FCDRListDetail With {.KeyID = FCDRKey, .Modification = Trim(gridviewtrips.Rows(i).Cells(FUTURE_TAIL).Text), .FlightID = Trim(gridviewtrips.Rows(i).Cells(RECORD_ID).Text),
                                    .TripNumber = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_TRIP).Text, gridviewtrips.Rows(i).Cells(CAS_TRIP).Text),
                                    .AC = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_AC).Text, gridviewtrips.Rows(i).Cells(CAS_AC).Text),
                                    .From_ICAO = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_FROM).Text, gridviewtrips.Rows(i).Cells(CAS_FROM).Text),
-                                   .To_ICAO = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_TO).Text, gridviewtrips.Rows(i).Cells(CAS_TO).Text)})
+                                   .To_ICAO = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_TO).Text, gridviewtrips.Rows(i).Cells(CAS_TO).Text),
+                                   .DepartDate = DepartDate})
                 End If
             End If
-
             If currentTail <> LastTail Then
                 gridviewtrips.Controls(0).Controls.AddAt(i + maxrows, AddRow(foscount, cascount)) ' This line will insert row at 2nd line
                 maxrows += 1
             End If
         Next
-        'Dim ck As Integer = 1
-        'If FCDRdetail.Count > 1 Then
-        '    Do While ck <> FCDRdetail.Count
-        '        If FCDRdetail.Where(Function(a) Trim(a.Modification) = Trim(FCDRdetail(ck).AC) And Trim(a.From_ICAO) = Trim(FCDRdetail(ck).From_ICAO) And Trim(a.To_ICAO) = Trim(FCDRdetail(ck).To_ICAO)).Count > 0 Then
-        '            'remove from the list
-        '            FCDRdetail.Remove(FCDRdetail(ck))
-        '            ck -= 1
-        '        End If
-        '        ck += 1
-        '    Loop
-        'End If
+        Dim ck As Integer = 0
+        If FCDRdetail.Count > 1 Then
+            Do While ck <> FCDRdetail.Count
+                If FCDRdetail.Where(Function(a) Trim(a.Modification) = Trim(FCDRdetail(ck).AC) And Trim(a.From_ICAO) = Trim(FCDRdetail(ck).From_ICAO) And Trim(a.To_ICAO) = Trim(FCDRdetail(ck).To_ICAO)).Count > 0 Then
+                    'remove from the list
+                    FCDRdetail.Remove(FCDRdetail(ck))
+                    ck -= 1
+                End If
+                ck += 1
+            Loop
+        End If
         If db.FCDRListDetail.Where(Function(c) c.KeyID = FCDRKey).Count() = 0 Then
 
             db.FCDRListDetail.AddRange(FCDRdetail)
