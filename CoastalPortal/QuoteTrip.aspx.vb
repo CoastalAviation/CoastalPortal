@@ -866,7 +866,9 @@ Public Class QuoteTrip
 
     End Function
 
-    Shared Function pushpinairport(ByVal airport As String, ByVal color As String, ByVal title As String, ByVal description As String, ByVal shapename As String) As String
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+    Shared Function pushpinairport(ByVal airport As String, ByVal color As String, ByVal title As String, ByVal description As String,
+                                   ByVal shapename As String, ByVal carrierid As Integer) As String
 
         '20111229 - pab
         AirTaxi.post_timing("pushpinairport Start  " & Now.ToString)
@@ -880,7 +882,7 @@ Public Class QuoteTrip
         Dim ws As New AviationWebService1_10.WebService1
 
         Dim fromairport As String
-        fromairport = ws.AirportLongLat("pbaumgart@ctgi.com", "123", _carrierid, airport)
+        fromairport = ws.AirportLongLat("pbaumgart@ctgi.com", "123", carrierid, airport)
 
         '20090706 - pab - fix airport locations 
         Dim oMapping As New Mapping
@@ -2022,13 +2024,14 @@ Public Class QuoteTrip
                 End If
 
                 '20130930 - pab - change email from
-                If IsNothing(_emailfrom) Then _emailfrom = ""
-                If _emailfrom = "" Then
-                    _emailfrom = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
+                '20171121 - pab - fix carriers changing midstream - change to Session variables
+                If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+                If Session("emailfrom").ToString = "" Then
+                    Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
-                If IsNothing(_emailfromquote) Then _emailfromquote = ""
-                If _emailfromquote = "" Then
-                    _emailfromquote = da.GetSetting(CInt(Session("carrierid")), "emailsentfromQuote")
+                If IsNothing(Session("emailfromquote")) Then Session("emailfromquote") = ""
+                If Session("emailfromquote") = "" Then
+                    Session("emailfromquote") = da.GetSetting(CInt(Session("carrierid")), "emailsentfromQuote")
                 End If
 
                 'rk 6.7.2010 load company branding
@@ -3574,6 +3577,9 @@ Public Class QuoteTrip
 
         AirTaxi.post_timing("getairports start  " & Now.ToString)
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+
         Dim dt As New DataTable
 
         Try
@@ -3774,7 +3780,7 @@ Public Class QuoteTrip
             'SendEmail(_carrierid, "info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " QuoteTrip.aspx.vb GetAirportsLatLong error", s, False, "", False)
             '20131024 - pab - fix duplicate emails
             'SendEmail(_carrierid, _emailfrom, "rkane@coastalaviationsoftware.com", appName & " QuoteTrip.aspx.vb GetAirportsLatLong error", s, False, "", False)
-            SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", appName & " QuoteTrip.aspx.vb GetAirportsLatLong error", s, CInt(Session("carrierid")))
+            SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "", appName & " QuoteTrip.aspx.vb GetAirportsLatLong error", s, CInt(Session("carrierid")))
 
         End Try
 
@@ -4682,6 +4688,9 @@ Public Class QuoteTrip
         AirTaxi.post_timing("Quote Start  " & Now.ToString)
         AirTaxi.Insertsys_log(0, appName, Left(Now & "Quote Start  ", 500), "Sub quote(ByVal carrierid As Integer)", "")
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+
 
         '20110926 - pab - update web services
         'Dim ws As New optimizelowestquote.Service
@@ -5106,7 +5115,7 @@ Public Class QuoteTrip
                         'Dim dqn2 As String = InBetween(1, dtflights.Rows(0).Item("PriceExplanationDetail"), "; dqn ", ";")
                         AirTaxi.Insertsys_log(0, appName, Left(Now & "recordquotexml  ", 500), " recordquotexmlStart", "")
 
-                        Dim qn As Integer = recordquotexml(dtflights, "", "", 0, "", 9, "", "", "", "", "", "")
+                        Dim qn As Integer = recordquotexml(dtflights, "", "", 0, "", 9, "", "", "", "", "", "", carrierid)
                         Session("quotenumber") = qn
                         'Session("dqn2") = dqn2
                         AirTaxi.Insertsys_log(0, appName, Left(Now & "recordquotexml  ", 500), " recordquotexmlEnd", "")
@@ -5454,7 +5463,7 @@ Public Class QuoteTrip
                 If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
                 If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
                 AirTaxi.Insertsys_log(carrierid, appName, s, "quote", "QuoteTrip.aspx.vb")
-                SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", appName & " QuoteTrip.aspx.vb quote error", s, CInt(Session("carrierid")))
+                SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "", appName & " QuoteTrip.aspx.vb quote error", s, CInt(Session("carrierid")))
             End Try
 
         Else
@@ -6390,6 +6399,9 @@ Public Class QuoteTrip
 
         AirTaxi.post_timing("GetLowestQuoteByWeightClassPartial Start  " & Now.ToString)
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+
         Dim BrokerID As Integer = 0
         If Not IsNothing(Session("BrokerID")) Then
             If IsNumeric(Session("BrokerID")) Then BrokerID = CInt(Session("BrokerID"))
@@ -6461,7 +6473,7 @@ Public Class QuoteTrip
                 'SendEmail(_carrierid, "info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " QuoteTrip.aspx.vb GetLowestQuoteByWeightClassPartial error", s, False, "", False)
                 '20131024 - pab - fix duplicate emails
                 'SendEmail(_carrierid, _emailfrom, "rkane@coastalaviationsoftware.com", appName & " QuoteTrip.aspx.vb GetLowestQuoteByWeightClassPartial error", s, False, "", False)
-                SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", appName & " QuoteTrip.aspx.vb GetLowestQuoteByWeightClassPartial error", s, CInt(Session("carrierid")))
+                SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "", appName & " QuoteTrip.aspx.vb GetLowestQuoteByWeightClassPartial error", s, CInt(Session("carrierid")))
             End If
 
         End Try
@@ -6492,6 +6504,9 @@ Public Class QuoteTrip
 
         '20111229 - pab
         AirTaxi.post_timing("GetLowestQuoteByWeightClass Start  " & Now.ToString)
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
 
         '20120919 - pab - add broker quote
         Dim BrokerID As Integer = 0
@@ -6568,7 +6583,7 @@ Public Class QuoteTrip
                 'SendEmail(_carrierid, "info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", appName & " QuoteTrip.aspx.vb GetLowestQuoteByWeightClass error", s, False, "", False)
                 '20131024 - pab - fix duplicate emails
                 'SendEmail(_carrierid, _emailfrom, "rkane@coastalaviationsoftware.com", appName & " QuoteTrip.aspx.vb GetLowestQuoteByWeightClass error", s, False, "", False)
-                SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", appName & " QuoteTrip.aspx.vb GetLowestQuoteByWeightClass error", s, CInt(Session("carrierid")))
+                SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "", appName & " QuoteTrip.aspx.vb GetLowestQuoteByWeightClass error", s, CInt(Session("carrierid")))
             End If
 
         End Try
@@ -6594,6 +6609,9 @@ Public Class QuoteTrip
 
         '20111229 - pab
         AirTaxi.post_timing("GetQuotesByWeightClassAllCarriers Start  " & Now.ToString)
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
 
         '20130722 - pab - fix web service call returning before quotes finished
         ws.Timeout = _sleep + 35000
@@ -6664,7 +6682,7 @@ Public Class QuoteTrip
                 '20131024 - pab - fix duplicate emails
                 'SendEmail(_carrierid, _emailfrom, "rkane@coastalaviationsoftware.com", _
                 '          appName & " QuoteTrip.aspx.vb GetQuotesByWeightClassAllCarriers error", s, False, "", False)
-                SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
+                SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "",
                           appName & " QuoteTrip.aspx.vb GetQuotesByWeightClassAllCarriers error", s, CInt(Session("carrierid")))
             End If
 
@@ -9233,6 +9251,9 @@ Public Class QuoteTrip
 
     Protected Sub Page_PreRender(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.PreRender
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+
         '20120809 - pab - try to catch error causing Object reference not set to an instance of an object
         Try
 
@@ -9644,7 +9665,7 @@ Public Class QuoteTrip
                 'SendEmail("info@coastalaviationsoftware.com", "rkane@coastalaviationsoftware.com", "Door2Door Timing Email ! Price Request from " & Session("origairportcode") & " to " & Session("destairportcode"), timing)
                 '20131024 - pab - fix duplicate emails
                 'SendEmail(_carrierid, _emailfrom, "rkane@coastalaviationsoftware.com", "Door2Door Timing Email ! Price Request from " & Session("origairportcode") & " to " & Session("destairportcode"), timing, False, "", False)
-                SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", "Door2Door Timing Email ! Price Request from " & Session("origairportcode") & " to " & Session("destairportcode"), timing, CInt(Session("carrierid")))
+                SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "", "Door2Door Timing Email ! Price Request from " & Session("origairportcode") & " to " & Session("destairportcode"), timing, CInt(Session("carrierid")))
             End If
 
             timing = ""
@@ -9664,7 +9685,7 @@ Public Class QuoteTrip
             '20131024 - pab - fix duplicate emails
             'SendEmail(_carrierid, _emailfrom, "rkane@coastalaviationsoftware.com", _
             '          appName & " QuoteTrip.aspx.vb Page_PreRender error", s, False, "", False)
-            SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
+            SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "",
                       appName & " QuoteTrip.aspx.vb Page_PreRender error", s, CInt(Session("carrierid")))
 
         End Try
@@ -10363,7 +10384,7 @@ Public Class QuoteTrip
             End If
 
             Dim dqn2 As String = InBetween(1, dtflightsselected.Rows(0).Item("PriceExplanationDetail"), "; dqn ", ";")
-            Dim qn As Integer = recordquotexml(dtflightsselected, "", "", 0, "", 9, "", "", "", "", "", "")
+            Dim qn As Integer = recordquotexml(dtflightsselected, "", "", 0, "", 9, "", "", "", "", "", "", carrierid)
             Session("quotenumber") = qn
             Session("dqn") = dqn2
             Session("dqn2") = dqn2
@@ -11950,6 +11971,9 @@ Public Class QuoteTrip
 
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+
         Try
 
             AirTaxi.post_timing("QuoteTrip.aspx.vb OriginAddress_ItemsRequested start  " & Now.ToString)
@@ -11971,7 +11995,7 @@ Public Class QuoteTrip
             If Not IsNothing(ex.StackTrace) Then serr &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             AirTaxi.Insertsys_log(0, AirTaxi.appName, serr, "QuoteTrip.aspx OriginAddress_ItemsRequested", "")
             '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
-            AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " QuoteTrip.aspx OriginAddress_ItemsRequested Error",
+            AirTaxi.SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " QuoteTrip.aspx OriginAddress_ItemsRequested Error",
                               serr, CInt(Session("carrierid")))
 
         End Try
@@ -12002,6 +12026,9 @@ Public Class QuoteTrip
 
             timing = ""
             AirTaxi.post_timing("QuoteTrip.aspx.vb loadairports start  " & Now.ToString)
+
+            '20171121 - pab - fix carriers changing midstream - change to Session variables
+            If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
 
             '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
             miles = DataAccess.getsettingnumeric(CInt(Session("carrierid")), "AirportDistance")
@@ -12163,7 +12190,7 @@ Public Class QuoteTrip
             If Not IsNothing(ex.InnerException) Then serr &= "; " & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then serr &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             AirTaxi.Insertsys_log(CInt(Session("carrierid")), AirTaxi.appName, serr, "QuoteTrip.aspx loadairports", "")
-            AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " QuoteTrip.aspx loadairports Error",
+            AirTaxi.SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " QuoteTrip.aspx loadairports Error",
                 serr, CInt(Session("carrierid")))
 
         End Try
@@ -13122,6 +13149,9 @@ Public Class QuoteTrip
         Dim rt As String = "05:00 PM"
         Dim s As String = ""
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+
         Try
 
             '20160909 - pab - adjust departure times to allow for quick turns when flight times are unknown to user
@@ -13656,7 +13686,7 @@ Public Class QuoteTrip
                 If Not IsNothing(ex.InnerException) Then serr &= "; " & ex.InnerException.ToString
                 If Not IsNothing(ex.StackTrace) Then serr &= vbNewLine & vbNewLine & ex.StackTrace.ToString
                 AirTaxi.Insertsys_log(0, AirTaxi.appName, serr, "QuoteTrip.aspx findflights", "")
-                AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " QuoteTrip.aspx findflights Error",
+                AirTaxi.SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " QuoteTrip.aspx findflights Error",
                                   serr, CInt(Session("carrierid")))
             End If
 
@@ -13677,6 +13707,10 @@ Public Class QuoteTrip
         Dim bintl As Boolean = False
         Dim leavedate As DateTime
         Dim returndate As DateTime
+
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        Dim carrierid As Integer = CInt(Session("carrierid"))
 
         If Not (IsNothing(Me.depart_date.SelectedDate)) Then
             If IsDate(Me.depart_date.SelectedDate.Value) Then
@@ -13790,7 +13824,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         '20160909 - pab - adjust departure times to allow for quick turns when flight times are unknown to user
         ma += TurnAroundMinutes    'add turn time
@@ -13837,6 +13871,10 @@ Public Class QuoteTrip
         Dim leave1 As DateTime
         Dim leave2 As DateTime
         Dim s As String = ""
+
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        Dim carrierid As Integer = CInt(Session("carrierid"))
 
         editflightsmultileg = ""
 
@@ -13938,7 +13976,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         ma += TurnAroundMinutes    'add turn time
         If leave2 < DateAdd(DateInterval.Minute, ma, leave1) Then
@@ -14015,7 +14053,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         ma += TurnAroundMinutes    'add turn time
         If leave2 < DateAdd(DateInterval.Minute, ma, leave1) Then
@@ -14092,7 +14130,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         ma += TurnAroundMinutes    'add turn time
         If leave2 < DateAdd(DateInterval.Minute, ma, leave1) Then
@@ -14169,7 +14207,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         ma += TurnAroundMinutes    'add turn time
         If leave2 < DateAdd(DateInterval.Minute, ma, leave1) Then
@@ -14246,7 +14284,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         ma += TurnAroundMinutes    'add turn time
         If leave2 < DateAdd(DateInterval.Minute, ma, leave1) Then
@@ -14323,7 +14361,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         ma += TurnAroundMinutes    'add turn time
         If leave2 < DateAdd(DateInterval.Minute, ma, leave1) Then
@@ -14400,7 +14438,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         ma += TurnAroundMinutes    'add turn time
         If leave2 < DateAdd(DateInterval.Minute, ma, leave1) Then
@@ -14477,7 +14515,7 @@ Public Class QuoteTrip
         d = da.GetRoundEarthDistanceBetweenLocations(fromairport, toairport)
         bintl = isflightintl(fromairport, toairport)
         If d > 0 Then
-            ma = AirTaxi.traveltime(d, bintl)
+            ma = AirTaxi.traveltime(d, bintl, carrierid)
         End If
         ma += TurnAroundMinutes    'add turn time
         If leave2 < DateAdd(DateInterval.Minute, ma, leave1) Then

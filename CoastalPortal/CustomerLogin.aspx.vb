@@ -11,6 +11,10 @@ Public Class loginpage
         Dim host As String = ""
 
         '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
+        Dim carrierid As Integer = CInt(Session("carrierid"))
+        Dim urlalias As String = Session("urlalias").ToString
         Insertsys_log(CInt(Session("carrierid")), appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
             "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; Request - " & Request.Url.ToString, "Page_Load", "CustomerLogin.aspx.vb")
 
@@ -51,8 +55,8 @@ Public Class loginpage
                     'Session("urlalias") = _urlalias
                     Session("urlalias") = alist.Item(1)
                     Session("connectstring") = alist.Item(2)
-                    _carrierid = Session("carrierid")
-                    _urlalias = Session("urlalias")
+                    carrierid = Session("carrierid")
+                    urlalias = Session("urlalias")
                     connectstring = Session("connectstring")
                 End If
             End If

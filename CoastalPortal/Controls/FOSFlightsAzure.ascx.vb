@@ -1223,7 +1223,9 @@ done:
 
         Dim tst As Label
         Dim desc As Label
-        _carrierid = Session("carrierid")
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        Dim carrierid As Integer = CInt(Session("carrierid"))
 
 
         Try
@@ -1275,13 +1277,13 @@ done:
 
 
             'rk 7.30.14 replace default model
-            If _carrierid = WHEELSUP Then
+            If carrierid = WHEELSUP Then
                 req = "SELECT top 1 [ModelRunID], [DeltaExpense], [DeltaNRM], [CASlinebreaks], [CASefficiency], [FOSlinebreaks], [FOSefficiency], deltaexpense1, deltaexpense2, deltaexpense3, deltaexpense4, Viewed  ,[EffCAS1],  [EffCAS2]  ,[EffCAS3]  ,[EffCAS4] ,[Efffos1],  [Efffos2]  ,[Efffos3]  ,[Efffos4]  FROM [OptimizerLog]  where casrevenuemiles <> 0 and  left (modelrunid, 3) = '347' and caslinebreaks <= (foslinebreaks + 7)  and ModelRunID not like '%R11%' and ModelRunID not like '%R12%'    and ModelRunID not like '%R0%'  and CASrevenueexpense <> 0 and FOSrevenuelegs - 25 <= CASrevenuelegs and carrierid = abc order by CAStotalrevenueexpense asc"
                 req = Replace(req, "347", customid)
                 req = Replace(req, "(modelrunid, 3)", "(modelrunid, " & Len(customid) & ")")
                 req = Replace(req, "abc", Session("carrierid"))
 
-            ElseIf _carrierid <> JETLINX Then
+            ElseIf carrierid <> JETLINX Then
                 req = "SELECT top 1 [ModelRunID], [DeltaExpense], [DeltaNRM], [CASlinebreaks], [CASefficiency], [FOSlinebreaks], [FOSefficiency], deltaexpense1, deltaexpense2, deltaexpense3, deltaexpense4, Viewed  ,[EffCAS1],  [EffCAS2]  ,[EffCAS3]  ,[EffCAS4] ,[Efffos1],  [Efffos2]  ,[Efffos3]  ,[Efffos4]  FROM [OptimizerLog]  where casrevenuemiles <> 0 and  customrunnumber = '347'    and  modelrunid not like '%Q-%'   and carrierid = abc  order by deltaexpense desc"
                 req = Replace(req, "347", customid)
                 req = Replace(req, "abc", Session("carrierid"))
@@ -1352,9 +1354,9 @@ done:
                     "  ,ltrim(rtrim([AC])) as [AC]       ,ltrim(rtrim([AircraftType])) as [Type]  , ltrim(rtrim([dhcost])) as cost, ltrim(rtrim([DeadHead])) as [DeadHead], ltrim(rtrim(tripnumber)) as tripnumber " &
                     " ,ltrim(rtrim([legratecode])) as [LRC] ,ltrim(rtrim([legpurposecode])) as [LPC] ,ltrim(rtrim([legtypecode])) as [LTC] , ltrim(rtrim([PIC])) as [PIC], ltrim(rtrim([SIC])) as [SIC]      ,  [tripcost]  ,[triprevenue], [pandl]         FROM [FOSFlightsOptimizer]  where ac = 'def' and  OptimizerRun = 'abc'  and legstate <> '5'   and carrierid = 'ghi' "
                 s = Replace(s, "def", DropDownNNumbers.SelectedItem.Value)
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & "  order by   aircrafttype, AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & " order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -1372,9 +1374,9 @@ done:
                     "   ,ltrim(rtrim([AC])) as [AC]       ,ltrim(rtrim([AircraftType])) as [Type]  , ltrim(rtrim([dhcost])) as cost, ltrim(rtrim([DeadHead])) as [DeadHead], ltrim(rtrim(tripnumber)) as tripnumber " &
                     "  ,ltrim(rtrim([legratecode])) as [LRC] ,ltrim(rtrim([legpurposecode])) as [LPC] ,ltrim(rtrim([legtypecode])) as [LTC] , ltrim(rtrim([PIC])) as [PIC], ltrim(rtrim([SIC])) as [SIC]      ,  [tripcost]  ,[triprevenue], [pandl]       FROM [FOSFlightsOptimizer]  where tripnumber = 'def' and  OptimizerRun = 'abc'  and legstate <> '5'    and carrierid = 'ghi' "
                 s = Replace(s, "def", DropDownTripNumbers.SelectedItem.Value)
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & "  order by   aircrafttype, AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & "order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -1393,9 +1395,9 @@ done:
                     "    ,ltrim(rtrim([AC])) as [AC]       ,ltrim(rtrim([AircraftType])) as [Type]  , ltrim(rtrim([dhcost])) as cost, ltrim(rtrim([DeadHead])) as [DeadHead], ltrim(rtrim(tripnumber)) as tripnumber " &
                     "  ,ltrim(rtrim([legratecode])) as [LRC] ,ltrim(rtrim([legpurposecode])) as [LPC] ,ltrim(rtrim([legtypecode])) as [LTC],  ltrim(rtrim([PIC])) as [PIC], ltrim(rtrim([SIC])) as [SIC]     ,  [tripcost]  ,[triprevenue], [pandl]       FROM [FOSFlightsOptimizer]  where DepartureAirporticao = 'def' and  OptimizerRun = 'abc'  and legstate <> '5'     and carrierid = 'ghi' "
                 s = Replace(s, "def", DropDownOriginAirports.SelectedItem.Value)
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & " order by  ltrim(rtrim([AircraftType])),  AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & "order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -1413,9 +1415,9 @@ done:
                     "   ,ltrim(rtrim([AC])) as [AC]       ,ltrim(rtrim([AircraftType])) as [Type]  , ltrim(rtrim([dhcost])) as cost, ltrim(rtrim([DeadHead])) as [DeadHead], ltrim(rtrim(tripnumber)) as tripnumber " &
                     "   ,ltrim(rtrim([legratecode])) as [LRC] ,ltrim(rtrim([legpurposecode])) as [LPC] ,ltrim(rtrim([legtypecode])) as [LTC] , ltrim(rtrim([PIC])) as [PIC], ltrim(rtrim([SIC])) as [SIC]    ,  [tripcost]  ,[triprevenue], [pandl]        FROM [FOSFlightsOptimizer]  where ArrivalAirporticao = 'def' and  OptimizerRun = 'abc'  and legstate <> '5'    and carrierid = 'ghi' "
                 s = Replace(s, "def", DropDownDestAirports.SelectedItem.Value)
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & "  order by   aircrafttype, AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & "order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -1439,9 +1441,9 @@ done:
                 s = Replace(s, "def", DropDownFleetType.SelectedItem.Value)
                 s = Replace(s, "where AircraftType = 'H80X'", "where (AircraftType = 'H80H' or AircraftType = 'H850')")
 
-                If _carrierid <> JETLINX Then
+                If carrierid <> JETLINX Then
                     s = s & "  order by   aircrafttype, AC, datetimegmt  "
-                ElseIf _carrierid = WHEELSUP Then
+                ElseIf carrierid = WHEELSUP Then
                     s = s & "order by AC, datetimegmt  "
                 Else
                     s = s & " order by base,  AC, datetimegmt  "
@@ -1473,9 +1475,9 @@ done:
             s = Replace(s, "aclist", ss)
             s = Replace(s, "def", AC1)
             s = Replace(s, "zqg", AC2)
-            If _carrierid <> JETLINX Then
+            If carrierid <> JETLINX Then
                 s = s & "  order by   aircrafttype, AC, datetimegmt  "
-            ElseIf _carrierid = WHEELSUP Then
+            ElseIf carrierid = WHEELSUP Then
                 s = s & "order by AC, datetimegmt  "
             Else
                 s = s & " order by base,  AC, datetimegmt  "
@@ -1787,7 +1789,9 @@ done:
         Dim mycolor As System.Drawing.Color
         mycolor = Drawing.Color.Aquamarine
 
-        _carrierid = Session("carrierid")
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        Dim carrierid As Integer = CInt(Session("carrierid"))
 
 
         If cnsetting.State = 1 Then cnsetting.Close()
@@ -1815,7 +1819,7 @@ done:
 
             'added plane lookup info back in rk 7.20.17
             If GridViewTrips.Rows(i).Cells(8).Text <> "" Then
-                GridViewTrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(GridViewTrips.Rows(i).Cells(8).Text)
+                GridViewTrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(GridViewTrips.Rows(i).Cells(8).Text, carrierid)
             End If
 
 
@@ -2459,7 +2463,7 @@ acskip:
             End If
             'added plane lookup info back in rk 7.20.17
             If GridViewTrips.Rows(i).Cells(8).Text <> "" Then
-                GridViewTrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(GridViewTrips.Rows(i).Cells(8).Text)
+                GridViewTrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(GridViewTrips.Rows(i).Cells(8).Text, carrierid)
             End If
         Next i
 
@@ -2475,7 +2479,7 @@ acskip:
                 GridViewTrips.Columns(z).Visible = False
             Next z
         End If
-        Select Case _carrierid
+        Select Case carrierid
             Case WHEELSUP
                 GridViewTrips.Columns(FOS_PANDL).Visible = True
                 GridViewTrips.Columns(FOS_REVENUE).Visible = True
@@ -2507,6 +2511,9 @@ acskip:
         Dim s As String = ""
         Dim req As String
 
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        Dim carrierid As Integer = CInt(Session("carrierid"))
 
         If ACX(1) <> "" Then
             s = Session("FCList")
@@ -2519,8 +2526,8 @@ acskip:
             cn.Open()
         End If
 
-        If _carrierid <> JETLINX Then
-            If _carrierid = WHEELSUP Then
+        If carrierid <> JETLINX Then
+            If carrierid = WHEELSUP Then
                 req = "SELECT count(*) as cnt, ac,aircrafttype FROM [fosFlightsOptimizer]  where optimizerrun = '1140-240797-R1-52C-96' group by ac,aircrafttype order by ac,aircrafttype"
             Else
                 req = "SELECT count(*) as cnt, A.ac, B.AircraftWeightClass  as AWC FROM fosFlightsOptimizer as A, AircraftWeightClass as B  where A.optimizerrun = '1140-240797-R1-52C-96' and A.AircraftType = B.AircraftType group by B.AircraftWeightClass,A.ac order by AWC,A.ac"
@@ -2562,8 +2569,8 @@ acskip:
         Loop
 
 
-        If _carrierid <> JETLINX Then
-            If _carrierid = WHEELSUP Then
+        If carrierid <> JETLINX Then
+            If carrierid = WHEELSUP Then
                 req = "SELECT count(*)  as cnt, aircraftregistration,aircrafttype FROM [CASFlightsOptimizer]  where optimizerrun = '1140-240797-R1-52C-96' group by aircraftregistration,aircrafttype order by aircraftregistration,aircrafttype"
             Else
                 req = "SELECT count(*)  as cnt, A.aircraftregistration,B.AircraftWeightClass  as AWC FROM CASFlightsOptimizer as A, AircraftWeightClass as B where A.optimizerrun = '1140-240797-R1-52C-96' and A.AircraftType = B.AircraftType group by B.AircraftWeightClass ,A.aircraftregistration order by AWC,A.aircraftregistration"

@@ -41,9 +41,9 @@ Public Class DataAccess
             Dim s As String = "parms - companyname " & companyname & vbCr & vbLf & ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetBrokersByCompany", "DataAccess.vb")
+            Insertsys_log(0, appName, s, "GetBrokersByCompany", "DataAccess.vb")
             SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
-                " DataAccess.vb GetBrokersByCompany Error", s, _carrierid)
+                " DataAccess.vb GetBrokersByCompany Error", s, 0)
         End Try
 
         Return dt
@@ -1591,8 +1591,9 @@ Public Class DataAccess
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             AirTaxi.Insertsys_log(0, appName, s, "GetZIPCodes", "DataAccess.vb")
-            AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " DataAccess.vb GetZIPCodes Error",
-                s, 0)
+            '20171121 - pab - fix carriers changing midstream - change to Session variables
+            AirTaxi.SendEmail("chartersales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName &
+                " DataAccess.vb GetZIPCodes Error", s, 0)
             Return Nothing
 
         Finally
