@@ -79,8 +79,8 @@ Public Class AirTaxi
     Public Shared fstart_dictionary As New Dictionary(Of String, String)
     Public Shared aclookup_dictionary As New Dictionary(Of String, String)
     Public Shared awclookup As New Dictionary(Of String, String)
-    Public Shared FOSRecords As New List(Of FOSFlightsOptimizerRecord)
-    Public Shared CASRecords As New List(Of CASFlightsOptimizerRecord)
+    'Public Shared FOSRecords As New List(Of FOSFlightsOptimizerRecord)
+    'Public Shared CASRecords As New List(Of CASFlightsOptimizerRecord)
     Public Shared fname_dictionary As New Dictionary(Of String, String)
 
     Public Const DELTA As Integer = 108

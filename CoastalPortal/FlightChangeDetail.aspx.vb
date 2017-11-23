@@ -27,6 +27,8 @@ Public Class FlightChangeDetail
 
     Public fcdrlist As New List(Of FCDRList)
     Public demandlookup As New Dictionary(Of String, Boolean)
+    Public FOSRecords As New List(Of FOSFlightsOptimizerRecord)
+    Public CASRecords As New List(Of CASFlightsOptimizerRecord)
     Private carrierprofile As New CarrierProfile
     Public newTail_Dictionary As New Dictionary(Of String, String)
     Public stest As String
@@ -301,6 +303,9 @@ Public Class FlightChangeDetail
 
             ptlist = ptlist.Union((From a In CASRecords Where ptlist.Contains(Trim(a.AircraftRegistration)) And Trim(a.PriorTail) <> "" And Trim(a.PriorTail) <> Trim(a.AircraftRegistration) And
                                            Trim(a.DepartureAirport) <> Trim(a.ArrivalAirport) And Trim(a.LegTypeCode) <> "BULL" Select Trim(a.PriorTail)).Distinct().ToList()).ToList()
+            If (From g In CASRecords Where ptlist.Contains(Trim(g.PriorTail)) And Not ptlist.Contains(g.AircraftRegistration) Select g).Count > 0 Then
+                ptlist = ptlist.Union((From g In CASRecords Where ptlist.Contains(Trim(g.PriorTail)) And Not ptlist.Contains(g.AircraftRegistration) Select Trim(g.AircraftRegistration)).ToList()).ToList()
+            End If
 
             ptlist = ptlist.Distinct().ToList()
             'add the enumerated list to the fcdr for display...
@@ -432,9 +437,9 @@ Public Class FlightChangeDetail
             FosList = FOSRecords.Where(Function(x) fcdr.FOSRecordList.Contains(Trim(x.AC)) And Not demandlookup.TryGetValue(Trim(x.AC), dummy) And x.DateTimeGMT.Date >= GMTStart.Date).OrderBy(Function(y) y.AC).ThenBy(Function(y) y.DepartureDateGMT).Distinct().ToList()
             CasList = CASRecords.Where(Function(x) fcdr.CASRecordList.Contains(Trim(x.AircraftRegistration)) And Not demandlookup.TryGetValue(Trim(x.AircraftRegistration), dummy) And x.DepartureTime >= GMTStart).OrderBy(Function(y) y.AircraftRegistration).ThenBy(Function(y) y.DepartureTime).Distinct().ToList()
 
-            TripList = (From a In CasList Select a.TripNumber).Distinct().ToList()
-            FosList = FosList.Union(FOSRecords.Where(Function(x) demandlookup.TryGetValue(Trim(x.AC), dummy) And TripList.Contains(x.TripNumber) And x.DateTimeGMT.Date >= GMTStart.Date).OrderBy(Function(y) y.AC).ThenBy(Function(y) y.DepartureDateGMT).ToList()).Distinct().ToList()
-            CasList = CasList.Union(CASRecords.Where(Function(x) demandlookup.TryGetValue(Trim(x.AircraftRegistration), dummy) And TripList.Contains(x.TripNumber) And x.DepartureTime >= GMTStart).OrderBy(Function(y) y.AircraftRegistration).ThenBy(Function(y) y.DepartureTime).ToList()).Distinct().ToList()
+            TripList = (From a In CasList Select Trim(a.TripNumber)).Distinct().ToList()
+            FosList = FosList.Union(FOSRecords.Where(Function(x) demandlookup.TryGetValue(Trim(x.AC), dummy) And TripList.Contains(Trim(x.TripNumber)) And x.DateTimeGMT.Date >= GMTStart.Date).OrderBy(Function(y) y.AC).ThenBy(Function(y) y.DepartureDateGMT).ToList()).Distinct().ToList()
+            CasList = CasList.Union(CASRecords.Where(Function(x) demandlookup.TryGetValue(Trim(x.AircraftRegistration), dummy) And TripList.Contains(Trim(x.TripNumber)) And x.DepartureTime >= GMTStart).OrderBy(Function(y) y.AircraftRegistration).ThenBy(Function(y) y.DepartureTime).ToList()).Distinct().ToList()
 
             FosList = (From a In FosList Select a).Distinct().ToList()
             CasList = (From b In CasList Select b).Distinct().ToList()
