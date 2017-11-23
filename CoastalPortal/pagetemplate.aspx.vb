@@ -55,9 +55,10 @@ Public Class pagetemplate
                 End If
 
                 '20130930 - pab - change email from
-                If IsNothing(_emailfrom) Then _emailfrom = ""
-                If _emailfrom = "" Then
-                    _emailfrom = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
+                '20171121 - pab - fix carriers changing midstream - change to Session variables
+                If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+                If Session("emailfrom").ToString = "" Then
+                    Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
 
                 Dim oLookup As New PopulateLookups
@@ -104,6 +105,9 @@ Public Class pagetemplate
 
     Private Sub RunOptimizer_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+
         Try
 
             Dim da As New DataAccess
@@ -136,7 +140,7 @@ Public Class pagetemplate
                 s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             End If
             AirTaxi.Insertsys_log(CInt(Session("carrierid")), appName, Left(Now & " " & s, 500), "ModelRunHistory.aspx.vb Page_PreRender", "")
-            SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
+            SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "",
                       appName & " ModelRunHistory.aspx.vb Page_PreRender error", s, CInt(Session("carrierid")))
 
         End Try

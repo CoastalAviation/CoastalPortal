@@ -41,9 +41,9 @@ Public Class DataAccess
             Dim s As String = "parms - companyname " & companyname & vbCr & vbLf & ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
-            Insertsys_log(_carrierid, appName, s, "GetBrokersByCompany", "DataAccess.vb")
+            Insertsys_log(0, appName, s, "GetBrokersByCompany", "DataAccess.vb")
             SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
-                " DataAccess.vb GetBrokersByCompany Error", s, _carrierid)
+                " DataAccess.vb GetBrokersByCompany Error", s, 0)
         End Try
 
         Return dt
@@ -1030,7 +1030,7 @@ Public Class DataAccess
     End Function
 
     '20171027 - pab - calendar
-    Shared Function GetFOSFlightsBestModels(ByRef CarrierID As Integer, ByRef includeR0 As Boolean) As DataTable
+    Shared Function GetFOSFlightsBestModels(ByRef CarrierID As Integer, ByRef includeR0 As Boolean, Optional ByVal usedevdb As Boolean = False) As DataTable
 
         Dim dt As DataTable = New DataTable()
 
@@ -1084,7 +1084,8 @@ Public Class DataAccess
     End Function
 
     '20171027 - pab - calendar
-    Public Function GetFOSFlightsBestModelRunID(ByVal CarrierID As Integer) As String
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Public Function GetFOSFlightsBestModelRunID(ByVal CarrierID As Integer, Optional ByVal usedevdb As Boolean = False) As String
 
         Dim oConn As SqlConnection = Nothing
         Dim oCmd As SqlCommand = Nothing
@@ -1122,8 +1123,9 @@ Public Class DataAccess
     End Function
 
     '20171027 - pab - calendar
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
     Shared Function GetFOSFlightsCalendarByCarrierIDDateOffset(ByRef CarrierID As Integer, ByRef ModelRunID As String, ByRef StartDate As Date,
-            ByRef offset As Integer) As DataTable
+            ByRef offset As Integer, Optional ByVal usedevdb As Boolean = False) As DataTable
 
         Dim dt As DataTable = New DataTable()
 
@@ -1185,7 +1187,9 @@ Public Class DataAccess
     End Function
 
     '20171027 - pab - calendar
-    Shared Function GetFOSFlightsCalendarCrewDate(ByRef CarrierID As Integer, ByRef ModelRunID As String, ByRef StartDate As Date) As DataTable
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Shared Function GetFOSFlightsCalendarCrewDate(ByRef CarrierID As Integer, ByRef ModelRunID As String, ByRef StartDate As Date,
+                                                  Optional ByVal usedevdb As Boolean = False) As DataTable
 
         Dim dt As DataTable = New DataTable()
 
@@ -1353,7 +1357,8 @@ Public Class DataAccess
     End Function
 
     '20171027 - pab - calendar
-    Shared Function GetFOSOptimizerRequestByID(ByRef CarrierID As Integer, ByRef ID As Integer) As DataTable
+    '20171121 - pab - fix carriers changing midstream - change to Session variables
+    Shared Function GetFOSOptimizerRequestByID(ByRef CarrierID As Integer, ByRef ID As Integer, Optional ByVal usedevdb As Boolean = False) As DataTable
 
         Dim dt As DataTable = New DataTable()
 
@@ -1591,8 +1596,9 @@ Public Class DataAccess
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             AirTaxi.Insertsys_log(0, appName, s, "GetZIPCodes", "DataAccess.vb")
-            AirTaxi.SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName & " DataAccess.vb GetZIPCodes Error",
-                s, 0)
+            '20171121 - pab - fix carriers changing midstream - change to Session variables
+            AirTaxi.SendEmail("chartersales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", AirTaxi.appName &
+                " DataAccess.vb GetZIPCodes Error", s, 0)
             Return Nothing
 
         Finally

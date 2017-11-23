@@ -334,8 +334,9 @@ Public Class Mapping
             Dim s As String = ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & vbNewLine & ex.InnerException.ToString
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
-            SendEmail("info@coastalaviationsoftware.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " Mapping.vb geocodebing error", s, _carrierid)
-            AirTaxi.Insertsys_log(_carrierid, AirTaxi.appName, s, "Mapping.aspx", "geocodebing")
+            SendEmail("info@coastalaviationsoftware.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                      " Mapping.vb geocodebing error", s, 0)
+            AirTaxi.Insertsys_log(0, AirTaxi.appName, s, "Mapping.aspx", "geocodebing")
 
             Return Nothing
 
@@ -405,8 +406,9 @@ Public Class Mapping
             If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             '20120807 - pab - write to email queue
             '20131024 - pab - fix duplicate emails
-            SendEmail("info@coastalaviationsoftware.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " Mapping.vb geocodebing error", s, _carrierid)
-            AirTaxi.Insertsys_log(_carrierid, AirTaxi.appName, s, "Mapping.aspx", "geocodebing")
+            SendEmail("info@coastalaviationsoftware.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                      " Mapping.vb geocodebing error", s, 0)
+            AirTaxi.Insertsys_log(0, AirTaxi.appName, s, "Mapping.aspx", "geocodebing")
 
             Return Nothing
 
@@ -779,9 +781,11 @@ Public Class Mapping
     End Function
 
     'Public Function GetAllAirportsInState(ByVal state As String, ByVal minimumRunwayLength As Integer) As DataSet
-    Public Function GetAllAirportsInState(ByVal userid As String, ByVal pswd As String, ByVal state As String, ByVal minimumRunwayLength As Integer) As DataSet
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+    Public Function GetAllAirportsInState(ByVal userid As String, ByVal pswd As String, ByVal state As String,
+                                          ByVal minimumRunwayLength As Integer, carrierid As Integer) As DataSet
 
-        Return ctgiOptimizationService.GetAllAirportsInState(userid, pswd, _carrierid, state, minimumRunwayLength)
+        Return ctgiOptimizationService.GetAllAirportsInState(userid, pswd, carrierid, state, minimumRunwayLength)
 
     End Function
 
@@ -789,11 +793,12 @@ Public Class Mapping
     'Public Function GetRegionalAirportsByCarriers(ByVal latitude As Double, ByVal longitude As Double, _
     'ByVal minimumRunwayLength As Integer, ByVal miles As Integer, _
     'ByVal count As Integer) As DataSet
+    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
     Public Function GetRegionalAirportsByCarriers(ByVal userid As String, ByVal pswd As String, ByVal latitude As Double, ByVal longitude As Double,
         ByVal minimumRunwayLength As Integer, ByVal miles As Integer,
-        ByVal count As Integer) As String
+        ByVal count As Integer, ByVal carrierid As Integer) As String
 
-        Return ctgiOptimizationService.GetRegionalAirportsByCarriers(userid, pswd, _carrierid, latitude.ToString, longitude.ToString,
+        Return ctgiOptimizationService.GetRegionalAirportsByCarriers(userid, pswd, carrierid, latitude.ToString, longitude.ToString,
             minimumRunwayLength.ToString, miles.ToString, count.ToString)
 
     End Function
@@ -827,7 +832,8 @@ Public Class Mapping
             If isdtnullorempty(dt) Then
                 Return 0
             End If
-            Return ws.GetRoundEarthDistanceBetweenLocations(userid, pswd, _carrierid, originLocationID, destinationLocationID)
+            '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+            Return ws.GetRoundEarthDistanceBetweenLocations(userid, pswd, carrierid, originLocationID, destinationLocationID)
         End If
 
     End Function

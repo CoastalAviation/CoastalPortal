@@ -109,6 +109,9 @@ Public Class ModelRunHistory
 
     Private Sub RunOptimizer_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+
         Try
 
             Dim da As New DataAccess
@@ -141,7 +144,7 @@ Public Class ModelRunHistory
                 s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             End If
             AirTaxi.Insertsys_log(CInt(Session("carrierid")), appName, Left(Now & " " & s, 500), "ModelRunHistory.aspx.vb Page_PreRender", "")
-            SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
+            SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "",
                       appName & " ModelRunHistory.aspx.vb Page_PreRender error", s, CInt(Session("carrierid")))
 
         End Try
@@ -355,6 +358,10 @@ Public Class ModelRunHistory
 
 
         Exit Sub
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("fosmodelrunid")) Then Session("fosmodelrunid") = ""
+        Dim modelrunid As String = Session("fosmodelrunid").ToString
 
         Try
 

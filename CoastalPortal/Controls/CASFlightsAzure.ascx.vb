@@ -170,7 +170,9 @@ Public Class CasFlightsAzure6
         Dim dt As DataTable = DataAccess.GetPinnedFlights(req)
         Insertsys_log(Session("carrierid"), appName, "CASFlightsAzure.ascx colorme end Get Pinned " & Now, "", "")
 
-        _carrierid = Session("carrierid")
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        Dim carrierid As Integer = CInt(Session("carrierid"))
 
 
         Dim dv_pinned As DataView = dt.DefaultView
@@ -848,7 +850,8 @@ acskip:
             End If
             'added plane lookup info back in rk 7.20.17
             If GridViewTrips.Rows(i).Cells(8).Text <> "" Then
-                GridViewTrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(GridViewTrips.Rows(i).Cells(8).Text)
+                '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+                GridViewTrips.Rows(i).Cells(8).ToolTip = AirTaxi.lookupac(GridViewTrips.Rows(i).Cells(8).Text, carrierid)
             End If
         Next i
 
@@ -866,10 +869,10 @@ acskip:
         '    Next z
         'End If
 
-        If _carrierid = WHEELSUP Then
+        If carrierid = WHEELSUP Then
             GridViewTrips.Columns(CAS_PANDL).Visible = True
             GridViewTrips.Columns(CAS_REVENUE).Visible = True
-        ElseIf _carrierid = JETLINX Then
+        ElseIf carrierid = JETLINX Then
             GridViewTrips.Columns(CAS_WC).Visible = True
             GridViewTrips.Columns(CAS_BASE).Visible = True
         Else
@@ -1049,9 +1052,13 @@ acskip:
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        Session("carrierid") = Session("carrierid")
+        'Session("carrierid") = Session("carrierid")
 
         If IsNothing(Session("carrierid")) Then Exit Sub
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
 
         Dim ws As New coastalavtech.service.WebService1
 
@@ -1347,7 +1354,14 @@ acskip:
         Dim req As String
         Dim databaseFROM As String = "TMCProduction" 'Me.txtDBFrom.Text
 
-        _carrierid = Session("carrierid")
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        Dim carrierid As Integer = CInt(Session("carrierid"))
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
+        Dim daterangefrom, daterangeto As Date
 
         If cnoptimizer.State = 1 Then cnoptimizer.Close()
         If cnoptimizer.State = 0 Then
@@ -1369,16 +1383,20 @@ acskip:
 
                 daterangefrom = rs.Fields("gmtstart").Value
                 daterangeto = rs.Fields("gmtend").Value
+
+                '20171121 - pab - fix carriers changing midstream - change to Session variables
+                Session("daterangefrom") = daterangefrom
+                Session("daterangefrom") = daterangeto
             End If
 
-            If _carrierid = JETLINX Then
+            If carrierid = JETLINX Then
 
                 req = "SELECT top 1 * FROM [OptimizerLog]  where casrevenuemiles <> 0   and  customrunnumber = '8183'   and CASrevenueexpense <> 0 and carrierid = abc order by CAStotalrevenueexpense  "
                 req = Replace(req, "8183", customid)
                 req = Replace(req, "abc", Session("carrierid"))
                 'rk 10.20.2012 grab the lowest of the two models
 
-            ElseIf _carrierid = WHEELSUP Then
+            ElseIf carrierid = WHEELSUP Then
 
                 req = "SELECT top 1 * FROM [OptimizerLog]  where casrevenuemiles <> 0 and  left (modelrunid, 4) = '8183' and caslinebreaks <= (foslinebreaks + 7)  and  modelrunid not like '%Q-%' and ModelRunID not like '%R11%' and ModelRunID not like '%R12%'   and ModelRunID not like '%R0%'  and CASrevenueexpense <> 0 and carrierid = abc and FOSrevenuelegs - 25 <= CASrevenuelegs order by CAStotalrevenueexpense asc"
                 req = Replace(req, "8183", customid)
@@ -1421,8 +1439,8 @@ acskip:
         s = Replace(s, "abc", modelrunid)
         s = Replace(s, "ghi", Session("carrierid"))
 
-        If _carrierid <> JETLINX Then
-            If _carrierid = WHEELSUP Then
+        If carrierid <> JETLINX Then
+            If carrierid = WHEELSUP Then
                 s = s & "order by ac, [FROM GMT] asc  "
             Else
                 s = s & "  order by AWC, ac, [FROM GMT] asc  "
@@ -1442,8 +1460,8 @@ acskip:
                 s = Replace(s, "abc", modelrunid)
                 s = Replace(s, "ghi", Session("carrierid"))
 
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & "order by AircraftRegistration, departuretime asc  "
                     Else
                         s = s & " order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -1467,8 +1485,8 @@ acskip:
                 s = Replace(s, "def", DropDownTripNumbers.SelectedItem.Value)
                 s = Replace(s, "ghi", Session("carrierid"))
 
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & " order by tripnumber, departuretime asc "
                     Else
                         s = s & " order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -1493,8 +1511,8 @@ acskip:
                 s = Replace(s, "abc", modelrunid)
                 s = Replace(s, "ghi", Session("carrierid"))
 
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & "order by AircraftRegistration, departuretime asc  "
                     Else
                         s = s & "  order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -1516,8 +1534,8 @@ acskip:
                 s = Replace(s, "abc", modelrunid)
                 s = Replace(s, "ghi", Session("carrierid"))
 
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & "order by AircraftRegistration, departuretime asc  "
                     Else
                         s = s & "  order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -1541,8 +1559,8 @@ acskip:
                 s = Replace(s, "ghi", Session("carrierid"))
 
                 s = Replace(s, "where aircrafttype = 'H80X'", "where (AircraftType = 'H80H' or AircraftType = 'H850')")
-                If _carrierid <> JETLINX Then
-                    If _carrierid = WHEELSUP Then
+                If carrierid <> JETLINX Then
+                    If carrierid = WHEELSUP Then
                         s = s & "order by AircraftRegistration, departuretime asc  "
                     Else
                         s = s & "  order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -1576,8 +1594,8 @@ acskip:
             s = Replace(s, "abc", modelrunid)
             s = Replace(s, "ghi", Session("carrierid"))
 
-            If _carrierid <> JETLINX Then
-                If _carrierid = WHEELSUP Then
+            If carrierid <> JETLINX Then
+                If carrierid = WHEELSUP Then
                     s = s & "order by AircraftRegistration, departuretime asc  "
                 Else
                     s = s & "  order by  aircrafttype, AircraftRegistration, departuretime asc  "
@@ -1604,6 +1622,11 @@ acskip:
     End Sub
 
     Protected Sub AcceptAll_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles radbtnAcceptAll.Click
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
+
         If cascalendarmodelid <> "" Then
             Session("AcceptModelID") = cascalendarmodelid
         End If
@@ -2376,14 +2399,17 @@ acskip:
         Dim rs As New ADODB.Recordset
         Dim req As String
 
+        '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        Dim carrierid As Integer = CInt(Session("carrierid"))
 
         If cn.State = 1 Then cn.Close()
         If cn.State = 0 Then
             cn.ConnectionString = ConnectionStringHelper.ReadOnlyDriverConnectionString
             cn.Open()
         End If
-        If _carrierid <> JETLINX Then
-            If _carrierid = WHEELSUP Then
+        If carrierid <> JETLINX Then
+            If carrierid = WHEELSUP Then
                 req = "SELECT count(*)  as cnt, aircraftregistration,aircrafttype FROM [CASFlightsOptimizer]  where optimizerrun = '1140-240797-R1-52C-96' group by aircraftregistration,aircrafttype order by aircraftregistration,aircrafttype"
             Else
                 req = "SELECT count(*)  as cnt, A.aircraftregistration,B.AircraftWeightClass as AWC FROM CASFlightsOptimizer as A, AircraftWeightClass as B where A.optimizerrun = '1140-240797-R1-52C-96' and A.AircraftType = B.AircraftType group by B.AircraftWeightClass ,A.aircraftregistration order by AWC,A.aircraftregistration"
@@ -2413,8 +2439,8 @@ acskip:
             rs.MoveNext()
         Loop
 
-        If _carrierid <> JETLINX Then
-            If _carrierid = WHEELSUP Then
+        If carrierid <> JETLINX Then
+            If carrierid = WHEELSUP Then
                 req = "SELECT count(*) as cnt, ac,aircrafttype FROM [fosFlightsOptimizer]  where optimizerrun = '1140-240797-R1-52C-96' group by ac,aircrafttype order by ac,aircrafttype"
             Else
                 req = "SELECT count(*) as cnt, A.ac,B.AircraftWeightClass  as AWC FROM fosFlightsOptimizer as A, AircraftWeightClass as B  where A.optimizerrun = '1140-240797-R1-52C-96' and A.AircraftType = B.AircraftType group by B.AircraftWeightClass,A.ac order by AWC,A.ac"
@@ -2489,7 +2515,7 @@ acskip:
 
                     '   For Each field As DataControlField In GridViewTrips.Columns
                     Dim colstostrip As Integer
-                    Select Case _carrierid
+                    Select Case carrierid
                         Case WHEELSUP
                             colstostrip = 8
                             Exit Select
@@ -2663,6 +2689,11 @@ done:
 
 
     Protected Sub cmdRecovery_Click(sender As Object, e As EventArgs) Handles cmdRecovery.Click
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("cascalendarmodelid")) Then Session("cascalendarmodelid") = ""
+        Dim cascalendarmodelid As String = Session("cascalendarmodelid")
+
         Response.Redirect("panel.aspx?modelrunid=" & normalizemodelrunid(cascalendarmodelid))
     End Sub
 
@@ -2705,6 +2736,12 @@ done:
         Dim rs As New ADODB.Recordset
         Dim req As String
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim daterangefrom, daterangeto As Date
+        If IsNothing(Session("daterangefrom")) Then Session("daterangefrom") = daterangefrom
+        If IsNothing(Session("daterangeto")) Then Session("daterangeto") = daterangeto
+        daterangefrom = Session("daterangefrom")
+        daterangeto = Session("daterangeto")
 
         If cn.State = 1 Then cn.Close()
         If cn.State = 0 Then
@@ -2901,11 +2938,16 @@ done:
 
         ' req = "select * FROM [OptimizerWest].[dbo].[CASFlightsOptimizer] where [OptimizerRun] = '8527-5/27/2015-R16-33C-4' and (aircraftregistration = 'N506UP' or aircraftregistration = 'N805UP')"
 
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim daterangeto As Date
 
         Dim dfrom As String
 
         dfrom = DateAdd(DateInterval.Day, 1, CDate(Now))
         daterangeto = DateAdd(DateInterval.Day, 6, CDate(Now))
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Session("daterangeto") = daterangeto
 
         req = Replace(req, "2015-10-08", dfrom)
         req = Replace(req, "2015-10-11", daterangeto)
@@ -3272,7 +3314,15 @@ done:
     Protected Sub cmdSlideReport_Click(sender As Object, e As EventArgs) Handles cmdSlideReport.Click
         '   sendemailtemplate("dhackett@coastalavtech.com,rkane@coastalavtech.com", " PrePosition Report " & modelrunid, cmdSlideReport.ToolTip, 100)
 
-        sendemailtemplate("dhacket@coastalavtech.com,bill.pickel@gamaaviation.com,mitchell.papontos@gamaaviation.com,jason.oakland@gamaaviation.com,Joshua.Stevens@gamaaviation.com,Valerie.Marma@gamaaviation.com,Anthony.McCoy@gamaaviation.com,Natalie.Caruso@gamaaviation.com,Jason.Baxter@gamaaviation.com,Robert.Petovello@gamaaviation.com,Steven.Saviour@gamaaviation.com", " PrePosition Report " & lblmodelid.Text, cmdSlideReport.ToolTip, 100)
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If Not IsNothing(Session("carrierid")) Then
+            Select Case CInt(Session("carrierid"))
+                Case WHEELSUP
+                    sendemailtemplate("dhacket@coastalavtech.com,bill.pickel@gamaaviation.com,mitchell.papontos@gamaaviation.com,jason.oakland@gamaaviation.com,Joshua.Stevens@gamaaviation.com,Valerie.Marma@gamaaviation.com,Anthony.McCoy@gamaaviation.com,Natalie.Caruso@gamaaviation.com,Jason.Baxter@gamaaviation.com,Robert.Petovello@gamaaviation.com,Steven.Saviour@gamaaviation.com", " PrePosition Report " & lblmodelid.Text, cmdSlideReport.ToolTip, 100)
+                Case Else
+                    sendemailtemplate("dhacket@coastalavtech.com", " PrePosition Report " & lblmodelid.Text, cmdSlideReport.ToolTip, 100)
+            End Select
+        End If
 
 
     End Sub

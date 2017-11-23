@@ -35,6 +35,8 @@ Public Class OptimizerCalendar
         If Session("fosmodelrunid") Is Nothing Then
             Session("fosmodelrunid") = ""
         End If
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        Dim modelrunid As String = Session("fosmodelrunid").ToString
 
         '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
         If CInt(Session("carrierid")) = 0 Then
@@ -58,11 +60,13 @@ Public Class OptimizerCalendar
         End If
 
         '20170924 - pab - show dev models
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
         If Me.chkDev.Checked = True Then
-            usedevdb = True
+            Session("usedevdb") = True
         Else
-            usedevdb = False
+            Session("usedevdb") = False
         End If
+        Dim usedevdb As Boolean = CBool(Session("usedevdb"))
 
         '20171107 - pab - show r0
         Dim br0 As Boolean = False
@@ -82,9 +86,9 @@ Public Class OptimizerCalendar
         '20171107 - pab - show r0
         'If sR0 = "1" Then
         If sR0 = "1" Or br0 = True Then
-            dt = DataAccess.GetFOSFlightsBestModels(CInt(Session("carrierid")), True)
+            dt = DataAccess.GetFOSFlightsBestModels(CInt(Session("carrierid")), True, usedevdb)
         Else
-            dt = DataAccess.GetFOSFlightsBestModels(CInt(Session("carrierid")), False)
+            dt = DataAccess.GetFOSFlightsBestModels(CInt(Session("carrierid")), False, usedevdb)
         End If
         rcbModelRun.Items.Clear()
         If Not isdtnullorempty(dt) Then
@@ -127,7 +131,7 @@ Public Class OptimizerCalendar
                 Else
                     '20161222 - pab - fix calendar
                     'Dim da As New DataAccess
-                    Session("fosmodelrunid") = da.GetFOSFlightsBestModelRunID(CInt(Session("carrierid"))).Trim
+                    Session("fosmodelrunid") = da.GetFOSFlightsBestModelRunID(CInt(Session("carrierid")), usedevdb).Trim
                     modelrunid = Session("fosmodelrunid").ToString
                     Session("fosmodelstart") = CDate(dt.Rows(0).Item("ModelStart").ToString)
 
@@ -146,7 +150,7 @@ Public Class OptimizerCalendar
             lblModelDesc.Text = ""
             i = InStr(lblModelRunID.Text, "-")
             If 1 > 0 Then
-                dt = DataAccess.GetFOSOptimizerRequestByID(CInt(Session("carrierid")), CInt(Left(lblModelRunID.Text, i - 1)))
+                dt = DataAccess.GetFOSOptimizerRequestByID(CInt(Session("carrierid")), CInt(Left(lblModelRunID.Text, i - 1)), usedevdb)
                 If Not isdtnullorempty(dt) Then
                     lblModelDesc.Text = dt.Rows(0).Item("description").ToString.Trim
                 End If

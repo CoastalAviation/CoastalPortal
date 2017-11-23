@@ -55,9 +55,10 @@ Public Class Error_Page
                 End If
 
                 '20130930 - pab - change email from
-                If IsNothing(_emailfrom) Then _emailfrom = ""
-                If _emailfrom = "" Then
-                    _emailfrom = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
+                '20171121 - pab - fix carriers changing midstream - change to Session variables
+                If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
+                If Session("emailfrom").ToString = "" Then
+                    Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
 
             End If
@@ -87,6 +88,9 @@ Public Class Error_Page
     End Sub
 
     Private Sub RunOptimizer_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
 
         Try
 
@@ -120,7 +124,7 @@ Public Class Error_Page
                 s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             End If
             AirTaxi.Insertsys_log(CInt(Session("carrierid")), appName, Left(Now & " " & s, 500), "Error_Page.aspx.vb Page_PreRender", "")
-            SendEmail(_emailfrom, "pbaumgart@coastalaviationsoftware.com", "",
+            SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "",
                       appName & " Error_Page.aspx.vb Page_PreRender error", s, CInt(Session("carrierid")))
 
         End Try
