@@ -245,7 +245,6 @@
     <Content Include="Controls\CASFlightsAzure.ascx" />
     <Content Include="Controls\FOSFlightsAzure.ascx" />
     <Content Include="Controls\FOSFlightsCalendar.ascx" />
-    <Content Include="Controls\ModelDetailPanel.ascx" />
     <Content Include="Controls\OptimizerCalendar.ascx" />
     <Content Include="CustomerLogin.aspx" />
     <Content Include="Dashboard.aspx" />
@@ -456,13 +455,6 @@
     </Compile>
     <Compile Include="Controls\FOSFlightsCalendar.ascx.vb">
       <DependentUpon>FOSFlightsCalendar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\ModelDetailPanel.ascx.designer.vb">
-      <DependentUpon>ModelDetailPanel.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ModelDetailPanel.ascx.vb">
-      <DependentUpon>ModelDetailPanel.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\OptimizerCalendar.ascx.designer.vb">
