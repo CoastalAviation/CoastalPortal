@@ -137,7 +137,7 @@ Namespace AviationWebService1_10
         '''<remarks/>
         Public Sub New()
             MyBase.New
-            Me.Url = Global.CoastalPortal.My.MySettings.Default.CoastalPortal_AviationWebService1_10_WebService1
+            Me.Url = Global.CoastalPortal.My.MySettings.Default.CoastalPortal_AWS_WebService1
             If (Me.IsLocalFileSystemWebService(Me.Url) = true) Then
                 Me.UseDefaultCredentials = true
                 Me.useDefaultCredentialsSetExplicitly = false

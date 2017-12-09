@@ -340,7 +340,7 @@
                         <br />
                     </td>
                     <td style="width: 50%; vertical-align: top;">
-                        <asp:Label ID="Label3" runat="server" Text="Type Of Model To Run:" Font-Bold="True" Font-Size="Small" ></asp:Label>
+                        <asp:Label ID="Label3" runat="server" Text="Type Of Model To Run:" Font-Bold="True" Font-Size="Small" Font-Underline="True" ></asp:Label>
                         <br />
                         <asp:RadioButtonList ID="rblModelType" runat="server">
                             <asp:ListItem Value="Fast"> Fast Run (5-10 minutes)</asp:ListItem>
@@ -349,10 +349,24 @@
                         </asp:RadioButtonList>
                         <br />
                         <br />
+                        <asp:Label ID="Label7" runat="server" Text="Scheduled Run Options:" Font-Bold="True" Font-Size="Small" Font-Underline="True" ></asp:Label>
+                        <br />
                         <asp:CheckBox ID="chkallowupgrades" runat="server" Text=" Allow Upgrades" Font-Names="arial" ToolTip="Allow Upgrades"  Checked="True" />
                         <br />
                         <br />
+                        <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />
+                        <br />
+                        <br />
                         <asp:CheckBox ID="chkAssigns" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />
+                        <br />
+                        <br />
+                        <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="True" />
+                        <br />
+                        <br />
+                        <asp:CheckBox ID="chkPinCharter" runat="server" Text=" Pin Charters" Font-Names="arial" ToolTip="Pin Charters"  Checked="false" Visible="False" />
+                        <br />
+                        <br />
+                        <asp:CheckBox ID="chkPinNetJets" runat="server" Text=" Pin NetJets" Font-Names="arial" ToolTip="Pin NetJets"  Checked="false" Visible="False" />
                         <br />
                     </td>
                 </tr>
@@ -366,23 +380,32 @@
                 </tr>
                 <tr>
                     <td style="width: 50%; vertical-align: top;">
-                        <strong><input type="text" style="width: 22px;" id="txtAutoPin" readonly="true"  />  Auto Pin (hours prior to departure)</strong>
+                        <strong><input type="text" style="width: 30px;" id="txtAutoPin" readonly="true"  />  Auto Pin (hours prior to departure)</strong>
                         <br />
                         <br />
                         <telerik:RadSlider ID="RadSliderAutoPin" runat="server"  OnClientValueChanged="HandleValueAutoPin" OnClientLoad="HandleValueAutoPin" 
                             MinimumValue="1"  MaximumValue="24" Value="6" ToolTip="Hours before departure to auto-pin flight" DbValue="0" Height="22px" 
                             Length="200" Width="300px" ></telerik:RadSlider>
                         <br />
-                        <strong><input type="text" style="width: 22px;" id="upgvalue" readonly="true" value="72" />  Allow upgrades (hours prior to departure)</strong>  
+                        <strong><input type="text" style="width: 30px;" id="upgvalue" readonly="true" value="72" />  Allow upgrades (hours prior to departure)</strong>  
                         <br />
                         <br />
                         <telerik:RadSlider ID="RadSliderUpg" runat="server"  OnClientValueChanged="HandleValueChangedUpgrade" OnClientLoad="HandleValueChangedUpgrade" 
                             MinimumValue="0"  MaximumValue="72" Value="72" ToolTip="Number of hours in advance to allow upgrades" DbValue="0" Height="22px" 
                             Length="200" Width="300px" ></telerik:RadSlider>
                         <br />
+                        <strong><input type="text" style="width: 30px;" id="txtAllowFlex" readonly="true" runat="server" />
+                            <asp:Label ID="lblAllowFlex" runat="server" Text="  Allow Flex" Visible="False"></asp:Label>
+                        </strong> 
+                        <br />
+                        <br />
+                        <telerik:RadSlider ID="RadSliderAllowFlex" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtAllowFlex');}" 
+                            OnClientLoad="function(sender,args){rsvalue(sender,args,'txtAllowFlex');}" MinimumValue="0"  MaximumValue="24" 
+                            Value="0" ToolTip="Allow Flex" DbValue="0" Height="22px" Length="200" Width="300px" Visible="False"></telerik:RadSlider>
+                        <br />
                     </td>
                     <td style="width: 50%; vertical-align: top;">
-                        <strong><input type="text" style="width: 22px;" id="txtmbf" readonly="true"  />  Minutes between flights</strong>
+                        <strong><input type="text" style="width: 30px;" id="txtmbf" readonly="true"  />  Minutes between flights</strong>
                         <br />
                         <br />
                         <telerik:RadSlider ID="RadSliderMBF" runat="server" OnClientValueChanged="HandleValueChangedMBF" OnClientLoad="HandleValueChangedMBF" 
@@ -432,10 +455,7 @@
                             <asp:CheckBox ID="chkproratecostbyday" runat="server" Text=" Pro-rate Costs By Day" Font-Names="arial" ToolTip="Pro-rate Costs By Day"  Checked="false" />
                             <br />
                             <br />
-                            <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="True" />
-                            <br />
-                            <br />
-                            <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />
+                            <asp:CheckBox ID="chkscrubincoming" runat="server" Text=" Scrub Incoming" Font-Names="arial" ToolTip="Scrub Incoming" Checked="false"  />
                             <br />
                             <br />
                         </td>
@@ -458,9 +478,6 @@
                             <asp:CheckBox ID="chkallowslides" runat="server" Text=" Allow Slides" Font-Names="arial" ToolTip="Allow Slides"  />
                             <br />
                             <br />
-                            <asp:CheckBox ID="chkscrubincoming" runat="server" Text=" Scrub Incoming" Font-Names="arial" ToolTip="Scrub Incoming" Checked="false"  />
-                            <br />
-                            <br />
                             <asp:CheckBox ID="chkRejects" runat="server" Text="Write Reject Reasons" Font-Names="arial"    />
                             <br />
                             <br />
@@ -468,7 +485,7 @@
                     </tr>
                     <tr>
                         <td style="width: 50%; vertical-align: top;">
-                            <strong><input type="text" style="width: 22px;" id="txtspeed" readonly="true" />  Consolidate After X Minutes</strong> 
+                            <strong><input type="text" style="width: 30px;" id="txtspeed" readonly="true" />  Consolidate After X Minutes</strong> 
                             <br />
                             <br />
                             <telerik:RadSlider ID="RadSliderR60Delay" runat="server"  OnClientValueChanged="HandleValueChangedSpeed" 
@@ -476,7 +493,7 @@
                                 ToolTip="Consolidate Plus X Minutes" DbValue="0" Height="22px" Length="200" Width="300px"></telerik:RadSlider>
                             <br />
                             <br />
-                            <strong><input type="text" style="width: 22px;" id="txtFastTurn" readonly="true"  />  Fast Turn on Same Trip # (minutes)</strong> 
+                            <strong><input type="text" style="width: 30px;" id="txtFastTurn" readonly="true"  />  Fast Turn on Same Trip # (minutes)</strong> 
                             <br />
                             <br />
                             <telerik:RadSlider ID="RadSliderFastTurn" runat="server"  OnClientValueChanged="HandleValueFastTurn" 
@@ -484,7 +501,7 @@
                                 ToolTip="Fast turn time on same trip number" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
                             <br />
                             <br />
-                            <strong><input type="text" style="width: 22px;" id="txtCrewWithinX" readonly="true"  />  Enforce Crew Within First X Hours</strong>                                                                                        
+                            <strong><input type="text" style="width: 30px;" id="txtCrewWithinX" readonly="true"  />  Enforce Crew Within First X Hours</strong>                                                                                        
                             <br />
                             <br />
                             <telerik:RadSlider ID="RadSliderCrewWithinX" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtCrewWithinX');}" 
@@ -493,7 +510,7 @@
                                 Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
                             <br />
                             <br />
-                            <strong><input type="text" style="width: 22px;" id="txtSwapWindow" readonly="true"  />  Swap Window</strong>                                                                                        
+                            <strong><input type="text" style="width: 30px;" id="txtSwapWindow" readonly="true"  />  Swap Window</strong>                                                                                        
                             <br />
                             <br />
                             <telerik:RadSlider ID="RadSliderswapwindow" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtSwapWindow');}" 
@@ -501,7 +518,7 @@
                                 Value="18" ToolTip="Crew Planning Swap Window" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
                             <br />
                             <br />
-                            <strong><input type="text" style="width: 22px;" id="txtMaxSlideMinutes" readonly="true"  />  Max Slide Minutes</strong>
+                            <strong><input type="text" style="width: 30px;" id="txtMaxSlideMinutes" readonly="true"  />  Max Slide Minutes</strong>
                             <br />
                             <br />
                             <telerik:RadSlider ID="RadSliderMaxSlideMinutes" runat="server"  OnClientValueChanged="function(sender,args){rsvalue(sender,args,'txtMaxSlideMinutes');}" 
@@ -509,7 +526,7 @@
                                 Value="15" ToolTip="Max Minutes for Slide" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
                         </td>
                         <td style="width: 50%; vertical-align: top;">
-                            <strong><input type="text" style="width: 22px;" id="txtdepdelay" readonly="true"  />  Departure Delays</strong>  (minutes)
+                            <strong><input type="text" style="width: 30px;" id="txtdepdelay" readonly="true"  />  Departure Delays</strong>  (minutes)
                             <br />
                             <br />
                             <telerik:RadSlider ID="RadSliderDepDelay" runat="server"  OnClientValueChanged="HandleValueChangedDepDelay" 
@@ -517,7 +534,7 @@
                                 ToolTip="Standard departure delay" DbValue="0" Height="22px" Width="300px"></telerik:RadSlider>
                             <br />
                             <br />
-                            <strong><input type="text" style="width: 22px;" id="txtPrePosition" readonly="true" />  Create repo before first flight (minutes)</strong> 
+                            <strong><input type="text" style="width: 30px;" id="txtPrePosition" readonly="true" />  Create repo before first flight (minutes)</strong> 
                             <br />
                             <br />
                             <telerik:RadSlider ID="RadSliderPrePosition" runat="server"  OnClientValueChanged="hvpp" OnClientLoad="hvpp" 
@@ -533,7 +550,7 @@
                                 Value="0" ToolTip="Cycle Cost" DbValue="0" Height="22px" Length="200" Width="300px" ></telerik:RadSlider>
                             <br />
                             <br />
-                            <strong><input type="text" style="width: 22px;" id="txttaxitime" readonly="true"  />  Taxi time</strong>&nbsp; (minutes)
+                            <strong><input type="text" style="width: 30px;" id="txttaxitime" readonly="true"  />  Taxi time</strong>&nbsp; (minutes)
                             <br />
                             <br />
                             <telerik:RadSlider ID="RadSliderTaxiTime1" runat="server"  OnClientValueChanged="hvtt" OnClientLoad="hvtt" 

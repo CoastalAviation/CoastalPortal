@@ -222,7 +222,7 @@
                     <asp:BoundField DataField="GMTEnd" HeaderText="GMT End" SortExpression="GMTEnd" />
                     <asp:BoundField DataField="DeclaredComplete" HeaderText="Declared Complete" SortExpression="DeclaredComplete" />
                     <asp:ButtonField CommandName="Base" Text="Base Model" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>
-                    <asp:ButtonField CommandName="Best" Text="Model Details" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>
+                    <asp:ButtonField CommandName="Best" Text="Display Full Schedule" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>
                     <asp:ButtonField CommandName="Eff" Text="Best Eff" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>
                 </Columns>
             </asp:GridView>

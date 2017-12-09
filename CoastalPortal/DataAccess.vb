@@ -10,6 +10,857 @@ Imports System.IO
 
 Public Class DataAccess
 
+    '20161025 - pab - add delete function
+    Shared Function DeletePricingZonesRatesAllByID(ByRef CarrierID As Integer, ByRef ZoneIDFrom As Integer, ByRef ZoneIDTo As Integer) As Boolean
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+
+            oCmd = New SqlCommand("sp_DeletePricingZonesRatesAllByZoneID", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = Nothing
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneIDFrom", SqlDbType.Int)
+            oParam.Value = ZoneIDFrom
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneIDTo", SqlDbType.Int)
+            oParam.Value = ZoneIDTo
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20161025 - pab - add delete function
+    Shared Function DeletePricingZones(ByRef CarrierID As Integer, ByRef ZoneID As Integer) As Boolean
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+
+            oCmd = New SqlCommand("sp_DeletePricingZones", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = Nothing
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneID", SqlDbType.Int)
+            oParam.Value = ZoneID
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20160227 - pab - zone pricing for tmc
+    Public Function InsertPricingZones(ByRef CarrierID As Integer, ByRef ZoneName As String, ByRef ZoneDescription As String,
+        ByRef BaseAirport As String, ByRef RadiusNM As Integer) As Integer
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+            oConn.Open()
+            oCmd = New SqlCommand("sp_InsertPricingZones", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneName", SqlDbType.VarChar)
+            oParam.Value = ZoneName
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneDescription", SqlDbType.VarChar)
+            oParam.Value = ZoneDescription
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@BaseAirport", SqlDbType.VarChar)
+            oParam.Value = BaseAirport
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@RadiusNM", SqlDbType.Int)
+            oParam.Value = RadiusNM
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter()
+            oParam.Direction = ParameterDirection.ReturnValue
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return CInt(oParam.Value)
+
+        Catch ex As Exception
+            Return 0
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20160916 - pab - add states drop down
+    Shared Function InsertPricingZonesStates(ByVal CarrierID As Integer, ByVal ZoneID As Integer, ByVal State As String) As Integer
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+            oCmd = New SqlCommand("sp_InsertPricingZonesStates", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneID", SqlDbType.Int)
+            oParam.Value = ZoneID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@State", SqlDbType.NVarChar)
+            oParam.Value = State
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter()
+            oParam.Direction = ParameterDirection.ReturnValue
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return CInt(oParam.Value)
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & "; ZoneID " & ZoneID & "; State " & State & vbNewLine & vbNewLine & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            Insertsys_log(CarrierID, appName, s, "InsertPricingZonesStates", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb InsertPricingZonesStates Error",
+                s, CarrierID)
+            Return -1
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20160505 - pab - regional pricing
+    Shared Function InsertPricingZonesAirports(ByVal CarrierID As Integer, ByVal ZoneID As Integer, ByVal BaseAirport As String,
+        ByVal RadiusNM As Integer) As Integer
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+            oCmd = New SqlCommand("sp_InsertPricingZonesAirports", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneID", SqlDbType.Int)
+            oParam.Value = ZoneID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@BaseAirport", SqlDbType.NVarChar)
+            oParam.Value = BaseAirport
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@RadiusNM", SqlDbType.Int)
+            oParam.Value = RadiusNM
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter()
+            oParam.Direction = ParameterDirection.ReturnValue
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return CInt(oParam.Value)
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & "; ZoneID " & ZoneID & "; BaseAirport " & BaseAirport &
+                "; RadiusNM " & RadiusNM & vbNewLine & vbNewLine & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            Insertsys_log(CarrierID, appName, s, "InsertPricingZonesAirports", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName & " DataAccess.vb InsertPricingZonesAirports Error",
+                s, CarrierID)
+            Return -1
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20160505 - pab - regional pricing
+    Public Function DeletePricingZonesStates(ByRef CarrierID As Integer, ByRef ZoneID As Integer) As Boolean
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+
+            oCmd = New SqlCommand("sp_DeletePricingZonesStates", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = Nothing
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneID", SqlDbType.Int)
+            oParam.Value = ZoneID
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20160505 - pab - regional pricing
+    Public Function DeletePricingZonesAirports(ByRef CarrierID As Integer, ByRef ZoneID As Integer) As Boolean
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+
+            oCmd = New SqlCommand("sp_DeletePricingZonesAirports", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = Nothing
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneID", SqlDbType.Int)
+            oParam.Value = ZoneID
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20160227 - pab - zone pricing for tmc
+    Public Function UpdatePricingZones(ByRef ZoneID As Integer, ByRef CarrierID As Integer, ByRef ZoneName As String, ByRef ZoneDescription As String,
+        ByRef BaseAirport As String, ByRef RadiusNM As Integer) As Boolean
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+
+            oCmd = New SqlCommand("sp_UpdatePricingZones", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = Nothing
+
+            oParam = New SqlParameter("@ZoneID", SqlDbType.Int)
+            oParam.Value = ZoneID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneName", SqlDbType.VarChar)
+            oParam.Value = ZoneName
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneDescription", SqlDbType.VarChar)
+            oParam.Value = ZoneDescription
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@BaseAirport", SqlDbType.VarChar)
+            oParam.Value = BaseAirport
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@RadiusNM", SqlDbType.Int)
+            oParam.Value = RadiusNM
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return True
+
+        Catch ex As Exception
+            Return False
+
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20110503 - pab - add mx16/mx33
+    Public Function GetUserSecurityByID(ByRef CarrierID As Integer, ByRef ID As Integer) As DataTable
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oAdp As SqlDataAdapter = Nothing
+        Dim oParam As SqlParameter = Nothing
+        Dim dt As DataTable = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+            oAdp = New SqlDataAdapter("sp_GetUserSecurityByID", oConn)
+
+            oAdp.SelectCommand.CommandType = CommandType.StoredProcedure
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oAdp.SelectCommand.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ID", SqlDbType.Int)
+            oParam.Value = ID
+            oAdp.SelectCommand.Parameters.Add(oParam)
+
+            dt = New DataTable
+            oAdp.Fill(dt)
+
+            Return dt
+
+        Catch ex As Exception
+            Return Nothing
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oAdp.Dispose()
+            oConn.Dispose()
+        End Try
+    End Function
+
+    '20160916 - pab - add states drop down
+    Function GetPricingZonesStates(ByVal CarrierID As Integer, ByVal ZoneID As Integer) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring(PortalServer)
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetPricingZonesStates"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+                    sqlParam.Value = CarrierID
+                    cmd.Parameters.Add(sqlParam)
+
+                    sqlParam = New SqlParameter("@ZoneID", SqlDbType.Int)
+                    sqlParam.Value = ZoneID
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & "; ZoneID " & ZoneID & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            Insertsys_log(CarrierID, appName, s, "GetPricingZonesStates", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetPricingZonesStates Error", s, CarrierID)
+        End Try
+
+        Return dt
+
+    End Function
+
+    '20161025 - pab - add delete function
+    Shared Function DeletePricingZonesRates(ByRef CarrierID As Integer, ByRef ID As Integer) As Boolean
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+
+            oCmd = New SqlCommand("sp_DeletePricingZonesRates", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = Nothing
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ID", SqlDbType.Int)
+            oParam.Value = ID
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20161017 - pab - time of day pricing
+    Public Function InsertPricingZonesRates(ByRef CarrierID As Integer, ByRef ACTypeID As Integer, ByRef ZoneIDFrom As Integer, ByRef ZoneIDTo As Integer,
+        ByRef Rate As Double, ByRef DiscountPCT As Integer, ByRef PremiumPCT As Integer, ByRef StartDate As Date, ByRef EndDate As Date,
+        ByRef DayofWeek As String, ByVal TimeofDay As String) As Integer
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+            oConn.Open()
+            oCmd = New SqlCommand("sp_InsertPricingZonesRates", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ACTypeID", SqlDbType.Int)
+            oParam.Value = ACTypeID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneIDFrom", SqlDbType.Int)
+            oParam.Value = ZoneIDFrom
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneIDTo", SqlDbType.Int)
+            oParam.Value = ZoneIDTo
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@Rate", SqlDbType.Money)
+            oParam.Value = Rate
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@DiscountPCT", SqlDbType.Int)
+            oParam.Value = DiscountPCT
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@PremiumPCT", SqlDbType.Int)
+            oParam.Value = PremiumPCT
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@StartDate", SqlDbType.Date)
+            oParam.Value = StartDate
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@EndDate", SqlDbType.Date)
+            oParam.Value = EndDate
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@DayofWeek", SqlDbType.NVarChar)
+            oParam.Value = DayofWeek
+            oCmd.Parameters.Add(oParam)
+
+            '20161017 - pab - time of day pricing
+            oParam = New SqlParameter("@TimeofDay", SqlDbType.NVarChar)
+            oParam.Value = TimeofDay
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter()
+            oParam.Direction = ParameterDirection.ReturnValue
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return CInt(oParam.Value)
+
+        Catch ex As Exception
+            Return 0
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20160505 - pab - regional pricing
+    '20161017 - pab - time of day pricing
+    Public Function UpdatePricingZonesRates(ByRef ID As Integer, ByRef CarrierID As Integer, ByRef ACTypeID As Integer, ByRef ZoneIDFrom As Integer,
+        ByRef ZoneIDTo As Integer, ByRef Rate As Double, ByRef DiscountPCT As Integer, ByRef PremiumPCT As Integer, ByRef StartDate As Date,
+        ByRef EndDate As Date, ByRef DayofWeek As String, ByVal TimeofDay As String) As Boolean
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+
+            oConn.Open()
+
+            oCmd = New SqlCommand("sp_UpdatePricingZonesRates", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = Nothing
+
+            oParam = New SqlParameter("@ID", SqlDbType.Int)
+            oParam.Value = ID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ACTypeID", SqlDbType.Int)
+            oParam.Value = ACTypeID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneIDFrom", SqlDbType.Int)
+            oParam.Value = ZoneIDFrom
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ZoneIDTo", SqlDbType.Int)
+            oParam.Value = ZoneIDTo
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@Rate", SqlDbType.Money)
+            oParam.Value = Rate
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@DiscountPCT", SqlDbType.Int)
+            oParam.Value = DiscountPCT
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@PremiumPCT", SqlDbType.Int)
+            oParam.Value = PremiumPCT
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@StartDate", SqlDbType.Date)
+            oParam.Value = StartDate
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@EndDate", SqlDbType.Date)
+            oParam.Value = EndDate
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@DayofWeek", SqlDbType.NVarChar)
+            oParam.Value = DayofWeek
+            oCmd.Parameters.Add(oParam)
+
+            '20161017 - pab - time of day pricing
+            oParam = New SqlParameter("@TimeofDay", SqlDbType.NVarChar)
+            oParam.Value = TimeofDay
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return True
+
+        Catch ex As Exception
+            Return False
+
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20160227 - pab - zone pricing for tmc
+    Function GetPricingZonesByName(ByRef CarrierID As Integer, ByRef ZoneName As String) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring(PortalServer)
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetPricingZonesByName"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+                    sqlParam.Value = CarrierID
+                    cmd.Parameters.Add(sqlParam)
+
+                    sqlParam = New SqlParameter("@ZoneName", SqlDbType.NVarChar)
+                    sqlParam.Value = ZoneName
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & "; ZoneName " & ZoneName & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            Insertsys_log(CarrierID, appName, s, "GetPricingZonesByName", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetPricingZonesByName Error", s, CarrierID)
+        End Try
+
+        Return dt
+
+    End Function
+
+    '20160227 - pab - zone pricing for tmc
+    Function GetPricingZoneRates(ByRef CarrierID As Integer, ByRef ID As Integer) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring(PortalServer)
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetPricingZoneRates"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+                    sqlParam.Value = CarrierID
+                    cmd.Parameters.Add(sqlParam)
+
+                    sqlParam = New SqlParameter("@ID", SqlDbType.Int)
+                    sqlParam.Value = ID
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            Insertsys_log(CarrierID, appName, s, "GetPricingZoneRates", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetPricingZoneRates Error", s, CarrierID)
+        End Try
+
+        Return dt
+
+    End Function
+
+    '20160217 - pab - TMC zone pricing
+    Function GetPricingZones(ByRef CarrierID As Integer, ByRef ZoneID As Integer) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring(PortalServer)
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetPricingZones"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+                    sqlParam.Value = CarrierID
+                    cmd.Parameters.Add(sqlParam)
+
+                    sqlParam = New SqlParameter("@ZoneID", SqlDbType.Int)
+                    sqlParam.Value = ZoneID
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & "; ZoneID " & ZoneID & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            Insertsys_log(CarrierID, appName, s, "GetPricingZones", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetPricingZones Error", s, CarrierID)
+        End Try
+
+        Return dt
+
+    End Function
+
+    '20160331 - pab - make not quoted history searchable
+    Function GetAircraftTypeServiceSpecsActive_2(ByVal CarrierID As Integer, ByVal ACTypeID As Integer) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring(PortalServer)
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetAircraftTypeServiceSpecsActive_2"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+                    sqlParam.Value = CarrierID
+                    cmd.Parameters.Add(sqlParam)
+
+                    sqlParam = New SqlParameter("@ACTypeID", SqlDbType.Int)
+                    sqlParam.Value = ACTypeID
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & "; ACTypeID " & ACTypeID & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            Insertsys_log(CarrierID, appName, s, "GetAircraftTypeServiceSpecsActive_2", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetAircraftTypeServiceSpecsActive_2 Error", s, CarrierID)
+        End Try
+
+        Return dt
+
+    End Function
+
     '20160304 - pab - add broker info
     Function GetBrokersByCompany(ByVal companyname As String) As DataTable
 

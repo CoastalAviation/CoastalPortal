@@ -87,16 +87,6 @@ Namespace My
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.WebServiceUrl),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("http://169.47.243.164/service.asmx")>  _
-        Public ReadOnly Property CoastalPortal_AviationWebService1_10_WebService1() As String
-            Get
-                Return CType(Me("CoastalPortal_AviationWebService1_10_WebService1"),String)
-            End Get
-        End Property
-        
-        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
-         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.SpecialSettingAttribute(Global.System.Configuration.SpecialSetting.WebServiceUrl),  _
          Global.System.Configuration.DefaultSettingValueAttribute("http://dev.virtualearth.net/webservices/v1/geocodeservice/GeocodeService.svc")>  _
         Public ReadOnly Property CoastalPortal_GeoCode_GeocodeService() As String
             Get

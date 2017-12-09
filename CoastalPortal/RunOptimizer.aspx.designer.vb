@@ -203,6 +203,15 @@ Partial Public Class RunOptimizer
     Protected WithEvents rblModelType As Global.System.Web.UI.WebControls.RadioButtonList
     
     '''<summary>
+    '''Label7 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents Label7 As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
     '''chkallowupgrades control.
     '''</summary>
     '''<remarks>
@@ -212,6 +221,15 @@ Partial Public Class RunOptimizer
     Protected WithEvents chkallowupgrades As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
+    '''chkAssignNewTrips control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkAssignNewTrips As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
     '''chkAssigns control.
     '''</summary>
     '''<remarks>
@@ -219,6 +237,33 @@ Partial Public Class RunOptimizer
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents chkAssigns As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkFCDRPublish control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkFCDRPublish As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkPinCharter control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkPinCharter As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
+    '''chkPinNetJets control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkPinNetJets As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
     '''Label4 control.
@@ -246,6 +291,33 @@ Partial Public Class RunOptimizer
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents RadSliderUpg As Global.Telerik.Web.UI.RadSlider
+    
+    '''<summary>
+    '''txtAllowFlex control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtAllowFlex As Global.System.Web.UI.HtmlControls.HtmlInputText
+    
+    '''<summary>
+    '''lblAllowFlex control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblAllowFlex As Global.System.Web.UI.WebControls.Label
+    
+    '''<summary>
+    '''RadSliderAllowFlex control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSliderAllowFlex As Global.Telerik.Web.UI.RadSlider
     
     '''<summary>
     '''RadSliderMBF control.
@@ -338,22 +410,13 @@ Partial Public Class RunOptimizer
     Protected WithEvents chkproratecostbyday As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
-    '''chkFCDRPublish control.
+    '''chkscrubincoming control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents chkFCDRPublish As Global.System.Web.UI.WebControls.CheckBox
-    
-    '''<summary>
-    '''chkAssignNewTrips control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents chkAssignNewTrips As Global.System.Web.UI.WebControls.CheckBox
+    Protected WithEvents chkscrubincoming As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
     '''chkDeconflict control.
@@ -408,15 +471,6 @@ Partial Public Class RunOptimizer
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents chkallowslides As Global.System.Web.UI.WebControls.CheckBox
-    
-    '''<summary>
-    '''chkscrubincoming control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents chkscrubincoming As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
     '''chkRejects control.

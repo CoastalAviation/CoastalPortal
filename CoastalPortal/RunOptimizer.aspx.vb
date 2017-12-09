@@ -106,6 +106,25 @@ Public Class RunOptimizer
                 '20171101 - pab - add AssignNewTrips per David - not used by optimzer yet
                 chkAssignNewTrips.Checked = False
 
+                '20171128 - pab - add 3 new options - hide until ready for prime time
+                chkPinCharter.Checked = False
+                chkPinNetJets.Checked = False
+                'If CInt(Session("carrierid")) = JETLINX Then
+                '    chkPinNetJets.Visible = True
+                'Else
+                '    chkPinNetJets.Visible = False
+                'End If
+                RadSliderAllowFlex.Value = 0
+                'If CInt(Session("carrierid")) = XOJET Then
+                '    txtAllowFlex.Visible = True
+                '    lblAllowFlex.Visible = True
+                '    RadSliderAllowFlex.Visible = True
+                'Else
+                txtAllowFlex.Visible = False
+                '    lblAllowFlex.Visible = False
+                '    RadSliderAllowFlex.Visible = False
+                'End If
+
                 If InStr(Session("email").ToString.ToLower, "@coastal") > 0 Then
                     pnlAdvancedSettings.Visible = True
                 Else
@@ -152,7 +171,7 @@ Public Class RunOptimizer
                 Me.imglogo.Src = GetImageURLByATSSID(CInt(Session("carrierid")), 0, "logo")
 
                 '20171017 - pab - demoair branding
-                If CInt(Session("carrierid")) = 48 Then
+                If CInt(Session("carrierid")) = DEMOAIR Then
                     imglogo.Width = 56
                     imglogo.Style.Remove("position")
                     imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
@@ -445,6 +464,19 @@ Public Class RunOptimizer
             Else
                 rs.Fields("ScrubIncoming").Value = 0
             End If
+
+            '20171128 - pab - add 3 new options - hide until ready for prime time
+            If chkPinCharter.Checked Then
+                rs.Fields("PinCharter").Value = 1
+            Else
+                rs.Fields("PinCharter").Value = 0
+            End If
+            If chkPinNetJets.Checked Then
+                rs.Fields("PinNetJets").Value = 1
+            Else
+                rs.Fields("PinNetJets").Value = 0
+            End If
+            rs.Fields("AllowFlex").Value = CInt(RadSliderAllowFlex.Value.ToString)
 
             rs.Update()
 

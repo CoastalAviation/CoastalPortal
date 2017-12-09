@@ -93,6 +93,7 @@ Public Class AirTaxi
     Public Const XOJET As Integer = 49
     Public Const WHEELSUP As Integer = 100
     Public Const TMC As Integer = 65
+    Public Const DEMOAIR As Integer = 48
 
     '20171121 - pab - fix carriers changing midstream - change to Session variables
     'Public Shared _fosmodelstartfos As Date
@@ -629,7 +630,7 @@ again:
 
             Try
                 ' Dim ws As New coastalavtech.service.WebService1
-                Dim ws As New AWS.WebService1
+                Dim ws As New AviationWebService1_10.WebService1
                 ws.SendEmail("pbaumgart@ctgi.com", "123", carrierid, targetemail, "",
                        "optimizer@coastalaviationsoftware.com", subject, body, True, "", carrierlogo, True, "")
             Catch ex As Exception
