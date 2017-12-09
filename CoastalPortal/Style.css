@@ -391,7 +391,7 @@ label select {
 
         .menu .menu__left li {
             float: left;
-            width: 50%;
+            width: 33.333%;
             text-align: left;
         }
 

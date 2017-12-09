@@ -34,9 +34,9 @@ Public Class loginpage
                 '20161227 - pab - default to wheelsup
                 'host = "wheelsup"
                 'host = "tmcjets"
-                host = "jetlinx"
+                'host = "jetlinx"
                 'host = "dpj"
-                'host = "xojet"
+                host = "xojet"
                 'host = "demoair"
             End If
 
@@ -165,6 +165,13 @@ Public Class loginpage
                     imglogo.Width = 56
                     imglogo.Style.Remove("position")
                     imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
+                End If
+
+                '20171209 - pab - link to quoting portal
+                If CInt(Session("carrierid")) = XOJET Then
+                    LnkQuoting.Visible = True
+                Else
+                    LnkQuoting.Visible = False
                 End If
 
                 'Select Case _carrierid

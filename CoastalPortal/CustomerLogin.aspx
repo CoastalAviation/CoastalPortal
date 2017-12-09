@@ -34,6 +34,8 @@
 					<li><a href="#">Run Optimizer</a></li>
 					<%--<li><a href="#">AOG Recovery</a></li>--%>
 					<li><a href="#">Model Run History</a></li>
+					<li><a href="#" id="LnkQuoting" runat="server">Rev Mgmt</a></li>
+					<li><%--<asp:LinkButton ID="LinkQuoting" runat="server" Visible="False">Rev Mgmt</asp:LinkButton>--%></li>
 				</ul>
 			</div>
 			<div class="logo">

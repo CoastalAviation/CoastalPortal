@@ -176,6 +176,14 @@ Public Class RunOptimizer
                     imglogo.Style.Remove("position")
                     imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
                 End If
+
+                '20171209 - pab - link to quoting portal
+                If CInt(Session("carrierid")) = XOJET Then
+                    LinkQuoting.Visible = True
+                Else
+                    LinkQuoting.Visible = False
+                End If
+
             End If
 
         Catch ex As Exception
@@ -607,6 +615,17 @@ Public Class RunOptimizer
         Session("username") = Nothing
 
         Response.Redirect("CustomerLogin.aspx", True)
+
+    End Sub
+
+    '20171209 - pab - link to quoting portal
+    Protected Sub LinkQuoting_Click(sender As Object, e As EventArgs) Handles LinkQuoting.Click
+
+        If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
+        If Session("urlalias").ToString.Trim <> "" Then
+            'Response.Redirect("http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx", True)
+            Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx','_blank');</script>")
+        End If
 
     End Sub
 

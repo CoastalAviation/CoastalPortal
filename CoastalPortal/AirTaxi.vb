@@ -94,6 +94,8 @@ Public Class AirTaxi
     Public Const WHEELSUP As Integer = 100
     Public Const TMC As Integer = 65
     Public Const DEMOAIR As Integer = 48
+    '20171209 - pab - add instant jet
+    Public Const INSTANTJET As Integer = 110
 
     '20171121 - pab - fix carriers changing midstream - change to Session variables
     'Public Shared _fosmodelstartfos As Date

@@ -32,6 +32,15 @@ Partial Public Class loginpage
     Protected WithEvents login As Global.System.Web.UI.HtmlControls.HtmlGenericControl
     
     '''<summary>
+    '''LnkQuoting control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents LnkQuoting As Global.System.Web.UI.HtmlControls.HtmlAnchor
+    
+    '''<summary>
     '''imglogo control.
     '''</summary>
     '''<remarks>

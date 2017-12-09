@@ -207,6 +207,7 @@ a:link, a:visited
 					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
 					<%--<li><a href="ModelRunHistory.aspx">Model Run History</a></li>--%>
 					<li><a href="#">Model Run History</a></li>
+					<li><asp:LinkButton ID="LinkQuoting" runat="server" Visible="False">Rev Mgmt</asp:LinkButton></li>
 				</ul>
 			</div>
 			<div class="logo">

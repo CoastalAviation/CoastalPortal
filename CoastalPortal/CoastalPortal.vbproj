@@ -325,15 +325,10 @@
     <Content Include="tip_balloon\stemt.gif" />
     <Content Include="tip_balloon\t.gif" />
     <Content Include="tip_balloon\tip_balloon.js" />
-    <Content Include="Web References\AviationWebService1_10\Reference.map">
+    <None Include="Web References\AviationWebService1_10\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
-    </Content>
-    <None Include="Web References\AviationWebService1_10\service.disco" />
-    <Content Include="Web References\AWS\Reference.map">
-      <Generator>MSDiscoCodeGenerator</Generator>
-      <LastGenOutput>Reference.vb</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="fonts\fontawesome-webfont-1.eot" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.hxd" />
@@ -348,13 +343,12 @@
     <Content Include="fonts\geometria-medium-webfont.hxd" />
     <Content Include="fonts\geometria-medium-webfont.woff" />
     <None Include="Web References\AviationWebService1_10\service.wsdl" />
-    <None Include="Web References\AWS\service.wsdl" />
     <None Include="Web References\CATMSGQ\msgq.disco" />
-    <None Include="Web References\AWS\service.disco" />
-    <Content Include="Web References\coastalavtech.service\Reference.map">
+    <None Include="Web References\AviationWebService1_10\service.disco" />
+    <None Include="Web References\coastalavtech.service\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
-    </Content>
+    </None>
     <None Include="Web References\coastalavtech.service\service.disco" />
     <Content Include="WebForm1.aspx" />
     <None Include="My Project\PublishProfiles\CustomProfile.pubxml" />
@@ -611,11 +605,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
     </Compile>
-    <Compile Include="Web References\AWS\Reference.vb">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.map</DependentUpon>
-    </Compile>
     <Compile Include="Web References\CATMSGQ\Reference.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -666,10 +655,10 @@
     <Content Include="Scripts\jquery-3.1.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
     <None Include="Web References\CATMSGQ\msgq.wsdl" />
-    <Content Include="Web References\CATMSGQ\Reference.map">
+    <None Include="Web References\CATMSGQ\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
-    </Content>
+    </None>
     <None Include="Web References\coastalavtech.service\service.wsdl" />
     <Content Include="Web References\GeoCode\GeocodeResponse.datasource">
       <DependentUpon>Reference.map</DependentUpon>
@@ -691,10 +680,10 @@
     <None Include="Web References\GeoCode\GeocodeService4.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Web References\GeoCode\Reference.map">
+    <None Include="Web References\GeoCode\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
-    </Content>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -715,7 +704,7 @@
   <ItemGroup>
     <WebReferenceUrl Include="http://169.47.243.162/service.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\AWS\</RelPath>
+      <RelPath>Web References\AviationWebService1_10\</RelPath>
       <UpdateFromURL>http://169.47.243.162/service.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
@@ -723,17 +712,6 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>CoastalPortal_AWS_WebService1</CachedSettingsPropName>
-    </WebReferenceUrl>
-    <WebReferenceUrl Include="http://169.47.243.164/service.asmx">
-      <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\AviationWebService1_10\</RelPath>
-      <UpdateFromURL>http://169.47.243.164/service.asmx</UpdateFromURL>
-      <ServiceLocationURL>
-      </ServiceLocationURL>
-      <CachedDynamicPropName>
-      </CachedDynamicPropName>
-      <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
-      <CachedSettingsPropName>CoastalPortal_AviationWebService1_10_WebService1</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://casmsgq.coastalavtech.com/msgq.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>

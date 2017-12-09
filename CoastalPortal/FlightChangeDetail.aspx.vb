@@ -1192,51 +1192,6 @@ Public Class FlightChangeDetail
         'MyBase.VerifyRenderingInServerForm(control)
     End Sub
 
-    Private Sub FlightChangeDetail_PreLoad(sender As Object, e As EventArgs) Handles Me.PreLoad
-
-        '20171121 - pab - fix carriers changing midstream - change to Session variables
-        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
-        If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
-        Dim carrierid As Integer = Session("carrierid")
-        Dim urlalias As String = Session("urlalias")
-
-        Try
-
-            Dim da As New DataAccess
-
-            If Not IsPostBack Then
-                '20171101 - pab - display cleanup
-                'Me.lblCarrier.Text = _urlalias.ToUpper
-                Dim slogotext As String = da.GetSetting(carrierid, "CompanyLogoText")
-                If slogotext = "" Then slogotext = urlalias & " Flight Schedule Optimization System"
-                Me.lblCarrier.Text = slogotext.ToUpper
-
-                Me.imglogo.Src = GetImageURLByATSSID(carrierid, 0, "logo")
-
-                '20171017 - pab - demoair branding
-                If carrierid = 48 Then
-                    imglogo.Width = 56
-                    imglogo.Style.Remove("position")
-                    imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
-                End If
-            End If
-
-        Catch ex As Exception
-            Dim s As String = ex.Message
-            If Not IsNothing(ex.InnerException) Then
-                s &= "" & ex.InnerException.ToString
-            End If
-            If Not IsNothing(ex.StackTrace) Then
-                s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
-            End If
-            AirTaxi.Insertsys_log(carrierid, appName, s, "FlightChangeDetail.aspx.vb Page_PreRender", "")
-            SendEmail("chartersales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "",
-                      appName & " FlightChangeDetail.aspx.vb Page_PreRender error", s, carrierid)
-
-        End Try
-
-    End Sub
-
     '20171101 - pab - display cleanup
     Protected Sub LinkLogOut_Click(sender As Object, e As EventArgs) Handles LinkLogOut.Click
 
@@ -1278,4 +1233,67 @@ Public Class FlightChangeDetail
 
     End Sub
 
+    Private Sub FlightChangeDetail_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+
+        '20171121 - pab - fix carriers changing midstream - change to Session variables
+        If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
+        If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
+        Dim carrierid As Integer = Session("carrierid")
+        Dim urlalias As String = Session("urlalias")
+
+        Try
+
+            Dim da As New DataAccess
+
+            If Not IsPostBack Then
+                '20171101 - pab - display cleanup
+                'Me.lblCarrier.Text = _urlalias.ToUpper
+                Dim slogotext As String = da.GetSetting(carrierid, "CompanyLogoText")
+                If slogotext = "" Then slogotext = urlalias & " Flight Schedule Optimization System"
+                Me.lblCarrier.Text = slogotext.ToUpper
+
+                Me.imglogo.Src = GetImageURLByATSSID(carrierid, 0, "logo")
+
+                '20171017 - pab - demoair branding
+                If carrierid = 48 Then
+                    imglogo.Width = 56
+                    imglogo.Style.Remove("position")
+                    imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
+                End If
+
+                '20171209 - pab - link to quoting portal
+                If CInt(Session("carrierid")) = XOJET Then
+                    LinkQuoting.Visible = True
+                Else
+                    LinkQuoting.Visible = False
+                End If
+
+            End If
+
+        Catch ex As Exception
+            Dim s As String = ex.Message
+            If Not IsNothing(ex.InnerException) Then
+                s &= "" & ex.InnerException.ToString
+            End If
+            If Not IsNothing(ex.StackTrace) Then
+                s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
+            End If
+            AirTaxi.Insertsys_log(carrierid, appName, s, "FlightChangeDetail.aspx.vb Page_PreRender", "")
+            SendEmail("chartersales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "",
+                      appName & " FlightChangeDetail.aspx.vb Page_PreRender error", s, carrierid)
+
+        End Try
+
+    End Sub
+
+    '20171209 - pab - link to quoting portal
+    Protected Sub LinkQuoting_Click(sender As Object, e As EventArgs) Handles LinkQuoting.Click
+
+        If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
+        If Session("urlalias").ToString.Trim <> "" Then
+            'Response.Redirect("http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx", True)
+            Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx','_blank');</script>")
+        End If
+
+    End Sub
 End Class
