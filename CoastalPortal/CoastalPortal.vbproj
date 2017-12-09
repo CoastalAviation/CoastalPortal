@@ -245,7 +245,6 @@
     <Content Include="Controls\CASFlightsAzure.ascx" />
     <Content Include="Controls\FOSFlightsAzure.ascx" />
     <Content Include="Controls\FOSFlightsCalendar.ascx" />
-    <Content Include="Controls\ModelDetailPanel.ascx" />
     <Content Include="Controls\OptimizerCalendar.ascx" />
     <Content Include="CustomerLogin.aspx" />
     <Content Include="Dashboard.aspx" />
@@ -299,9 +298,6 @@
     <Content Include="ModelRunHistory.aspx" />
     <Content Include="My Project\PublishProfiles\CustomProfile.pubxml.user" />
     <Content Include="pagetemplate.aspx" />
-    <Content Include="QuoteTrip.aspx" />
-    <Content Include="RegionPricing.aspx" />
-    <Content Include="Regions.aspx" />
     <Content Include="RunOptimizer.aspx" />
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -329,10 +325,15 @@
     <Content Include="tip_balloon\stemt.gif" />
     <Content Include="tip_balloon\t.gif" />
     <Content Include="tip_balloon\tip_balloon.js" />
-    <None Include="Web References\AviationWebService1_10\Reference.map">
+    <Content Include="Web References\AviationWebService1_10\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
-    </None>
+    </Content>
+    <None Include="Web References\AviationWebService1_10\service.disco" />
+    <Content Include="Web References\AWS\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </Content>
     <Content Include="fonts\fontawesome-webfont-1.eot" />
     <Content Include="fonts\fontawesome-webfont.eot" />
     <Content Include="fonts\fontawesome-webfont.hxd" />
@@ -347,8 +348,9 @@
     <Content Include="fonts\geometria-medium-webfont.hxd" />
     <Content Include="fonts\geometria-medium-webfont.woff" />
     <None Include="Web References\AviationWebService1_10\service.wsdl" />
+    <None Include="Web References\AWS\service.wsdl" />
     <None Include="Web References\CATMSGQ\msgq.disco" />
-    <None Include="Web References\AviationWebService1_10\service.disco" />
+    <None Include="Web References\AWS\service.disco" />
     <Content Include="Web References\coastalavtech.service\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
@@ -453,13 +455,6 @@
     </Compile>
     <Compile Include="Controls\FOSFlightsCalendar.ascx.vb">
       <DependentUpon>FOSFlightsCalendar.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Controls\ModelDetailPanel.ascx.designer.vb">
-      <DependentUpon>ModelDetailPanel.ascx</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ModelDetailPanel.ascx.vb">
-      <DependentUpon>ModelDetailPanel.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\OptimizerCalendar.ascx.designer.vb">
@@ -575,27 +570,6 @@
     </Compile>
     <Compile Include="PlanningFOS.vb" />
     <Compile Include="PopulateLookups.vb" />
-    <Compile Include="QuoteTrip.aspx.designer.vb">
-      <DependentUpon>QuoteTrip.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="QuoteTrip.aspx.vb">
-      <DependentUpon>QuoteTrip.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="RegionPricing.aspx.designer.vb">
-      <DependentUpon>RegionPricing.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="RegionPricing.aspx.vb">
-      <DependentUpon>RegionPricing.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Regions.aspx.designer.vb">
-      <DependentUpon>Regions.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Regions.aspx.vb">
-      <DependentUpon>Regions.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
     <Compile Include="RunOptimizer.aspx.designer.vb">
       <DependentUpon>RunOptimizer.aspx</DependentUpon>
     </Compile>
@@ -633,6 +607,11 @@
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
     <Compile Include="Web References\AviationWebService1_10\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\AWS\Reference.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.map</DependentUpon>
@@ -736,7 +715,7 @@
   <ItemGroup>
     <WebReferenceUrl Include="http://169.47.243.162/service.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>
-      <RelPath>Web References\AviationWebService1_10\</RelPath>
+      <RelPath>Web References\AWS\</RelPath>
       <UpdateFromURL>http://169.47.243.162/service.asmx</UpdateFromURL>
       <ServiceLocationURL>
       </ServiceLocationURL>
@@ -744,6 +723,17 @@
       </CachedDynamicPropName>
       <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
       <CachedSettingsPropName>CoastalPortal_AWS_WebService1</CachedSettingsPropName>
+    </WebReferenceUrl>
+    <WebReferenceUrl Include="http://169.47.243.164/service.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\AviationWebService1_10\</RelPath>
+      <UpdateFromURL>http://169.47.243.164/service.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>MySettings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>CoastalPortal_AviationWebService1_10_WebService1</CachedSettingsPropName>
     </WebReferenceUrl>
     <WebReferenceUrl Include="http://casmsgq.coastalavtech.com/msgq.asmx">
       <UrlBehavior>Dynamic</UrlBehavior>

@@ -94,7 +94,7 @@ Public Class FlightChangeReports
                     Dim i = InStr(btnresult, " ")
                     Dim action = Left(btnresult, i - 1)
                     Dim KeyId = Mid(btnresult, i + 1)
-                    AcceptRejectFCDR(KeyId, action)
+                    AcceptRejectFCDR(action, KeyId)
                 End If
             End If
             If btnSelect Is Nothing Then btnSelect = ""
