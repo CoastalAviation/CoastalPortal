@@ -9355,7 +9355,7 @@ Public Class QuoteTrip
                 Me.lblCarrier.Text = Session("urlalias").ToString.ToUpper
 
                 '20171017 - pab - demoair branding
-                If CInt(Session("carrierid")) = 48 Then
+                If CInt(Session("carrierid")) = DEMOAIR Then
                     imglogo.Width = 56
                     imglogo.Style.Remove("position")
                     imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")

@@ -34,6 +34,8 @@
 					<li><a href="#">Run Optimizer</a></li>
 					<%--<li><a href="#">AOG Recovery</a></li>--%>
 					<li><a href="#">Model Run History</a></li>
+					<li><a href="#" id="LnkQuoting" runat="server">Rev Mgmt</a></li>
+					<li><%--<asp:LinkButton ID="LinkQuoting" runat="server" Visible="False">Rev Mgmt</asp:LinkButton>--%></li>
 				</ul>
 			</div>
 			<div class="logo">
@@ -98,8 +100,8 @@
 					</label>
 					<label class="nom">
 						<%--<input type="checkbox" class="checkbox" id="chkbox" />--%>
-                        <asp:CheckBox ID="chkbox" runat="server" class="checkbox" Checked="True" Visible="False"></asp:CheckBox>
-						<label class="labeltxt" for="checkbox" style="visibility: hidden">Keep Me Logged In</label>
+                        <asp:CheckBox ID="chkbox" runat="server" class="checkbox" Checked="True"></asp:CheckBox>
+						<label class="labeltxt" for="checkbox">Keep Me Logged In</label>
 					</label>
 					<label class="nom no">
                         	<%--<a href="#login__password" class="forgot">forgot password</a>--%>

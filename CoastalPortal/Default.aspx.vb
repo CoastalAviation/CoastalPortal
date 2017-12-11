@@ -39,9 +39,10 @@ Public Class _Default
         If host = "corporateportaluatbeta.cloudapp.net" Or host = "corporateportaluat.cloudapp.net" Or host = "localhost" Then
             '20161227 - pab - default to wheelsup
             'host = "tmcjets"
-            host = "wheelsup"
+            'host = "wheelsup"
             'host = "jetlinx"
             'host = "demoair"
+            host = "xojet"
         End If
 
         '20130109 - pab - fix changing carrier

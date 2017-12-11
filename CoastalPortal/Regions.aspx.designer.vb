@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class pagetemplate
+Partial Public Class define_regions
     
     '''<summary>
     '''Head1 control.
@@ -23,13 +23,13 @@ Partial Public Class pagetemplate
     Protected WithEvents Head1 As Global.System.Web.UI.HtmlControls.HtmlHead
     
     '''<summary>
-    '''form1 control.
+    '''form control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
+    Protected WithEvents form As Global.System.Web.UI.HtmlControls.HtmlForm
     
     '''<summary>
     '''RadStyleSheetManager1 control.
@@ -57,15 +57,6 @@ Partial Public Class pagetemplate
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents RadAjaxManager1 As Global.Telerik.Web.UI.RadAjaxManager
-    
-    '''<summary>
-    '''LinkQuoting control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents LinkQuoting As Global.System.Web.UI.WebControls.LinkButton
     
     '''<summary>
     '''imglogo control.
@@ -104,33 +95,6 @@ Partial Public Class pagetemplate
     Protected WithEvents LinkLogOut2 As Global.System.Web.UI.WebControls.LinkButton
     
     '''<summary>
-    '''form_1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-    
-    '''<summary>
-    '''aircraft_type_txt_1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents aircraft_type_txt_1 As Global.System.Web.UI.WebControls.Label
-    
-    '''<summary>
-    '''gvServiceProviderMatrix control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents gvServiceProviderMatrix As Global.System.Web.UI.WebControls.GridView
-    
-    '''<summary>
     '''lblMsg control.
     '''</summary>
     '''<remarks>
@@ -140,155 +104,200 @@ Partial Public Class pagetemplate
     Protected WithEvents lblMsg As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
-    '''lblFlightTimeMsg control.
+    '''pnlEdit control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lblFlightTimeMsg As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents pnlEdit As Global.System.Web.UI.WebControls.Panel
     
     '''<summary>
-    '''price_summary_1 control.
+    '''edit_region_name_1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents price_summary_1 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents edit_region_name_1 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''cmdEdit control.
+    '''edit_description_1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cmdEdit As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents edit_description_1 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''cmdStartOver1 control.
+    '''edit_airport_code_1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cmdStartOver1 As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents edit_airport_code_1 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''rblOneWayRoundTrip control.
+    '''edit_radius_1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rblOneWayRoundTrip As Global.System.Web.UI.WebControls.RadioButtonList
+    Protected WithEvents edit_radius_1 As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''ddllBrokerCompanies control.
+    '''RadComboBoxStates1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddllBrokerCompanies As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents RadComboBoxStates1 As Global.Telerik.Web.UI.RadComboBox
     
     '''<summary>
-    '''ddllBrokers control.
+    '''update_popup_ok control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddllBrokers As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents update_popup_ok As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
-    '''RadComboBoxACInclude control.
+    '''update_popup_delete control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RadComboBoxACInclude As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents update_popup_delete As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
-    '''OriginAddress control.
+    '''update_popup_cancel control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents OriginAddress As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents update_popup_cancel As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
-    '''DestinationAddress control.
+    '''hddnZoneID control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents DestinationAddress As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents hddnZoneID As Global.System.Web.UI.WebControls.HiddenField
     
     '''<summary>
-    '''ddlPassengers control.
+    '''find_region_txt control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddlPassengers As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents find_region_txt As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''depart_date control.
+    '''find_airport_txt control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents depart_date As Global.Telerik.Web.UI.RadDatePicker
+    Protected WithEvents find_airport_txt As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''departtime_combo control.
+    '''find_button control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents departtime_combo As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents find_button As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
-    '''bttnAddLeg control.
+    '''get_defineregions control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents bttnAddLeg As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents get_defineregions As Global.System.Web.UI.WebControls.SqlDataSource
     
     '''<summary>
-    '''lblMsg1 control.
+    '''table_main_gridview control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lblMsg1 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents table_main_gridview As Global.System.Web.UI.WebControls.GridView
     
     '''<summary>
-    '''cmdQuote control.
+    '''popup_regionname_txt control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cmdQuote As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents popup_regionname_txt As Global.System.Web.UI.WebControls.TextBox
     
     '''<summary>
-    '''cmdStartOver control.
+    '''popup_rdescription_txt control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents cmdStartOver As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents popup_rdescription_txt As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''popup_airportcode_txt control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents popup_airportcode_txt As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''popup_radius_txt control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents popup_radius_txt As Global.System.Web.UI.WebControls.TextBox
+    
+    '''<summary>
+    '''RadComboBoxStates control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadComboBoxStates As Global.Telerik.Web.UI.RadComboBox
+    
+    '''<summary>
+    '''popup_add control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents popup_add As Global.System.Web.UI.WebControls.Button
+    
+    '''<summary>
+    '''popup_cancel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents popup_cancel As Global.System.Web.UI.WebControls.Button
 End Class

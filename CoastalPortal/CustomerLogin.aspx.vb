@@ -34,9 +34,9 @@ Public Class loginpage
                 '20161227 - pab - default to wheelsup
                 'host = "wheelsup"
                 'host = "tmcjets"
-                host = "jetlinx"
+                'host = "jetlinx"
                 'host = "dpj"
-                'host = "xojet"
+                host = "xojet"
                 'host = "demoair"
             End If
 
@@ -83,6 +83,48 @@ Public Class loginpage
             '20101104 - pab - remove hardcoded value
             Title = da.GetSetting(CInt(Session("carrierid")), "CompanyName") & Title
 
+            '20171127 - pab - keep me loggin in
+            If Not IsPostBack Then
+                'Check if the browser support cookies
+                If Request.Browser.Cookies Then
+                    'Check if the cookies with name CASLOGIN exist on user's machine
+                    If Request.Cookies("CASLOGIN") IsNot Nothing Then
+                        'Pass the user name and password to the VerifyLogin method
+
+                        If Request.Cookies("CASLOGIN")("UNAME").ToString() <> "" Then
+                            If Request.Cookies("CASLOGIN")("UNAME") IsNot Nothing Then
+
+                                txtEmail.Text = Request.Cookies("CASLOGIN")("UNAME").ToString()
+                                '  Me.txtEmail2.Text = Request.Cookies("CASOPTIMIZERLOGIN")("UNAME").ToString()
+                                '  Me.Session("email") = Request.Cookies("CASOPTIMIZERLOGIN")("UNAME").ToString()
+                            End If
+                        End If
+
+                        If Request.Cookies("CASLOGIN")("UPASS") IsNot Nothing Then
+
+                            If Request.Cookies("CASLOGIN")("UPASS").ToString() <> "" Then
+                                '     Me.txtPassword.Text = Request.Cookies("CASOPTIMIZERLOGIN")("UPASS").ToString()
+                                Dim p As String
+                                p = Request.Cookies("CASLOGIN")("UPASS").ToString()
+                                txtPin.Text = p
+
+                            End If
+
+                        End If
+
+
+                        If Me.txtEmail.Text <> "" Then
+                            If Me.txtPin.Text <> "" Then
+                                imgLogin_Click(Nothing, Nothing)
+                            End If
+                        End If
+
+
+
+                    End If
+                End If
+            End If
+
         Catch ex As Exception
             Dim s As String = "url " & url & "; host " & host & vbNewLine & ex.Message
             If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
@@ -119,10 +161,17 @@ Public Class loginpage
                 If simage = "" Then simage = "images/bg2.jpg"
                 login.Style.Remove("background-image")
                 login.Style.Add("background-image", simage)
-                If CInt(Session("carrierid")) = 48 Then
+                If CInt(Session("carrierid")) = DEMOAIR Then
                     imglogo.Width = 56
                     imglogo.Style.Remove("position")
                     imglogo.Style.Add("position", "absolute;top:16px;lefT:50%;margin:0 0 0 -23px;width:56px;z-index:1;")
+                End If
+
+                '20171209 - pab - link to quoting portal
+                If CInt(Session("carrierid")) = XOJET Then
+                    LnkQuoting.Visible = True
+                Else
+                    LnkQuoting.Visible = False
                 End If
 
                 'Select Case _carrierid
@@ -404,7 +453,33 @@ Public Class loginpage
 
         'If rs.State = 1 Then rs.Close()
 
+        '20171127 - pab - keep me loggin in
+        If Me.chkbox.Checked = True Then
+            If txtEmail.Text <> "" Then
+                If txtPin.Text <> "" Then
+                    If (Request.Browser.Cookies) Then
+                        If (Request.Cookies("CASLOGIN") Is Nothing) Then
+                            Response.Cookies("CASLOGIN").Expires = DateTime.Now.AddDays(60)
 
+
+                            Response.Cookies("CASLOGIN").Item("UNAME") = txtEmail.Text
+                            'Write password to the cookie
+                            Response.Cookies("CASLOGIN").Item("UPASS") = txtPin.Text
+
+                        Else
+                            Response.Cookies("CASLOGIN").Expires = DateTime.Now.AddDays(60)
+
+
+                            Response.Cookies("CASLOGIN").Item("UNAME") = txtEmail.Text
+                            'Write password to the cookie
+                            Response.Cookies("CASLOGIN").Item("UPASS") = txtPin.Text
+                        End If
+
+                    End If
+                End If
+            End If
+        End If
+        Session.Timeout = 24 * 60 * 10
 
         Me.txtmsg.Visible = True
 
