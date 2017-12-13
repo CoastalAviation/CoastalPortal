@@ -514,7 +514,7 @@
                                                         <asp:BoundField DataField="basecode" HeaderText="Base" SortExpression="Base" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="FosRevenue" HeaderText="FOS P&L" SortExpression="FosRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="CasRevenue" HeaderText="CAS P&L" SortExpression="CasRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
-                                                        <asp:BoundField DataField="TotalRevenue" HeaderText="Gross Profit Change" SortExpression="DelatRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="GrossProfitChange" HeaderText="Gross Profit Change" SortExpression="DelatRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                     </Columns>
                                                 </asp:GridView>
                                             </td>

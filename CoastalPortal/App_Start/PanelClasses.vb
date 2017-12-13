@@ -2672,6 +2672,15 @@ Public Class baseRevenue
     Private m_basecode As String
     Private m_fosRevenue As Decimal
     Private m_casRevenue As Decimal
+    Private m_grossprofitchange As Decimal
+    Public Property GrossProfitChange() As Decimal
+        Get
+            Return m_grossprofitchange
+        End Get
+        Set(ByVal value As Decimal)
+            m_grossprofitchange = value
+        End Set
+    End Property
     Public Property CasRevenue() As Decimal
         Get
             Return m_casRevenue
@@ -2695,11 +2704,6 @@ Public Class baseRevenue
         Set(ByVal value As String)
             m_basecode = value
         End Set
-    End Property
-    Public ReadOnly Property TotalRevenue() As Decimal
-        Get
-            Return CasRevenue - FosRevenue
-        End Get
     End Property
 
 End Class
