@@ -509,7 +509,7 @@ Public Class FlightChangeDetail
                         CasProfit += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
                         CasProfit += -CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
                     Next
-                    baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = Caspandl, .FosRevenue = Fospandl, .GrossProfitChange = (CasProfit - cascost)})
+                    baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = Caspandl, .FosRevenue = Fospandl, .GrossProfitChange = (CasProfit - cascost) - (FosProfit - foscost)})
                 Next
             End If
             Dim CurrentTail, LastTail As String
