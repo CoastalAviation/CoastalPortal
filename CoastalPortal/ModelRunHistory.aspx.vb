@@ -93,6 +93,8 @@ Public Class ModelRunHistory
         Dim req As String = "SELECT top 20 ID, status, CarrierID, Description, GMTStart, GMTEnd,"
         req &= " case when declaredcomplete = 1 then 'True' else 'False' end as declaredcomplete FROM OptimizerRequest"
         req &= " where description not like 'Optimizer request %' and status = 'X' and carrierid = " & Session("carrierid").ToString
+        '20171215 - pab - dho't show dynamic costing models
+        req &= " and description not like '%Dynamic Costing Request%'"
         req &= " and requestdate > getdate() - 2 order by id desc"
 
         SqlDataSourceOptimizerRequests.ConnectionString = ConnectionStringHelper.GetsqladapterWestConnectionString

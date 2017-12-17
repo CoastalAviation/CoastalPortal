@@ -34,9 +34,9 @@ Public Class loginpage
                 '20161227 - pab - default to wheelsup
                 'host = "wheelsup"
                 'host = "tmcjets"
-                'host = "jetlinx"
+                host = "jetlinx"
                 'host = "dpj"
-                host = "xojet"
+                'host = "xojet"
                 'host = "demoair"
             End If
 

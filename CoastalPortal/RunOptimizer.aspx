@@ -459,6 +459,9 @@
                             <asp:CheckBox ID="chkscrubincoming" runat="server" Text=" Scrub Incoming" Font-Names="arial" ToolTip="Scrub Incoming" Checked="false"  />
                             <br />
                             <br />
+                            <asp:CheckBox ID="chkUseIncomingModelCost" runat="server" Text=" Use Incoming Model Cost" Font-Names="arial" ToolTip="Scrub Incoming" Checked="false"  />
+                            <br />
+                            <br />
                         </td>
                         <td style="width: 50%; vertical-align: top;">
                             <asp:CheckBox ID="chkDeconflict" runat="server" Text=" DeConflict Initial Model" Font-Names="arial"  Checked="True" />
