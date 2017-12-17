@@ -248,6 +248,12 @@ Public Class FlightChangeDetail
         End If
         Session("FCDRKey") = fcdrlist
         ' If Not Page.IsPostBack Then
+        For Each cr As CASFlightsOptimizerRecord In CASRecords
+            If cr.ProRatedRevenue = 0 Then
+                cr.ProRatedRevenue = FOSRecords.Where(Function(c) c.FOSKey = cr.FOSKEY).Select(Function(c) c.ProRatedRevenue).FirstOrDefault()
+            End If
+        Next
+
         GetTrips()
         ' End If
     End Sub
@@ -486,18 +492,24 @@ Public Class FlightChangeDetail
 
             If carrierprofile.FCDRPandL Then
                 For Each x As String In BaseList
-                    Dim CasRev, Fosrev, BasePremiumRev As Decimal
-                    BasePremiumRev = 0
-                    Fosrev = 0
-                    CasRev = 0
+                    Dim Caspandl, Fospandl, FosProfit, CasProfit, foscost, cascost As Decimal
+                    FosProfit = 0
+                    CasProfit = 0
+                    Fospandl = 0
+                    Caspandl = 0
+                    foscost = 0
+                    cascost = 0
                     For Each dd As String In TripList
-                        Fosrev += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.PandL).FirstOrDefault())
-                        CasRev += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.PandL).FirstOrDefault())
-                        BasePremiumRev = CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
-                        BasePremiumRev = -CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
-                        CasRev += BasePremiumRev
+                        Fospandl += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.PandL).FirstOrDefault())
+                        Caspandl += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.PandL).FirstOrDefault())
+                        foscost += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost)).Sum())
+                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) = Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
+                        FosProfit += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) = x Select a.ProRatedRevenue).Sum())
+                        CasProfit += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) = x Select a.ProRatedRevenue).Sum())
+                        CasProfit += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
+                        CasProfit += -CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
                     Next
-                    baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = CasRev, .FosRevenue = Fosrev})
+                    baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = Caspandl, .FosRevenue = Fospandl, .GrossProfitChange = (CasProfit - cascost) - (FosProfit - foscost)})
                 Next
             End If
             Dim CurrentTail, LastTail As String

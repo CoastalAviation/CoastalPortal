@@ -448,7 +448,7 @@ a:link, a:visited
                <asp:TemplateField HeaderText="Grp">
                    <ItemTemplate>
                        <asp:LinkButton ID="lnkDepartmentClientSide" Text='<%#Eval("PriorTail")%>'
-                           runat="server" PostBackUrl='<%#String.Format("flightchangesNew.aspx?Key={0}", DataBinder.Eval(Container, "DataItem.ID"))%>' OnClientClick="form1.target='_blank'">
+                           runat="server" PostBackUrl='<%#String.Format("flightchangeDetail.aspx?Key={0}", DataBinder.Eval(Container, "DataItem.ID"))%>' OnClientClick="form1.target='_blank'">
                        </asp:LinkButton>
                    </ItemTemplate>
                </asp:TemplateField>
