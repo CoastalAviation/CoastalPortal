@@ -59,7 +59,7 @@ Public Class FlightChangeReports
             Dim dt As DataTable
             Dim btnresult As String = Request.Form("btnacpt")
             Dim btnSelect As String = Request.Form("btnselect")
-
+            Dim DynamicCost As String = Request.QueryString("DynamicCost")
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
@@ -86,6 +86,7 @@ Public Class FlightChangeReports
                 If Session("emailfrom").ToString = "" Then
                     Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
+                If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
             Else
                 If btnSelect IsNot Nothing Then
                     getDetail(btnSelect)
@@ -181,24 +182,31 @@ Public Class FlightChangeReports
         Dim fcdrlist As New List(Of FCDRList)
         Dim today = DateAdd("d", -2, DateTime.Now)
         Dim i As Integer = 1
+        Dim ModelRun As Integer
 
         '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
         If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = CInt(Session("carrierid"))
 
-        fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
-        If fcdrlist.Count > 1 Then
-            Do While i <> fcdrlist.Count
-                Dim checkme = fcdrlist(i - 1)
-                If (fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings) Or
-                    (fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).DeltaNonRevMiles = checkme.DeltaNonRevMiles And fcdrlist(i).TotalSavings = checkme.TotalSavings) Then
-                    fcdrlist.Remove(fcdrlist(i))
-                    i -= 1
-                End If
-                i += 1
-            Loop
+        If getKey.Contains("DynamicCosting") Then
+            ModelRun = Mid(getKey, InStr(getKey, "-") + 1)
+            fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA" And c.DynamicCost = True).OrderByDescending(Function(c) c.TotalSavings).ToList()
+            getKey = Nothing
+        Else
+            fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA" And c.DynamicCost = False).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
         End If
-        gvFCDRList.DataSource = fcdrlist
+        If fcdrlist.Count > 1 Then
+                Do While i <> fcdrlist.Count
+                    Dim checkme = fcdrlist(i - 1)
+                    If (fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings) Or
+                    (fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).DeltaNonRevMiles = checkme.DeltaNonRevMiles And fcdrlist(i).TotalSavings = checkme.TotalSavings) Then
+                        fcdrlist.Remove(fcdrlist(i))
+                        i -= 1
+                    End If
+                    i += 1
+                Loop
+            End If
+            gvFCDRList.DataSource = fcdrlist
         gvFCDRList.DataBind()
         Colorme(getKey)
     End Sub
