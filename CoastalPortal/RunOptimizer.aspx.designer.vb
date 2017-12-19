@@ -428,6 +428,15 @@ Partial Public Class RunOptimizer
     Protected WithEvents chkscrubincoming As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
+    '''chkUseIncomingModelCost control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkUseIncomingModelCost As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
     '''chkDeconflict control.
     '''</summary>
     '''<remarks>

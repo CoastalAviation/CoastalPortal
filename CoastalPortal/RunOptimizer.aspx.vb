@@ -105,6 +105,8 @@ Public Class RunOptimizer
                 chkFCDRPublish.Checked = True
                 '20171101 - pab - add AssignNewTrips per David - not used by optimzer yet
                 chkAssignNewTrips.Checked = False
+                '20171217 - pab - add UseIncomingModelCost internal use only per Richard
+                chkUseIncomingModelCost.Checked = False
 
                 '20171128 - pab - add 3 new options - hide until ready for prime time
                 chkPinCharter.Checked = False
@@ -418,6 +420,13 @@ Public Class RunOptimizer
                 rs.Fields("AssignNewTrips").Value = 1
             Else
                 rs.Fields("AssignNewTrips").Value = 0
+            End If
+
+            '20171217 - pab - add UseIncomingModelCost internal use only per Richard
+            If chkUseIncomingModelCost.Checked = True Then
+                rs.Fields("UseIncomingModelCost").Value = 1
+            Else
+                rs.Fields("UseIncomingModelCost").Value = 0
             End If
 
             Dim st As New System.TimeSpan
