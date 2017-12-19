@@ -2050,6 +2050,15 @@ Public Class FCDRList
     Private m_carrieracceptdate As DateTime?
     Private m_deltanonrevmiles As Integer
     Private m_carrierid As Integer
+    Private m_dynamiccost As Boolean
+    Public Property DynamicCost() As Boolean
+        Get
+            Return m_dynamiccost
+        End Get
+        Set(ByVal value As Boolean)
+            m_dynamiccost = value
+        End Set
+    End Property
     Public Property CarrierID() As Integer
         Get
             Return m_carrierid
@@ -2595,6 +2604,15 @@ End Class
 Public Class OptimizerRequest
     Private m_id As Integer
     Private m_GMTStart As DateTime
+    Private m_description As String
+    Public Property Description() As String
+        Get
+            Return m_description
+        End Get
+        Set(ByVal value As String)
+            m_description = value
+        End Set
+    End Property
     Public Property GMTStart() As DateTime
         Get
             Return m_GMTStart

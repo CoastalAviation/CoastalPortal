@@ -279,6 +279,8 @@ Public Class FlightChangeDetail
         Dim TripList As New List(Of String)
         Dim zz As Integer = 0
         Dim AssignTrip As Boolean = False
+        Dim optreq As New OptimizerRequest
+        Dim DynamicCosting As Boolean = False
         'Dim AClist As String
 
         casflights.Clear()
@@ -347,7 +349,9 @@ Public Class FlightChangeDetail
 
         mrid = Left(model, i)
 
-        GMTStart = db.OptimizerRequest.Find(CInt(mrid)).GMTStart
+        optreq = db.OptimizerRequest.Find(CInt(mrid))
+        GMTStart = optreq.GMTStart
+        DynamicCosting = optreq.Description.Contains("Dynamic Costing")
         frc = isdbn((From fr In FOSRecords Where Trim(fr.LegTypeCode) <> "77" And Trim(fr.LegTypeCode) <> "7" And Trim(fr.LegState) <> "5" And
                                                 ((Not demandlookup.TryGetValue(Trim(fr.AC), dummy) And ptlist.Contains(Trim(fr.AC))) Or
                                                  (demandlookup.TryGetValue(Trim(fr.AC), dummy) And TripList.Contains(Trim(fr.TripNumber)))) And
@@ -401,7 +405,7 @@ Public Class FlightChangeDetail
 
 
         fcdrlist.Add(New FCDRList With {.CASRecordList = CasIDList, .FOSRecordList = FosIdList, .ModelRunID = model, .PriorTailNumber = starttail, .DeltaNonRevMiles = CInt(fnrm - cnrm), .CarrierAcceptStatus = "NA", .isTrade = False,
-                    .TotalSavings = totalcost, .SavingsDay0 = dcostday0, .SavingsDay1 = dcostday1, .SavingsDay2 = dcostday2, .keyid = fcdrkey, .ModelRun = mrid, .GMTStart = GMTStart, .CarrierID = carrierprofile.carrierid})
+                    .TotalSavings = totalcost, .SavingsDay0 = dcostday0, .SavingsDay1 = dcostday1, .SavingsDay2 = dcostday2, .keyid = fcdrkey, .ModelRun = mrid, .GMTStart = GMTStart, .CarrierID = carrierprofile.carrierid, .DynamicCost = DynamicCosting})
 
         Try
             db.FCDRList.AddRange(fcdrlist)
@@ -502,12 +506,12 @@ Public Class FlightChangeDetail
                     For Each dd As String In TripList
                         Fospandl += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.PandL).FirstOrDefault())
                         Caspandl += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.PandL).FirstOrDefault())
-                        foscost += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost)).Sum())
-                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) = Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
+                        foscost += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost)).Sum())
+                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
                         FosProfit += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) = x Select a.ProRatedRevenue).Sum())
                         CasProfit += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) = x Select a.ProRatedRevenue).Sum())
-                        CasProfit += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
-                        CasProfit += -CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
+                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
+                        CasProfit += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
                     Next
                     baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = Caspandl, .FosRevenue = Fospandl, .GrossProfitChange = (CasProfit - cascost) - (FosProfit - foscost)})
                 Next
