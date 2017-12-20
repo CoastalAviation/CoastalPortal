@@ -3114,3 +3114,23 @@ Public Class RejectedFlight
         End Set
     End Property
 End Class
+Public Class AircrafPremium
+    Private _fosAircraftID As String
+    Private _premium As String
+    Public Property Premium() As String
+        Get
+            Return _premium
+        End Get
+        Set(ByVal value As String)
+            _premium = value
+        End Set
+    End Property
+    Public Property FosAircraftID() As String
+        Get
+            Return _fosAircraftID
+        End Get
+        Set(ByVal value As String)
+            _fosAircraftID = value
+        End Set
+    End Property
+End Class
