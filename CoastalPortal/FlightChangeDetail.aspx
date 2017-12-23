@@ -455,6 +455,7 @@
                                                         <asp:BoundField DataField="FOSRecord.SIC" HeaderText="SIC" SortExpression="SIC" Visible="false" />
                                                         <asp:BoundField DataField="FOSRecord.PIC" HeaderText="PIC" SortExpression="PIC" Visible="false" />
                                                         <asp:BoundField DataField="FOSRecord.triprevenue" HeaderText="Revenue" SortExpression="Revenue" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
+                                                        <asp:BoundField DataField="FOSRecord.ProRatedRevenue" HeaderText="PR Revenue" SortExpression="PRRevenue" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
                                                         <asp:BoundField DataField="FOSRecord.DHCost" HeaderText="Cost" SortExpression="Cost" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
                                                         <asp:BoundField DataField="FOSRecord.PandL" HeaderText="P&L" SortExpression="P&L" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="FOSRecord.BaseCode" HeaderText="ACBase" SortExpression="ACBase" />
@@ -480,6 +481,7 @@
                                                         <asp:BoundField DataField="CASRecord.SIC" HeaderText="SIC" SortExpression="SIC" Visible="false" />
                                                         <asp:BoundField DataField="CASRecord.PIC" HeaderText="PIC" SortExpression="PIC" Visible="false" />
                                                         <asp:BoundField DataField="CASRecord.triprevenue" HeaderText="Revenue" SortExpression="Revenue" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
+                                                        <asp:BoundField DataField="CASRecord.ProRatedRevenue" HeaderText="PR Revenue" SortExpression="PRRevenue" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
                                                         <asp:BoundField DataField="CASRecord.Cost" HeaderText="Cost" SortExpression="Cost" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="CASRecord.PandL" HeaderText="P&L" SortExpression="P&L" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="CASRecord.BaseCode" HeaderText="ACBase" SortExpression="ACBase" />

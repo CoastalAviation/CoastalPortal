@@ -54,37 +54,39 @@ Public Class FlightChangeDetail
     Public Const FOS_LTC As Integer = 10
     Public Const FOS_SIC As Integer = 11
     Public Const FOS_PIC As Integer = 12
-    Public Const FOS_COST As Integer = 14
-    Public Const FOS_PANDL As Integer = 15
     Public Const FOS_REV As Integer = 13
-    Public Const FOS_BASE As Integer = 16
-    Public Const FOS_LEGBASE As Integer = 17
-    Public Const FOS_QE As Integer = 18
-    Public Const FUTURE_TAIL As Integer = 19
-    Public Const CAS_FROM As Integer = 20
-    Public Const CAS_TO As Integer = 21
-    Public Const CAS_FROMGMT As Integer = 22
-    Public Const CAS_TOGMT As Integer = 23
-    Public Const CAS_NM As Integer = 24
-    Public Const CAS_AC As Integer = 25
-    Public Const CAS_TYPE As Integer = 26
-    Public Const CAS_FT As Integer = 27
-    Public Const CAS_TRIP As Integer = 28
-    Public Const CAS_IND As Integer = 29
-    Public Const CAS_LTC As Integer = 30
-    Public Const CAS_SIC As Integer = 31
-    Public Const CAS_PIC As Integer = 32
-    Public Const CAS_REV As Integer = 33
-    Public Const CAS_COST As Integer = 34
-    Public Const CAS_PANDL As Integer = 35
-    Public Const CAS_BASE As Integer = 36
-    Public Const CAS_LEGBASE As Integer = 37
-    Public Const CAS_PIN As Integer = 38
-    Public Const CAS_PT As Integer = 39
-    Public Const RECORD_ID As Integer = 40
-    Public Const FCDR_DEPARTDATE As Integer = 41
-    Public Const CAS_HA As Integer = 42
-    Public Const CAS_OE As Integer = 43
+    Public Const FOS_PROREV As Integer = 14
+    Public Const FOS_COST As Integer = 15
+    Public Const FOS_PANDL As Integer = 16
+    Public Const FOS_BASE As Integer = 17
+    Public Const FOS_LEGBASE As Integer = 18
+    Public Const FOS_QE As Integer = 19
+    Public Const FUTURE_TAIL As Integer = 20
+    Public Const CAS_FROM As Integer = 21
+    Public Const CAS_TO As Integer = 22
+    Public Const CAS_FROMGMT As Integer = 23
+    Public Const CAS_TOGMT As Integer = 24
+    Public Const CAS_NM As Integer = 25
+    Public Const CAS_AC As Integer = 26
+    Public Const CAS_TYPE As Integer = 27
+    Public Const CAS_FT As Integer = 28
+    Public Const CAS_TRIP As Integer = 29
+    Public Const CAS_IND As Integer = 30
+    Public Const CAS_LTC As Integer = 31
+    Public Const CAS_SIC As Integer = 32
+    Public Const CAS_PIC As Integer = 33
+    Public Const CAS_REV As Integer = 34
+    Public Const CAS_PROREV As Integer = 35
+    Public Const CAS_COST As Integer = 36
+    Public Const CAS_PANDL As Integer = 37
+    Public Const CAS_BASE As Integer = 38
+    Public Const CAS_LEGBASE As Integer = 39
+    Public Const CAS_PIN As Integer = 40
+    Public Const CAS_PT As Integer = 41
+    Public Const RECORD_ID As Integer = 42
+    Public Const FCDR_DEPARTDATE As Integer = 43
+    Public Const CAS_HA As Integer = 44
+    Public Const CAS_OE As Integer = 45
     Public Property DepartDate As DateTime
 
     Private M_carrier As Integer
@@ -953,6 +955,12 @@ Public Class FlightChangeDetail
                 gridviewtrips.Rows(i).Cells(CAS_AC).ToolTip = AirTaxi.lookupac(gridviewtrips.Rows(i).Cells(CAS_AC).Text, carrierid)
             End If
         Next i
+        If carrierprofile.carrierid <> JETLINX Then
+            gridviewtrips.Columns(FOS_LEGBASE).Visible = False
+            gridviewtrips.Columns(CAS_LEGBASE).Visible = False
+            gridviewtrips.Columns(FOS_PROREV).Visible = False
+            gridviewtrips.Columns(CAS_PROREV).Visible = False
+        End If
 
     End Function
     Function linebreaks(ByRef gridviewtrips As GridView, ByVal FCDRKey As String) ', ACType As String)
@@ -1021,10 +1029,6 @@ Public Class FlightChangeDetail
         gridviewtrips.Columns(CAS_PT).Visible = False
         gridviewtrips.Columns(RECORD_ID).Visible = False
         gridviewtrips.Columns(FCDR_DEPARTDATE).Visible = False
-        If carrierprofile.carrierid <> JETLINX Then
-            gridviewtrips.Columns(FOS_LEGBASE).Visible = False
-            gridviewtrips.Columns(CAS_LEGBASE).Visible = False
-        End If
     End Function
     Function AddRow(foscount As Integer, cascount As Integer) As GridViewRow
         Dim row As New GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Alternate)
