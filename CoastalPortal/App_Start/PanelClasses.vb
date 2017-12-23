@@ -2263,6 +2263,12 @@ Public Class PanelRecord
         End Get
     End Property
     <NotMapped>
+    Public ReadOnly Property FCDRDepartDate() As DateTime
+        Get
+            Return If(FOSRecord Is Nothing, CASRecord.DepartureTime, CDate(FOSRecord.DepartureDateGMT + " " + FOSRecord.DepartureTimeGMT))
+        End Get
+    End Property
+    <NotMapped>
     Public ReadOnly Property PanelKey() As String
         Get
             Return If(FOSRecord Is Nothing, CASRecord.ID, FOSRecord.id)
@@ -2691,6 +2697,51 @@ Public Class baseRevenue
     Private m_fosRevenue As Decimal
     Private m_casRevenue As Decimal
     Private m_grossprofitchange As Decimal
+    Private m_foscost As Decimal
+    Private m_cascost As Decimal
+    Private m_FosProfit As Decimal
+    Private m_CasProfit As Decimal
+    Private m_BasePremiums As Decimal
+    Public Property BasePremiums() As Decimal
+        Get
+            Return m_BasePremiums
+        End Get
+        Set(ByVal value As Decimal)
+            m_BasePremiums = value
+        End Set
+    End Property
+    Public Property CasProfit() As Decimal
+        Get
+            Return m_CasProfit
+        End Get
+        Set(ByVal value As Decimal)
+            m_CasProfit = value
+        End Set
+    End Property
+    Public Property FosProfit() As Decimal
+        Get
+            Return m_FosProfit
+        End Get
+        Set(ByVal value As Decimal)
+            m_FosProfit = value
+        End Set
+    End Property
+    Public Property CasCost() As Decimal
+        Get
+            Return m_cascost
+        End Get
+        Set(ByVal value As Decimal)
+            m_cascost = value
+        End Set
+    End Property
+    Public Property FosCost() As Decimal
+        Get
+            Return m_foscost
+        End Get
+        Set(ByVal value As Decimal)
+            m_foscost = value
+        End Set
+    End Property
     Public Property GrossProfitChange() As Decimal
         Get
             Return m_grossprofitchange

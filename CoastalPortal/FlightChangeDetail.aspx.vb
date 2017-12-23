@@ -58,31 +58,33 @@ Public Class FlightChangeDetail
     Public Const FOS_PANDL As Integer = 15
     Public Const FOS_REV As Integer = 13
     Public Const FOS_BASE As Integer = 16
-    Public Const FOS_QE As Integer = 17
-    Public Const FUTURE_TAIL As Integer = 18
-    Public Const CAS_FROM As Integer = 19
-    Public Const CAS_TO As Integer = 20
-    Public Const CAS_FROMGMT As Integer = 21
-    Public Const CAS_TOGMT As Integer = 22
-    Public Const CAS_NM As Integer = 23
-    Public Const CAS_AC As Integer = 24
-    Public Const CAS_TYPE As Integer = 25
-    Public Const CAS_FT As Integer = 26
-    Public Const CAS_TRIP As Integer = 27
-    Public Const CAS_IND As Integer = 28
-    Public Const CAS_LTC As Integer = 29
-    Public Const CAS_SIC As Integer = 30
-    Public Const CAS_PIC As Integer = 31
-    Public Const CAS_COST As Integer = 33
-    Public Const CAS_PANDL As Integer = 34
-    Public Const CAS_REV As Integer = 32
-    Public Const CAS_BASE As Integer = 35
-    Public Const CAS_PIN As Integer = 36
-    Public Const CAS_PT As Integer = 37
-    Public Const RECORD_ID As Integer = 38
-    Public Const CAS_HA As Integer = 39
-    Public Const CAS_LEGBASE As Integer = 40
-    Public Const CAS_OE As Integer = 41
+    Public Const FOS_LEGBASE As Integer = 17
+    Public Const FOS_QE As Integer = 18
+    Public Const FUTURE_TAIL As Integer = 19
+    Public Const CAS_FROM As Integer = 20
+    Public Const CAS_TO As Integer = 21
+    Public Const CAS_FROMGMT As Integer = 22
+    Public Const CAS_TOGMT As Integer = 23
+    Public Const CAS_NM As Integer = 24
+    Public Const CAS_AC As Integer = 25
+    Public Const CAS_TYPE As Integer = 26
+    Public Const CAS_FT As Integer = 27
+    Public Const CAS_TRIP As Integer = 28
+    Public Const CAS_IND As Integer = 29
+    Public Const CAS_LTC As Integer = 30
+    Public Const CAS_SIC As Integer = 31
+    Public Const CAS_PIC As Integer = 32
+    Public Const CAS_REV As Integer = 33
+    Public Const CAS_COST As Integer = 34
+    Public Const CAS_PANDL As Integer = 35
+    Public Const CAS_BASE As Integer = 36
+    Public Const CAS_LEGBASE As Integer = 37
+    Public Const CAS_PIN As Integer = 38
+    Public Const CAS_PT As Integer = 39
+    Public Const RECORD_ID As Integer = 40
+    Public Const FCDR_DEPARTDATE As Integer = 41
+    Public Const CAS_HA As Integer = 42
+    Public Const CAS_OE As Integer = 43
     Public Property DepartDate As DateTime
 
     Private M_carrier As Integer
@@ -249,9 +251,7 @@ Public Class FlightChangeDetail
         Session("FCDRKey") = fcdrlist
         ' If Not Page.IsPostBack Then
         For Each cr As CASFlightsOptimizerRecord In CASRecords
-            If cr.ProRatedRevenue = 0 Then
-                cr.ProRatedRevenue = FOSRecords.Where(Function(c) c.FOSKey = cr.FOSKEY).Select(Function(c) c.ProRatedRevenue).FirstOrDefault()
-            End If
+            cr.ProRatedRevenue = FOSRecords.Where(Function(c) c.FOSKey = cr.FOSKEY).Select(Function(c) c.ProRatedRevenue).FirstOrDefault()
         Next
 
         GetTrips()
@@ -498,24 +498,25 @@ Public Class FlightChangeDetail
 
             If carrierprofile.FCDRPandL Then
                 For Each x As String In BaseList
-                    Dim Caspandl, Fospandl, FosProfit, CasProfit, foscost, cascost As Decimal
+                    Dim Caspandl, Fospandl, FosProfit, CasProfit, foscost, cascost, BasePremium As Decimal
                     FosProfit = 0
                     CasProfit = 0
                     Fospandl = 0
                     Caspandl = 0
                     foscost = 0
                     cascost = 0
+                    BasePremium = 0
                     For Each dd As String In TripList
                         Fospandl += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select a.PandL).FirstOrDefault())
                         Caspandl += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select a.PandL).FirstOrDefault())
                         foscost += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select CDbl(a.DHCost)).Sum())
-                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
+                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
                         FosProfit += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.LegBaseCode), 3) = x Select a.ProRatedRevenue).Sum())
                         CasProfit += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.LegBaseCode), 3) = x Select a.ProRatedRevenue).Sum())
-                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
-                        cascost -= CDbl((From a In CasList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AircraftRegistration) Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost * (1 - CDbl(p.Premium))).Sum())
+                        'cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
+                        BasePremium += CDbl((From a In CasList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AircraftRegistration) Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost - (a.cost / CDbl(p.Premium))).Sum())
                     Next
-                    baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = Caspandl, .FosRevenue = Fospandl, .GrossProfitChange = foscost - cascost})
+                    baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = Caspandl, .FosRevenue = Fospandl, .CasCost = cascost, .FosCost = foscost, .CasProfit = CasProfit, .FosProfit = FosProfit, .BasePremiums = BasePremium, .GrossProfitChange = (CasProfit - cascost) - (FosProfit - foscost) + BasePremium})
                 Next
             End If
             Dim CurrentTail, LastTail As String
@@ -737,13 +738,15 @@ Public Class FlightChangeDetail
                 End If
             End If
 
-            For z = 2 To 5
-                If IsDate(gridviewtrips.Rows(i).Cells(z).Text) Then
-                    DepartDate = gridviewtrips.Rows(i).Cells(z).Text
-                    Dim departgmt As Date = CDate(gridviewtrips.Rows(i).Cells(z).Text)
-                    gridviewtrips.Rows(i).Cells(z).Text = Trim(departgmt.ToString("MM'/'dd' 'HH':'mm"))
-                End If
-            Next z
+            If IsDate(gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text) Then
+                ' DepartDate = gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text
+                Dim departgmt As Date = CDate(gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text)
+                gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text = Trim(departgmt.ToString("MM'/'dd' 'HH':'mm"))
+            End If
+            If IsDate(gridviewtrips.Rows(i).Cells(FOS_TOGMT).Text) Then
+                Dim departgmt As Date = CDate(gridviewtrips.Rows(i).Cells(FOS_TOGMT).Text)
+                gridviewtrips.Rows(i).Cells(FOS_TOGMT).Text = Trim(departgmt.ToString("MM'/'dd' 'HH':'mm"))
+            End If
 
         Next i
     End Function
@@ -905,7 +908,7 @@ Public Class FlightChangeDetail
             End If
 
             If IsDate(gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text) Then
-                DepartDate = gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text
+                '   DepartDate = gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text
                 Dim gmt As Date = DateTime.UtcNow
                 Dim departgmt As Date = CDate(gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text)
                 gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text = Trim(departgmt.ToString("MM'/'dd' 'HH':'mm"))
@@ -972,6 +975,9 @@ Public Class FlightChangeDetail
         Next
 
         For i = 1 To gridviewtrips.Rows.Count - 1
+            If IsDate(gridviewtrips.Rows(i).Cells(FCDR_DEPARTDATE).Text) Then
+                DepartDate = gridviewtrips.Rows(i).Cells(FCDR_DEPARTDATE).Text
+            End If
             currentTail = If(Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text))
             LastTail = If(Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text) <> "&nbsp;", Trim(gridviewtrips.Rows(i - 1).Cells(FOS_AC).Text), Trim(gridviewtrips.Rows(i - 1).Cells(CAS_AC).Text))
             If Trim(gridviewtrips.Rows(i).Cells(FOS_AC).Text) <> Trim(gridviewtrips.Rows(i).Cells(CAS_AC).Text) Then
@@ -982,6 +988,7 @@ Public Class FlightChangeDetail
                                    .From_ICAO = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_FROM).Text, gridviewtrips.Rows(i).Cells(CAS_FROM).Text),
                                    .To_ICAO = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", gridviewtrips.Rows(i).Cells(FOS_TO).Text, gridviewtrips.Rows(i).Cells(CAS_TO).Text),
                                    .DepartDate = DepartDate})
+                    '              .DepartDate = If(gridviewtrips.Rows(i).Cells(FOS_AC).Text <> "&nbsp;", Date.ParseExact(gridviewtrips.Rows(i).Cells(FOS_FROMGMT).Text, "MM/dd HH:mm", Nothing), Date.ParseExact(gridviewtrips.Rows(i).Cells(CAS_FROMGMT).Text, "MM/dd HH:mm", Nothing))})
                 End If
             End If
             If currentTail <> LastTail Then
@@ -1013,6 +1020,11 @@ Public Class FlightChangeDetail
         gridviewtrips.Controls(0).Controls.AddAt(gridviewtrips.Rows.Count + maxrows, AddRow(foscount, cascount)) ' This line will insert row at 2nd line
         gridviewtrips.Columns(CAS_PT).Visible = False
         gridviewtrips.Columns(RECORD_ID).Visible = False
+        gridviewtrips.Columns(FCDR_DEPARTDATE).Visible = False
+        If carrierprofile.carrierid <> JETLINX Then
+            gridviewtrips.Columns(FOS_LEGBASE).Visible = False
+            gridviewtrips.Columns(CAS_LEGBASE).Visible = False
+        End If
     End Function
     Function AddRow(foscount As Integer, cascount As Integer) As GridViewRow
         Dim row As New GridViewRow(0, 0, DataControlRowType.DataRow, DataControlRowState.Alternate)

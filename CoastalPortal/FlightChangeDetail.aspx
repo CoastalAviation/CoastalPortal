@@ -457,8 +457,9 @@
                                                         <asp:BoundField DataField="FOSRecord.triprevenue" HeaderText="Revenue" SortExpression="Revenue" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
                                                         <asp:BoundField DataField="FOSRecord.DHCost" HeaderText="Cost" SortExpression="Cost" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
                                                         <asp:BoundField DataField="FOSRecord.PandL" HeaderText="P&L" SortExpression="P&L" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
-                                                        <asp:BoundField DataField="FOSRecord.BaseCode" HeaderText="Base" SortExpression="Base" />
-                                                        <asp:BoundField DataField="FOSRecord.QuotedEquipType" HeaderText="QE" SortExpression="QE" />
+                                                        <asp:BoundField DataField="FOSRecord.BaseCode" HeaderText="ACBase" SortExpression="ACBase" />
+                                                        <asp:BoundField DataField="FOSRecord.LegBaseCode" HeaderText="RevBase" SortExpression="RevBase" />
+                                                       <asp:BoundField DataField="FOSRecord.QuotedEquipType" HeaderText="QE" SortExpression="QE" />
                                                         <asp:BoundField DataField="CASModification" HeaderText="NewTail" SortExpression="NewTail" Visible="True" />
                                                         <asp:BoundField DataField="CASRecord.DepartureAirport" HeaderText="From" SortExpression="From" />
                                                         <asp:BoundField DataField="CASRecord.ArrivalAirport" HeaderText="To" SortExpression="To" />
@@ -481,14 +482,16 @@
                                                         <asp:BoundField DataField="CASRecord.triprevenue" HeaderText="Revenue" SortExpression="Revenue" ItemStyle-HorizontalAlign="Center" DataFormatString="{0:c0}" />
                                                         <asp:BoundField DataField="CASRecord.Cost" HeaderText="Cost" SortExpression="Cost" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="CASRecord.PandL" HeaderText="P&L" SortExpression="P&L" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
-                                                        <asp:BoundField DataField="CASRecord.BaseCode" HeaderText="Base" SortExpression="Base" />
-                                                        <asp:ButtonField CommandName="X" HeaderText=" Pin  " ShowHeader="True" Text="Pin" ItemStyle-ForeColor="#009999" ButtonType="Link">
+                                                        <asp:BoundField DataField="CASRecord.BaseCode" HeaderText="ACBase" SortExpression="ACBase" />
+                                                         <asp:BoundField DataField="CASRecord.LegBaseCode" HeaderText="RevBase" SortExpression="RevBase" />
+                                                       <asp:ButtonField CommandName="X" HeaderText=" Pin  " ShowHeader="True" Text="Pin" ItemStyle-ForeColor="#009999" ButtonType="Link">
                                                             <ControlStyle Width="30px" />
                                                             <HeaderStyle Width="30px" />
                                                             <ItemStyle Width="30px" ForeColor="#009999"></ItemStyle>
                                                         </asp:ButtonField>
                                                         <asp:BoundField DataField="CASRecord.PriorTail" HeaderText="PT" SortExpression="PT" />
                                                         <asp:BoundField DataField="PanelKey" HeaderText="ID" SortExpression="ID" />
+                                                        <asp:BoundField DataField="FCDRDepartDate" HeaderText="DepartureDate" SortExpression="DepartureDate" />
                                                     </Columns>
                                                     <FooterStyle BackColor="White" ForeColor="#000066" />
                                                     <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
@@ -508,13 +511,18 @@
                                         <tr>
                                             <td>
                                                 <asp:GridView ID="GVbaseRevenue" runat="server" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3"
-                                                    Font-Names="Arial" Font-Size="Small" Width="700px" Style="margin-top: 0px;" AutoGenerateColumns="false"
+                                                    Font-Names="Arial" Font-Size="Small" Width="1000px" Style="margin-top: 0px;" AutoGenerateColumns="false"
                                                     DataSource="<%#Item.RevenueRecords %>" ItemType="Optimizer.RevenueRecords">
                                                     <Columns>
                                                         <asp:BoundField DataField="basecode" HeaderText="Base" SortExpression="Base" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="FosRevenue" HeaderText="FOS P&L" SortExpression="FosRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                         <asp:BoundField DataField="CasRevenue" HeaderText="CAS P&L" SortExpression="CasRevenue" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
-                                                        <asp:BoundField DataField="GrossProfitChange" HeaderText="Gross Profit Change" SortExpression="DelatRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="FosCost" HeaderText="FOS Cost" SortExpression="FosCost" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="FosProfit" HeaderText="FOS Pro Rated" SortExpression="FosPRRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="CasCost" HeaderText="CAS Cost" SortExpression="CasCost" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                       <asp:BoundField DataField="CasProfit" HeaderText="CAS Pro Rated" SortExpression="CasPRRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                        <asp:BoundField DataField="BasePremiums" HeaderText="Base Premiums" SortExpression="basepremium" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
+                                                      <asp:BoundField DataField="GrossProfitChange" HeaderText="Cost Change + Base Premium" SortExpression="DelatRev" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" />
                                                     </Columns>
                                                 </asp:GridView>
                                             </td>
