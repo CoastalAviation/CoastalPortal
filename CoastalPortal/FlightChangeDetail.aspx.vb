@@ -252,6 +252,10 @@ Public Class FlightChangeDetail
         End If
         Session("FCDRKey") = fcdrlist
         ' If Not Page.IsPostBack Then
+        For Each fr As FOSFlightsOptimizerRecord In FOSRecords
+            If fr.ProRatedRevenue < 0 Then fr.ProRatedRevenue = 0
+        Next
+
         For Each cr As CASFlightsOptimizerRecord In CASRecords
             cr.ProRatedRevenue = FOSRecords.Where(Function(c) c.FOSKey = cr.FOSKEY).Select(Function(c) c.ProRatedRevenue).FirstOrDefault()
         Next
@@ -493,32 +497,48 @@ Public Class FlightChangeDetail
             Next
             Panellist = (From a In Panellist Select a).OrderByDescending(Function(x) x.Starttail).ThenBy(Function(x) x.TailNumber).ThenBy(Function(x) x.DateTimeGMT).Distinct().ToList()
             BaseList = (From a In FosList Select Right(Trim(a.BaseCode), 3)).Distinct().ToList()
-            BaseList = BaseList.Union((From a In CasList Where a.ProRatedRevenue > 0 Select Right(Trim(a.LegBaseCode), 3)).Distinct().ToList()).ToList()
+            BaseList = BaseList.Union((From a In CasList Where a.ProRatedRevenue >= 0 Select Right(Trim(a.LegBaseCode), 3)).Distinct().ToList()).ToList()
 
             Dim ii As Integer = 0
             Dim Premium As Decimal = 0
 
             If carrierprofile.FCDRPandL Then
                 For Each x As String In BaseList
-                    Dim Caspandl, Fospandl, FosProfit, CasProfit, foscost, cascost, BasePremium As Decimal
-                    FosProfit = 0
-                    CasProfit = 0
+                    Dim Caspandl, Fospandl, FosCost, CasRevenue, FosRevenue, cascost, CasBasePremium, FosBasePremium, BasePremium, ActualCost As Decimal
+                    FosCost = 0
+                    CasRevenue = 0
                     Fospandl = 0
                     Caspandl = 0
-                    foscost = 0
+                    FosRevenue = 0
                     cascost = 0
+                    ActualCost = 0
                     BasePremium = 0
+                    CasBasePremium = 0
+                    FosBasePremium = 0
                     For Each dd As String In TripList
-                        Fospandl += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select a.PandL).FirstOrDefault())
-                        Caspandl += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select a.PandL).FirstOrDefault())
-                        foscost += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select CDbl(a.DHCost)).Sum())
-                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
-                        FosProfit += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.LegBaseCode), 3) = x Select a.ProRatedRevenue).Sum())
-                        CasProfit += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.LegBaseCode), 3) = x Select a.ProRatedRevenue).Sum())
-                        'cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
-                        BasePremium += CDbl((From a In CasList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AircraftRegistration) Where Trim(a.TripNumber) = Trim(dd) And a.ProRatedRevenue > 0 And Right(Trim(a.BaseCode), 3) <> Right(Trim(a.LegBaseCode), 3) And Right(Trim(a.BaseCode), 3) = x Select a.cost - (a.cost / CDbl(p.Premium))).Sum())
+                        'All home base have operating cost of thier own fleet -- note this will include premiums we will deduct later
+                        FosCost += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost)).Sum())
+                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
+                        ' All Revenue to Quoted Base -- 
+                        FosRevenue += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select a.ProRatedRevenue).Sum())
+                        CasRevenue += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) = x Select a.ProRatedRevenue).Sum())
+                        'Cost paid by Quoted Base to Other Base Aircraft + Premium 
+                        cascost += CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) <> x And Right(Trim(a.LegBaseCode), 3) = x Select a.cost).Sum())
+                        FosCost += CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.BaseCode), 3) <> x And Right(Trim(a.LegBaseCode), 3) = x Select CDbl(a.DHCost)).Sum())
+                        'Add revenue to other base this is the cost from Revenue Base and includes the premium as it should it is revenue
+                        FosRevenue += CDbl((From a In FosList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AC) Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost)).Sum())
+                        CasRevenue += CDbl((From a In CasList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AircraftRegistration) Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum())
+                        'Reduce Owning AC base cost by premium they dont pay to fly thier own plane and add Premium to PRemium column for show.
+                        ActualCost = CDbl((From a In FosList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AC) Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost) / CDbl(p.Premium)).Sum())
+                        BasePremium = CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost)).Sum()) - ActualCost
+                        FosBasePremium += BasePremium
+                        'FosCost -= BasePremium
+                        ActualCost = CDbl((From a In CasList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AircraftRegistration) Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select a.cost / CDbl(p.Premium)).Sum())
+                        BasePremium = CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum()) - ActualCost
+                        CasBasePremium += BasePremium
+                        cascost -= BasePremium
                     Next
-                    baserev.Add(New baseRevenue With {.basecode = x, .CasRevenue = Caspandl, .FosRevenue = Fospandl, .CasCost = cascost, .FosCost = foscost, .CasProfit = CasProfit, .FosProfit = FosProfit, .BasePremiums = BasePremium, .GrossProfitChange = (CasProfit - cascost) - (FosProfit - foscost) + BasePremium})
+                    baserev.Add(New baseRevenue With {.basecode = x, .CasPandL = CasRevenue - cascost, .FosPandL = FosRevenue - FosCost, .CasCost = cascost, .FosCost = FosCost, .CasRevenue = CasRevenue, .FosRevenue = FosRevenue, .CasBasePremium = CasBasePremium, .FosBasePremium = FosBasePremium, .GrossProfitChange = (CasRevenue - cascost) - (FosRevenue - FosCost)})
                 Next
             End If
             Dim CurrentTail, LastTail As String
@@ -960,6 +980,10 @@ Public Class FlightChangeDetail
             gridviewtrips.Columns(CAS_LEGBASE).Visible = False
             gridviewtrips.Columns(FOS_PROREV).Visible = False
             gridviewtrips.Columns(CAS_PROREV).Visible = False
+        ElseIf carrierprofile.carrierid = JETLINX Then
+            gridviewtrips.Columns(FOS_REV).Visible = False
+            gridviewtrips.Columns(CAS_REV).Visible = False
+
         End If
 
     End Function

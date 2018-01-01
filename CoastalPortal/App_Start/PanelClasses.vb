@@ -2701,16 +2701,25 @@ Public Class baseRevenue
     Private m_cascost As Decimal
     Private m_FosProfit As Decimal
     Private m_CasProfit As Decimal
-    Private m_BasePremiums As Decimal
-    Public Property BasePremiums() As Decimal
+    Private m_CasBasePremiums As Decimal
+    Private m_FosBasePremiums As Decimal
+    Public Property FosBasePremium() As Decimal
         Get
-            Return m_BasePremiums
+            Return m_FosBasePremiums
         End Get
         Set(ByVal value As Decimal)
-            m_BasePremiums = value
+            m_FosBasePremiums = value
         End Set
     End Property
-    Public Property CasProfit() As Decimal
+    Public Property CasBasePremium() As Decimal
+        Get
+            Return m_CasBasePremiums
+        End Get
+        Set(ByVal value As Decimal)
+            m_CasBasePremiums = value
+        End Set
+    End Property
+    Public Property CasPandL() As Decimal
         Get
             Return m_CasProfit
         End Get
@@ -2718,7 +2727,7 @@ Public Class baseRevenue
             m_CasProfit = value
         End Set
     End Property
-    Public Property FosProfit() As Decimal
+    Public Property FosPandL() As Decimal
         Get
             Return m_FosProfit
         End Get
@@ -2996,6 +3005,7 @@ Public Class RejectedFlight
     Private _FOSKEY As String
     Private _Version As String
     Private _Batch As String
+    <DatabaseGenerated(DatabaseGeneratedOption.Identity)>
     Public Property id() As Integer
         Get
             Return _id
