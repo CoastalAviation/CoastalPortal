@@ -532,13 +532,13 @@ Public Class FlightChangeDetail
                         ActualCost = CDbl((From a In FosList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AC) Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost) / CDbl(p.Premium)).Sum())
                         BasePremium = CDbl((From a In FosList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select CDbl(a.DHCost)).Sum()) - ActualCost
                         FosBasePremium += BasePremium
-                        'FosCost -= BasePremium
+                        FosCost -= BasePremium
                         ActualCost = CDbl((From a In CasList Join p In ACPRemiums On Trim(p.FosAircraftID) Equals Trim(a.AircraftRegistration) Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select a.cost / CDbl(p.Premium)).Sum())
                         BasePremium = CDbl((From a In CasList Where Trim(a.TripNumber) = Trim(dd) And Right(Trim(a.LegBaseCode), 3) <> x And Right(Trim(a.BaseCode), 3) = x Select a.cost).Sum()) - ActualCost
                         CasBasePremium += BasePremium
                         cascost -= BasePremium
                     Next
-                    baserev.Add(New baseRevenue With {.basecode = x, .CasPandL = CasRevenue - cascost, .FosPandL = FosRevenue - FosCost, .CasCost = cascost, .FosCost = FosCost, .CasRevenue = CasRevenue, .FosRevenue = FosRevenue, .CasBasePremium = CasBasePremium, .FosBasePremium = FosBasePremium, .GrossProfitChange = (CasRevenue - cascost) - (FosRevenue - FosCost)})
+                    baserev.Add(New baseRevenue With {.basecode = x, .CasPandL = CasRevenue - cascost, .FosPandL = FosRevenue - FosCost, .CasCost = cascost, .FosCost = FosCost, .CasRevenue = CasRevenue, .FosRevenue = FosRevenue, .CasBasePremium = CasBasePremium, .FosBasePremium = FosBasePremium, .GrossProfitChange = (CasRevenue - cascost) - (FosRevenue - FosCost) + FosBasePremium})
                 Next
             End If
             Dim CurrentTail, LastTail As String

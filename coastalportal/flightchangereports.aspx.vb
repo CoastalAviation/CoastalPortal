@@ -313,14 +313,45 @@ Public Class FlightChangeReports
             fcdr.CarrierAcceptStatus = If(action = "accept", "AC", "RJ")
         End If
 
+
+        If action = "accept" Then
+            'Send Email to those that need it
+        ElseIf action = "reject" Then
+            Dim fcdrDtl As New List(Of FCDRListDetail)
+            Dim cr As New CASFlightsOptimizerRecord
+            Dim fr As New FOSFlightsOptimizerRecord
+            Dim rf As New RejectedFlight
+            fcdrDtl = odb.FCDRListDetail.Where(Function(e) e.KeyID = fcdr.keyid).ToList()
+            For Each fd As FCDRListDetail In fcdrDtl
+                If fd.Modification = "Added" Then
+                    cr = odb.CASFlightsOptimizer.Find(fd.FlightID)
+                    rf.FOSKEY = cr.FOSKEY
+                    rf.FromDateGMT = cr.DepartureTime
+                    rf.ToDateGMT = cr.ArrivalTime
+                Else
+                    fr = odb.FOSFlightsOptimizer.Find(fd.FlightID)
+                    rf.PriorTail = If(fd.Modification <> "Removed", fd.AC, "")
+                    rf.FOSKEY = fr.FOSKey
+                    rf.FromDateGMT = fr.DateTimeGMT
+                    rf.ToDateGMT = Date.Parse(fr.ArrivalDateGMT).Add(TimeSpan.Parse(fr.ArrivalTimeGMT))
+                End If
+                rf.CarrierID = fcdr.CarrierID
+                rf.Action = fd.Modification
+                rf.DepartureAirport = fd.From_ICAO
+                rf.ArrivalAirport = fd.To_ICAO
+                rf.TripNumber = fd.TripNumber
+                rf.AircraftRegistration = fd.AC
+                rf.RejectedOn = Now
+                rf.Rejected = True
+                rf.CASFOid = 0
+                rf.StatusComment = "Rejected in FCDR"
+            Next
+        End If
         Try
             odb.SaveChanges()
         Catch ex As Exception
         End Try
 
-        If action = "accept" Then
-            'Send Email to those that need it
-        End If
     End Sub
     Public Sub getDetail(getKey As String)
         Dim odb As New OptimizerContext
