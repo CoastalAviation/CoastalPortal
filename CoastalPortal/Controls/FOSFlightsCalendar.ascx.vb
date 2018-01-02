@@ -984,6 +984,7 @@ Public Class FOSFlightsCalendar
                                 '20170721 - pab - jlx - show bkr
                                 '20170913 - pab - add cost and leg type code to mouseover
                                 '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
+                                '20180102 - pab - fix missing column
                                 tdtext = FormatRowWeekly(startDateRange, endDateRange, dr2("FlightDetail").ToString.Trim, CInt(dr2("aircraftid")), CStr(dr2("Registration")),
                                     CStr(dr2("departureairport")), CDate(dr2("departuretime")), CStr(dr2("arrivalairport")), CDate(dr2("arrivaltime")),
                                     CStr(dr2("flighttype")), "", passengers, seatsavailable, rownumber, "A", FOSCalendarDays, timezone, dr2("legtypecode").ToString.Trim,
