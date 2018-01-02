@@ -987,8 +987,8 @@ Public Class FOSFlightsCalendar
                                 '20180102 - pab - fix missing column
                                 tdtext = FormatRowWeekly(startDateRange, endDateRange, dr2("FlightDetail").ToString.Trim, CInt(dr2("aircraftid")), CStr(dr2("Registration")),
                                     CStr(dr2("departureairport")), CDate(dr2("departuretime")), CStr(dr2("arrivalairport")), CDate(dr2("arrivaltime")),
-                                    CStr(dr2("flighttype")), "", passengers, seatsavailable, rownumber, "A", FOSCalendarDays, timezone, dr2("legtypecode").ToString.Trim,
-                                    dr2("basecode").ToString.Trim, CInt(dr2("cost")), carrierid)
+                                    CStr(dr2("flighttype")), "", passengers, seatsavailable, rownumber, "A", FOSCalendarDays, timezone, dr("legtypecode").ToString.Trim,
+                                    dr("basecode").ToString.Trim, CInt(dr("cost")), carrierid)
                                 For i = 1 To FOSCalendarDays
                                     tdcrew(i).Text &= tdtext(i - 1).ToString
                                 Next
@@ -997,6 +997,8 @@ Public Class FOSFlightsCalendar
                         Next
                         '20140901 - pab - fix text calendar 
                         'If bAddCrew = True Then
+                        '20180102 - pab - don't show crew
+                        bAddCrew = False
                         If bAddCrew = True And UCase(Session("CalendarStyle").ToString) <> "TEXT" Then
                             tdcrew(1).Style.Add("border-left", "1px solid gray")
                             For i = 1 To FOSCalendarDays

@@ -86,12 +86,7 @@ Public Class FlightChangeReports
                 If Session("emailfrom").ToString = "" Then
                     Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
-                If DynamicCost IsNot Nothing Then
-                    btnSelect = "DynamicCosting-" & DynamicCost
-                    Session("DynamicCosting") = btnSelect
-                Else
-                    Session("DynamicCosting") = ""
-                End If
+                If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
             Else
                 If btnSelect IsNot Nothing Then
                     getDetail(btnSelect)
@@ -103,7 +98,6 @@ Public Class FlightChangeReports
                     AcceptRejectFCDR(action, KeyId)
                 End If
             End If
-            If Session("DynamicCosting") <> "" Then btnSelect = Session("DynamicCosting")
             If btnSelect Is Nothing Then btnSelect = ""
             GetTrips(btnSelect)
 
@@ -196,10 +190,10 @@ Public Class FlightChangeReports
 
         If getKey.Contains("DynamicCosting") Then
             ModelRun = Mid(getKey, InStr(getKey, "-") + 1)
-            fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA" And c.DynamicCost = True).OrderByDescending(Function(c) c.TotalSavings).ToList()
+            fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.TotalSavings).ToList()
             getKey = Nothing
         Else
-            fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA" And c.DynamicCost = False).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
+            fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
         End If
         If fcdrlist.Count > 1 Then
                 Do While i <> fcdrlist.Count
