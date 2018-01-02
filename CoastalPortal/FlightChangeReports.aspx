@@ -303,7 +303,7 @@
                              <PagerStyle Font-Size="Medium" />
                        <columns>
                            <asp:BoundField Datafield ="TripNumber" HeaderText="Trip Number" SortExpression="TripNumber" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="DepartDate" HeaderText="Departure Date" SortExpression="DepartDate" ItemStyle-HorizontalAlign="Center"/>
+                           <asp:BoundField Datafield ="DepartDate" HeaderText="Departure Date(GMT)" SortExpression="DepartDate" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="From_ICAO" HeaderText="From" SortExpression="From" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="To_ICAO" HeaderText="To" SortExpression="To" ItemStyle-HorizontalAlign="Center"/>
                            <asp:BoundField Datafield ="AC" HeaderText="Prior Tail" SortExpression="OAC" ItemStyle-HorizontalAlign="Center"/>
