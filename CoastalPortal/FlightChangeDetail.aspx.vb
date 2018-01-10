@@ -324,9 +324,8 @@ Public Class FlightChangeDetail
             ptlist = ptlist.Union((From a In CASRecords Where ptlist.Contains(Trim(a.AircraftRegistration)) And Trim(a.PriorTail) <> "" And Trim(a.PriorTail) <> Trim(a.AircraftRegistration) And
                                            Trim(a.DepartureAirport) <> Trim(a.ArrivalAirport) And Trim(a.LegTypeCode) <> "BULL" Select Trim(a.PriorTail)).Distinct().ToList()).ToList()
             If (From g In CASRecords Where ptlist.Contains(Trim(g.PriorTail)) And Not ptlist.Contains(g.AircraftRegistration) Select g).Count > 0 Then
-                ptlist = ptlist.Union((From g In CASRecords Where ptlist.Contains(Trim(g.PriorTail)) And Not ptlist.Contains(g.AircraftRegistration) Select Trim(g.AircraftRegistration)).ToList()).ToList()
+                ptlist = ptlist.Union((From g In CASRecords Where ptlist.Contains(Trim(g.PriorTail)) And Not ptlist.Contains(Trim(g.AircraftRegistration)) Select Trim(g.AircraftRegistration)).ToList()).ToList()
             End If
-
             ptlist = ptlist.Distinct().ToList()
             'add the enumerated list to the fcdr for display...
             TripList = (From a In casflights Select a.tripnumber).Distinct.ToList()
