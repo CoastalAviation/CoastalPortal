@@ -475,12 +475,16 @@ Public Class FlightChangeDetail
             ACList = ACList.Distinct().ToList()
 
 
-            Panellist = (From f In FosList Group Join c In CasList On Trim(f.AC) Equals Trim(c.AircraftRegistration) And Trim(f.TripNumber) Equals Trim(c.TripNumber) And
-                         Trim(f.ArrivalAirportICAO) Equals Trim(c.ArrivalAirport) And Trim(f.DepartureAirportICAO) Equals Trim(c.DepartureAirport) And c.DepartureTime Equals f.DateTimeGMT
+            ' Panellist = (From f In FosList Group Join c In CasList On Trim(f.AC) Equals Trim(c.AircraftRegistration) And ((Trim(f.TripNumber) = Trim(c.TripNumber) And
+            ' Trim(f.ArrivalAirportICAO) = Trim(c.ArrivalAirport) And Trim(f.DepartureAirportICAO) = Trim(c.DepartureAirport) And c.DepartureTime = f.DateTimeGMT) Or Trim(f.FOSKey) = Trim(c.FOSKEY))
+            'Into Plist = Group From p In Plist.DefaultIfEmpty() Select New PanelRecord With {.FCDR_Key = fcdr.keyid, .CASRecord = p, .FOSRecord = f}).Distinct().ToList()
+            Panellist = (From f In FosList Group Join c In CasList On Trim(f.AC) Equals Trim(c.AircraftRegistration) And Trim(f.TripNumber) Equals Trim(c.TripNumber) And Trim(f.FOSKey) Equals Trim(c.FOSKEY)
                                                Into Plist = Group From p In Plist.DefaultIfEmpty() Select New PanelRecord With {.FCDR_Key = fcdr.keyid, .CASRecord = p, .FOSRecord = f}).Distinct().ToList()
 
-            PanellistRight = (From c In CasList Group Join f In FosList On Trim(f.AC) Equals Trim(c.AircraftRegistration) And Trim(f.ArrivalAirportICAO) Equals Trim(c.ArrivalAirport) And
-                                                    Trim(f.DepartureAirportICAO) Equals Trim(c.DepartureAirport) And Trim(f.TripNumber) Equals Trim(c.TripNumber) And c.DepartureTime Equals f.DateTimeGMT
+            'PanellistRight = (From c In CasList Group Join f In FosList On Trim(f.AC) Equals Trim(c.AircraftRegistration) And Trim(f.ArrivalAirportICAO) Equals Trim(c.ArrivalAirport) And
+            '                                        Trim(f.DepartureAirportICAO) Equals Trim(c.DepartureAirport) And Trim(f.TripNumber) Equals Trim(c.TripNumber) And c.DepartureTime Equals f.DateTimeGMT
+            '                                        Into Plist = Group From p In Plist.DefaultIfEmpty() Select New PanelRecord With {.FCDR_Key = fcdr.keyid, .FOSRecord = p, .CASRecord = c}).Distinct().ToList()
+            PanellistRight = (From c In CasList Group Join f In FosList On Trim(f.AC) Equals Trim(c.AircraftRegistration) And Trim(f.TripNumber) Equals Trim(c.TripNumber) And Trim(f.FOSKey) Equals Trim(c.FOSKEY)
                                                     Into Plist = Group From p In Plist.DefaultIfEmpty() Select New PanelRecord With {.FCDR_Key = fcdr.keyid, .FOSRecord = p, .CASRecord = c}).Distinct().ToList()
 
             For Each i As PanelRecord In PanellistRight
