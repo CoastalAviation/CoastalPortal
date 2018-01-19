@@ -193,7 +193,7 @@ Public Class FlightChangeReports
             fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.TotalSavings).ToList()
             getKey = Nothing
         Else
-            fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
+            fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA" And c.DynamicCost = False).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
         End If
         If fcdrlist.Count > 1 Then
                 Do While i <> fcdrlist.Count
@@ -314,9 +314,9 @@ Public Class FlightChangeReports
             Dim fcdrDtl As New List(Of FCDRListDetail)
             Dim cr As New CASFlightsOptimizerRecord
             Dim fr As New FOSFlightsOptimizerRecord
-            Dim rf As New RejectedFlight
             fcdrDtl = odb.FCDRListDetail.Where(Function(e) e.KeyID = fcdr.keyid).ToList()
             For Each fd As FCDRListDetail In fcdrDtl
+                Dim rf As New RejectedFlight
                 If fd.Modification = "Added" Then
                     cr = odb.CASFlightsOptimizer.Find(fd.FlightID)
                     rf.FOSKEY = cr.FOSKEY
@@ -339,6 +339,7 @@ Public Class FlightChangeReports
                 rf.Rejected = True
                 rf.CASFOid = 0
                 rf.StatusComment = "Rejected in FCDR"
+                odb.RejectedFlights.Add(rf)
             Next
         End If
         Try
