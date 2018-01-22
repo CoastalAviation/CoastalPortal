@@ -2998,7 +2998,7 @@ Public Class RejectedFlight
     Private _Reason As String
     Private _PriorTail As String
     Private _Action As String
-    Private _Status As String
+    Private _Status As Char
     Private _StatusComment As String
     Private _CASFOid As Integer
     Private _PriorTailSavings As String
@@ -3118,11 +3118,11 @@ Public Class RejectedFlight
             _Action = value
         End Set
     End Property
-    Public Property Status() As String
+    Public Property Status() As Char
         Get
             Return _Status
         End Get
-        Set(ByVal value As String)
+        Set(ByVal value As Char)
             _Status = value
         End Set
     End Property
