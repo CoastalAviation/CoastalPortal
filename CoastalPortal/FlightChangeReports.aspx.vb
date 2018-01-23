@@ -322,12 +322,14 @@ Public Class FlightChangeReports
                     rf.FOSKEY = Trim(cr.FOSKEY)
                     rf.FromDateGMT = Trim(cr.DepartureTime)
                     rf.ToDateGMT = Trim(cr.ArrivalTime)
+                    rf.Version = cr.Version
                 Else
                     fr = odb.FOSFlightsOptimizer.Find(fd.FlightID)
                     rf.PriorTail = If(fd.Modification <> "Removed", Trim(fd.AC), "")
                     rf.FOSKEY = Trim(fr.FOSKey)
                     rf.FromDateGMT = Trim(fr.DateTimeGMT)
                     rf.ToDateGMT = Trim(Date.Parse(fr.ArrivalDateGMT).Add(TimeSpan.Parse(fr.ArrivalTimeGMT)))
+                    rf.Version = fr.Version
                 End If
                 rf.CarrierID = Trim(fcdr.CarrierID)
                 rf.Action = Trim(fd.Modification)
@@ -338,7 +340,8 @@ Public Class FlightChangeReports
                 rf.RejectedOn = Now
                 rf.Rejected = True
                 rf.CASFOid = 0
-                rf.Status = "/"
+                rf.PriorTailSavings = 0
+                'rf.Status = "/"
                 rf.TripType = "R"
                 rf.StatusComment = "Rejected in FCDR"
                 odb.RejectedFlights.Add(rf)
