@@ -319,25 +319,30 @@ Public Class FlightChangeReports
                 Dim rf As New RejectedFlight
                 If fd.Modification = "Added" Then
                     cr = odb.CASFlightsOptimizer.Find(fd.FlightID)
-                    rf.FOSKEY = cr.FOSKEY
-                    rf.FromDateGMT = cr.DepartureTime
-                    rf.ToDateGMT = cr.ArrivalTime
+                    rf.FOSKEY = Trim(cr.FOSKEY)
+                    rf.FromDateGMT = Trim(cr.DepartureTime)
+                    rf.ToDateGMT = Trim(cr.ArrivalTime)
+                    rf.Version = cr.Version
                 Else
                     fr = odb.FOSFlightsOptimizer.Find(fd.FlightID)
-                    rf.PriorTail = If(fd.Modification <> "Removed", fd.AC, "")
-                    rf.FOSKEY = fr.FOSKey
-                    rf.FromDateGMT = fr.DateTimeGMT
-                    rf.ToDateGMT = Date.Parse(fr.ArrivalDateGMT).Add(TimeSpan.Parse(fr.ArrivalTimeGMT))
+                    rf.PriorTail = If(fd.Modification <> "Removed", Trim(fd.AC), "")
+                    rf.FOSKEY = Trim(fr.FOSKey)
+                    rf.FromDateGMT = Trim(fr.DateTimeGMT)
+                    rf.ToDateGMT = Trim(Date.Parse(fr.ArrivalDateGMT).Add(TimeSpan.Parse(fr.ArrivalTimeGMT)))
+                    rf.Version = fr.Version
                 End If
-                rf.CarrierID = fcdr.CarrierID
-                rf.Action = fd.Modification
-                rf.DepartureAirport = fd.From_ICAO
-                rf.ArrivalAirport = fd.To_ICAO
-                rf.TripNumber = fd.TripNumber
-                rf.AircraftRegistration = fd.AC
+                rf.CarrierID = Trim(fcdr.CarrierID)
+                rf.Action = Trim(fd.Modification)
+                rf.DepartureAirport = Trim(fd.From_ICAO)
+                rf.ArrivalAirport = Trim(fd.To_ICAO)
+                rf.TripNumber = Trim(fd.TripNumber)
+                rf.AircraftRegistration = Trim(fd.AC)
                 rf.RejectedOn = Now
                 rf.Rejected = True
                 rf.CASFOid = 0
+                rf.PriorTailSavings = 0
+                'rf.Status = "/"
+                rf.TripType = "R"
                 rf.StatusComment = "Rejected in FCDR"
                 odb.RejectedFlights.Add(rf)
             Next

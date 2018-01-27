@@ -240,7 +240,7 @@ Public Class FlightChangeDetail
             CASRecords = db.CASFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrid).ToList()
         End If
 
-        demandlookup.Clear()
+        'demandlookup.Clear()
         If carrierprofile Is Nothing Then
             carrierprofile = db.CarrierProfiles.Find(CASRecords(0).CarrierId)
         End If
