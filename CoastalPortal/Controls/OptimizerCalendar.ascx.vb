@@ -95,9 +95,10 @@ Public Class OptimizerCalendar
             Dim i As Integer = 0
             For i = 0 To dt.Rows.Count - 1
                 '20171101 - pab - only show last 2 days
-                If DateDiff(DateInterval.Hour, dt.Rows(i).Item("ModelStart"), Now) > 48 Then
-                    Exit For
-                End If
+                '20180205 - pab - show 200 models per David
+                'If DateDiff(DateInterval.Hour, dt.Rows(i).Item("ModelStart"), Now) > 48 Then
+                '    Exit For
+                'End If
 
                 Dim ti As New Telerik.Web.UI.RadComboBoxItem
                 If Not IsDBNull(dt.Rows(i).Item("ModelRunID")) Then
