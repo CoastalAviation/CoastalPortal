@@ -364,6 +364,9 @@
                         <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="True" />
                         <br />
                         <br />
+                        <asp:CheckBox ID="chkPinManaged" runat="server" Text=" Pin Managed" Font-Names="arial" ToolTip="Pin Managed"  Checked="false" />
+                        <br />
+                        <br />
                         <asp:CheckBox ID="chkPinCharter" runat="server" Text=" Pin Charters" Font-Names="arial" ToolTip="Pin Charters"  Checked="false" Visible="False" />
                         <br />
                         <br />
