@@ -128,7 +128,8 @@ Public Class RunOptimizer
                 'End If
 
                 '20180207 - pab - add PinManaged - default checked to jlx and not for all others
-                If CInt(Session("carrierid")) = JETLINX Then
+                '20180208 - pab - add PinManaged - default checked to dpj instead of jlx
+                If CInt(Session("carrierid")) = DELTA Then
                     chkPinManaged.Checked = True
                 Else
                     chkPinManaged.Checked = False
