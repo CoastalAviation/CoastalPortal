@@ -42,7 +42,8 @@ Public Class _Default
             'host = "wheelsup"
             'host = "jetlinx"
             'host = "demoair"
-            host = "xojet"
+            'host = "xojet"
+            host = "dpj"
         End If
 
         '20130109 - pab - fix changing carrier

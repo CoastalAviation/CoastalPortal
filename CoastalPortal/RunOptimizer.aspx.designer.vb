@@ -257,6 +257,15 @@ Partial Public Class RunOptimizer
     Protected WithEvents chkFCDRPublish As Global.System.Web.UI.WebControls.CheckBox
     
     '''<summary>
+    '''chkPinManaged control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkPinManaged As Global.System.Web.UI.WebControls.CheckBox
+    
+    '''<summary>
     '''chkPinCharter control.
     '''</summary>
     '''<remarks>

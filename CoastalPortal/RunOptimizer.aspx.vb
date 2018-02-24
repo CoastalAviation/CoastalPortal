@@ -127,6 +127,14 @@ Public Class RunOptimizer
                 '    RadSliderAllowFlex.Visible = False
                 'End If
 
+                '20180207 - pab - add PinManaged - default checked to jlx and not for all others
+                '20180208 - pab - add PinManaged - default checked to dpj instead of jlx
+                If CInt(Session("carrierid")) = DELTA Then
+                    chkPinManaged.Checked = True
+                Else
+                    chkPinManaged.Checked = False
+                End If
+
                 If InStr(Session("email").ToString.ToLower, "@coastal") > 0 Then
                     pnlAdvancedSettings.Visible = True
                 Else
@@ -494,6 +502,13 @@ Public Class RunOptimizer
                 rs.Fields("PinNetJets").Value = 0
             End If
             rs.Fields("AllowFlex").Value = CInt(RadSliderAllowFlex.Value.ToString)
+
+            '20180207 - pab - add PinManaged - default checked to jlx and not for all others
+            If chkPinManaged.Checked = True Then
+                rs.Fields("PinManaged").Value = 1
+            Else
+                rs.Fields("PinManaged").Value = 0
+            End If
 
             rs.Update()
 
