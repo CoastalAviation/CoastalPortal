@@ -43,7 +43,9 @@ Public Class _Default
             'host = "jetlinx"
             'host = "demoair"
             'host = "xojet"
-            host = "dpj"
+            'host = "dpj"
+            'host = "instantjet"
+            host = "jetsmarter"
         End If
 
         '20130109 - pab - fix changing carrier
