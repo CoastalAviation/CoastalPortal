@@ -491,6 +491,11 @@
                                                             <HeaderStyle Width="30px" />
                                                             <ItemStyle Width="30px" ForeColor="#009999"></ItemStyle>
                                                         </asp:ButtonField>
+                                                         <asp:TemplateField HeaderText ="Reject">
+                                                             <ItemTemplate>
+                                                          <button name="btnacpt" value='<%# "reject" + "-" + Eval("PanelKey") %>' >Reject</button>
+                                                            </ItemTemplate>
+                                                    </asp:TemplateField>
                                                         <asp:BoundField DataField="CASRecord.PriorTail" HeaderText="PT" SortExpression="PT" />
                                                         <asp:BoundField DataField="PanelKey" HeaderText="ID" SortExpression="ID" />
                                                         <asp:BoundField DataField="FCDRDepartDate" HeaderText="DepartureDate" SortExpression="DepartureDate" />

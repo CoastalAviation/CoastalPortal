@@ -2274,6 +2274,12 @@ Public Class PanelRecord
             Return If(FOSRecord Is Nothing, CASRecord.ID, FOSRecord.id)
         End Get
     End Property
+    <NotMapped>
+    Public ReadOnly Property FOSKey() As String
+        Get
+            Return If(FOSRecord Is Nothing, CASRecord.FOSKEY, FOSRecord.FOSKey)
+        End Get
+    End Property
     Public Property WeightClass() As String
         Get
             Return M_ACW

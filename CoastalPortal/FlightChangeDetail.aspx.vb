@@ -82,11 +82,12 @@ Public Class FlightChangeDetail
     Public Const CAS_BASE As Integer = 38
     Public Const CAS_LEGBASE As Integer = 39
     Public Const CAS_PIN As Integer = 40
-    Public Const CAS_PT As Integer = 41
-    Public Const RECORD_ID As Integer = 42
-    Public Const FCDR_DEPARTDATE As Integer = 43
-    Public Const CAS_HA As Integer = 44
-    Public Const CAS_OE As Integer = 45
+    Public Const REJECTBTN As Integer = 41
+    Public Const CAS_PT As Integer = 42
+    Public Const RECORD_ID As Integer = 43
+    Public Const FCDR_DEPARTDATE As Integer = 44
+    Public Const CAS_HA As Integer = 45
+    Public Const CAS_OE As Integer = 46
     Public Property DepartDate As DateTime
 
     Private M_carrier As Integer
@@ -112,6 +113,8 @@ Public Class FlightChangeDetail
 
         'Dim carrierprofile As New CarrierProfile
 
+        'TODO .. Add Code to get reject button here.
+
         '  Dim ac1, ac2 As String
         Dim mrid As String = ""
         Dim id As Integer
@@ -136,132 +139,142 @@ Public Class FlightChangeDetail
             demandlookup.Add(Trim(x), True)
         Next
 
-        If Not Request.QueryString("key") Is Nothing Then
-            id = Request.QueryString("key")
-            fcdrlist = db.FCDRList.Where(Function(c) c.keyid = id).ToList()
-            If fcdrlist.Count = 0 Then
-                CreatePDF = True
-            End If
-            If Not Request.QueryString("carrier") Is Nothing Then
-                Session("carrierid") = Request.QueryString("carrier")
-            End If
-            If fcdrlist.Count = 0 Then
-                If CASRecords Is Nothing Then
-                    casRecord = db.CASFlightsOptimizer.Find(id)
-                Else
-                    casRecord = CASRecords.Find(Function(x) x.ID = id)
-                    If casRecord Is Nothing Then 'we Have the Wrong Carrier ID
+        If Not IsPostBack Then
+            If Not Request.QueryString("key") Is Nothing Then
+                id = Request.QueryString("key")
+                fcdrlist = db.FCDRList.Where(Function(c) c.keyid = id).ToList()
+                If fcdrlist.Count = 0 Then
+                    CreatePDF = True
+                End If
+                If Not Request.QueryString("carrier") Is Nothing Then
+                    Session("carrierid") = Request.QueryString("carrier")
+                End If
+                If fcdrlist.Count = 0 Then
+                    If CASRecords Is Nothing Then
                         casRecord = db.CASFlightsOptimizer.Find(id)
-                        CASRecords = Nothing
-                        FOSRecords = Nothing
+                    Else
+                        casRecord = CASRecords.Find(Function(x) x.ID = id)
+                        If casRecord Is Nothing Then 'we Have the Wrong Carrier ID
+                            casRecord = db.CASFlightsOptimizer.Find(id)
+                            CASRecords = Nothing
+                            FOSRecords = Nothing
+                        End If
                     End If
-                End If
-                If casRecord Is Nothing Then Exit Sub ' ID supplied is bad
-                mrid = Trim(casRecord.OptimizerRun)
-                pt = casRecord.PriorTail
-                ar = casRecord.AircraftRegistration
-                ACX(0) = Trim(ar)
-                ACX(1) = Trim(pt)
-                casmodelrunid = mrid
-                carrierprofile = db.CarrierProfiles.Find(casRecord.CarrierId)
-            Else
-                mrid = fcdrlist(0).ModelRunID.ToString()
-                carrierprofile = db.CarrierProfiles.Find(fcdrlist(0).CarrierID)
-            End If
-        Else
-            If Not Request.QueryString("ModelSavings") Is Nothing Then
-                mrid = Request.QueryString("ModelSavings")
-                ACX(0) = Trim(InBetween(1, mrid, "A1[", "]"))
-                ACX(1) = Trim(InBetween(1, mrid, "A2[", "]"))
-                mrid = Trim(InBetween(1, mrid, "A0[", "]"))
-            Else
-                If carrierprofile IsNot Nothing Then
-                    If carrierprofile.carrierid = 0 Then Exit Sub
+                    If casRecord Is Nothing Then Exit Sub ' ID supplied is bad
+                    mrid = Trim(casRecord.OptimizerRun)
+                    pt = casRecord.PriorTail
+                    ar = casRecord.AircraftRegistration
+                    ACX(0) = Trim(ar)
+                    ACX(1) = Trim(pt)
+                    casmodelrunid = mrid
+                    carrierprofile = db.CarrierProfiles.Find(casRecord.CarrierId)
                 Else
-                    Exit Sub
+                    mrid = fcdrlist(0).ModelRunID.ToString()
+                    carrierprofile = db.CarrierProfiles.Find(fcdrlist(0).CarrierID)
                 End If
-
-                Dim today = DateAdd("d", -2, DateTime.Now)
-
-                fcdrlist = db.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.TotalSavings).ToList()
-                mrid = fcdrlist.Where(Function(b) b.ModelRun = fcdrlist.Max(Function(c) c.ModelRun)).Select(Function(c) c.ModelRunID).FirstOrDefault()
-            End If
-            Dim i As Integer = 1
-            fcdrlist = fcdrlist.Where(Function(c) c.ModelRunID = mrid).ToList()
-            fcdrlist = fcdrlist.Where(Function(c) c.ModelRunID = mrid And c.TotalSavings = fcdrlist.Max(Function(bc) bc.TotalSavings)).ToList()
-            If fcdrlist.Count > 1 Then
-                Do While i <> fcdrlist.Count
-                    Dim checkme = fcdrlist(i - 1)
-                    If fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings Then
-                        fcdrlist.Remove(fcdrlist(i))
-                        i -= 1
+            Else
+                If Not Request.QueryString("ModelSavings") Is Nothing Then
+                    mrid = Request.QueryString("ModelSavings")
+                    ACX(0) = Trim(InBetween(1, mrid, "A1[", "]"))
+                    ACX(1) = Trim(InBetween(1, mrid, "A2[", "]"))
+                    mrid = Trim(InBetween(1, mrid, "A0[", "]"))
+                Else
+                    If carrierprofile IsNot Nothing Then
+                        If carrierprofile.carrierid = 0 Then Exit Sub
+                    Else
+                        Exit Sub
                     End If
-                    i += 1
-                Loop
+
+                    Dim today = DateAdd("d", -2, DateTime.Now)
+
+                    fcdrlist = db.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today).OrderByDescending(Function(c) c.TotalSavings).ToList()
+                    mrid = fcdrlist.Where(Function(b) b.ModelRun = fcdrlist.Max(Function(c) c.ModelRun)).Select(Function(c) c.ModelRunID).FirstOrDefault()
+                End If
+                Dim i As Integer = 1
+                fcdrlist = fcdrlist.Where(Function(c) c.ModelRunID = mrid).ToList()
+                fcdrlist = fcdrlist.Where(Function(c) c.ModelRunID = mrid And c.TotalSavings = fcdrlist.Max(Function(bc) bc.TotalSavings)).ToList()
+                If fcdrlist.Count > 1 Then
+                    Do While i <> fcdrlist.Count
+                        Dim checkme = fcdrlist(i - 1)
+                        If fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings Then
+                            fcdrlist.Remove(fcdrlist(i))
+                            i -= 1
+                        End If
+                        i += 1
+                    Loop
+                End If
+                If fcdrlist.Count = 0 Then
+                    CreatePDF = True
+                    If CASRecords Is Nothing Then
+                        casRecord = db.CASFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrid).First()
+                    Else
+                        casRecord = CASRecords.Where(Function(x) x.OptimizerRun = mrid).First()
+                    End If
+
+                    id = casRecord.ID
+                    mrid = casRecord.OptimizerRun
+                Else
+                    mrid = fcdrlist(0).ModelRunID.ToString()
+                End If
             End If
+            If awclookup.Count = 0 Then
+                awclookup.Clear()
+                AWC = db.AircraftWeightClass.ToList()
+                For Each x As WeightClass In AWC
+                    awclookup.Add(Trim(x.AircraftType), x.AircraftWeightClass)
+                Next
+            End If
+
+            Session("modelrunid") = mrid
+
+            If Session("overridemodel") = "" Then
+                mrcustom = normalizemodelrunid(Session("modelrunid").ToString)
+            Else
+                mrcustom = Session("overridemodel")
+            End If
+
+            If Session("overridemodel") <> "" And ACX(1) <> "" Then
+                mrcustom = normalizemodelrunid(Session("modelrunid").ToString)
+            End If
+            mrcustom = normalizemodelrunid(mrid)
+            If FOSRecords Is Nothing Then
+                FOSRecords = db.FOSFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrcustom).ToList()
+            End If
+            If CASRecords Is Nothing Then
+                CASRecords = db.CASFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrid).ToList()
+            End If
+
+            'demandlookup.Clear()
+            If carrierprofile Is Nothing Then
+                carrierprofile = db.CarrierProfiles.Find(CASRecords(0).CarrierId)
+            End If
+
             If fcdrlist.Count = 0 Then
-                CreatePDF = True
-                If CASRecords Is Nothing Then
-                    casRecord = db.CASFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrid).First()
-                Else
-                    casRecord = CASRecords.Where(Function(x) x.OptimizerRun = mrid).First()
-                End If
+                enumerate(ACX(0), id, mrid, ACX(1))
+                Session("carrierid") = casRecord.CarrierId
 
-                id = casRecord.ID
-                mrid = casRecord.OptimizerRun
-            Else
-                mrid = fcdrlist(0).ModelRunID.ToString()
             End If
-        End If
-        If awclookup.Count = 0 Then
-            awclookup.Clear()
-            AWC = db.AircraftWeightClass.ToList()
-            For Each x As WeightClass In AWC
-                awclookup.Add(Trim(x.AircraftType), x.AircraftWeightClass)
+            Session("FCDRKey") = fcdrlist
+            ' If Not Page.IsPostBack Then
+            For Each fr As FOSFlightsOptimizerRecord In FOSRecords
+                If fr.ProRatedRevenue < 0 Then fr.ProRatedRevenue = 0
             Next
-        End If
 
-        Session("modelrunid") = mrid
+            For Each cr As CASFlightsOptimizerRecord In CASRecords
+                cr.ProRatedRevenue = FOSRecords.Where(Function(c) c.FOSKey = cr.FOSKEY).Select(Function(c) c.ProRatedRevenue).FirstOrDefault()
+            Next
 
-        If Session("overridemodel") = "" Then
-            mrcustom = normalizemodelrunid(Session("modelrunid").ToString)
+            GetTrips()
         Else
-            mrcustom = Session("overridemodel")
-        End If
-
-        If Session("overridemodel") <> "" And ACX(1) <> "" Then
-            mrcustom = normalizemodelrunid(Session("modelrunid").ToString)
-        End If
-        mrcustom = normalizemodelrunid(mrid)
-        If FOSRecords Is Nothing Then
-            FOSRecords = db.FOSFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrcustom).ToList()
-        End If
-        If CASRecords Is Nothing Then
-            CASRecords = db.CASFlightsOptimizer.Where(Function(x) x.OptimizerRun = mrid).ToList()
-        End If
-
-        'demandlookup.Clear()
-        If carrierprofile Is Nothing Then
-            carrierprofile = db.CarrierProfiles.Find(CASRecords(0).CarrierId)
-        End If
-
-        If fcdrlist.Count = 0 Then
-            enumerate(ACX(0), id, mrid, ACX(1))
-            Session("carrierid") = casRecord.CarrierId
+            Dim btnresult As String = Request.Form("btnacpt")
+            If btnresult IsNot Nothing Then
+                Dim i = InStr(btnresult, "-")
+                Dim action = Left(btnresult, i - 1)
+                Dim KeyId = Mid(btnresult, i + 1)
+                RejectFlight(KeyId)
+            End If
 
         End If
-        Session("FCDRKey") = fcdrlist
-        ' If Not Page.IsPostBack Then
-        For Each fr As FOSFlightsOptimizerRecord In FOSRecords
-            If fr.ProRatedRevenue < 0 Then fr.ProRatedRevenue = 0
-        Next
-
-        For Each cr As CASFlightsOptimizerRecord In CASRecords
-            cr.ProRatedRevenue = FOSRecords.Where(Function(c) c.FOSKey = cr.FOSKEY).Select(Function(c) c.ProRatedRevenue).FirstOrDefault()
-        Next
-
-        GetTrips()
-        ' End If
     End Sub
 
     Private Sub Flights24_Unload(sender As Object, e As EventArgs) Handles Me.Unload
@@ -1357,4 +1370,49 @@ Public Class FlightChangeDetail
         End If
 
     End Sub
+    Public Sub RejectFlight(KeyID As String)
+        Dim odb As New OptimizerContext
+        Dim fcdr_Key = Session("FCDRKey")
+
+        Dim cr As New CASFlightsOptimizerRecord
+        Dim fr As New FOSFlightsOptimizerRecord
+        Dim fd = odb.FCDRListDetail.Where(Function(g) g.KeyID = fcdr_Key And g.FlightID = KeyID).FirstOrDefault()
+
+        Dim rf As New RejectedFlight
+        If fd.Modification = "Added" Then
+                cr = odb.CASFlightsOptimizer.Find(fd.FlightID)
+                rf.FOSKEY = Trim(cr.FOSKEY)
+                rf.FromDateGMT = Trim(cr.DepartureTime)
+                rf.ToDateGMT = Trim(cr.ArrivalTime)
+            rf.Version = cr.Version
+            rf.CarrierID = cr.CarrierId
+        Else
+                fr = odb.FOSFlightsOptimizer.Find(fd.FlightID)
+                rf.PriorTail = If(fd.Modification <> "Removed", Trim(fd.AC), "")
+                rf.FOSKEY = Trim(fr.FOSKey)
+                rf.FromDateGMT = Trim(fr.DateTimeGMT)
+                rf.ToDateGMT = Trim(Date.Parse(fr.ArrivalDateGMT).Add(TimeSpan.Parse(fr.ArrivalTimeGMT)))
+            rf.Version = fr.Version
+            rf.CarrierID = fr.carrierid
+        End If
+        rf.Action = Trim(fd.Modification)
+        rf.DepartureAirport = Trim(fd.From_ICAO)
+        rf.ArrivalAirport = Trim(fd.To_ICAO)
+        rf.TripNumber = Trim(fd.TripNumber)
+        rf.AircraftRegistration = Trim(fd.AC)
+        rf.RejectedOn = Now
+        rf.Rejected = True
+        rf.CASFOid = 0
+        rf.PriorTailSavings = 0
+        'rf.Status = "/"
+        rf.TripType = "R"
+        rf.StatusComment = "Rejected in FCDR"
+        odb.RejectedFlights.Add(rf)
+        Try
+            odb.SaveChanges()
+        Catch ex As Exception
+        End Try
+
+    End Sub
+
 End Class
