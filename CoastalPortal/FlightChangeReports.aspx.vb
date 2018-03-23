@@ -31,6 +31,12 @@ Public Class FlightChangeReports
         '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
         If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = CInt(Session("carrierid"))
+        '20111121 - pab - convert to single db
+        Dim da As New DataAccess
+        Dim dt As DataTable
+        Dim btnresult As String = Request.Form("btnacpt")
+        Dim btnSelect As String = Request.Form("btnselect")
+        Dim DynamicCost As String = Request.QueryString("DynamicCost")
 
         Try
 
@@ -50,16 +56,15 @@ Public Class FlightChangeReports
             '20160412 - pab - If Session("email") Is Nothing Then assume timeout and redirect to login page
             If Session("email") Is Nothing Then
                 'Session.Abandon()
-                Response.Redirect("CustomerLogin.aspx", True)
+                '20180313 - pab - fix bug - when Change Details is selected, the list of tails reverts to the last optimizer run not the DC request
+                If IsNothing(DynamicCost) Then
+                    Response.Redirect("CustomerLogin.aspx", True)
+                Else
+                    Response.Redirect("CustomerLogin.aspx/FlightChangeReports?DynamicCost=" & DynamicCost, True)
+                End If
 
             End If
 
-            '20111121 - pab - convert to single db
-            Dim da As New DataAccess
-            Dim dt As DataTable
-            Dim btnresult As String = Request.Form("btnacpt")
-            Dim btnSelect As String = Request.Form("btnselect")
-            Dim DynamicCost As String = Request.QueryString("DynamicCost")
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
@@ -88,6 +93,9 @@ Public Class FlightChangeReports
                 End If
                 If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
             Else
+                ''20180313 - pab - fix bug - when Change Details is selected, the list of tails reverts to the last optimizer run not the DC request
+                'If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
+
                 If btnSelect IsNot Nothing Then
                     getDetail(btnSelect)
                 End If

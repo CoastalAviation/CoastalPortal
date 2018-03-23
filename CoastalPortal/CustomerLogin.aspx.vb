@@ -4,6 +4,8 @@ Imports CoastalPortal.Models
 Public Class loginpage
     Inherits System.Web.UI.Page
 
+    '20180313 - pab - fix bug - when Change Details is selected, the list of tails reverts to the last optimizer run not the DC request
+    Private DynamicCost As String
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
@@ -15,8 +17,13 @@ Public Class loginpage
         If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
         Dim carrierid As Integer = CInt(Session("carrierid"))
         Dim urlalias As String = Session("urlalias").ToString
-        Insertsys_log(CInt(Session("carrierid")), appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " & Request.Url.DnsSafeHost &
-            "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; Request - " & Request.Url.ToString, "Page_Load", "CustomerLogin.aspx.vb")
+
+        '20180313 - pab - fix bug - when Change Details is selected, the list of tails reverts to the last optimizer run not the DC request
+        DynamicCost = Request.QueryString("DynamicCost")
+
+        Insertsys_log(CInt(Session("carrierid")), appName, "AbsoluteUri - " & Request.Url.AbsoluteUri & "; DnsSafeHost - " &
+            Request.Url.DnsSafeHost & "; Host - " & Request.Url.Host & "; Query - " & Request.Url.Query & "; Request - " &
+            Request.Url.ToString, "Page_Load", "CustomerLogin.aspx.vb")
 
         Try
 
@@ -35,11 +42,11 @@ Public Class loginpage
                 'host = "wheelsup"
                 'host = "tmcjets"
                 'host = "jetlinx"
-                'host = "dpj"
+                host = "dpj"
                 'host = "xojet"
                 'host = "demoair"
                 'host = "instantjet"
-                host = "jetsmarter"
+                'host = "jetsmarter"
             End If
 
             '20171115 - pab - fix carriers changing midstream - change _urlalias to Session("urlalias")
@@ -486,7 +493,11 @@ Public Class loginpage
         Me.txtmsg.Visible = True
 
         '20160410 - pab - selworthy integration
-        Response.Redirect("RunOptimizer.aspx", True)
+        If IsNothing(DynamicCost) Then
+            Response.Redirect("RunOptimizer.aspx", True)
+        Else
+            Response.Redirect("FlightChangeReports?DynamicCost=" & DynamicCost, True)
+        End If
 
     End Sub
 
