@@ -261,8 +261,8 @@
                <ContentTemplate>
                
     <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" 
-                HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" AllowPaging="True" PageSize="10" 
-        PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRList_PageIndexChanging" OnPreRender="gvFCDRList_PreRender">
+            HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" AllowPaging="True" PageSize="10" 
+            PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRList_PageIndexChanging" OnPreRender="gvFCDRList_PreRender">
         <PagerSettings FirstPageText="First Page" LastPageText="Last Page" visible="true"/>
         <PagerStyle Font-Size="Medium" />
             <Columns >
@@ -283,7 +283,8 @@
                 <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
                <asp:TemplateField HeaderText ="Accept/Reject">
                     <ItemTemplate>
-                        <button name="btnacpt" value='<%# "accept" + " " + Eval("keyid") %>' >Accept</button>&nbsp;&nbsp; <button name="btnacpt" value='<%# "reject" + " " + Eval("keyid") %>' >Reject</button>
+                        <button name="btnacpt" value='<%# "accept" + " " + Eval("keyid") %>' >Accept</button>&nbsp;&nbsp; 
+                        <button name="btnacpt" value='<%# "reject" + " " + Eval("keyid") %>' >Reject</button>
                     </ItemTemplate>
                 </asp:TemplateField>
                  <asp:BoundField DataField="keyid"  />

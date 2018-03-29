@@ -31,12 +31,6 @@ Public Class FlightChangeReports
         '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
         If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = CInt(Session("carrierid"))
-        '20111121 - pab - convert to single db
-        Dim da As New DataAccess
-        Dim dt As DataTable
-        Dim btnresult As String = Request.Form("btnacpt")
-        Dim btnSelect As String = Request.Form("btnselect")
-        Dim DynamicCost As String = Request.QueryString("DynamicCost")
 
         Try
 
@@ -56,15 +50,16 @@ Public Class FlightChangeReports
             '20160412 - pab - If Session("email") Is Nothing Then assume timeout and redirect to login page
             If Session("email") Is Nothing Then
                 'Session.Abandon()
-                '20180313 - pab - fix bug - when Change Details is selected, the list of tails reverts to the last optimizer run not the DC request
-                If IsNothing(DynamicCost) Then
-                    Response.Redirect("CustomerLogin.aspx", True)
-                Else
-                    Response.Redirect("CustomerLogin.aspx/FlightChangeReports?DynamicCost=" & DynamicCost, True)
-                End If
+                Response.Redirect("CustomerLogin.aspx", True)
 
             End If
 
+            '20111121 - pab - convert to single db
+            Dim da As New DataAccess
+            Dim dt As DataTable
+            Dim btnresult As String = Request.Form("btnacpt")
+            Dim btnSelect As String = Request.Form("btnselect")
+            Dim DynamicCost As String = Request.QueryString("DynamicCost")
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
@@ -91,11 +86,15 @@ Public Class FlightChangeReports
                 If Session("emailfrom").ToString = "" Then
                     Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
-                If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
-            Else
-                ''20180313 - pab - fix bug - when Change Details is selected, the list of tails reverts to the last optimizer run not the DC request
+                '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs per David - 10 fcdrs should be sufficient
                 'If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
-
+                If DynamicCost IsNot Nothing Then
+                    btnSelect = "DynamicCosting-" & DynamicCost
+                    gvFCDRList.Columns(0).Visible = False
+                    gvFCDRList.Columns(11).Visible = False
+                    gvFCDRDetail.PagerSettings.Visible = False
+                End If
+            Else
                 If btnSelect IsNot Nothing Then
                     getDetail(btnSelect)
                 End If
@@ -144,6 +143,12 @@ Public Class FlightChangeReports
         Try
 
             Dim da As New DataAccess
+
+            '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs
+            Dim DynamicCost As String = Request.QueryString("DynamicCost")
+            If DynamicCost IsNot Nothing Then
+                gvFCDRDetail.PagerSettings.Visible = False
+            End If
 
             If Not IsPostBack Then
                 '20171101 - pab - display cleanup
@@ -199,22 +204,31 @@ Public Class FlightChangeReports
         If getKey.Contains("DynamicCosting") Then
             ModelRun = Mid(getKey, InStr(getKey, "-") + 1)
             fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.TotalSavings).ToList()
-            getKey = Nothing
+            '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs
+            'getKey = Nothing
         Else
             fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA" And c.DynamicCost = False).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
         End If
         If fcdrlist.Count > 1 Then
-                Do While i <> fcdrlist.Count
-                    Dim checkme = fcdrlist(i - 1)
-                    If (fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings) Or
-                    (fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).DeltaNonRevMiles = checkme.DeltaNonRevMiles And fcdrlist(i).TotalSavings = checkme.TotalSavings) Then
-                        fcdrlist.Remove(fcdrlist(i))
-                        i -= 1
-                    End If
-                    i += 1
+            Do While i <> fcdrlist.Count
+                Dim checkme = fcdrlist(i - 1)
+                If (fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings) Or
+                (fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).DeltaNonRevMiles = checkme.DeltaNonRevMiles And fcdrlist(i).TotalSavings = checkme.TotalSavings) Then
+                    fcdrlist.Remove(fcdrlist(i))
+                    i -= 1
+                End If
+                i += 1
+            Loop
+
+            '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs
+            If getKey.Contains("DynamicCosting") Then
+                Do While fcdrlist.Count > 10
+                    fcdrlist.Remove(fcdrlist(fcdrlist.Count - 1))
                 Loop
+                getKey = Nothing
             End If
-            gvFCDRList.DataSource = fcdrlist
+        End If
+        gvFCDRList.DataSource = fcdrlist
         gvFCDRList.DataBind()
         Colorme(getKey)
     End Sub
