@@ -228,6 +228,26 @@ Public Class FlightChangeReports
                 getKey = Nothing
             End If
         End If
+
+        '20180330 - pab - filter out placement fcdrs
+        Dim da As New DataAccess
+        Dim dt As DataTable
+        'Dim prevmodel As Integer = 0
+        'Dim prevdesc As String = ""
+        If fcdrlist.Count > 1 Then
+            i = 1
+            Do While i <> fcdrlist.Count
+                dt = da.GetFOSOptimizerRequestByID(fcdrlist(i).CarrierID, fcdrlist(i).ModelRun)
+                If Not isdtnullorempty(dt) Then
+                    If InStr(dt.Rows(0).Item("Description").ToString.ToLower, "placement request") > 0 Then
+                        fcdrlist.Remove(fcdrlist(i))
+                        i -= 1
+                    End If
+                End If
+                i += 1
+            Loop
+        End If
+
         gvFCDRList.DataSource = fcdrlist
         gvFCDRList.DataBind()
         Colorme(getKey)
