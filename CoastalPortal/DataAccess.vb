@@ -10,6 +10,50 @@ Imports System.IO
 
 Public Class DataAccess
 
+    '20180410 - pab - add headings - Trip number, Weight class requested, origin, dest and departure date/time
+    Function GetQuoteFlightsByQuoteNumber(ByVal CarrierID As Integer, ByVal QuoteNumber As String) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring("OPTIMIZERSERVER")
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetQuoteFlightsByQuoteNumber"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+                    sqlParam.Value = CarrierID
+                    cmd.Parameters.Add(sqlParam)
+
+                    sqlParam = New SqlParameter("@QuoteNumber", SqlDbType.NVarChar)
+                    sqlParam.Value = QuoteNumber
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & "; QuoteNumber " & QuoteNumber & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetQuoteFlightsByQuoteNumber Error", s, CarrierID)
+            Insertsys_log(CarrierID, appName, s, "GetQuoteFlightsByQuoteNumber", "DataAccess.vb")
+        End Try
+
+        Return dt
+
+    End Function
+
     '20161025 - pab - add delete function
     Shared Function DeletePricingZonesRatesAllByID(ByRef CarrierID As Integer, ByRef ZoneIDFrom As Integer, ByRef ZoneIDTo As Integer) As Boolean
 

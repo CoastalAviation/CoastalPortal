@@ -204,6 +204,35 @@
 	
 	<div class="form__order2"  id="form_1" runat="server" >
 		<div class="title">Review Flight Change Reports</div>
+		<span class="description" style="width: 100%">
+            <div class="form" style="width: 100%" runat="server" id="divHeading">
+                <asp:Label ID="Label1" runat="server" Text="Trip number: " Font-Size="x-small"></asp:Label>
+                <asp:TextBox ID="txtTripnumber" runat="server" Width="150px" Height="24px" Enabled="False"></asp:TextBox>
+                <asp:Label ID="Label2" runat="server" Text="Weight class: " Font-Size="x-small"></asp:Label>
+                <asp:TextBox ID="txtWeightclass" runat="server" Width="50px" Height="24px" Enabled="False"></asp:TextBox>
+                <br />
+                <asp:Label ID="Label3" runat="server" Text="origin: " Font-Size="x-small"></asp:Label>
+                <asp:TextBox ID="txtorigin" runat="server" Width="50px" Height="24px" Enabled="False"></asp:TextBox>
+                <asp:Label ID="Label4" runat="server" Text="destination: " Font-Size="x-small"></asp:Label>
+                <asp:TextBox ID="txtdest" runat="server" Width="50px" Height="24px" Enabled="False"></asp:TextBox>
+                <br />
+                <asp:Label ID="Label5" runat="server" Text="departs: " Font-Size="x-small"></asp:Label>
+                <asp:TextBox ID="txtdeparture" runat="server" Width="170px" Height="24px" Enabled="False"></asp:TextBox>
+		            <%--<label id="lblHeader" runat="server" style="width: 100%">
+			            <p class="sub_title" style="width: 100%">Trip number:
+                            <asp:TextBox id="TextBox1" runat="server" CssClass="txt" placeholder="Trip number">Trip number</asp:TextBox>
+                            Weight class requested:
+                            <asp:TextBox id="TextBox2" runat="server" CssClass="txt" placeholder="Weight class">Weight class</asp:TextBox>
+                            origin:
+                            <asp:TextBox id="TextBox3" runat="server" CssClass="txt" placeholder="origin">origin</asp:TextBox>
+                            destination:
+                            <asp:TextBox id="TextBox4" runat="server" CssClass="txt" placeholder="destination">destination</asp:TextBox>
+                            departure date/time:
+                            <asp:TextBox id="TextBox5" runat="server" CssClass="txt" placeholder="departure date/time">departure date/time</asp:TextBox>
+			            </p>
+		            </label>--%>
+            </div>
+		</span>
 
 		<div class="title"> <%--<asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label>--%> </div>
 		<%--<div class="table">
