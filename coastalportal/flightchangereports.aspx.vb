@@ -86,6 +86,10 @@ Public Class FlightChangeReports
                 If Session("emailfrom").ToString = "" Then
                     Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
+
+                '20180410 - pab - add headings - Trip number, Weight class requested, origin, dest and departure date/time
+                divHeading.Visible = False
+
                 '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs per David - 10 fcdrs should be sufficient
                 'If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
                 If DynamicCost IsNot Nothing Then
@@ -93,6 +97,17 @@ Public Class FlightChangeReports
                     gvFCDRList.Columns(0).Visible = False
                     gvFCDRList.Columns(11).Visible = False
                     gvFCDRDetail.PagerSettings.Visible = False
+
+                    '20180410 - pab - add headings - Trip number, Weight class requested, origin, dest and departure date/time
+                    divHeading.Visible = True
+                    Dim dtq As DataTable = da.GetQuoteFlightsByQuoteNumber(carrierid, DynamicCost)
+                    If Not isdtnullorempty(dtq) Then
+                        Me.txtTripnumber.Text = dtq.Rows(0).Item("TripNumber").ToString.Trim
+                        Me.txtWeightclass.Text = dtq.Rows(0).Item("Weightclass").ToString.Trim
+                        Me.txtorigin.Text = dtq.Rows(0).Item("DepartureAirport").ToString.Trim
+                        Me.txtdest.Text = dtq.Rows(0).Item("ArrivalAirport").ToString.Trim
+                        Me.txtdeparture.Text = dtq.Rows(0).Item("DepartureDate").ToString.Trim & " " & dtq.Rows(0).Item("DepartureTime").ToString.Trim
+                    End If
                 End If
             Else
                 If btnSelect IsNot Nothing Then

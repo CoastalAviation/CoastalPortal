@@ -131,6 +131,14 @@ Public Class RunOptimizer
                 '20180208 - pab - add PinManaged - default checked to dpj instead of jlx
                 If CInt(Session("carrierid")) = DELTA Then
                     chkPinManaged.Checked = True
+                    '20180416 - pab - change run options per david
+                    lblModelType.Text = "Run Optimizer:"
+                    rblModelType.ClearSelection()
+                    rblModelType.Items.Clear()
+                    Dim li As ListItem = Nothing
+                    li = New ListItem(" Fast Run (5-10 minutes)", "Fast")
+                    rblModelType.Items.Add(li)
+                    rblModelType.Items(0).Selected = True
                 Else
                     chkPinManaged.Checked = False
                 End If

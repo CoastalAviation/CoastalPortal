@@ -318,6 +318,7 @@
                 </asp:TemplateField>
                  <asp:BoundField DataField="keyid"  />
                   <asp:BoundField DataField="isTrade"  />
+                <asp:BoundField DataField="carrierid" HeaderText="carrier id" SortExpression="carrierid" ItemStyle-HorizontalAlign="Center"/>
                 </Columns>
             </asp:GridView>	
                    </ContentTemplate>

@@ -194,13 +194,13 @@ Partial Public Class RunOptimizer
     Protected WithEvents RaddatetimeTo As Global.Telerik.Web.UI.RadDateTimePicker
     
     '''<summary>
-    '''Label3 control.
+    '''lblModelType control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents Label3 As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents lblModelType As Global.System.Web.UI.WebControls.Label
     
     '''<summary>
     '''rblModelType control.
