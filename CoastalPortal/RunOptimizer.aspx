@@ -344,8 +344,8 @@
                         <asp:Label ID="lblModelType" runat="server" Text="Type Of Model To Run:" Font-Bold="True" Font-Size="Small" Font-Underline="True" ></asp:Label>
                         <br />
                         <asp:RadioButtonList ID="rblModelType" runat="server">
-                            <asp:ListItem Value="Fast" Selected="True"> Standard Run (5-10 minutes)</asp:ListItem>
-                            <asp:ListItem Value="Schedule"> Schedule Rebuild (20-30 minutes)</asp:ListItem>
+                            <asp:ListItem Value="Fast" Selected="True"> Standard Run</asp:ListItem>
+                            <asp:ListItem Value="Schedule"> Schedule Rebuild</asp:ListItem>
                             <%--<asp:ListItem Value="Full"> Full Schedule Rebuild (40-60 minutes)</asp:ListItem>--%>
                         </asp:RadioButtonList>
                         <br />
