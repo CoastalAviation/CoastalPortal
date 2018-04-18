@@ -136,7 +136,7 @@ Public Class RunOptimizer
                     rblModelType.ClearSelection()
                     rblModelType.Items.Clear()
                     Dim li As ListItem = Nothing
-                    li = New ListItem(" Fast Run", "Fast")
+                    li = New ListItem(" Standard Run", "Fast")
                     rblModelType.Items.Add(li)
                     rblModelType.Items(0).Selected = True
                 Else
