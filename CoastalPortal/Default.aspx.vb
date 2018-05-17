@@ -46,6 +46,7 @@ Public Class _Default
             'host = "dpj"
             'host = "instantjet"
             'host = "jetsmarter"
+            'host = "hopajet"
         End If
 
         '20130109 - pab - fix changing carrier

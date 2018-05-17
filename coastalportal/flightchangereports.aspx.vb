@@ -218,7 +218,9 @@ Public Class FlightChangeReports
 
         If getKey.Contains("DynamicCosting") Then
             ModelRun = Mid(getKey, InStr(getKey, "-") + 1)
-            fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.TotalSavings).ToList()
+            '20180427 - pab - do not show if total saving > 0 per david
+            'fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.TotalSavings).ToList()
+            fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA" And c.TotalSavings <= 0).OrderByDescending(Function(c) c.TotalSavings).ToList()
             '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs
             'getKey = Nothing
         Else

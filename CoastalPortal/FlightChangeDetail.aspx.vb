@@ -470,8 +470,11 @@ Public Class FlightChangeDetail
 
         For Each fcdr As FCDRList In fcdrlist
             GMTStart = fcdr.GMTStart
+            '20180511 - pab - fix fcdrs
             FosList = FOSRecords.Where(Function(x) fcdr.FOSRecordList.Contains(Trim(x.AC)) And Not demandlookup.TryGetValue(Trim(x.AC), dummy) And x.DateTimeGMT.Date >= GMTStart.Date).OrderBy(Function(y) y.AC).ThenBy(Function(y) y.DepartureDateGMT).Distinct().ToList()
             CasList = CASRecords.Where(Function(x) fcdr.CASRecordList.Contains(Trim(x.AircraftRegistration)) And Not demandlookup.TryGetValue(Trim(x.AircraftRegistration), dummy) And x.DepartureTime >= GMTStart).OrderBy(Function(y) y.AircraftRegistration).ThenBy(Function(y) y.DepartureTime).Distinct().ToList()
+            'FosList = FOSRecords.Where(Function(x) fcdr.FOSRecordList.Contains(Trim(x.AC) And x.DepartureAirportICAO <> x.ArrivalAirportICAO And x.LegTypeCode <> "BULL") And Not demandlookup.TryGetValue(Trim(x.AC), dummy) And x.DateTimeGMT.Date >= GMTStart.Date).OrderBy(Function(y) y.AC).ThenBy(Function(y) y.DepartureDateGMT).Distinct().ToList()
+            'CasList = CASRecords.Where(Function(x) fcdr.CASRecordList.Contains(Trim(x.AircraftRegistration) And x.DepartureAirport <> x.ArrivalAirport And x.LegTypeCode <> "BULL") And Not demandlookup.TryGetValue(Trim(x.AircraftRegistration), dummy) And x.DepartureTime >= GMTStart).OrderBy(Function(y) y.AircraftRegistration).ThenBy(Function(y) y.DepartureTime).Distinct().ToList()
 
             TripList = (From a In CasList Select Trim(a.TripNumber)).Distinct().ToList()
             FosList = FosList.Union(FOSRecords.Where(Function(x) demandlookup.TryGetValue(Trim(x.AC), dummy) And TripList.Contains(Trim(x.TripNumber)) And x.DateTimeGMT.Date >= GMTStart.Date).OrderBy(Function(y) y.AC).ThenBy(Function(y) y.DepartureDateGMT).ToList()).Distinct().ToList()
@@ -479,6 +482,29 @@ Public Class FlightChangeDetail
 
             FosList = (From a In FosList Select a).Distinct().ToList()
             CasList = (From b In CasList Select b).Distinct().ToList()
+
+            '20180504 - pab - foslist sometimes contains rows it shouldn't - datetimegmt less than gmtstart
+            'this code fixes key=1517458797 - dpj
+            If FosList.Count > 1 Then
+                Dim i As Integer = 0
+                Do While i <> FosList.Count - 1
+                    If FosList(i).DateTimeGMT < GMTStart Then
+                        FosList.Remove(FosList(i))
+                        If i > 0 Then i -= 1
+                    End If
+                    i += 1
+                Loop
+            End If
+            If CasList.Count > 1 Then
+                Dim i As Integer = 0
+                Do While i <> CasList.Count - 1
+                    If CasList(i).DepartureTime < GMTStart Then
+                        CasList.Remove(CasList(i))
+                        If i > 0 Then i -= 1
+                    End If
+                    i += 1
+                Loop
+            End If
 
             fcdrcolors.Add(New fcdrColorlist With {.FCDR_Key = fcdr.keyid, .changecolor_dictionary = getColorDictionary(CasList)})
 

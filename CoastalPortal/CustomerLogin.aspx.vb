@@ -47,6 +47,7 @@ Public Class loginpage
                 'host = "demoair"
                 'host = "instantjet"
                 'host = "jetsmarter"
+                'host = "hopajet"
             End If
 
             '20171115 - pab - fix carriers changing midstream - change _urlalias to Session("urlalias")

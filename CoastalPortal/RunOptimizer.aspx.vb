@@ -143,6 +143,13 @@ Public Class RunOptimizer
                     chkPinManaged.Checked = False
                 End If
 
+                '20180517 - pab - add Datamine - default to true for jlx
+                If CInt(Session("carrierid")) = JETLINX Then
+                    chkDatamine.Checked = True
+                Else
+                    chkDatamine.Checked = False
+                End If
+
                 If InStr(Session("email").ToString.ToLower, "@coastal") > 0 Then
                     pnlAdvancedSettings.Visible = True
                 Else
@@ -516,6 +523,13 @@ Public Class RunOptimizer
                 rs.Fields("PinManaged").Value = 1
             Else
                 rs.Fields("PinManaged").Value = 0
+            End If
+
+            '20180517 - pab - add Datamine
+            If chkDatamine.Checked = True Then
+                rs.Fields("Datamine").Value = 1
+            Else
+                rs.Fields("Datamine").Value = 0
             End If
 
             rs.Update()

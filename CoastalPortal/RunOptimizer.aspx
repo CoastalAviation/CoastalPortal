@@ -488,6 +488,9 @@
                             <asp:CheckBox ID="chkRejects" runat="server" Text="Write Reject Reasons" Font-Names="arial"    />
                             <br />
                             <br />
+                            <asp:CheckBox ID="chkDatamine" runat="server" Text="Datamine" Font-Names="arial"    />
+                            <br />
+                            <br />
                         </td>
                     </tr>
                     <tr>
