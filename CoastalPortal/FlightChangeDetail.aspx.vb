@@ -487,7 +487,9 @@ Public Class FlightChangeDetail
             'this code fixes key=1517458797 - dpj
             If FosList.Count > 1 Then
                 Dim i As Integer = 0
-                Do While i <> FosList.Count - 1
+                '20180518 - pab - fix error - index out of range
+                'Do While i <> FosList.Count - 1
+                Do While i <> FosList.Count - 1 And FosList.Count > 1
                     If FosList(i).DateTimeGMT < GMTStart Then
                         FosList.Remove(FosList(i))
                         If i > 0 Then i -= 1
@@ -497,7 +499,9 @@ Public Class FlightChangeDetail
             End If
             If CasList.Count > 1 Then
                 Dim i As Integer = 0
-                Do While i <> CasList.Count - 1
+                '20180518 - pab - fix error - index out of range
+                'Do While i <> CasList.Count - 1
+                Do While i <> CasList.Count - 1 And CasList.Count > 1
                     If CasList(i).DepartureTime < GMTStart Then
                         CasList.Remove(CasList(i))
                         If i > 0 Then i -= 1
