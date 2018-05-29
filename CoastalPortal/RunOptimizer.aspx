@@ -320,7 +320,7 @@
                             <DatePopupButton HoverImageUrl="" ImageUrl="" />
                         </telerik:raddatetimepicker>
                         <br />
-                        (For best results, use 0400 start time)
+                        <%--(For best results, use 0400 start time)--%>
                         <br />
                         <br />
                         <asp:Label ID="Label2" runat="server" Text="GMT End:  " Font-Bold="True" Font-Size="Small" ></asp:Label>
@@ -355,10 +355,12 @@
                         <asp:CheckBox ID="chkallowupgrades" runat="server" Text=" Allow Upgrades" Font-Names="arial" ToolTip="Allow Upgrades"  Checked="True" />
                         <br />
                         <br />
-                        <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />
+                        <%--<asp:CheckBox ID="CheckBox1" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />--%>
+                        <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="New Trip Assignments Only"  Checked="false" />
                         <br />
                         <br />
-                        <asp:CheckBox ID="chkAssigns" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />
+                        <%--<asp:CheckBox ID="CheckBox1" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />--%>
+                        <asp:CheckBox ID="chkAssigns" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Integrate Assignments with Optimizer Run"  Checked="false" />
                         <br />
                         <br />
                         <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="True" />
