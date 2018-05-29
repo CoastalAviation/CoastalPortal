@@ -514,8 +514,20 @@ Public Class FlightChangeDetail
 
             ACList = (From a In FosList Select Trim(a.AC)).Distinct().ToList()
             ACList = ACList.Union((From a In CasList Select Trim(a.AircraftRegistration)).Distinct()).ToList()
+            '20180522 - pab - check cas prior tail too
+            ACList = ACList.Union((From a In CasList Select Trim(a.PriorTail)).Distinct()).ToList()
             ACList = ACList.Distinct().ToList()
-
+            '20180522 - pab - check cas prior tail too
+            If ACList.Count > 1 Then
+                Dim i As Integer = 0
+                Do While i <> ACList.Count - 1 And ACList.Count > 1
+                    If ACList(i) = "" Then
+                        ACList.Remove(ACList(i))
+                        If i > 0 Then i -= 1
+                    End If
+                    i += 1
+                Loop
+            End If
 
             ' Panellist = (From f In FosList Group Join c In CasList On Trim(f.AC) Equals Trim(c.AircraftRegistration) And ((Trim(f.TripNumber) = Trim(c.TripNumber) And
             ' Trim(f.ArrivalAirportICAO) = Trim(c.ArrivalAirport) And Trim(f.DepartureAirportICAO) = Trim(c.DepartureAirport) And c.DepartureTime = f.DateTimeGMT) Or Trim(f.FOSKey) = Trim(c.FOSKEY))

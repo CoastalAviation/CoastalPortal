@@ -41,8 +41,8 @@ Public Class loginpage
                 '20161227 - pab - default to wheelsup
                 'host = "wheelsup"
                 'host = "tmcjets"
-                host = "jetlinx"
-                'host = "dpj"
+                'host = "jetlinx"
+                host = "dpj"
                 'host = "xojet"
                 'host = "demoair"
                 'host = "instantjet"

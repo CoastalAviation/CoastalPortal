@@ -138,6 +138,11 @@ Public Class RunOptimizer
                     Dim li As ListItem = Nothing
                     li = New ListItem(" Standard Run", "Fast")
                     rblModelType.Items.Add(li)
+
+                    '20180529 - pab - put rebuild schedule option back in for dpj per David
+                    li = New ListItem(" Rebuild Schedule", "Schedule")
+                    rblModelType.Items.Add(li)
+
                     rblModelType.Items(0).Selected = True
                 Else
                     chkPinManaged.Checked = False
