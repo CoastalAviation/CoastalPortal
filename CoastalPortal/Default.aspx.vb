@@ -72,7 +72,9 @@ Public Class _Default
         Session("reset") = "T"
 
         '20171115 - pab - fix carriers changing midstream - change _urlalias to Session("urlalias")
-        If CInt(Session("carrierid")) = 0 Or Session("urlalias").ToString = "" Or InStr(Session("urlalias").ToString.ToLower, "personiflyadmin") > 0 Then
+        '20180606 - pab - change url for admin portal
+        'If CInt(Session("carrierid")) = 0 Or Session("urlalias").ToString = "" Or InStr(Session("urlalias").ToString.ToLower, "personiflyadmin") > 0 Then
+        If CInt(Session("carrierid")) = 0 Or Session("urlalias").ToString = "" Or InStr(Session("urlalias").ToString.ToLower, "avaisearch") > 0 Then
             '20130702 - pab - insert into log - don't sent email
             'SendEmail("info@coastalaviationsoftware.com", "pbaumgart@coastalaviationsoftware.com", "carrier not resolved", appName & " carrierid - " & _carrierid & "; _urlalias - " & _urlalias & "; host - " & host & "; connectstring - " & connectstring & vbNewLine, _carrierid)
             Insertsys_log(CInt(Session("carrierid")), appName, "carrier not resolved; carrierid - " & CInt(Session("carrierid")) &

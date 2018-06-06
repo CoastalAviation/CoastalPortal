@@ -75,7 +75,9 @@ Public Class loginpage
             'Session("carrierid") = _carrierid
 
             '20171018 - pab - fix invalid alias
-            If CInt(Session("carrierid")) = 0 Or Session("urlalias").ToString = "" Or InStr(Session("urlalias").ToString.ToLower, "personiflyadmin") > 0 Then
+            '20180606 - pab - change url for admin portal
+            'If CInt(Session("carrierid")) = 0 Or Session("urlalias").ToString = "" Or InStr(Session("urlalias").ToString.ToLower, "personiflyadmin") > 0 Then
+            If CInt(Session("carrierid")) = 0 Or Session("urlalias").ToString = "" Or InStr(Session("urlalias").ToString.ToLower, "avaisearch") > 0 Then
                 Session("reset") = "T"
                 Insertsys_log(CInt(Session("carrierid")), appName, "carrier not resolved; carrierid - " & CInt(Session("carrierid")) &
                     "; urlalias - " & Session("urlalias").ToString & "; host - " & host & "; connectstring - " & Session("connectstring").ToString, "Page_Load", "Default.aspx.vb")

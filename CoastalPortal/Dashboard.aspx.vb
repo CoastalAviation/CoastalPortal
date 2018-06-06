@@ -196,7 +196,9 @@ Public Class Dashboard
         If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
         If Session("urlalias").ToString.Trim <> "" Then
             'Response.Redirect("http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx", True)
-            Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx','_blank');</script>")
+            '20180606 - pab - change url for admin portal
+            'Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx','_blank');</script>")
+            Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".avaisearch.com/CustomerLogin.aspx','_blank');</script>")
         End If
 
     End Sub
