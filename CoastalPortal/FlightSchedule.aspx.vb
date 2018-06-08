@@ -62,6 +62,18 @@ Public Class FlightSchedule
                     Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
 
+                '20180608 - pab - don't show r0 unless called from model run history page - clear if r0 model id saved
+                If Not Request.QueryString("r0") Is Nothing Then
+                    If Request.QueryString("r0").ToString = "0" Then
+                        If Not IsNothing(Session("fosmodelrunid")) Then
+                            If InStr(Session("fosmodelrunid"), "-R0-") > 0 Then
+                                Session("fosmodelrunid") = ""
+                                Session("fosmodelstart") = Nothing
+                                Session("fosmodelstartfos") = Nothing
+                            End If
+                        End If
+                    End If
+                End If
             End If
 
             '20100608 - pab - add logo to email
