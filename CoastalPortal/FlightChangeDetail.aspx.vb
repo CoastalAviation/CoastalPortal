@@ -469,7 +469,9 @@ Public Class FlightChangeDetail
         ACPRemiums = db.Database.SqlQuery(Of AircrafPremium)("Select FosAircraftID,Premium from AircraftPremium").ToList()
 
         For Each fcdr As FCDRList In fcdrlist
-            GMTStart = fcdr.GMTStart
+            '20180608 - pab - slide start time
+            'GMTStart = fcdr.GMTStart
+            GMTStart = DateAdd(DateInterval.Hour, -3, fcdr.GMTStart)
             '20180511 - pab - fix fcdrs
             FosList = FOSRecords.Where(Function(x) fcdr.FOSRecordList.Contains(Trim(x.AC)) And Not demandlookup.TryGetValue(Trim(x.AC), dummy) And x.DateTimeGMT.Date >= GMTStart.Date).OrderBy(Function(y) y.AC).ThenBy(Function(y) y.DepartureDateGMT).Distinct().ToList()
             CasList = CASRecords.Where(Function(x) fcdr.CASRecordList.Contains(Trim(x.AircraftRegistration)) And Not demandlookup.TryGetValue(Trim(x.AircraftRegistration), dummy) And x.DepartureTime >= GMTStart).OrderBy(Function(y) y.AircraftRegistration).ThenBy(Function(y) y.DepartureTime).Distinct().ToList()

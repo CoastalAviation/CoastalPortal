@@ -115,20 +115,28 @@ Public Class OptimizerCalendar
                         Session("fosmodelrunid") = dt.Rows(n).Item("modelrunid").ToString.Trim
                         Session("fosmodelstart") = dt.Rows(n).Item("modelstart")
                         Session("fosmodelstartfos") = Session("fosmodelstart")
+
+                        '20180606 - pab - use modelrunid instead of Session("fosmodelrunid")
+                        modelrunid = Session("fosmodelrunid").ToString
+
                         Exit For
                     End If
                 Next
             End If
 
             If Not IsPostBack Then
-                If Session("fosmodelrunid").ToString.Trim <> "" Then
+                '20180606 - pab - use modelrunid instead of Session("fosmodelrunid")
+                'If Session("fosmodelrunid").ToString.Trim <> "" Then
+                If modelrunid <> "" Then
                     'lblModelRunID.Text = modelrunid.Trim
                     'Dim i As Integer = InStr(modelrunid, " - ")
                     'If i > 0 Then
                     '    If IsDate((Mid(modelrunid, i + 2))) Then Session("fosmodelstart") = CDate(Mid(modelrunid, i + 2))
                     '    _fosmodelrunid = Left(modelrunid, i - 1)
                     'End If
-                    lblModelRunID.Text = Session("fosmodelrunid").ToString & " - " & Session("fosmodelstart")
+                    '20180606 - pab - use modelrunid instead of Session("fosmodelrunid")
+                    'lblModelRunID.Text = Session("fosmodelrunid").ToString & " - " & Session("fosmodelstart")
+                    lblModelRunID.Text = modelrunid & " - " & Session("fosmodelstart")
                 Else
                     '20161222 - pab - fix calendar
                     'Dim da As New DataAccess
@@ -137,14 +145,16 @@ Public Class OptimizerCalendar
                     Session("fosmodelstart") = CDate(dt.Rows(0).Item("ModelStart").ToString)
 
                     '20170929 - fix initial display bug
-                    If Session("fosmodelrunid").ToString = "" Then
+                    '20180606 - pab - use modelrunid instead of Session("fosmodelrunid")
+                    'If Session("fosmodelrunid").ToString = "" Then
+                    If modelrunid = "" Then
                         lblModelRunID.Text = rcbModelRun.Items(0).Text
                         modelrunid = dt.Rows(0).Item("ModelRunID").ToString.Trim
                         Session("fosmodelrunid") = modelrunid
                         Session("fosmodelstart") = CDate(dt.Rows(0).Item("ModelStart").ToString)
                     End If
 
-                    lblModelRunID.Text = Session("fosmodelrunid").ToString & " - " & Session("fosmodelstart")
+                    lblModelRunID.Text = modelrunid & " - " & Session("fosmodelstart")
                 End If
             End If
 
