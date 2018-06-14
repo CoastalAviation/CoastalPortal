@@ -363,6 +363,9 @@ Public Class FlightChangeDetail
         Dim totalcost As Double = 0
         Dim fnrm, cnrm As Double
 
+        '20180614 - pab - add another bucket for days 3 +
+        Dim dcostday3 As Double = 0
+
         Dim i As Integer = model.IndexOf("-")
 
         mrid = Left(model, i)
@@ -411,6 +414,17 @@ Public Class FlightChangeDetail
                                                    cr.DepartureTime >= DateAdd("d", 2, GMTStart) And cr.DepartureTime < DateAdd("d", 3, GMTStart) Select CInt(Trim(cr.cost))).Sum())
         dcostday2 = frc - cascost
 
+        '20180614 - pab - add another bucket for days 3 +
+        frc = isdbn((From fr In FOSRecords Where Trim(fr.LegTypeCode) <> "77" And Trim(fr.LegTypeCode) <> "7" And Trim(fr.LegState) <> "5" And
+                                                ((Not demandlookup.TryGetValue(Trim(fr.AC), dummy) And ptlist.Contains(Trim(fr.AC))) Or
+                                                 (demandlookup.TryGetValue(Trim(fr.AC), dummy) And TripList.Contains(Trim(fr.TripNumber)))) And
+                                                fr.DateTimeGMT >= DateAdd("d", 3, GMTStart) Select CInt(Trim(fr.DHCost))).Sum())
+        cascost = isdbn((From cr In CASRecords Where ptlist.Contains(Trim(cr.AircraftRegistration)) And
+                                                   ((Not demandlookup.TryGetValue(Trim(cr.AircraftRegistration), dummy) And ptlist.Contains(Trim(cr.AircraftRegistration))) Or
+                                                    (demandlookup.TryGetValue(Trim(cr.AircraftRegistration), dummy) And TripList.Contains(Trim(cr.TripNumber)))) And
+                                                   cr.DepartureTime >= DateAdd("d", 3, GMTStart) Select CInt(Trim(cr.cost))).Sum())
+        dcostday3 = frc - cascost
+
         fnrm = isdbn((From fr In FOSRecords Where Trim(fr.DeadHead) = "True" And Trim(fr.LegTypeCode) <> "77" And Trim(fr.LegTypeCode) <> "7" And Trim(fr.LegState) <> "5" And
                                     ((Not demandlookup.TryGetValue(Trim(fr.AC), dummy) And ptlist.Contains(Trim(fr.AC))) Or
                                            (demandlookup.TryGetValue(Trim(fr.AC), dummy) And TripList.Contains(Trim(fr.TripNumber)))) And
@@ -422,8 +436,11 @@ Public Class FlightChangeDetail
 
 
 
+        '20180614 - pab - add another bucket for days 3 +
+        'fcdrlist.Add(New FCDRList With {.CASRecordList = CasIDList, .FOSRecordList = FosIdList, .ModelRunID = model, .PriorTailNumber = starttail, .DeltaNonRevMiles = CInt(fnrm - cnrm), .CarrierAcceptStatus = "NA", .isTrade = False,
+        '            .TotalSavings = totalcost, .SavingsDay0 = dcostday0, .SavingsDay1 = dcostday1, .SavingsDay2 = dcostday2, .keyid = fcdrkey, .ModelRun = mrid, .GMTStart = GMTStart, .CarrierID = carrierprofile.carrierid, .DynamicCost = DynamicCosting})
         fcdrlist.Add(New FCDRList With {.CASRecordList = CasIDList, .FOSRecordList = FosIdList, .ModelRunID = model, .PriorTailNumber = starttail, .DeltaNonRevMiles = CInt(fnrm - cnrm), .CarrierAcceptStatus = "NA", .isTrade = False,
-                    .TotalSavings = totalcost, .SavingsDay0 = dcostday0, .SavingsDay1 = dcostday1, .SavingsDay2 = dcostday2, .keyid = fcdrkey, .ModelRun = mrid, .GMTStart = GMTStart, .CarrierID = carrierprofile.carrierid, .DynamicCost = DynamicCosting})
+                    .TotalSavings = totalcost, .SavingsDay0 = dcostday0, .SavingsDay1 = dcostday1, .SavingsDay2 = dcostday2, .SavingsDay3 = dcostday3, .keyid = fcdrkey, .ModelRun = mrid, .GMTStart = GMTStart, .CarrierID = carrierprofile.carrierid, .DynamicCost = DynamicCosting})
 
         Try
             db.FCDRList.AddRange(fcdrlist)
@@ -623,7 +640,10 @@ Public Class FlightChangeDetail
                 Loop
             End If
 
-            GridViewSource.Add(New PanelDisplay With {.FCDR_Key = fcdr.keyid, .dcostday0 = fcdr.SavingsDay0, .dcostday1 = fcdr.SavingsDay1, .dcostday2 = fcdr.SavingsDay2, .TailNumber = fcdr.PriorTailNumber, .RevenueRecords = baserev,
+            '20180614 - pab - add another bucket for days 3 +
+            'GridViewSource.Add(New PanelDisplay With {.FCDR_Key = fcdr.keyid, .dcostday0 = fcdr.SavingsDay0, .dcostday1 = fcdr.SavingsDay1, .dcostday2 = fcdr.SavingsDay2, .TailNumber = fcdr.PriorTailNumber, .RevenueRecords = baserev,
+            '                                            .NRM = CDbl(fcdr.DeltaNonRevMiles), .PanelRecord = Panellist.ToList(), .ModelNumber = fcdr.ModelRunID, .TotalSavings = fcdr.TotalSavings})
+            GridViewSource.Add(New PanelDisplay With {.FCDR_Key = fcdr.keyid, .dcostday0 = fcdr.SavingsDay0, .dcostday1 = fcdr.SavingsDay1, .dcostday2 = fcdr.SavingsDay2, .dcostday3 = fcdr.SavingsDay3, .TailNumber = fcdr.PriorTailNumber, .RevenueRecords = baserev,
                                                         .NRM = CDbl(fcdr.DeltaNonRevMiles), .PanelRecord = Panellist.ToList(), .ModelNumber = fcdr.ModelRunID, .TotalSavings = fcdr.TotalSavings})
 
             Filename = fcdr.keyid
@@ -1140,6 +1160,8 @@ Public Class FlightChangeDetail
             If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblCostDay0b"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblCostDay0b"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblCostDay1b"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblCostDay1b"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblCostDay2b"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblCostDay2b"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+            '20180614 - pab - add another bucket for days 3 +
+            If CInt(DirectCast(lvflightlist.Items(i).FindControl("lblCostDay3b"), Label).Text) < 0 Then DirectCast(lvflightlist.Items(i).FindControl("lblCostDay3b"), Label).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
             FOScolorme(DirectCast(lvflightlist.Items(i).FindControl("GVGridViewTrips"), GridView), fcdrcolors.Where(Function(z) z.FCDR_Key = x).Select(Function(z) z).FirstOrDefault()) ', DirectCast(lvflightlist.Items(1).FindControl("pnlACType"), Label).Text)
             CAScolorme(DirectCast(lvflightlist.Items(i).FindControl("GVGridViewTrips"), GridView), fcdrcolors.Where(Function(z) z.FCDR_Key = x).Select(Function(z) z).FirstOrDefault())
             linebreaks(DirectCast(lvflightlist.Items(i).FindControl("GVGridViewTrips"), GridView), x) ', DirectCast(lvflightlist.Items(1).FindControl("pnlACType"), Label).Text)

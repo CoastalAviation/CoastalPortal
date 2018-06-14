@@ -2042,6 +2042,9 @@ Public Class FCDRList
     Private m_savingsday0 As Decimal
     Private m_savingsday1 As Decimal
     Private m_savingsday2 As Decimal
+    '20180614 - pab - add another bucket for days 3 +
+    Private m_savingsday3 As Decimal
+
     Private m_GMTstart As DateTime
     Private m_totalsavings As Decimal
     Private m_carrieracceptstatus As String
@@ -2124,6 +2127,16 @@ Public Class FCDRList
             m_GMTstart = value
         End Set
     End Property
+    '20180614 - pab - add another bucket for days 3 +
+    Public Property SavingsDay3() As Decimal
+        Get
+            Return m_savingsday3
+        End Get
+        Set(ByVal value As Decimal)
+            m_savingsday3 = value
+        End Set
+    End Property
+
     Public Property SavingsDay2() As Decimal
         Get
             Return m_savingsday2
@@ -2329,6 +2342,9 @@ Public Class PanelDisplay
     Private M_fcdrcostd0 As Double
     Private M_fcdrcostd1 As Double
     Private M_fcdrcostd2 As Double
+    '20180614 - pab - add another bucket for days 3 +
+    Private M_fcdrcostd3 As Double
+
     Private M_nrm As Double
     Private m_modelnumber As String
     Private m_totalsavings As Double
@@ -2366,6 +2382,16 @@ Public Class PanelDisplay
             M_nrm = value
         End Set
     End Property
+    '20180614 - pab - add another bucket for days 3 +
+    Public Property dcostday3() As Double
+        Get
+            Return M_fcdrcostd3
+        End Get
+        Set(ByVal value As Double)
+            M_fcdrcostd3 = value
+        End Set
+    End Property
+
     Public Property dcostday2() As Double
         Get
             Return M_fcdrcostd2
