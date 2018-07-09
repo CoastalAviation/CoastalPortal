@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class FlightChangeReports
+Partial Public Class AssignNewFlights
     
     '''<summary>
     '''Head1 control.
@@ -111,15 +111,6 @@ Partial Public Class FlightChangeReports
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-    
-    '''<summary>
-    '''divHeadMain control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents divHeadMain As Global.System.Web.UI.HtmlControls.HtmlGenericControl
     
     '''<summary>
     '''divHeading control.
@@ -237,42 +228,6 @@ Partial Public Class FlightChangeReports
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents gvFCDRList As Global.System.Web.UI.WebControls.GridView
-    
-    '''<summary>
-    '''NotesPanel control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents NotesPanel As Global.System.Web.UI.UpdatePanel
-    
-    '''<summary>
-    '''pnlNotes control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents pnlNotes As Global.System.Web.UI.WebControls.Panel
-    
-    '''<summary>
-    '''txtNotes control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtNotes As Global.System.Web.UI.WebControls.TextBox
-    
-    '''<summary>
-    '''bttnUpdate control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents bttnUpdate As Global.System.Web.UI.WebControls.Button
     
     '''<summary>
     '''DetailPanel control.

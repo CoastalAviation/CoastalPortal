@@ -151,6 +151,9 @@ Public Class RunOptimizer
                 '20180517 - pab - add Datamine - default to true for jlx
                 If CInt(Session("carrierid")) = JETLINX Then
                     chkDatamine.Checked = True
+                    '20180703 - pab - per David - set the Jetlinx optimizer default to Schedule Rebuild and not Standard
+                    rblModelType.ClearSelection()
+                    rblModelType.Items(1).Selected = True
                 Else
                     chkDatamine.Checked = False
                 End If
@@ -444,10 +447,13 @@ Public Class RunOptimizer
             End If
 
             '20171101 - pab - add AssignNewTrips per David - not used by optimzer yet
+            '20170621 - pab - add DemandFlights bit
             If chkAssignNewTrips.Checked = True Then
                 rs.Fields("AssignNewTrips").Value = 1
+                rs.Fields("DemandFlights").Value = 1
             Else
                 rs.Fields("AssignNewTrips").Value = 0
+                rs.Fields("DemandFlights").Value = 0
             End If
 
             '20171217 - pab - add UseIncomingModelCost internal use only per Richard

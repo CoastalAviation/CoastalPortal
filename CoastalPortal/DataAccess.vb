@@ -10,6 +10,180 @@ Imports System.IO
 
 Public Class DataAccess
 
+    '20180701 - pab - assign new fligths
+    Function GetOptimizerRequestByParentReqNo(ByVal CarrierID As Integer) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring("OPTIMIZERSERVER")
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetOptimizerRequestByParentReqNo"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+                    sqlParam.Value = CarrierID
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetOptimizerRequestByParentReqNo Error", s, CarrierID)
+            Insertsys_log(CarrierID, appName, s, "GetOptimizerRequestByParentReqNo", "DataAccess.vb")
+        End Try
+
+        Return dt
+
+    End Function
+
+    '20180624 - pab - add tracking fields to fcdr
+    Function GetFCDRListByKeyID(ByVal CarrierID As Integer, ByVal keyID As Integer) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring("OPTIMIZERSERVER")
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetFCDRListByKeyID"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@keyID", SqlDbType.Int)
+                    sqlParam.Value = keyID
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetFCDRListByKeyID Error", s, CarrierID)
+            Insertsys_log(CarrierID, appName, s, "GetFCDRListByKeyID", "DataAccess.vb")
+        End Try
+
+        Return dt
+
+    End Function
+
+    '20180624 - pab - add tracking fields to fcdr
+    Function GetAircraftByFOSAircraftID(ByVal CarrierID As Integer, ByVal FOSAircraftID As String) As DataTable
+
+        Dim dt As DataTable = New DataTable()
+
+        Try
+            Using conn As New SqlConnection()
+                conn.ConnectionString = ConnectionStringHelper.getglobalconnectionstring("OPTIMIZERSERVER")
+                Using cmd As New SqlCommand
+                    cmd.Connection = conn
+                    cmd.CommandType = CommandType.StoredProcedure
+                    cmd.CommandText = "sp_GetAircraftByFOSAircraftID"
+
+                    Dim sqlParam As SqlParameter
+
+                    sqlParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+                    sqlParam.Value = CarrierID
+                    cmd.Parameters.Add(sqlParam)
+
+                    sqlParam = New SqlParameter("@FOSAircraftID", SqlDbType.VarChar)
+                    sqlParam.Value = FOSAircraftID
+                    cmd.Parameters.Add(sqlParam)
+
+                    conn.Open()
+
+                    Using rdr As SqlDataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection)
+                        dt.Load(rdr)
+                    End Using
+                End Using
+            End Using
+
+        Catch ex As Exception
+            Dim s As String = "parms - CarrierID " & CarrierID & "; FOSAircraftID " & FOSAircraftID & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetAircraftByFOSAircraftID Error", s, CarrierID)
+            Insertsys_log(CarrierID, appName, s, "GetAircraftByFOSAircraftID", "DataAccess.vb")
+        End Try
+
+        Return dt
+
+    End Function
+
+    '20180624 - pab - add tracking fields to fcdr
+    Public Function UpdateFCDRListReview(ByRef KeyId As Integer, ByRef ReviewedBy As Integer, ByRef Notes As String, ByRef ReviewedByInit As String) As Boolean
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring("OPTIMIZERSERVER"))
+
+            oConn.Open()
+
+            oCmd = New SqlCommand("sp_UpdateFCDRListReview", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = Nothing
+
+            oParam = New SqlParameter("@KeyId", SqlDbType.Int)
+            oParam.Value = KeyId
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ReviewedBy", SqlDbType.Int)
+            oParam.Value = ReviewedBy
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@Notes", SqlDbType.VarChar)
+            oParam.Value = Left(Notes, 50)
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ReviewedByInit", SqlDbType.VarChar)
+            oParam.Value = ReviewedByInit
+            oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return True
+
+        Catch ex As Exception
+            Return False
+
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
     '20180410 - pab - add headings - Trip number, Weight class requested, origin, dest and departure date/time
     Function GetQuoteFlightsByQuoteNumber(ByVal CarrierID As Integer, ByVal QuoteNumber As String) As DataTable
 

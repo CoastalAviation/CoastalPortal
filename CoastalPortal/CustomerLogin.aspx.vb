@@ -41,8 +41,8 @@ Public Class loginpage
                 '20161227 - pab - default to wheelsup
                 'host = "wheelsup"
                 'host = "tmcjets"
-                'host = "jetlinx"
-                host = "dpj"
+                host = "jetlinx"
+                'host = "dpj"
                 'host = "xojet"
                 'host = "demoair"
                 'host = "instantjet"
@@ -289,6 +289,13 @@ Public Class loginpage
                 Session("userid") = LoginUser.UserID
                 Session("username") = LoginUser.Email.Trim
                 Session("Active") = True
+
+                '20180624 - pab - add tracking fields to fcdr
+                Session("MiddleName") = LoginUser.MiddleName
+                Session("LastName") = LoginUser.LastName
+                If Len(LoginUser.FirstName.Trim) > 0 Then Session("Initials") = Left(LoginUser.FirstName.Trim, 1).ToUpper
+                If Len(LoginUser.MiddleName.Trim) > 0 Then Session("Initials") &= Left(LoginUser.MiddleName.Trim, 1).ToUpper
+                If Len(LoginUser.LastName.Trim) > 0 Then Session("Initials") &= Left(LoginUser.LastName.Trim, 1).ToUpper
 
                 Me.txtmsg.Text = "Welcome Back " & LoginUser.FirstName & "." & vbCr & vbLf & vbCr & vbLf & "You are a valued " & LoginUser.PlanType & " level member. " & vbCr & vbLf
 

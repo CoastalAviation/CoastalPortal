@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="FlightChangeReports.aspx.vb" Inherits="CoastalPortal.FlightChangeReports"  EnableEventValidation="false"%>
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="FlightChangeReportsNew.aspx.vb" Inherits="CoastalPortal.FlightChangeReportsNew" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="asp" %>
 
@@ -267,7 +267,7 @@
                         <asp:Label ID="lbRegistration" runat="server" Text=""></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
+                <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center" Visible="False" />
                <asp:TemplateField HeaderText ="Accept/Reject">
                     <ItemTemplate>
                         <button name="btnacpt" value='<%# "accept" + " " + Eval("keyid") %>' >Accept</button>&nbsp;&nbsp; 
@@ -306,6 +306,15 @@
                </asp:UpdatePanel>
            <br />
            <br />
+		   <%--<div class="title" runat="server" id="divNotes" style="visibility: visible">Notes
+            <span class="description" style="width: 100%">
+                <div class="form" style="width: 100%">
+                    <asp:Label ID="Label6" runat="server" Text="Enter up to 50 characters: " Font-Size="x-small"></asp:Label>
+                    <asp:TextBox ID="txtNotes" runat="server" Width="500px" Height="24px" MaxLength="50" CssClass="txt" ></asp:TextBox>
+                    <asp:Button ID="bttnUpdate" runat="server" Text="Update" CssClass="button" />
+                </div>
+            </span>
+            </div>--%>
            <asp:UpdatePanel runat="server" ID="NotesPanel" UpdateMode="Conditional">
                <ContentTemplate>
                    <asp:Panel ID="pnlNotes" runat="server">

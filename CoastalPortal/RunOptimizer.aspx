@@ -356,11 +356,11 @@
                         <br />
                         <br />
                         <%--<asp:CheckBox ID="CheckBox1" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />--%>
-                        <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" New Trip Assignments Only" Font-Names="arial" ToolTip="New Trip Assignments Only"  Checked="false" />
+                        <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" Assign Individual Hold Line Trips" Font-Names="arial" ToolTip="Assign Individual Hold Line Tripsy"  Checked="false" />
                         <br />
                         <br />
                         <%--<asp:CheckBox ID="CheckBox1" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />--%>
-                        <asp:CheckBox ID="chkAssigns" runat="server" Text=" Integrate Assignments with Optimizer Run" Font-Names="arial" ToolTip="Integrate Assignments with Optimizer Run"  Checked="false" />
+                        <asp:CheckBox ID="chkAssigns" runat="server" Text=" Integrate Hold Line Trips with Optimizer Run" Font-Names="arial" ToolTip="Integrate Hold Line Trips with Optimizer Run"  Checked="false" />
                         <br />
                         <br />
                         <asp:CheckBox ID="chkFCDRPublish" runat="server" Text=" Publish FCDR" Font-Names="arial" ToolTip="Publish FCDR"  Checked="True" />

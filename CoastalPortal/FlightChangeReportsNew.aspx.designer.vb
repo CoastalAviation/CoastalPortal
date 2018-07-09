@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class FlightChangeReports
+Partial Public Class FlightChangeReportsNew
     
     '''<summary>
     '''Head1 control.

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="FlightChangeReports.aspx.vb" Inherits="CoastalPortal.FlightChangeReports"  EnableEventValidation="false"%>
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="HoldLineTrips.aspx.vb" Inherits="CoastalPortal.HoldLineTrips" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="asp" %>
 
@@ -6,7 +6,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
-    <title> Flight Change Reports</title>
+    <title> Hold Line Trips</title>
     <link rel="shortcut icon" href="Images/cat.ico" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <link href="style.css" rel="stylesheet" type="text/css" />
@@ -49,9 +49,6 @@
     </script>
    </head>
 <body>
-    <style>
-    .hidden {display:none;}
-    </style>
     <form id="form1" runat="server">
         <telerik:RadStyleSheetManager ID="RadStyleSheetManager1" runat="server"></telerik:RadStyleSheetManager>
         <telerik:RadScriptManager ID="ScriptManager1" runat="server" EnableTheming="True">
@@ -203,44 +200,115 @@
 </section>
 	
 <section class="article nopadding">
+    <asp:SqlDataSource ID="SqlDataSource1" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" SelectCommand="SELECT distinct r.ID as modelrun,Description,r.GMTStart FROM OptimizerRequest r join FCDRList l on r.ID = l.modelrun where ParentRequestNumber > 0 and r.GMTStart >= DATEADD(d,-2,r.GMTStart) order by r.id desc"
+        runat="server"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource2" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" SelectCommand="SELECT * FROM FCDRList Where modelrun = @modelrun"
+        runat="server">
+        <SelectParameters>
+            <asp:SessionParameter Name="modelrun" SessionField="modelrun" Type="Int32"></asp:SessionParameter>
+        </SelectParameters>
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource3" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" SelectCommand="SELECT * FROM FCDRListDetail where KeyId = @KeyId"
+        runat="server">
+        <SelectParameters>
+            <asp:SessionParameter Name="KeyId" SessionField="KeyId" Type="Int32"></asp:SessionParameter>
+        </SelectParameters>
+    </asp:SqlDataSource>
 
 	
 	<div class="form__order2"  id="form_1" runat="server" >
-		<div class="title" id="divHeadMain" runat="server">Review Flight Change Reports</div>
-		<span class="description" style="width: 100%">
-            <div class="form" style="width: 100%" runat="server" id="divHeading">
-                <asp:Label ID="Label1" runat="server" Text="Trip number: " Font-Size="x-small"></asp:Label>
-                <asp:TextBox ID="txtTripnumber" runat="server" Width="150px" Height="24px" Enabled="False"></asp:TextBox>
-                <asp:Label ID="Label2" runat="server" Text="Weight class: " Font-Size="x-small"></asp:Label>
-                <asp:TextBox ID="txtWeightclass" runat="server" Width="50px" Height="24px" Enabled="False"></asp:TextBox>
-                <br />
-                <asp:Label ID="Label3" runat="server" Text="origin: " Font-Size="x-small"></asp:Label>
-                <asp:TextBox ID="txtorigin" runat="server" Width="50px" Height="24px" Enabled="False"></asp:TextBox>
-                <asp:Label ID="Label4" runat="server" Text="destination: " Font-Size="x-small"></asp:Label>
-                <asp:TextBox ID="txtdest" runat="server" Width="50px" Height="24px" Enabled="False"></asp:TextBox>
-                <br />
-                <asp:Label ID="Label5" runat="server" Text="departs: " Font-Size="x-small"></asp:Label>
-                <asp:TextBox ID="txtdeparture" runat="server" Width="170px" Height="24px" Enabled="False"></asp:TextBox>
-		            <%--<label id="lblHeader" runat="server" style="width: 100%">
-			            <p class="sub_title" style="width: 100%">Trip number:
-                            <asp:TextBox id="TextBox1" runat="server" CssClass="txt" placeholder="Trip number">Trip number</asp:TextBox>
-                            Weight class requested:
-                            <asp:TextBox id="TextBox2" runat="server" CssClass="txt" placeholder="Weight class">Weight class</asp:TextBox>
-                            origin:
-                            <asp:TextBox id="TextBox3" runat="server" CssClass="txt" placeholder="origin">origin</asp:TextBox>
-                            destination:
-                            <asp:TextBox id="TextBox4" runat="server" CssClass="txt" placeholder="destination">destination</asp:TextBox>
-                            departure date/time:
-                            <asp:TextBox id="TextBox5" runat="server" CssClass="txt" placeholder="departure date/time">departure date/time</asp:TextBox>
-			            </p>
-		            </label>--%>
-            </div>
-		</span>
-
-		<%--<div class="title">  </div>--%>
+		<div class="title">Hold Line Trips</div>
+		<div class="title"> <%--<asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label>--%> </div>
        <div style="align-items:center; justify-content:center;margin-left:10px;">
            <asp:UpdatePanel EnableViewState="false" runat="server" ID="FCSummary">
                <ContentTemplate>
+
+                    <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1"  ShowStatusBar="true"
+                        DataSourceID="SqlDataSource1" runat="server" AutoGenerateColumns="False" PageSize="10"
+                        AllowSorting="True" AllowMultiRowSelection="False" AllowPaging="True" GridLines="None">
+                        <PagerStyle Mode="NumericPages"></PagerStyle>
+                        <MasterTableView EnableHierarchyExpandAll="true" DataSourceID="SqlDataSource1" DataKeyNames="modelrun" AllowMultiColumnSorting="True">
+                            <DetailTables>
+                                <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource2" Width="100%"
+                                    runat="server">
+                                    <ParentTableRelation>
+                                        <telerik:GridRelationFields DetailKeyField="modelrun" MasterKeyField="modelrun"></telerik:GridRelationFields>
+                                    </ParentTableRelation>
+                                    <DetailTables>
+                                        <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource3" Width="100%"
+                                            runat="server">
+                                            <ParentTableRelation>
+                                                <telerik:GridRelationFields DetailKeyField="KeyId" MasterKeyField="KeyId"></telerik:GridRelationFields>
+                                            </ParentTableRelation>
+                                            <Columns>
+                                                <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="Trip Number" HeaderButtonType="TextButton"
+                                                    DataField="TripNumber" UniqueName="TripNumber">
+                                                </telerik:GridBoundColumn>
+                                                <telerik:GridBoundColumn SortExpression="AC" HeaderText="AC" HeaderButtonType="TextButton"
+                                                    DataField="AC" UniqueName="AC">
+                                                </telerik:GridBoundColumn>
+                                                <telerik:GridBoundColumn SortExpression="From_ICAO" HeaderText="From" HeaderButtonType="TextButton"
+                                                    DataField="From_ICAO" UniqueName="From_ICAO">
+                                                </telerik:GridBoundColumn>
+                                            </Columns>
+                                            <SortExpressions>
+                                                <telerik:GridSortExpression FieldName="AC" SortOrder="Descending"></telerik:GridSortExpression>
+                                            </SortExpressions>
+                                        </telerik:GridTableView>
+                                    </DetailTables>
+                                    <Columns>
+                                        <telerik:GridBoundColumn SortExpression="KeyId" HeaderText="KeyId" HeaderButtonType="TextButton"
+                                            DataField="KeyId" UniqueName="KeyId">
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn SortExpression="PriorTailNumber" HeaderText="Tail" HeaderButtonType="TextButton"
+                                            DataField="PriorTailNumber" UniqueName="PriorTailNumber">
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn SortExpression="TotalSavings" HeaderText="Total Savings" HeaderButtonType="TextButton"
+                                            DataField="TotalSavings" UniqueName="TotalSavings">
+                                        </telerik:GridBoundColumn>
+                                    </Columns>
+                                    <SortExpressions>
+                                        <telerik:GridSortExpression FieldName="PriorTailNumber"></telerik:GridSortExpression>
+                                    </SortExpressions>
+                                </telerik:GridTableView>
+                            </DetailTables>
+                            <Columns>
+                                <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="MODEL RUN" HeaderButtonType="TextButton"
+                                    DataField="modelrun" UniqueName="modelrun">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="GMTStart" HeaderText="GMT Start" HeaderButtonType="TextButton"
+                                    DataField="GMTStart" UniqueName="GMTStart" DataFormatString="{0:D}">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="Trip Number" HeaderButtonType="TextButton"
+                                    DataField="TripNumber" UniqueName="TripNumber">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="Weightclass" HeaderText="Weight class" HeaderButtonType="TextButton"
+                                    DataField="Weightclass" UniqueName="Weightclass">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="Description" HeaderText="Description" HeaderButtonType="TextButton"
+                                    DataField="Description" UniqueName="Description">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="DepartureAirport" HeaderText="From" HeaderButtonType="TextButton"
+                                    DataField="DepartureAirport" UniqueName="DepartureAirport">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="ArrivalAirport" HeaderText="To" HeaderButtonType="TextButton"
+                                    DataField="ArrivalAirport" UniqueName="ArrivalAirport">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="Departs" HeaderText="Departs" HeaderButtonType="TextButton"
+                                    DataField="Departs" UniqueName="Departs" DataFormatString="{0:D}">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="CarrierID" HeaderText="CarrierID" HeaderButtonType="TextButton"
+                                    DataField="CarrierID" UniqueName="CarrierID">
+                                </telerik:GridBoundColumn>
+                            </Columns>
+                            <SortExpressions>
+                                <telerik:GridSortExpression FieldName="modelrun"></telerik:GridSortExpression>
+                            </SortExpressions>
+                        </MasterTableView>
+                    </telerik:RadGrid>
                
     <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" 
             HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" AllowPaging="True" PageSize="10" 
@@ -261,12 +329,7 @@
                 <asp:BoundField DataField="savingsday0" HeaderText="SAV D0" SortExpression="SaveNow" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="savingsday1" HeaderText="SAV D1" SortExpression="Save1" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="savingsday2" HeaderText="SAV D2" SortExpression="Save2" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
-                <asp:BoundField DataField="priortailnumber" HeaderText="Start Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
-                <asp:TemplateField HeaderText ="Reg">
-                    <ItemTemplate>
-                        <asp:Label ID="lbRegistration" runat="server" Text=""></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
+                <asp:BoundField DataField="priortailnumber" HeaderText="Starting Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
                <asp:TemplateField HeaderText ="Accept/Reject">
                     <ItemTemplate>
@@ -274,89 +337,14 @@
                         <button name="btnacpt" value='<%# "reject" + " " + Eval("keyid") %>' >Reject</button>
                     </ItemTemplate>
                 </asp:TemplateField>
-                 <asp:BoundField DataField="keyid" HeaderText ="keyid" ItemStyle-CssClass="hidden" HeaderStyle-CssClass="hidden" />
-                  <asp:BoundField DataField="isTrade" HeaderText ="isTrade" />
-                <asp:BoundField DataField="carrierid" HeaderText="carrier id" SortExpression="carrierid" ItemStyle-HorizontalAlign="Center" Visible="True" />
-                <%--<asp:BoundField DataField="ReviewedDate" HeaderText="Date Reviewed" SortExpression="ReviewedDate" ItemStyle-HorizontalAlign="Center"/>
-                <asp:BoundField DataField="ReviewedByInit" HeaderText="By" SortExpression="ReviewedByInit" ItemStyle-HorizontalAlign="Center"/>
-                <asp:BoundField DataField="Notes" HeaderText="Notes" SortExpression="Notes" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="20%" />--%>
-                <asp:TemplateField HeaderText ="Date Reviewed">
-                    <ItemTemplate>
-                        <asp:Label ID="lbReviewedDate" runat="server" Text=""></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText ="By">
-                    <ItemTemplate>
-                        <asp:Label ID="lbReviewedBy" runat="server" Text=""></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText ="Notes" ItemStyle-Width="20%">
-                    <ItemTemplate>
-                        <asp:Label ID="lbNotes" runat="server" Text=""></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText ="Schedule" Visible="False">
-                    <ItemTemplate>
-                        <asp:LinkButton ID="linkSchedule" runat="server" CommandArgument="PDFLink" OnClientClick="linkschedule_click">See Schedule</asp:LinkButton>
-                    </ItemTemplate>
-                </asp:TemplateField>
+                 <asp:BoundField DataField="keyid"  />
+                  <asp:BoundField DataField="isTrade"  />
+                <asp:BoundField DataField="carrierid" HeaderText="carrier id" SortExpression="carrierid" ItemStyle-HorizontalAlign="Center"/>
                 </Columns>
             </asp:GridView>	
                    </ContentTemplate>
                </asp:UpdatePanel>
-           <br />
-           <br />
-           <asp:UpdatePanel runat="server" ID="NotesPanel" UpdateMode="Conditional">
-               <ContentTemplate>
-                   <asp:Panel ID="pnlNotes" runat="server">
-                       <span class="description" style="width: 100%">
-                           <label>
-                               <%--<div class="title">Notes</div>--%>
-                               <div class="form">
-                                   <table>
-                                       <tr>
-                                           <td class="title"><b>NOTES</b></td>
-                                           <td>
-                                                <asp:TextBox ID="txtNotes" runat="server" Width="500px" Height="24px" MaxLength="50" CssClass="txt" 
-                                                    ToolTip="Enter up to 50 characters"></asp:TextBox>
-                                           </td>
-                                           <td>
-                                                <asp:Button ID="bttnUpdate" runat="server" Text="Update" CssClass="button" />
-                                           </td>
-                                       </tr>
-                                   </table>
-                               </div>
-                           </label>
-                       </span>
-                   </asp:Panel>
-               </ContentTemplate>
-           </asp:UpdatePanel>
-           <br />
-           <br />
-           <asp:UpdatePanel runat="server" ID="DetailPanel">
-               <ContentTemplate>
-                   <asp:GridView ID="gvFCDRDetail" runat="server" BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" HeaderStyle-HorizontalAlign="Center"  
-                       AllowPaging="True" PageSize="10" PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRDetail_PageIndexChanging" ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound" 
-                       EmptyDataText="No Revenue trips were added or changed in this Report" Caption="<b>Change Details for Revenue Flights</b>">
-                               <PagerSettings FirstPageText="First Page" LastPageText="Last Page"  />
-                             <PagerStyle Font-Size="Medium" />
-                       <columns>
-                           <asp:BoundField Datafield ="TripNumber" HeaderText="Trip Number" SortExpression="TripNumber" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="DepartDate" HeaderText="Departure Date(GMT)" SortExpression="DepartDate" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="From_ICAO" HeaderText="From" SortExpression="From" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="To_ICAO" HeaderText="To" SortExpression="To" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="AC" HeaderText="Prior Tail" SortExpression="OAC" ItemStyle-HorizontalAlign="Center"/>
-                           <asp:BoundField Datafield ="Modification" HeaderText="New Tail" SortExpression="Result" ItemStyle-HorizontalAlign="Center"/>
-                       </columns>
-                   </asp:GridView>
-                   </ContentTemplate>
-               </asp:UpdatePanel>
            </div>
-        	<%--<div class="form__order2"  id="Div1" runat="server" >
-		        <div class="title">Change Details for Revenue Flights</div>
-                <div style="padding-left:30px">
-		        </div>
-            </div>--%>
 
 </div>		
 </section>

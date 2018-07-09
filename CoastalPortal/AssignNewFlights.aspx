@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="FlightChangeReports.aspx.vb" Inherits="CoastalPortal.FlightChangeReports"  EnableEventValidation="false"%>
+﻿<%@ Page Language="vb" AutoEventWireup="false" CodeBehind="AssignNewFlights.aspx.vb" Inherits="CoastalPortal.AssignNewFlights" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <%@ Register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="asp" %>
 
@@ -6,7 +6,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head id="Head1" runat="server">
-    <title> Flight Change Reports</title>
+    <title> Assign New Flights</title>
     <link rel="shortcut icon" href="Images/cat.ico" />
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <link href="style.css" rel="stylesheet" type="text/css" />
@@ -49,9 +49,6 @@
     </script>
    </head>
 <body>
-    <style>
-    .hidden {display:none;}
-    </style>
     <form id="form1" runat="server">
         <telerik:RadStyleSheetManager ID="RadStyleSheetManager1" runat="server"></telerik:RadStyleSheetManager>
         <telerik:RadScriptManager ID="ScriptManager1" runat="server" EnableTheming="True">
@@ -206,7 +203,7 @@
 
 	
 	<div class="form__order2"  id="form_1" runat="server" >
-		<div class="title" id="divHeadMain" runat="server">Review Flight Change Reports</div>
+		<div class="title">Assign New Flights</div>
 		<span class="description" style="width: 100%">
             <div class="form" style="width: 100%" runat="server" id="divHeading">
                 <asp:Label ID="Label1" runat="server" Text="Trip number: " Font-Size="x-small"></asp:Label>
@@ -237,7 +234,57 @@
             </div>
 		</span>
 
-		<%--<div class="title">  </div>--%>
+		<div class="title"> <%--<asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label>--%> </div>
+		<%--<div class="table">
+			<div class="table__scroll">
+			<div class="table_h">
+				<span class="h">Origin</span>
+				<span class="h">Departs</span>
+				<span class="h">Destination</span>
+				<span class="h">Arrives</span>
+				<span class="h col-small">Flight Duration</span>
+				<span class="h col-small">Price</span>
+			</div>
+
+			<div class="table__item">
+				<ul class="table__list">
+					<li> <asp:Label runat="server" ID="origin_one_1" Text="">  </asp:Label></li>
+					<li> <asp:Label runat="server" ID="origin_two_1" Text="BEVERLY MUNI (BVY)">  </asp:Label></li>
+				</ul>
+			</div>
+			<div class="table__item">
+				<ul class="table__list">
+					<li> <asp:Label runat="server" ID="departs_one_1" Text="">  </asp:Label></li>
+					<li> <asp:Label runat="server" ID="departs_two_1" Text="2/23/16 9:00 AM">  </asp:Label></li>
+				</ul>
+			</div>
+			<div class="table__item">
+				<ul class="table__list">
+					<li> <asp:Label runat="server" ID="destination_one_1" Text="">  </asp:Label></li>
+					<li> <asp:Label runat="server" ID="destination_two_1" Text="WESTCHESTER COUNTY (HPN)">  </asp:Label></li>
+				</ul>
+			</div>
+			<div class="table__item">
+				<ul class="table__list">
+					<li> <asp:Label runat="server" ID="arrives_one_1" Text="">  </asp:Label></li>
+					<li> <asp:Label runat="server" ID="arrives_two_1" Text="2/23/16 9:29 AM">  </asp:Label></li>
+				</ul>
+			</div>
+			<div class="table__item col-small">
+				<ul class="table__list">
+					<li> <asp:Label runat="server" ID="flight_one_1" Text="">  </asp:Label></li>
+					<li> <asp:Label runat="server" ID="flight_two_1" Text="00:29">  </asp:Label></li>
+				</ul>
+			</div>
+			<div class="table__item col-small">
+				<ul class="table__list">
+					<li> <asp:Label runat="server" ID="price_one_1" Text="$5200" >  </asp:Label></li>
+					<li> <asp:Label runat="server" ID="price_two_1" Text="$5200" >  </asp:Label></li>
+				</ul> CssClass="table__tr" HeaderStyle-CssClass="table__h"
+			</div> <div style="align-items:center; justify-content:center;margin-left:10px;"> 
+
+		</div>	
+		</div>--%>
        <div style="align-items:center; justify-content:center;margin-left:10px;">
            <asp:UpdatePanel EnableViewState="false" runat="server" ID="FCSummary">
                <ContentTemplate>
@@ -261,12 +308,7 @@
                 <asp:BoundField DataField="savingsday0" HeaderText="SAV D0" SortExpression="SaveNow" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="savingsday1" HeaderText="SAV D1" SortExpression="Save1" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="savingsday2" HeaderText="SAV D2" SortExpression="Save2" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
-                <asp:BoundField DataField="priortailnumber" HeaderText="Start Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
-                <asp:TemplateField HeaderText ="Reg">
-                    <ItemTemplate>
-                        <asp:Label ID="lbRegistration" runat="server" Text=""></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
+                <asp:BoundField DataField="priortailnumber" HeaderText="Starting Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
                 <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
                <asp:TemplateField HeaderText ="Accept/Reject">
                     <ItemTemplate>
@@ -274,70 +316,20 @@
                         <button name="btnacpt" value='<%# "reject" + " " + Eval("keyid") %>' >Reject</button>
                     </ItemTemplate>
                 </asp:TemplateField>
-                 <asp:BoundField DataField="keyid" HeaderText ="keyid" ItemStyle-CssClass="hidden" HeaderStyle-CssClass="hidden" />
-                  <asp:BoundField DataField="isTrade" HeaderText ="isTrade" />
-                <asp:BoundField DataField="carrierid" HeaderText="carrier id" SortExpression="carrierid" ItemStyle-HorizontalAlign="Center" Visible="True" />
-                <%--<asp:BoundField DataField="ReviewedDate" HeaderText="Date Reviewed" SortExpression="ReviewedDate" ItemStyle-HorizontalAlign="Center"/>
-                <asp:BoundField DataField="ReviewedByInit" HeaderText="By" SortExpression="ReviewedByInit" ItemStyle-HorizontalAlign="Center"/>
-                <asp:BoundField DataField="Notes" HeaderText="Notes" SortExpression="Notes" ItemStyle-HorizontalAlign="Center" ItemStyle-Width="20%" />--%>
-                <asp:TemplateField HeaderText ="Date Reviewed">
-                    <ItemTemplate>
-                        <asp:Label ID="lbReviewedDate" runat="server" Text=""></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText ="By">
-                    <ItemTemplate>
-                        <asp:Label ID="lbReviewedBy" runat="server" Text=""></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText ="Notes" ItemStyle-Width="20%">
-                    <ItemTemplate>
-                        <asp:Label ID="lbNotes" runat="server" Text=""></asp:Label>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:TemplateField HeaderText ="Schedule" Visible="False">
-                    <ItemTemplate>
-                        <asp:LinkButton ID="linkSchedule" runat="server" CommandArgument="PDFLink" OnClientClick="linkschedule_click">See Schedule</asp:LinkButton>
-                    </ItemTemplate>
-                </asp:TemplateField>
+                 <asp:BoundField DataField="keyid"  />
+                  <asp:BoundField DataField="isTrade"  />
+                <asp:BoundField DataField="carrierid" HeaderText="carrier id" SortExpression="carrierid" ItemStyle-HorizontalAlign="Center"/>
                 </Columns>
             </asp:GridView>	
                    </ContentTemplate>
                </asp:UpdatePanel>
            <br />
            <br />
-           <asp:UpdatePanel runat="server" ID="NotesPanel" UpdateMode="Conditional">
-               <ContentTemplate>
-                   <asp:Panel ID="pnlNotes" runat="server">
-                       <span class="description" style="width: 100%">
-                           <label>
-                               <%--<div class="title">Notes</div>--%>
-                               <div class="form">
-                                   <table>
-                                       <tr>
-                                           <td class="title"><b>NOTES</b></td>
-                                           <td>
-                                                <asp:TextBox ID="txtNotes" runat="server" Width="500px" Height="24px" MaxLength="50" CssClass="txt" 
-                                                    ToolTip="Enter up to 50 characters"></asp:TextBox>
-                                           </td>
-                                           <td>
-                                                <asp:Button ID="bttnUpdate" runat="server" Text="Update" CssClass="button" />
-                                           </td>
-                                       </tr>
-                                   </table>
-                               </div>
-                           </label>
-                       </span>
-                   </asp:Panel>
-               </ContentTemplate>
-           </asp:UpdatePanel>
-           <br />
-           <br />
            <asp:UpdatePanel runat="server" ID="DetailPanel">
                <ContentTemplate>
                    <asp:GridView ID="gvFCDRDetail" runat="server" BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" HeaderStyle-HorizontalAlign="Center"  
                        AllowPaging="True" PageSize="10" PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRDetail_PageIndexChanging" ItemType="CoastalPortal.FCDRListDetail" OnDataBound="gvFCDRDetail_DataBound" 
-                       EmptyDataText="No Revenue trips were added or changed in this Report" Caption="<b>Change Details for Revenue Flights</b>">
+                       EmptyDataText="No Revenue trips were added or changed in this Report" Caption="<b>Assignment Details for Revenue Flights</b>">
                                <PagerSettings FirstPageText="First Page" LastPageText="Last Page"  />
                              <PagerStyle Font-Size="Medium" />
                        <columns>

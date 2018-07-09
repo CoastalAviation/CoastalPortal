@@ -40,10 +40,10 @@ Public Class _Default
             '20161227 - pab - default to wheelsup
             'host = "tmcjets"
             'host = "wheelsup"
-            'host = "jetlinx"
+            host = "jetlinx"
             'host = "demoair"
             'host = "xojet"
-            host = "dpj"
+            'host = "dpj"
             'host = "instantjet"
             'host = "jetsmarter"
             'host = "hopajet"

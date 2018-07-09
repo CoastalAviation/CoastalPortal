@@ -416,7 +416,7 @@
                                                     <asp:Label ID="lblCostDay0b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday0", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
                                                 &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 1:">
                                                     <asp:Label ID="lblCostDay1b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday1", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 2:">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 2 +:">
                                                     <asp:Label ID="lblCostDay2b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday2", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
                                             </td>
                                         </tr>
