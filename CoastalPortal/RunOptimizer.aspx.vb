@@ -480,7 +480,12 @@ Public Class RunOptimizer
             rs.Fields("AutoPin").Value = RadSliderAutoPin.Value.ToString
             rs.Fields("TaxiTime").Value = RadSliderTaxiTime1.Value.ToString
             rs.Fields("FastTurnSameTrip").Value = RadSliderFastTurn.Value.ToString
-            rs.Fields("PrepositionFirstFlight").Value = RadSliderPrePosition.Value.ToString
+            '20180803 - pab - fix no min value if slider not visible
+            If RadSliderPrePosition.Value = 0 Then
+                rs.Fields("PrepositionFirstFlight").Value = "1"
+            Else
+                rs.Fields("PrepositionFirstFlight").Value = RadSliderPrePosition.Value.ToString
+            End If
             rs.Fields("CrewWithinX").Value = RadSliderCrewWithinX.Value.ToString
             rs.Fields("email").Value = Me.txtemail.Text 'rk 3/6/2013 add email for notifications
             rs.Fields("RequestDate").Value = Now
@@ -537,7 +542,8 @@ Public Class RunOptimizer
             End If
 
             '20180517 - pab - add Datamine
-            If chkDatamine.Checked = True Then
+            '20180727 - pab - do not datamine if integration checked per David
+            If chkDatamine.Checked = True And chkAssigns.Checked = False Then
                 rs.Fields("Datamine").Value = 1
             Else
                 rs.Fields("Datamine").Value = 0

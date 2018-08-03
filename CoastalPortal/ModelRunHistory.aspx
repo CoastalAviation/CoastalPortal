@@ -165,6 +165,7 @@
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
+					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 				</ul>
 			</div>
 			
@@ -186,6 +187,7 @@
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
 					<%--<li><a href="#">Model Run History</a></li>--%>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
+					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 					<li><a href="FlightSchedule.aspx?r0=0">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>
@@ -209,19 +211,29 @@
             <asp:Button CssClass="button" Text="Display Current FOS Schedule" runat="server" ToolTip="Display Current FOS Schedule" ID="bttnR0" />
             <br />
             <br />
-            <asp:Label ID="lblMsg" runat="server" ForeColor="Red"></asp:Label>
+            <asp:Label ID="lblMsg" runat="server" ForeColor="Red" Height="16px"></asp:Label>
 		</div>
 	
         <div class="table grid">
             <asp:GridView ID="GridView2" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
-                AutoGenerateColumns="False" DataKeyNames="ID"  CssClass="table__tr">
+                AutoGenerateColumns="False" DataKeyNames="ID"  CssClass="table__tr" CellPadding="5">
                 <Columns>
-                    <asp:BoundField DataField="ID" HeaderText="ID" InsertVisible="False" ReadOnly="True" SortExpression="ID" />
+                    <asp:BoundField DataField="ID" HeaderText="model" InsertVisible="False" ReadOnly="True" SortExpression="ID" ItemStyle-Width="7%" />
                     <asp:BoundField DataField="CarrierID" HeaderText="CarrierID" SortExpression="CarrierID" Visible="False" />
                     <asp:BoundField DataField="Description" HeaderText="Description" SortExpression="Description" />
-                    <asp:BoundField DataField="GMTStart" HeaderText="GMT Start" SortExpression="GMTStart" />
-                    <asp:BoundField DataField="GMTEnd" HeaderText="GMT End" SortExpression="GMTEnd" />
+                    <asp:BoundField DataField="GMTStart" HeaderText="GMT Start" SortExpression="GMTStart" DataFormatString="{0:g}" />
+                    <asp:BoundField DataField="GMTEnd" HeaderText="GMT End" SortExpression="GMTEnd" DataFormatString="{0:g}" />
+                    <asp:BoundField DataField="RequestDate" HeaderText="Date Requested" SortExpression="RequestDate" DataFormatString="{0:g}" />
                     <asp:BoundField DataField="DeclaredComplete" HeaderText="Declared Complete" SortExpression="DeclaredComplete" />
+                    <asp:BoundField DataField="runtype" HeaderText="run type" SortExpression="runtype" />
+                    <%--<asp:BoundField DataField="checkallowupgrades" HeaderText="allow upgrades" SortExpression="checkallowupgrades" />--%>
+                    <asp:BoundField DataField="DemandFlights" HeaderText="hold line" SortExpression="DemandFlights" />
+                    <asp:BoundField DataField="UseAssigns" HeaderText="Integrate Hold Line" SortExpression="UseAssigns" />
+                    <%--<asp:BoundField DataField="PublishFCDR" HeaderText="Publish FCDR" SortExpression="PublishFCDR" />--%>
+                    <%--<asp:BoundField DataField="PinManaged" HeaderText="Pin Managed" SortExpression="PinManaged" />--%>
+                    <asp:BoundField DataField="MinutesBetweenFlights" HeaderText="Gound Time" SortExpression="MinutesBetweenFlights" />
+                    <asp:BoundField DataField="CrewDutyHours" HeaderText="Duty Hours" SortExpression="CrewDutyHours" />
+                    <%--<asp:BoundField DataField="CrewDutyDay" HeaderText="Duty Day" SortExpression="CrewDutyDay" DataFormatString="{0:f1}" />--%>
                     <asp:ButtonField CommandName="Base" Text="Base Model" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>
                     <asp:ButtonField CommandName="Best" Text="Display Full Schedule" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>
                     <asp:ButtonField CommandName="Eff" Text="Best Eff" Visible="False"><ItemStyle ForeColor="Blue" /></asp:ButtonField>

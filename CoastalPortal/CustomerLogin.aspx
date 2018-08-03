@@ -46,9 +46,10 @@
 			<div class="menu__right">
 				<ul>
 					<li><a href="#">Review Flight Change Reports</a></li>
-					<li><a href="#">Flight Schedule </a></li>
+					<li><a href="#">Flight Schedule</a></li>
 					<li><a href="##registration__form">New User</a></li>
 					<%--<li><a href="#">Operations Dashboard</a></li>--%>
+					<li><a href="#">Review Hold Line Trips</a></li>
 				</ul>
 			</div>
 			
@@ -69,7 +70,8 @@
 					<%--<li><a href="#">AOG Recovery</a></li>--%>
 					<li><a href="#">Model Run History</a></li>
 					<li><a href="#">Review Flight Change Reports</a></li>
-					<li><a href="#">Flight Schedule </a></li>
+					<li><a href="#">Review Hold Line Trips</a></li>
+					<li><a href="#">Flight Schedule</a></li>
 					<li><a href="##registration__form">New User</a></li>
 					<%--<li><a href="#">Operations Dashboard</a></li>--%>
 				</ul>

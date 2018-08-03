@@ -161,6 +161,7 @@
 			<div class="menu__right">
 				<ul>
 					<li><a href="#">Review Flight Change Reports</a></li>
+					<li><a href="#">Review Hold Line Trips</a></li>
 					<li><a href="#">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
@@ -186,6 +187,7 @@
 					<li><a href="#">Model Run History</a></li>
 					<%--<li><a href="#">Model Run History</a></li>--%>
 					<li><a href="#">Review Flight Change Reports</a></li>
+					<li><a href="#">Review Hold Line Trips</a></li>
 					<li><a href="#">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>

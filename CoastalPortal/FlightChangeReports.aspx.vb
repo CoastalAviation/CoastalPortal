@@ -1,6 +1,7 @@
 ﻿Imports CoastalPortal.AirTaxi
 Imports Telerik.Web.UI
 Imports CoastalPortal.Models
+
 Public Class FlightChangeReports
     Inherits System.Web.UI.Page
 
@@ -14,9 +15,16 @@ Public Class FlightChangeReports
     Public Const F_SV1 = 7
     Public Const F_SV2 = 8
     Public Const F_PT = 9
-    Public Const F_ACC = 10
-    Public Const F_KEY2 = 12
-    Public Const F_TRADE = 13
+    Public Const F_REG = 10
+    Public Const F_ACCS = 11
+    Public Const F_ACC = 12     'button column
+    Public Const F_KEY2 = 13
+    Public Const F_TRADE = 14
+    Public Const F_CARRIER = 15
+    Public Const F_RDATE = 16
+    Public Const F_RBY = 17
+    Public Const F_NOTES = 18
+
     Public Const FD_TRIP = 0
     Public Const FD_FROM = 1
     Public Const FD_TO = 2
@@ -90,6 +98,13 @@ Public Class FlightChangeReports
                 '20180410 - pab - add headings - Trip number, Weight class requested, origin, dest and departure date/time
                 divHeading.Visible = False
 
+                '20180624 - pab - add tracking fields to fcdr
+                'divNotes.Visible = False
+                'divNotes.Style.Remove("visibility")
+                'divNotes.Style.Add("visibility", "collapse")      'collapse hidden
+                pnlNotes.Visible = False
+                NotesPanel.Update()
+
                 '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs per David - 10 fcdrs should be sufficient
                 'If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
                 If DynamicCost IsNot Nothing Then
@@ -112,6 +127,17 @@ Public Class FlightChangeReports
             Else
                 If btnSelect IsNot Nothing Then
                     getDetail(btnSelect)
+
+                    '20180624 - pab - add tracking fields to fcdr
+                    'divNotes.Visible = True
+                    'divNotes.Style.Remove("visibility")
+                    'divNotes.Style.Add("visibility", "visible")
+                    '20180712 - pab - do not show notes for dc
+                    If divHeading.Visible = False Then
+                        pnlNotes.Visible = True
+                        NotesPanel.Update()
+                    End If
+
                 End If
                 If btnresult IsNot Nothing Then
                     Dim i = InStr(btnresult, " ")
@@ -219,8 +245,9 @@ Public Class FlightChangeReports
         If getKey.Contains("DynamicCosting") Then
             ModelRun = Mid(getKey, InStr(getKey, "-") + 1)
             '20180427 - pab - do not show if total saving > 0 per david
+            '20180621 - pab - show if total davings <= 1500 per Richard
             'fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.TotalSavings).ToList()
-            fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA" And c.TotalSavings <= 0).OrderByDescending(Function(c) c.TotalSavings).ToList()
+            fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA" And c.TotalSavings <= 1500).OrderByDescending(Function(c) c.TotalSavings).ToList()
             '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs
             'getKey = Nothing
         Else
@@ -230,7 +257,7 @@ Public Class FlightChangeReports
             Do While i <> fcdrlist.Count
                 Dim checkme = fcdrlist(i - 1)
                 If (fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings) Or
-                (fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).DeltaNonRevMiles = checkme.DeltaNonRevMiles And fcdrlist(i).TotalSavings = checkme.TotalSavings) Then
+                        (fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).DeltaNonRevMiles = checkme.DeltaNonRevMiles And fcdrlist(i).TotalSavings = checkme.TotalSavings) Then
                     fcdrlist.Remove(fcdrlist(i))
                     i -= 1
                 End If
@@ -265,39 +292,146 @@ Public Class FlightChangeReports
             Loop
         End If
 
+        '20180712 - pab - if first row is placement it's not being removed
+        If fcdrlist.Count > 0 Then
+            i = 0
+            dt = da.GetFOSOptimizerRequestByID(fcdrlist(i).CarrierID, fcdrlist(i).ModelRun)
+            If Not isdtnullorempty(dt) Then
+                If InStr(dt.Rows(0).Item("Description").ToString.ToLower, "placement request") > 0 Then
+                    fcdrlist.Remove(fcdrlist(i))
+                End If
+            End If
+        End If
+
         gvFCDRList.DataSource = fcdrlist
         gvFCDRList.DataBind()
         Colorme(getKey)
     End Sub
     Public Sub Colorme(ByRef GetKey As String)
         Dim i As Integer = 0
+        Dim da As New DataAccess
 
-        For i = 0 To gvFCDRList.Rows.Count - 1
-            gvFCDRList.Rows(i).Cells(F_KEY).ForeColor = Drawing.Color.Blue
-            If gvFCDRList.Rows(i).Cells(F_KEY2).Text = GetKey And GetKey <> "" Then
-                gvFCDRList.Rows(i).BackColor = Drawing.Color.Aqua
-            Else
-                gvFCDRList.Rows(i).Cells(F_KEY).BackColor = Drawing.Color.Wheat
-            End If
-            If gvFCDRList.Rows(i).Cells(F_TRADE).Text = "True" Then gvFCDRList.Rows(i).BackColor = Drawing.Color.Green
-            If gvFCDRList.Rows(i).Cells(F_NRM).Text < 0 Then gvFCDRList.Rows(i).Cells(F_NRM).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-            If gvFCDRList.Rows(i).Cells(F_SV0).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV0).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-            If gvFCDRList.Rows(i).Cells(F_SV1).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV1).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-            If gvFCDRList.Rows(i).Cells(F_SV2).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV2).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-            If gvFCDRList.Rows(i).Cells(F_TOT).Text < 0 Then gvFCDRList.Rows(i).Cells(F_TOT).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-            'If gvFCDRList.Rows(i).Cells(F_ACC + 1).Text <> "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
-            'If gvFCDRList.Rows(i).Cells(F_ACC).Text = "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
-
-            For ii = 2 To gvFCDRList.Columns.Count - 1
-                If ii <> F_ACC + 1 Then
-                    gvFCDRList.Rows(i).Cells(ii).Text = Trim(gvFCDRList.Rows(i).Cells(ii).Text)
+        Try
+            For i = 0 To gvFCDRList.Rows.Count - 1
+                gvFCDRList.Rows(i).Cells(F_KEY).ForeColor = Drawing.Color.Blue
+                If gvFCDRList.Rows(i).Cells(F_KEY2).Text = GetKey And GetKey <> "" Then
+                    gvFCDRList.Rows(i).BackColor = Drawing.Color.Aqua
+                Else
+                    gvFCDRList.Rows(i).Cells(F_KEY).BackColor = Drawing.Color.Wheat
                 End If
+                If gvFCDRList.Rows(i).Cells(F_TRADE).Text = "True" Then gvFCDRList.Rows(i).BackColor = Drawing.Color.Green
+                If IsNumeric(gvFCDRList.Rows(i).Cells(F_NRM).Text) Then
+                    If gvFCDRList.Rows(i).Cells(F_NRM).Text < 0 Then gvFCDRList.Rows(i).Cells(F_NRM).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+                End If
+                If IsNumeric(gvFCDRList.Rows(i).Cells(F_SV0).Text) Then
+                    If gvFCDRList.Rows(i).Cells(F_SV0).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV0).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+                End If
+                If IsNumeric(gvFCDRList.Rows(i).Cells(F_SV1).Text) Then
+                    If gvFCDRList.Rows(i).Cells(F_SV1).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV1).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+                End If
+                If IsNumeric(gvFCDRList.Rows(i).Cells(F_SV2).Text) Then
+                    If gvFCDRList.Rows(i).Cells(F_SV2).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV2).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+                End If
+                If IsNumeric(gvFCDRList.Rows(i).Cells(F_TOT).Text) Then
+                    If gvFCDRList.Rows(i).Cells(F_TOT).Text < 0 Then gvFCDRList.Rows(i).Cells(F_TOT).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
+                End If
+                'If gvFCDRList.Rows(i).Cells(F_ACC + 1).Text <> "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
+                'If gvFCDRList.Rows(i).Cells(F_ACC).Text = "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
+
+                '20180624 - pab - add tracking fields to fcdr
+                Dim dt, dta As DataTable
+                'If IsNumeric(gvFCDRList.Rows(i).Cells(F_KEY2).Text) Then
+                '    If CInt(gvFCDRList.Rows(i).Cells(F_KEY2).Text) = 1569032222 Or CInt(gvFCDRList.Rows(i).Cells(F_KEY2).Text) = 1569032876 Then
+                '        Dim s As String
+                '        s = ""
+                '    End If
+                'End If
+                ''48964
+                If gvFCDRList.Rows(i).Cells(F_RUN).Text.Trim = "48964" And gvFCDRList.Rows(i).Cells(F_NRM).Text.Trim = "580" Then
+                    Dim s As String
+                    s = ""
+                End If
+                If IsNumeric(gvFCDRList.Rows(i).Cells(F_KEY2).Text) Then
+                    dt = da.GetFCDRListByKeyID(CInt(Session("carrierid")), CInt(gvFCDRList.Rows(i).Cells(F_KEY2).Text))
+                End If
+                dta = da.GetAircraftByFOSAircraftID(CInt(Session("carrierid")), gvFCDRList.Rows(i).Cells(F_PT).Text)
+
+                For ii = 2 To gvFCDRList.Columns.Count - 1
+                    If ii <> F_ACC Then     'skip button column
+                        gvFCDRList.Rows(i).Cells(ii).Text = Trim(gvFCDRList.Rows(i).Cells(ii).Text)
+                    End If
+                Next
+
+                '20180624 - pab - add tracking fields to fcdr
+                If Not isdtnullorempty(dt) Then
+                    gvFCDRList.Rows(i).Cells(F_RDATE).Text = dt.Rows(0).Item("ReviewedDate").ToString.Trim
+                    gvFCDRList.Rows(i).Cells(F_RBY).Text = dt.Rows(0).Item("ReviewedByInit").ToString.Trim
+                    gvFCDRList.Rows(i).Cells(F_NOTES).Text = dt.Rows(0).Item("Notes").ToString.Trim
+                End If
+                If Not isdtnullorempty(dta) Then
+                    gvFCDRList.Rows(i).Cells(F_REG).Text = dta.Rows(0).Item("registration").ToString.Trim
+                End If
+
+                'If Not isdtnullorempty(dt) Then
+                '    'gvFCDRList.Rows(i).Cells(F_RBY).Text = ""
+                '    'If Not IsDBNull(dt.Rows(0).Item("ReviewedBy")) Then
+                '    '    If dt.Rows(0).Item("ReviewedBy") > 0 Then
+                '    '        dtu = da.GetMemberByUserID(CInt(Session("carrierid")), dt.Rows(0).Item("ReviewedBy"))
+                '    '        If Not isdtnullorempty(dtu) Then
+                '    '            If Len(dtu.Rows(0).Item("FirstName").ToString.Trim) > 0 Then
+                '    '                gvFCDRList.Rows(i).Cells(F_RBY).Text = Left(dtu.Rows(0).Item("FirstName").ToString.Trim, 1)
+                '    '            End If
+                '    '            If Len(dtu.Rows(0).Item("MiddleName").ToString.Trim) > 0 Then
+                '    '                gvFCDRList.Rows(i).Cells(F_RBY).Text &= Left(dtu.Rows(0).Item("MiddleName").ToString.Trim, 1)
+                '    '            End If
+                '    '            If Len(dtu.Rows(0).Item("LastName").ToString.Trim) > 0 Then
+                '    '                gvFCDRList.Rows(i).Cells(F_RBY).Text &= Left(dtu.Rows(0).Item("LastName").ToString.Trim, 1)
+                '    '            End If
+                '    '        End If
+                '    '    End If
+                '    'End If
+                '    gvFCDRList.Rows(i).Cells(F_RDATE).Text = dt.Rows(0).Item("ReviewedDate").ToString.Trim
+                '    gvFCDRList.Rows(i).Cells(F_RBY).Text = dt.Rows(0).Item("ReviewedByInit").ToString.Trim
+                '    gvFCDRList.Rows(i).Cells(F_NOTES).Text = dt.Rows(0).Item("Notes").ToString.Trim
+                'End If
+
             Next
-        Next
-        gvFCDRList.Columns(F_ACC).Visible = False
-        gvFCDRList.Columns(F_KEY2).Visible = False
-        gvFCDRList.Columns(F_MDL).Visible = False
-        gvFCDRList.Columns(F_TRADE).Visible = False
+
+            gvFCDRList.Columns(F_ACCS).Visible = False
+            '20180706 - pab - do not set keyid column to visible = false - it will not render a value - use cssclass in markup
+            'gvFCDRList.Columns(F_KEY2).Visible = False
+            gvFCDRList.Columns(F_MDL).Visible = False
+            gvFCDRList.Columns(F_TRADE).Visible = False
+
+            '20180624 - pab - add tracking fields to fcdr
+            If Not IsNothing(Session("username")) Then
+                If InStr(Session("username").ToString.ToLower, "coastalav") = 0 Then
+                    'gvFCDRList.Columns(F_RUN).Visible = False
+                    '20180712 - pab - hide savings0-2 for dc only
+                    If divHeading.Visible = True Then
+                        gvFCDRList.Columns(F_SV0).Visible = False
+                        gvFCDRList.Columns(F_SV1).Visible = False
+                        gvFCDRList.Columns(F_SV2).Visible = False
+                    End If
+                    gvFCDRList.Columns(F_ACC).Visible = False
+                    gvFCDRList.Columns(F_CARRIER).Visible = False
+                End If
+            End If
+
+            '20180712 - pab - hide review fields for dc only - all users
+            If divHeading.Visible = True Then
+                gvFCDRList.Columns(F_RDATE).Visible = False
+                gvFCDRList.Columns(F_RBY).Visible = False
+                gvFCDRList.Columns(F_NOTES).Visible = False
+            End If
+
+            '20180624 - pab - add tracking fields to fcdr
+            'gvFCDRList.Columns(F_CARRIER).Visible = False
+
+        Catch ex As Exception
+            Dim s As String = ex.Message
+        End Try
+
     End Sub
     Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
 
@@ -422,11 +556,19 @@ Public Class FlightChangeReports
             If row.Cells(F_KEY).Text = getKey Then
                 row.BackColor = Drawing.Color.Azure
             End If
+
+            '20180624 - pab - add tracking fields to fcdr
+            If row.Cells(F_NOTES).Text <> "" Then
+                txtNotes.Text = row.Cells(F_NOTES).Text.Trim
+            End If
+
         Next
+
         detailitems = odb.FCDRListDetail.Where(Function(c) Trim(c.KeyID) = Trim(getKey)).ToList()
         gvFCDRDetail.DataSource = detailitems
         gvFCDRDetail.DataBind()
         'If detailitems.Count > 0 Then gvFCDRDetail.Visible = True
+
     End Sub
 
     Protected Sub gvFCDRDetail_DataBound(sender As Object, e As EventArgs)
@@ -467,6 +609,35 @@ Public Class FlightChangeReports
             'Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx','_blank');</script>")
             Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".avaisearch.com/CustomerLogin.aspx','_blank');</script>")
         End If
+
+    End Sub
+
+    '20180624 - pab - add tracking fields to fcdr
+    Protected Sub bttnUpdate_Click(sender As Object, e As EventArgs) Handles bttnUpdate.Click
+
+        Dim CarrierID As Integer = CInt(Session("carrierid"))
+        Dim da As New DataAccess
+
+        Try
+            da.UpdateFCDRListReview(CInt(Session("GetKey")), CInt(Session("userid")), txtNotes.Text.Trim, Session("Initials").ToString.Trim)
+            txtNotes.Text = ""
+            'pnlNotes.Visible = False
+            'NotesPanel.Update()
+
+            'Session("getkey") = ""
+            'getDetail(Session("getkey").ToString)
+
+            GetTrips("")
+
+        Catch ex As Exception
+            Dim s As String = ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " FlightChangeReports.aspx.vb bttnUpdate_Click Error", s, CarrierID)
+            Insertsys_log(CarrierID, appName, s, "bttnUpdate_Click", "FlightChangeReports.aspx.vb")
+
+        End Try
 
     End Sub
 

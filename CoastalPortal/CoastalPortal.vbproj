@@ -176,7 +176,6 @@
       <HintPath>..\packages\Microsoft.AspNet.FriendlyUrls.Core.1.0.2\lib\net45\Microsoft.AspNet.FriendlyUrls.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Telerik.Web.Design, Version=2017.2.711.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Web.Device.Detection, Version=2017.2.711.45, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\RCAJAX\2017.2.711.45\Telerik.Web.Device.Detection.dll</HintPath>
@@ -192,18 +191,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\lib\RCAJAX\2017.2.711.45\Telerik.Web.UI.Skins.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Windows.Controls">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Telerik\UI for Silverlight R2 2017\Binaries.NoXaml\Silverlight\Telerik.Windows.Controls.dll</HintPath>
-    </Reference>
-    <Reference Include="Telerik.Windows.Controls.FixedDocumentViewers">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\Telerik\UI for Silverlight R2 2017\Binaries.NoXaml\Silverlight\Telerik.Windows.Controls.FixedDocumentViewers.dll</HintPath>
-    </Reference>
     <Reference Include="Telerik.Windows.Documents.Core, Version=2017.2.607.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Documents.Fixed, Version=2017.2.607.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Telerik\UI for Silverlight R2 2017\Binaries.NoXaml\Silverlight\Telerik.Windows.Documents.Fixed.dll</HintPath>
     </Reference>
-    <Reference Include="Telerik.Windows.Documents.Flow, Version=2017.2.607.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Documents.Spreadsheet, Version=2017.2.607.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Documents.Spreadsheet.FormatProviders.OpenXml, Version=2017.2.607.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
     <Reference Include="Telerik.Windows.Zip, Version=2017.2.607.40, Culture=neutral, PublicKeyToken=5803cfa389c90ce7, processorArchitecture=MSIL" />
@@ -239,7 +231,6 @@
     <Content Include="About.aspx" />
     <Content Include="AOGRecovery.aspx" />
     <Content Include="AssignNewFlights.aspx" />
-    <Content Include="Assign.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -260,7 +251,6 @@
     <Content Include="favicon.ico" />
     <Content Include="FlightChangeDetail.aspx" />
     <Content Include="FlightChangeReports.aspx" />
-    <Content Include="FlightChangeReportsNew.aspx" />
     <Content Include="FlightSchedule.aspx" />
     <Content Include="fonts\fontawesome-webfont.sql" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -463,13 +453,6 @@
       <DependentUpon>AssignNewFlights.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
-    <Compile Include="Assign.aspx.designer.vb">
-      <DependentUpon>Assign.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Assign.aspx.vb">
-      <DependentUpon>Assign.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
     <Compile Include="ConnectionStringHelper.vb" />
     <Compile Include="Contact.aspx.designer.vb">
       <DependentUpon>Contact.aspx</DependentUpon>
@@ -561,13 +544,6 @@
     </Compile>
     <Compile Include="FlightChangeReports.aspx.vb">
       <DependentUpon>FlightChangeReports.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="FlightChangeReportsNew.aspx.designer.vb">
-      <DependentUpon>FlightChangeReportsNew.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="FlightChangeReportsNew.aspx.vb">
-      <DependentUpon>FlightChangeReportsNew.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="FlightSchedule.aspx.designer.vb">
@@ -759,6 +735,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Contracts\" />
     <Folder Include="FCDRpages\" />
   </ItemGroup>
   <ItemGroup>

@@ -32,6 +32,15 @@ Partial Public Class HoldLineTrips
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
     
     '''<summary>
+    '''RadSkinManager1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadSkinManager1 As Global.Telerik.Web.UI.RadSkinManager
+    
+    '''<summary>
     '''RadStyleSheetManager1 control.
     '''</summary>
     '''<remarks>
@@ -104,6 +113,24 @@ Partial Public Class HoldLineTrips
     Protected WithEvents LinkLogOut2 As Global.System.Web.UI.WebControls.LinkButton
     
     '''<summary>
+    '''form_1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+    
+    '''<summary>
+    '''RadGrid1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadGrid1 As Global.Telerik.Web.UI.RadGrid
+    
+    '''<summary>
     '''SqlDataSource1 control.
     '''</summary>
     '''<remarks>
@@ -131,38 +158,47 @@ Partial Public Class HoldLineTrips
     Protected WithEvents SqlDataSource3 As Global.System.Web.UI.WebControls.SqlDataSource
     
     '''<summary>
-    '''form_1 control.
+    '''RadGrid2 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents form_1 As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+    Protected WithEvents RadGrid2 As Global.Telerik.Web.UI.RadGrid
     
     '''<summary>
-    '''FCSummary control.
+    '''SqlDataSource4 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents FCSummary As Global.System.Web.UI.UpdatePanel
+    Protected WithEvents SqlDataSource4 As Global.System.Web.UI.WebControls.SqlDataSource
     
     '''<summary>
-    '''RadGrid1 control.
+    '''SqlDataSource5 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RadGrid1 As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents SqlDataSource5 As Global.System.Web.UI.WebControls.SqlDataSource
     
     '''<summary>
-    '''gvFCDRList control.
+    '''SqlDataSource6 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents gvFCDRList As Global.System.Web.UI.WebControls.GridView
+    Protected WithEvents SqlDataSource6 As Global.System.Web.UI.WebControls.SqlDataSource
+    
+    '''<summary>
+    '''SqlDataSource7 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents SqlDataSource7 As Global.System.Web.UI.WebControls.SqlDataSource
 End Class

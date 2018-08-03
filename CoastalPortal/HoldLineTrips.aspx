@@ -50,6 +50,7 @@
    </head>
 <body>
     <form id="form1" runat="server">
+        <telerik:RadSkinManager ID="RadSkinManager1" runat="server" ShowChooser="False" Skin="Outlook" />
         <telerik:RadStyleSheetManager ID="RadStyleSheetManager1" runat="server"></telerik:RadStyleSheetManager>
         <telerik:RadScriptManager ID="ScriptManager1" runat="server" EnableTheming="True">
             <Scripts>
@@ -165,6 +166,7 @@
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
+					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 				</ul>
 			</div>
 			
@@ -186,6 +188,7 @@
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
 					<%--<li><a href="#">Model Run History</a></li>--%>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
+					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 					<li><a href="FlightSchedule.aspx?r0=0">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>
@@ -200,151 +203,344 @@
 </section>
 	
 <section class="article nopadding">
-    <asp:SqlDataSource ID="SqlDataSource1" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
-        ProviderName="System.Data.SqlClient" SelectCommand="SELECT distinct r.ID as modelrun,Description,r.GMTStart FROM OptimizerRequest r join FCDRList l on r.ID = l.modelrun where ParentRequestNumber > 0 and r.GMTStart >= DATEADD(d,-2,r.GMTStart) order by r.id desc"
-        runat="server"></asp:SqlDataSource>
-    <asp:SqlDataSource ID="SqlDataSource2" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
-        ProviderName="System.Data.SqlClient" SelectCommand="SELECT * FROM FCDRList Where modelrun = @modelrun"
-        runat="server">
+	<div class="form__order2"  id="form_1" runat="server" >
+		<div class="title">Hold Line Trips</div>
+		<div class="title"> <%--<asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label>--%> </div>
+       <div style="align-items:center; justify-content:center;margin-left:10px;">
+           <%--<asp:UpdatePanel EnableViewState="false" runat="server" ID="FCSummary">
+               <ContentTemplate>
+                </ContentTemplate>
+            </asp:UpdatePanel>--%>
+            <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1"  ShowStatusBar="true"
+                DataSourceID="SqlDataSource1" runat="server" AutoGenerateColumns="False" PageSize="10"
+                AllowSorting="True" AllowMultiRowSelection="False" AllowPaging="True" GridLines="None" Font-Size="Medium" Visible="False">
+                <PagerStyle Mode="NumericPages"></PagerStyle>
+                <MasterTableView EnableHierarchyExpandAll="true" DataSourceID="SqlDataSource1" DataKeyNames="modelrun" AllowMultiColumnSorting="True" Name="Parent">
+                    <DetailTables>
+                        <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource2" Width="100%"
+                            runat="server" Name="Child1">
+                            <ParentTableRelation>
+                                <telerik:GridRelationFields DetailKeyField="modelrun" MasterKeyField="modelrun"></telerik:GridRelationFields>
+                            </ParentTableRelation>
+                            <DetailTables>
+                                <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource3" Width="100%"
+                                    runat="server" NoDetailRecordsText="No FCDRs to display." NoMasterRecordsText="No Hold Line Trips to display." Name="Child2">
+                                    <ParentTableRelation>
+                                        <telerik:GridRelationFields DetailKeyField="KeyId" MasterKeyField="KeyId"></telerik:GridRelationFields>
+                                    </ParentTableRelation>
+                                    <Columns>
+                                        <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="<b>TRIP NUMBER</b>" HeaderButtonType="TextButton"
+                                            DataField="TripNumber" UniqueName="TripNumber">
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn SortExpression="DepartDate" HeaderText="<b>DEPARTURE DATE (GMT)</b>" HeaderButtonType="TextButton"
+                                            DataField="DepartDate" UniqueName="DepartDate" DataFormatString="{0:g}">
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn SortExpression="From_ICAO" HeaderText="<b>ORIGIN</b>" HeaderButtonType="TextButton"
+                                            DataField="From_ICAO" UniqueName="From_ICAO">
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn SortExpression="To_ICAO" HeaderText="<b>DESTINATION</b>" HeaderButtonType="TextButton"
+                                            DataField="To_ICAO" UniqueName="To_ICAO">
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn SortExpression="AC" HeaderText="<b>PRIOR TAIL</b>" HeaderButtonType="TextButton"
+                                            DataField="AC" UniqueName="AC">
+                                        </telerik:GridBoundColumn>
+                                        <telerik:GridBoundColumn SortExpression="Modification" HeaderText="<b>NEW TAIL</b>" HeaderButtonType="TextButton"
+                                            DataField="Modification" UniqueName="Modification">
+                                        </telerik:GridBoundColumn>
+                                    </Columns>
+                                    <SortExpressions>
+                                        <telerik:GridSortExpression FieldName="DepartDate" SortOrder="Ascending"></telerik:GridSortExpression>
+                                    </SortExpressions>
+                                </telerik:GridTableView>
+                            </DetailTables>
+                            <Columns>
+                                <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="<b>MODEL RUN</b>" HeaderButtonType="TextButton"
+                                    DataField="modelrun" UniqueName="modelrun">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="DeltaNonRevMiles" HeaderText="<b>DELTA NRM</b>" HeaderButtonType="TextButton"
+                                    DataField="DeltaNonRevMiles" UniqueName="DeltaNonRevMiles">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="TotalSavings" HeaderText="<b>TOTAL SAVINGS</b>" HeaderButtonType="TextButton"
+                                    DataField="TotalSavings" UniqueName="TotalSavings" DataFormatString="{0:c0}">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="SavingsDay0" HeaderText="<b>SAVINGS D0</b>" HeaderButtonType="TextButton"
+                                    DataField="SavingsDay0" UniqueName="SavingsDay0" DataFormatString="{0:c0}">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="SavingsDay1" HeaderText="<b>SAVINGS D1</b>" HeaderButtonType="TextButton"
+                                    DataField="SavingsDay1" UniqueName="SavingsDay1" DataFormatString="{0:c0}">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="SavingsDay2" HeaderText="<b>SAVINGS D2</b>" HeaderButtonType="TextButton"
+                                    DataField="SavingsDay2" UniqueName="SavingsDay2" DataFormatString="{0:c0}">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="PriorTailNumber" HeaderText="<b>STARTING TAIL</b>" HeaderButtonType="TextButton"
+                                    DataField="PriorTailNumber" UniqueName="PriorTailNumber">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="Registration" HeaderText="<b>REGISTRATION</b>" HeaderButtonType="TextButton"
+                                    DataField="Registration" UniqueName="Registration">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="CarrierID" HeaderText="<b>CARRIER ID</b>" HeaderButtonType="TextButton"
+                                    DataField="CarrierID" UniqueName="CarrierID">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridHyperLinkColumn Text="See Schedule" HeaderText="<b>Schedule</b>" 
+                                    Target="_blank" DataNavigateUrlFields="PDFLink" ItemStyle-ForeColor="#0066FF">
+                                </telerik:GridHyperLinkColumn>
+                                <telerik:GridBoundColumn SortExpression="ReviewedDate" HeaderText="<b>DATE REVIEWED</b>" HeaderButtonType="TextButton"
+                                    DataField="ReviewedDate" UniqueName="ReviewedDate" Visible="False">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="ReviewedByInit" HeaderText="<b>BY</b>" HeaderButtonType="TextButton"
+                                    DataField="ReviewedByInit" UniqueName="ReviewedByInit" Visible="False">
+                                </telerik:GridBoundColumn>
+                                <telerik:GridBoundColumn SortExpression="Notes" HeaderText="<b>NOTES</b>" HeaderButtonType="TextButton"
+                                    DataField="Notes" UniqueName="Notes" ItemStyle-Width="20%" Visible="False">
+                                </telerik:GridBoundColumn>
+                            </Columns>
+                            <SortExpressions>
+                                <telerik:GridSortExpression FieldName="TotalSavings" SortOrder="Descending"></telerik:GridSortExpression>
+                            </SortExpressions>
+                        </telerik:GridTableView>
+                    </DetailTables>
+                    <Columns>
+                        <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="<b>MODEL RUN</b>" HeaderButtonType="TextButton"
+                            DataField="modelrun" UniqueName="modelrun">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn SortExpression="Description" HeaderText="<b>DESCRIPTION</b>" HeaderButtonType="TextButton"
+                            DataField="Description" UniqueName="Description">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn SortExpression="GMTStart" HeaderText="<b>GMT START</b>" HeaderButtonType="TextButton"
+                            DataField="GMTStart" UniqueName="GMTStart" DataFormatString="{0:g}">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="<b>TRIP NUMBER</b>" HeaderButtonType="TextButton"
+                            DataField="TripNumber" UniqueName="TripNumber">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn SortExpression="Weightclass" HeaderText="<b>WEIGHT CLASS</b>" HeaderButtonType="TextButton"
+                            DataField="Weightclass" UniqueName="Weightclass">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn SortExpression="DepartureAirport" HeaderText="<b>ORIGIN</b>" HeaderButtonType="TextButton"
+                            DataField="DepartureAirport" UniqueName="DepartureAirport">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn SortExpression="ArrivalAirport" HeaderText="<b>DESTINATION</b>" HeaderButtonType="TextButton"
+                            DataField="ArrivalAirport" UniqueName="ArrivalAirport">
+                        </telerik:GridBoundColumn>
+                        <telerik:GridBoundColumn SortExpression="DEPARTS" HeaderText="<b>DEPARTURE DATE (GMT)</b>" HeaderButtonType="TextButton"
+                            DataField="DEPARTS" UniqueName="DEPARTS" DataFormatString="{0:g}">
+                        </telerik:GridBoundColumn>
+                    </Columns>
+                    <SortExpressions>
+                        <telerik:GridSortExpression FieldName="modelrun" SortOrder="Descending"></telerik:GridSortExpression>
+                    </SortExpressions>
+                </MasterTableView>
+            </telerik:RadGrid>
+            <asp:SqlDataSource ID="SqlDataSource1" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+                ProviderName="System.Data.SqlClient" runat="server" 
+                SelectCommand="SELECT distinct r.ID as modelrun,Description,replace(TripNumber,r.CarrierID + '-','') as TripNumber,Weightclass,DepartureAirport,ArrivalAirport,cast(DepartureDate + ' ' + DepartureTime as datetime) as DEPARTS,r.CarrierID,r.GMTStart FROM OptimizerRequest r join QuoteFlights q on r.ID = q.QuoteNumber join FCDRList l on r.ID = l.modelrun where ParentRequestNumber &gt; 0 and r.GMTStart &gt;= DATEADD(d,-7,getdate()) and r.CarrierID = @carrierid order by r.id desc">
+                <SelectParameters>
+                    <asp:Parameter Name="carrierid" />
+                </SelectParameters>
+           </asp:SqlDataSource>
+            <asp:SqlDataSource ID="SqlDataSource2" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+                ProviderName="System.Data.SqlClient" runat="server"
+                SelectCommand="SELECT max(keyid) as KeyId,modelrun,DeltaNonRevMiles,TotalSavings,SavingsDay0,SavingsDay1,SavingsDay2,PriorTailNumber,Registration,l.CarrierID,ReviewedDate,ReviewedByInit,Notes,'~/FCDRpages/' + KeyId + '.pdf' as PDFLink FROM FCDRList l join Aircraft a on l.CarrierID = a.CarrierID and l.PriorTailNumber = a.FOSAircraftID Where modelrun = @modelrun group by modelrun,DeltaNonRevMiles,TotalSavings,SavingsDay0,SavingsDay1,SavingsDay2,PriorTailNumber,Registration,l.CarrierID,ReviewedDate,ReviewedByInit,Notes,KeyId">
+                <SelectParameters>
+                    <asp:SessionParameter Name="modelrun" SessionField="modelrun" Type="Int32"></asp:SessionParameter>
+                </SelectParameters>
+            </asp:SqlDataSource>
+            <asp:SqlDataSource ID="SqlDataSource3" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+                ProviderName="System.Data.SqlClient" runat="server"
+                SelectCommand="SELECT d.KeyId,case when CHARINDEX('-', TripNumber) > 0 then SUBSTRING(TripNumber,CHARINDEX('-', TripNumber) + 1,LEN(TripNumber) - CHARINDEX('-', TripNumber)) else TripNumber end as TripNumber,DepartDate,From_ICAO,To_ICAO,AC,Modification FROM FCDRListDetail d join FCDRList l on d.KeyID = l.KeyId where d.KeyId = @KeyId">
+                <SelectParameters>
+                    <asp:SessionParameter Name="KeyId" SessionField="KeyId" Type="Int32"></asp:SessionParameter>
+                </SelectParameters>
+            </asp:SqlDataSource>
+
+           <br />
+           <br />
+ 
+           <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2"  ShowStatusBar="true"
+            DataSourceID="SqlDataSource4" runat="server" AutoGenerateColumns="False" PageSize="10"
+            AllowSorting="True" AllowMultiRowSelection="False" AllowPaging="True" GridLines="None" Font-Size="Medium" Visible="True">
+            <PagerStyle Mode="NumericPages"></PagerStyle>
+            <MasterTableView EnableHierarchyExpandAll="true" DataSourceID="SqlDataSource4" DataKeyNames="modelrun" AllowMultiColumnSorting="True">
+                <DetailTables>
+                    <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="modelrun" DataSourceID="SqlDataSource5" Width="100%"
+                        runat="server" Name="Child3">
+                        <ParentTableRelation>
+                            <telerik:GridRelationFields DetailKeyField="modelrun" MasterKeyField="modelrun"></telerik:GridRelationFields>
+                        </ParentTableRelation>
+                        <DetailTables>
+                            <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource6" Width="100%"
+                                runat="server" Name="Child4">
+                                <ParentTableRelation>
+                                    <telerik:GridRelationFields DetailKeyField="modelrun" MasterKeyField="modelrun"></telerik:GridRelationFields>
+                                </ParentTableRelation>
+                                <DetailTables>
+                                    <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource7" Width="100%"
+                                        runat="server" Name="Child5">
+                                        <ParentTableRelation>
+                                            <telerik:GridRelationFields DetailKeyField="KeyId" MasterKeyField="KeyId"></telerik:GridRelationFields>
+                                        </ParentTableRelation>
+                                        <Columns>
+                                            <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="<b>TRIP NUMBER</b>" HeaderButtonType="TextButton"
+                                                DataField="TripNumber" UniqueName="TripNumber">
+                                            </telerik:GridBoundColumn>
+                                            <telerik:GridBoundColumn SortExpression="DepartDate" HeaderText="<b>DEPARTURE DATE (GMT)</b>" HeaderButtonType="TextButton"
+                                                DataField="DepartDate" UniqueName="DepartDate" DataFormatString="{0:g}">
+                                            </telerik:GridBoundColumn>
+                                            <telerik:GridBoundColumn SortExpression="From_ICAO" HeaderText="<b>ORIGIN</b>" HeaderButtonType="TextButton"
+                                                DataField="From_ICAO" UniqueName="From_ICAO">
+                                            </telerik:GridBoundColumn>
+                                            <telerik:GridBoundColumn SortExpression="To_ICAO" HeaderText="<b>DESTINATION</b>" HeaderButtonType="TextButton"
+                                                DataField="To_ICAO" UniqueName="To_ICAO">
+                                            </telerik:GridBoundColumn>
+                                            <telerik:GridBoundColumn SortExpression="AC" HeaderText="<b>PRIOR TAIL</b>" HeaderButtonType="TextButton"
+                                                DataField="AC" UniqueName="AC">
+                                            </telerik:GridBoundColumn>
+                                            <telerik:GridBoundColumn SortExpression="Modification" HeaderText="<b>NEW TAIL</b>" HeaderButtonType="TextButton"
+                                                DataField="Modification" UniqueName="Modification">
+                                            </telerik:GridBoundColumn>
+                                        </Columns>
+                                        <SortExpressions>
+                                            <telerik:GridSortExpression FieldName="DepartDate" SortOrder="Ascending"></telerik:GridSortExpression>
+                                        </SortExpressions>
+                                    </telerik:GridTableView>
+                                </DetailTables>
+                                <Columns>
+                                    <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="<b>MODEL RUN</b>" HeaderButtonType="TextButton"
+                                        DataField="modelrun" UniqueName="modelrun">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="DeltaNonRevMiles" HeaderText="<b>DELTA NRM</b>" HeaderButtonType="TextButton"
+                                        DataField="DeltaNonRevMiles" UniqueName="DeltaNonRevMiles">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="TotalSavings" HeaderText="<b>TOTAL SAVINGS</b>" HeaderButtonType="TextButton"
+                                        DataField="TotalSavings" UniqueName="TotalSavings" DataFormatString="{0:c0}">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="SavingsDay0" HeaderText="<b>SAVINGS D0</b>" HeaderButtonType="TextButton"
+                                        DataField="SavingsDay0" UniqueName="SavingsDay0" DataFormatString="{0:c0}">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="SavingsDay1" HeaderText="<b>SAVINGS D1</b>" HeaderButtonType="TextButton"
+                                        DataField="SavingsDay1" UniqueName="SavingsDay1" DataFormatString="{0:c0}">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="SavingsDay2" HeaderText="<b>SAVINGS D2</b>" HeaderButtonType="TextButton"
+                                        DataField="SavingsDay2" UniqueName="SavingsDay2" DataFormatString="{0:c0}">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="PriorTailNumber" HeaderText="<b>STARTING TAIL</b>" HeaderButtonType="TextButton"
+                                        DataField="PriorTailNumber" UniqueName="PriorTailNumber">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="Registration" HeaderText="<b>REGISTRATION</b>" HeaderButtonType="TextButton"
+                                        DataField="Registration" UniqueName="Registration">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="CarrierID" HeaderText="<b>CARRIER ID</b>" HeaderButtonType="TextButton"
+                                        DataField="CarrierID" UniqueName="CarrierID">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridHyperLinkColumn Text="See Schedule" HeaderText="<b>Schedule</b>" 
+                                        Target="_blank" DataNavigateUrlFields="PDFLink" ItemStyle-ForeColor="#0066FF">
+                                    </telerik:GridHyperLinkColumn>
+                                    <telerik:GridBoundColumn SortExpression="ReviewedDate" HeaderText="<b>DATE REVIEWED</b>" HeaderButtonType="TextButton"
+                                        DataField="ReviewedDate" UniqueName="ReviewedDate" Visible="False">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="ReviewedByInit" HeaderText="<b>BY</b>" HeaderButtonType="TextButton"
+                                        DataField="ReviewedByInit" UniqueName="ReviewedByInit" Visible="False">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="Notes" HeaderText="<b>NOTES</b>" HeaderButtonType="TextButton"
+                                        DataField="Notes" UniqueName="Notes" ItemStyle-Width="20%" Visible="False">
+                                    </telerik:GridBoundColumn>
+                                </Columns>
+                                <SortExpressions>
+                                    <telerik:GridSortExpression FieldName="TotalSavings" SortOrder="Descending"></telerik:GridSortExpression>
+                                </SortExpressions>
+                            </telerik:GridTableView>
+                        </DetailTables>
+                        <Columns>
+                            <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="<b>MODEL RUN</b>" HeaderButtonType="TextButton"
+                                DataField="modelrun" UniqueName="modelrun">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="Description" HeaderText="<b>DESCRIPTION</b>" HeaderButtonType="TextButton"
+                                DataField="Description" UniqueName="Description">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="GMTStart" HeaderText="<b>GMT START</b>" HeaderButtonType="TextButton"
+                                DataField="GMTStart" UniqueName="GMTStart" DataFormatString="{0:g}">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="<b>TRIP NUMBER</b>" HeaderButtonType="TextButton"
+                                DataField="TripNumber" UniqueName="TripNumber">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="Weightclass" HeaderText="<b>WEIGHT CLASS</b>" HeaderButtonType="TextButton"
+                                DataField="Weightclass" UniqueName="Weightclass">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="DepartureAirport" HeaderText="<b>ORIGIN</b>" HeaderButtonType="TextButton"
+                                DataField="DepartureAirport" UniqueName="DepartureAirport">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="ArrivalAirport" HeaderText="<b>DESTINATION</b>" HeaderButtonType="TextButton"
+                                DataField="ArrivalAirport" UniqueName="ArrivalAirport">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="DEPARTS" HeaderText="<b>DEPARTURE DATE (GMT)</b>" HeaderButtonType="TextButton"
+                                DataField="DEPARTS" UniqueName="DEPARTS" DataFormatString="{0:g}">
+                            </telerik:GridBoundColumn>
+                            <%--<telerik:GridBoundColumn SortExpression="CarrierID" HeaderText="<b>CARRIER ID</b>" HeaderButtonType="TextButton"
+                                DataField="CarrierID" UniqueName="CarrierID">
+                            </telerik:GridBoundColumn>--%>
+                        </Columns>
+                        <SortExpressions>
+                            <telerik:GridSortExpression FieldName="modelrun"></telerik:GridSortExpression>
+                        </SortExpressions>
+                    </telerik:GridTableView>
+                </DetailTables>
+                <Columns>
+                    <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="<b>MODEL RUN</b>" HeaderButtonType="TextButton"
+                        DataField="modelrun" UniqueName="modelrun">
+                    </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn SortExpression="Description" HeaderText="<b>DESCRIPTION</b>" HeaderButtonType="TextButton"
+                        DataField="Description" UniqueName="Description">
+                    </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn SortExpression="RequestDate" HeaderText="<b>DATE REQUESTED</b>" HeaderButtonType="TextButton"
+                        DataField="RequestDate" UniqueName="RequestDate" DataFormatString="{0:g}">
+                    </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn SortExpression="Complete" HeaderText="<b>COMPLETE</b>" HeaderButtonType="TextButton"
+                        DataField="Complete" UniqueName="Complete">
+                    </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn SortExpression="GMTStart" HeaderText="<b>GMT START</b>" HeaderButtonType="TextButton"
+                        DataField="GMTStart" UniqueName="GMTStart" DataFormatString="{0:g}">
+                    </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn SortExpression="GMTEnd" HeaderText="<b>GMT END</b>" HeaderButtonType="TextButton"
+                        DataField="GMTEnd" UniqueName="GMTEnd" DataFormatString="{0:g}">
+                    </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn SortExpression="CarrierID" HeaderText="<b>CARRIER ID</b>" HeaderButtonType="TextButton"
+                        DataField="CarrierID" UniqueName="CarrierID">
+                    </telerik:GridBoundColumn>
+                </Columns>
+                <SortExpressions>
+                    <telerik:GridSortExpression FieldName="modelrun" SortOrder="Descending"></telerik:GridSortExpression>
+                </SortExpressions>
+            </MasterTableView>
+        </telerik:RadGrid>
+    <asp:SqlDataSource ID="SqlDataSource4" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" runat="server" 
+        SelectCommand="SELECT distinct r.ID as modelrun,r.Description,r.RequestDate,r.declaredcomplete,r.CompleteDate,case when r.CompleteDate is not null then (case when r.CarrierID = 108 then 'Y' else format(r.CompleteDate,'g','en-US') end) else 'N' end as Complete,r.GMTStart,r.GMTEnd,r.CarrierID FROM OptimizerRequest r join OptimizerRequest r2 on r.id = r2.ParentRequestNumber where r.CarrierID = @carrierid and r.DemandFlights = 1 and r.GMTStart &gt;= DATEADD(d,-2,r.GMTStart) order by r.id desc">
+        <SelectParameters>
+            <asp:Parameter Name="carrierid" />
+        </SelectParameters>
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource5" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" runat="server"
+        SelectCommand="SELECT distinct r.ID as modelrun,Description,replace(TripNumber,r.CarrierID + '-','') as TripNumber,Weightclass,DepartureAirport,ArrivalAirport,cast(DepartureDate + ' ' + DepartureTime as datetime) as DEPARTS,r.CarrierID,r.GMTStart FROM OptimizerRequest r join QuoteFlights q on r.ID = q.QuoteNumber join FCDRList l on r.ID = l.modelrun where ParentRequestNumber = @modelrun and r.GMTStart &gt;= DATEADD(d,-2,r.GMTStart) order by r.id desc">
         <SelectParameters>
             <asp:SessionParameter Name="modelrun" SessionField="modelrun" Type="Int32"></asp:SessionParameter>
         </SelectParameters>
     </asp:SqlDataSource>
-    <asp:SqlDataSource ID="SqlDataSource3" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
-        ProviderName="System.Data.SqlClient" SelectCommand="SELECT * FROM FCDRListDetail where KeyId = @KeyId"
-        runat="server">
+    <asp:SqlDataSource ID="SqlDataSource6" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" runat="server"
+        SelectCommand="SELECT max(keyid) as KeyId,modelrun,DeltaNonRevMiles,TotalSavings,SavingsDay0,SavingsDay1,SavingsDay2,PriorTailNumber,Registration,l.CarrierID,ReviewedDate,ReviewedByInit,Notes,'~/FCDRpages/' + KeyId + '.pdf' as PDFLink FROM FCDRList l join Aircraft a on l.CarrierID = a.CarrierID and l.PriorTailNumber = a.FOSAircraftID Where modelrun = @modelrun group by modelrun,DeltaNonRevMiles,TotalSavings,SavingsDay0,SavingsDay1,SavingsDay2,PriorTailNumber,Registration,l.CarrierID,ReviewedDate,ReviewedByInit,Notes,KeyId">
+        <SelectParameters>
+            <asp:SessionParameter Name="modelrun" SessionField="modelrun" Type="Int32"></asp:SessionParameter>
+        </SelectParameters>
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource7" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" runat="server"
+        SelectCommand="SELECT d.KeyId,case when CHARINDEX('-', TripNumber) &gt; 0 then SUBSTRING(TripNumber,CHARINDEX('-', TripNumber) + 1,LEN(TripNumber) - CHARINDEX('-', TripNumber)) else TripNumber end as TripNumber,DepartDate,From_ICAO,To_ICAO,AC,Modification FROM FCDRListDetail d join FCDRList l on d.KeyID = l.KeyId where d.KeyId = @KeyId">
         <SelectParameters>
             <asp:SessionParameter Name="KeyId" SessionField="KeyId" Type="Int32"></asp:SessionParameter>
         </SelectParameters>
     </asp:SqlDataSource>
 
-	
-	<div class="form__order2"  id="form_1" runat="server" >
-		<div class="title">Hold Line Trips</div>
-		<div class="title"> <%--<asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label>--%> </div>
-       <div style="align-items:center; justify-content:center;margin-left:10px;">
-           <asp:UpdatePanel EnableViewState="false" runat="server" ID="FCSummary">
-               <ContentTemplate>
-
-                    <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid1"  ShowStatusBar="true"
-                        DataSourceID="SqlDataSource1" runat="server" AutoGenerateColumns="False" PageSize="10"
-                        AllowSorting="True" AllowMultiRowSelection="False" AllowPaging="True" GridLines="None">
-                        <PagerStyle Mode="NumericPages"></PagerStyle>
-                        <MasterTableView EnableHierarchyExpandAll="true" DataSourceID="SqlDataSource1" DataKeyNames="modelrun" AllowMultiColumnSorting="True">
-                            <DetailTables>
-                                <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource2" Width="100%"
-                                    runat="server">
-                                    <ParentTableRelation>
-                                        <telerik:GridRelationFields DetailKeyField="modelrun" MasterKeyField="modelrun"></telerik:GridRelationFields>
-                                    </ParentTableRelation>
-                                    <DetailTables>
-                                        <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource3" Width="100%"
-                                            runat="server">
-                                            <ParentTableRelation>
-                                                <telerik:GridRelationFields DetailKeyField="KeyId" MasterKeyField="KeyId"></telerik:GridRelationFields>
-                                            </ParentTableRelation>
-                                            <Columns>
-                                                <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="Trip Number" HeaderButtonType="TextButton"
-                                                    DataField="TripNumber" UniqueName="TripNumber">
-                                                </telerik:GridBoundColumn>
-                                                <telerik:GridBoundColumn SortExpression="AC" HeaderText="AC" HeaderButtonType="TextButton"
-                                                    DataField="AC" UniqueName="AC">
-                                                </telerik:GridBoundColumn>
-                                                <telerik:GridBoundColumn SortExpression="From_ICAO" HeaderText="From" HeaderButtonType="TextButton"
-                                                    DataField="From_ICAO" UniqueName="From_ICAO">
-                                                </telerik:GridBoundColumn>
-                                            </Columns>
-                                            <SortExpressions>
-                                                <telerik:GridSortExpression FieldName="AC" SortOrder="Descending"></telerik:GridSortExpression>
-                                            </SortExpressions>
-                                        </telerik:GridTableView>
-                                    </DetailTables>
-                                    <Columns>
-                                        <telerik:GridBoundColumn SortExpression="KeyId" HeaderText="KeyId" HeaderButtonType="TextButton"
-                                            DataField="KeyId" UniqueName="KeyId">
-                                        </telerik:GridBoundColumn>
-                                        <telerik:GridBoundColumn SortExpression="PriorTailNumber" HeaderText="Tail" HeaderButtonType="TextButton"
-                                            DataField="PriorTailNumber" UniqueName="PriorTailNumber">
-                                        </telerik:GridBoundColumn>
-                                        <telerik:GridBoundColumn SortExpression="TotalSavings" HeaderText="Total Savings" HeaderButtonType="TextButton"
-                                            DataField="TotalSavings" UniqueName="TotalSavings">
-                                        </telerik:GridBoundColumn>
-                                    </Columns>
-                                    <SortExpressions>
-                                        <telerik:GridSortExpression FieldName="PriorTailNumber"></telerik:GridSortExpression>
-                                    </SortExpressions>
-                                </telerik:GridTableView>
-                            </DetailTables>
-                            <Columns>
-                                <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="MODEL RUN" HeaderButtonType="TextButton"
-                                    DataField="modelrun" UniqueName="modelrun">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn SortExpression="GMTStart" HeaderText="GMT Start" HeaderButtonType="TextButton"
-                                    DataField="GMTStart" UniqueName="GMTStart" DataFormatString="{0:D}">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="Trip Number" HeaderButtonType="TextButton"
-                                    DataField="TripNumber" UniqueName="TripNumber">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn SortExpression="Weightclass" HeaderText="Weight class" HeaderButtonType="TextButton"
-                                    DataField="Weightclass" UniqueName="Weightclass">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn SortExpression="Description" HeaderText="Description" HeaderButtonType="TextButton"
-                                    DataField="Description" UniqueName="Description">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn SortExpression="DepartureAirport" HeaderText="From" HeaderButtonType="TextButton"
-                                    DataField="DepartureAirport" UniqueName="DepartureAirport">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn SortExpression="ArrivalAirport" HeaderText="To" HeaderButtonType="TextButton"
-                                    DataField="ArrivalAirport" UniqueName="ArrivalAirport">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn SortExpression="Departs" HeaderText="Departs" HeaderButtonType="TextButton"
-                                    DataField="Departs" UniqueName="Departs" DataFormatString="{0:D}">
-                                </telerik:GridBoundColumn>
-                                <telerik:GridBoundColumn SortExpression="CarrierID" HeaderText="CarrierID" HeaderButtonType="TextButton"
-                                    DataField="CarrierID" UniqueName="CarrierID">
-                                </telerik:GridBoundColumn>
-                            </Columns>
-                            <SortExpressions>
-                                <telerik:GridSortExpression FieldName="modelrun"></telerik:GridSortExpression>
-                            </SortExpressions>
-                        </MasterTableView>
-                    </telerik:RadGrid>
-               
-    <asp:GridView ID="gvFCDRList" runat="server"  BorderWidth="0" AutoGenerateColumns="False"  CssClass="fcdrlist__tr" HeaderStyle-CssClass="fcdrlist__h" 
-            HeaderStyle-HorizontalAlign="Center"  ItemType="CoastalPortal.FCDRList" AllowPaging="True" PageSize="10" 
-            PagerStyle-HorizontalAlign="Center" OnPageIndexChanging="gvFCDRList_PageIndexChanging" OnPreRender="gvFCDRList_PreRender">
-        <PagerSettings FirstPageText="First Page" LastPageText="Last Page" visible="true"/>
-        <PagerStyle Font-Size="Medium" />
-            <Columns >
-               <asp:TemplateField HeaderText ="Show Details">
-                    <ItemTemplate>
-                        <button name="btnselect" value='<%#Eval("keyid") %>' >Change Details</button>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                <asp:HyperLinkField Text="See Schedule" DataNavigateUrlFields="PDFLink" HeaderText="Schedule" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />
-                <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center" />
-                <asp:BoundField DataField="GMTStart" HeaderText="Model Start" SortExpression="Start" ItemStyle-HorizontalAlign="Center" />
-                <asp:BoundField DataField="deltanonrevmiles" HeaderText="Delta NRM" SortExpression="NRM" DataFormatString="{0:N0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
-                <asp:BoundField DataField="TotalSavings" HeaderText="TOT SAVE" SortExpression="TotalSavings" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
-                <asp:BoundField DataField="savingsday0" HeaderText="SAV D0" SortExpression="SaveNow" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
-                <asp:BoundField DataField="savingsday1" HeaderText="SAV D1" SortExpression="Save1" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
-                <asp:BoundField DataField="savingsday2" HeaderText="SAV D2" SortExpression="Save2" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
-                <asp:BoundField DataField="priortailnumber" HeaderText="Starting Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
-                <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
-               <asp:TemplateField HeaderText ="Accept/Reject">
-                    <ItemTemplate>
-                        <button name="btnacpt" value='<%# "accept" + " " + Eval("keyid") %>' >Accept</button>&nbsp;&nbsp; 
-                        <button name="btnacpt" value='<%# "reject" + " " + Eval("keyid") %>' >Reject</button>
-                    </ItemTemplate>
-                </asp:TemplateField>
-                 <asp:BoundField DataField="keyid"  />
-                  <asp:BoundField DataField="isTrade"  />
-                <asp:BoundField DataField="carrierid" HeaderText="carrier id" SortExpression="carrierid" ItemStyle-HorizontalAlign="Center"/>
-                </Columns>
-            </asp:GridView>	
-                   </ContentTemplate>
-               </asp:UpdatePanel>
-           </div>
+        </div>
 
 </div>		
 </section>

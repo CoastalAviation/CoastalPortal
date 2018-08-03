@@ -7,7 +7,6 @@ Imports CoastalPortal.ConnectionStringHelper
 Imports System.Data.SqlClient
 Imports System.Collections.Generic
 
-
 Public Class AirTaxi
 
     Public Shared OptimizerDB As String = If(ConnectionStringHelper.ts = "Test", "OptimizerTestDB", "OptimizerDB")

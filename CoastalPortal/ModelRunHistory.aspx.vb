@@ -91,12 +91,28 @@ Public Class ModelRunHistory
     Function updategrid()
 
         Dim req As String = "SELECT top 20 ID, status, CarrierID, Description, GMTStart, GMTEnd,"
-        req &= " case when declaredcomplete = 1 then 'True' else 'False' end as declaredcomplete FROM OptimizerRequest"
-        req &= " where description not like 'Optimizer request %' and status = 'X' and carrierid = " & Session("carrierid").ToString
+
+
+        '20180713 - pab - don't show completion time for dpj users
+        If CInt(Session("carrierid")) = DELTA And InStr(Session("email").ToString.ToLower, "@coastalav") = 0 Then
+            req &= " case when declaredcomplete = 1 then 'True' else 'False' end as declaredcomplete "
+        Else
+            req &= " case when declaredcomplete = 1 then case when CompleteDate is null then 'True' else FORMAT(CompleteDate,'g','en-US') end "
+            req &= "else 'False' end as declaredcomplete "
+        End If
+
+        req &= ",case when ScheduleUpdate = 1 then 'Rebuild Schedule' else 'Standard Run' end as runtype "
+        'req &= ",case when checkallowupgrades = 1 then 'Y' else 'N' end as checkallowupgrades  "
+        req &= ",case when DemandFlights = 1 then 'Y' else 'N' end as DemandFlights  "
+        req &= ",case when UseAssigns = 1 then 'Y' else 'N' end as UseAssigns  "
+        'req &= ",case when PublishFCDR = 1 then 'Y' else 'N' end as PublishFCDR  "
+        'req &= ",case when PinManaged = 1 then 'Y' else 'N' end as PinManaged  "
+        req &= ",MinutesBetweenFlights,CrewDutyHours,CrewDutyDay,RequestDate "
+        req &= " FROM OptimizerRequest where carrierid = " & Session("carrierid").ToString
         '20171215 - pab - don't show dynamic costing models
         req &= " and description not like '%Dynamic Costing Request%'"
         '20180323 - pab - don't show Placement models
-        req &= " and description not like '%Placement%'"
+        req &= " and description not like '%Placement%' and description not like 'Optimizer request %' and status = 'X' "
         req &= " and requestdate > getdate() - 2 order by id desc"
 
         SqlDataSourceOptimizerRequests.ConnectionString = ConnectionStringHelper.GetsqladapterWestConnectionString

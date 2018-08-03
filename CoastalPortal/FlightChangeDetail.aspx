@@ -350,6 +350,7 @@
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
+					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 				</ul>
 			</div>
 			
@@ -371,6 +372,7 @@
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
 					<%--<li><a href="#">Model Run History</a></li>--%>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
+					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 					<li><a href="FlightSchedule.aspx?r0=0">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>

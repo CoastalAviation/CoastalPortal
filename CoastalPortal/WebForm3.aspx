@@ -101,6 +101,118 @@
             <asp:SessionParameter Name="KeyId" SessionField="KeyId" Type="Int32"></asp:SessionParameter>
         </SelectParameters>
     </asp:SqlDataSource>
+
+        <telerik:RadGrid RenderMode="Lightweight" ID="RadGrid2"  ShowStatusBar="true"
+            DataSourceID="SqlDataSource4" runat="server" AutoGenerateColumns="False" PageSize="10"
+            AllowSorting="True" AllowMultiRowSelection="False" AllowPaging="True" GridLines="None">
+            <PagerStyle Mode="NumericPages"></PagerStyle>
+            <MasterTableView EnableHierarchyExpandAll="true" DataSourceID="SqlDataSource4" DataKeyNames="modelrun" AllowMultiColumnSorting="True">
+                <DetailTables>
+                    <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="modelrun" DataSourceID="SqlDataSource5" Width="100%"
+                        runat="server">
+                        <ParentTableRelation>
+                            <telerik:GridRelationFields DetailKeyField="modelrun" MasterKeyField="modelrun"></telerik:GridRelationFields>
+                        </ParentTableRelation>
+                        <DetailTables>
+                            <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource6" Width="100%"
+                                runat="server">
+                                <ParentTableRelation>
+                                    <telerik:GridRelationFields DetailKeyField="modelrun" MasterKeyField="modelrun"></telerik:GridRelationFields>
+                                </ParentTableRelation>
+                                <DetailTables>
+                                    <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="KeyId" DataSourceID="SqlDataSource7" Width="100%"
+                                        runat="server">
+                                        <ParentTableRelation>
+                                            <telerik:GridRelationFields DetailKeyField="KeyId" MasterKeyField="KeyId"></telerik:GridRelationFields>
+                                        </ParentTableRelation>
+                                        <Columns>
+                                            <telerik:GridBoundColumn SortExpression="TripNumber" HeaderText="Trip Number" HeaderButtonType="TextButton"
+                                                DataField="TripNumber" UniqueName="TripNumber">
+                                            </telerik:GridBoundColumn>
+                                            <telerik:GridBoundColumn SortExpression="AC" HeaderText="AC" HeaderButtonType="TextButton"
+                                                DataField="AC" UniqueName="AC">
+                                            </telerik:GridBoundColumn>
+                                            <telerik:GridBoundColumn SortExpression="From_ICAO" HeaderText="From" HeaderButtonType="TextButton"
+                                                DataField="From_ICAO" UniqueName="From_ICAO">
+                                            </telerik:GridBoundColumn>
+                                        </Columns>
+                                        <SortExpressions>
+                                            <telerik:GridSortExpression FieldName="AC" SortOrder="Descending"></telerik:GridSortExpression>
+                                        </SortExpressions>
+                                    </telerik:GridTableView>
+                                </DetailTables>
+                                <Columns>
+                                    <telerik:GridBoundColumn SortExpression="KeyId" HeaderText="KeyId" HeaderButtonType="TextButton"
+                                        DataField="KeyId" UniqueName="KeyId">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="PriorTailNumber" HeaderText="Tail" HeaderButtonType="TextButton"
+                                        DataField="PriorTailNumber" UniqueName="PriorTailNumber">
+                                    </telerik:GridBoundColumn>
+                                    <telerik:GridBoundColumn SortExpression="TotalSavings" HeaderText="Total Savings" HeaderButtonType="TextButton"
+                                        DataField="TotalSavings" UniqueName="TotalSavings">
+                                    </telerik:GridBoundColumn>
+                                </Columns>
+                                <SortExpressions>
+                                    <telerik:GridSortExpression FieldName="PriorTailNumber"></telerik:GridSortExpression>
+                                </SortExpressions>
+                            </telerik:GridTableView>
+                        </DetailTables>
+                        <Columns>
+                            <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="model run" HeaderButtonType="TextButton"
+                                DataField="modelrun" UniqueName="modelrun">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="Description" HeaderText="Description" HeaderButtonType="TextButton"
+                                DataField="Description" UniqueName="Description">
+                            </telerik:GridBoundColumn>
+                            <telerik:GridBoundColumn SortExpression="GMTStart" HeaderText="GMT Start" HeaderButtonType="TextButton"
+                                DataField="GMTStart" UniqueName="GMTStart" DataFormatString="{0:D}">
+                            </telerik:GridBoundColumn>
+                        </Columns>
+                        <SortExpressions>
+                            <telerik:GridSortExpression FieldName="modelrun"></telerik:GridSortExpression>
+                        </SortExpressions>
+                    </telerik:GridTableView>
+                </DetailTables>
+                <Columns>
+                    <telerik:GridBoundColumn SortExpression="modelrun" HeaderText="model run" HeaderButtonType="TextButton"
+                        DataField="modelrun" UniqueName="modelrun">
+                    </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn SortExpression="Description" HeaderText="Description" HeaderButtonType="TextButton"
+                        DataField="Description" UniqueName="Description">
+                    </telerik:GridBoundColumn>
+                    <telerik:GridBoundColumn SortExpression="GMTStart" HeaderText="GMT Start" HeaderButtonType="TextButton"
+                        DataField="GMTStart" UniqueName="GMTStart" DataFormatString="{0:D}">
+                    </telerik:GridBoundColumn>
+                </Columns>
+                <SortExpressions>
+                    <telerik:GridSortExpression FieldName="modelrun"></telerik:GridSortExpression>
+                </SortExpressions>
+            </MasterTableView>
+        </telerik:RadGrid>
+    <asp:SqlDataSource ID="SqlDataSource4" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" SelectCommand="SELECT distinct ID as modelrun,Description,r.GMTStart FROM OptimizerRequest r where DemandFlights = 1 and r.GMTStart >= DATEADD(d,-2,r.GMTStart) order by id desc"
+        runat="server"></asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource5" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" SelectCommand="SELECT distinct ID as modelrun,Description,r.GMTStart FROM OptimizerRequest r join FCDRList l on r.ID = l.modelrun where ParentRequestNumber = @modelrun and r.GMTStart >= DATEADD(d,-2,r.GMTStart) order by id desc"
+        runat="server">
+        <SelectParameters>
+            <asp:SessionParameter Name="modelrun" SessionField="modelrun" Type="Int32"></asp:SessionParameter>
+        </SelectParameters>
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource6" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" SelectCommand="SELECT * FROM FCDRList Where modelrun = @modelrun"
+        runat="server">
+        <SelectParameters>
+            <asp:SessionParameter Name="modelrun" SessionField="modelrun" Type="Int32"></asp:SessionParameter>
+        </SelectParameters>
+    </asp:SqlDataSource>
+    <asp:SqlDataSource ID="SqlDataSource7" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
+        ProviderName="System.Data.SqlClient" SelectCommand="SELECT * FROM FCDRListDetail where KeyId = @KeyId"
+        runat="server">
+        <SelectParameters>
+            <asp:SessionParameter Name="KeyId" SessionField="KeyId" Type="Int32"></asp:SessionParameter>
+        </SelectParameters>
+    </asp:SqlDataSource>
     </form>
 </body>
 </html>

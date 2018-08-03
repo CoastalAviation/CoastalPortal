@@ -26,12 +26,14 @@ Public Class HoldLineTrips
     Public Const FD_RESULT = 5
     Public Const FD_NAC = 6
 
+    '20180723 - pab - fix bug - second page of grid not displaying
+    Public carrierid As Integer
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
         If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
-        Dim carrierid As Integer = CInt(Session("carrierid"))
+        carrierid = CInt(Session("carrierid"))
 
         Try
 
@@ -57,19 +59,12 @@ Public Class HoldLineTrips
 
             '20111121 - pab - convert to single db
             Dim da As New DataAccess
-            Dim dt As DataTable
-            Dim btnresult As String = Request.Form("btnacpt")
-            Dim btnSelect As String = Request.Form("btnselect")
-            Dim DynamicCost As String = Request.QueryString("DynamicCost")
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
-                gvFCDRList.Visible = True
-
-
                 '20160517 - pab - fix carrierid = 0 preventing quotes
                 If InStr(Session("email").ToString.ToLower, "tmcjets.com") > 0 And carrierid = 0 Then
-                    carrierid = 65
+                    carrierid = TMC
                 End If
 
                 '20111121 - pab - convert to single db
@@ -81,6 +76,21 @@ Public Class HoldLineTrips
                     Response.Redirect("CustomerLogin.aspx", True)
                 End If
 
+                '20180723 - pab - fix bug - second page of grid not displaying
+                'SqlDataSource1.SelectCommand = "SELECT distinct r.ID as modelrun,Description,replace(TripNumber,r.CarrierID + '-','') " &
+                '    "as TripNumber,Weightclass,DepartureAirport,ArrivalAirport,cast(DepartureDate + ' ' + DepartureTime as datetime) " &
+                '    "as DEPARTS,r.CarrierID,r.GMTStart FROM OptimizerRequest r join QuoteFlights q on r.ID = q.QuoteNumber " &
+                '    "join FCDRList l on r.ID = l.modelrun where ParentRequestNumber > 0 " &
+                '    "and r.GMTStart >= DATEADD(d,-7,getdate()) and r.CarrierID = " & carrierid & " order by r.id desc"
+                ''20180718 - pab - add new master level and shift other levels up
+                'SqlDataSource4.SelectCommand = "SELECT distinct r.ID as modelrun,r.Description,r.RequestDate,r.declaredcomplete," &
+                '    "r.CompleteDate,case when r.CompleteDate is not null then (case when r.CarrierID = 108 then 'Y' else " &
+                '    "format(r.CompleteDate,'g','en-US') end) else 'N' end as Complete,r.GMTStart,r.GMTEnd,r.CarrierID FROM " &
+                '    "OptimizerRequest r join OptimizerRequest r2 on r.id = r2.ParentRequestNumber where r.CarrierID = " &
+                '    carrierid & " and r.DemandFlights = 1 and r.GMTStart >= DATEADD(d,-2,r.GMTStart) order by r.id desc"
+                SqlDataSource1.SelectParameters(0).DefaultValue = carrierid
+                SqlDataSource4.SelectParameters(0).DefaultValue = carrierid
+
                 '20130930 - pab - change email from
                 '20171121 - pab - fix carriers changing midstream - change to Session variables
                 If IsNothing(Session("emailfrom")) Then Session("emailfrom") = ""
@@ -88,28 +98,7 @@ Public Class HoldLineTrips
                     Session("emailfrom") = da.GetSetting(CInt(Session("carrierid")), "emailsentfrom")
                 End If
 
-                '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs per David - 10 fcdrs should be sufficient
-                'If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
-                If DynamicCost IsNot Nothing Then
-                    btnSelect = "DynamicCosting-" & DynamicCost
-                    gvFCDRList.Columns(0).Visible = False
-                    gvFCDRList.Columns(11).Visible = False
-
-                End If
-            Else
-                If btnSelect IsNot Nothing Then
-                    'getDetail(btnSelect)
-                End If
-                If btnresult IsNot Nothing Then
-                    Dim i = InStr(btnresult, " ")
-                    Dim action = Left(btnresult, i - 1)
-                    Dim KeyId = Mid(btnresult, i + 1)
-                    AcceptRejectFCDR(action, KeyId)
-                End If
             End If
-            If btnSelect Is Nothing Then btnSelect = ""
-            'GetTrips(btnSelect)
-
 
             '20100608 - pab - add logo to email
             Session("ApplicationPath") = Request.PhysicalApplicationPath
@@ -120,20 +109,20 @@ Public Class HoldLineTrips
             If s <> "Thread was being aborted." Then
                 If Not IsNothing(ex.InnerException) Then s &= " - " & ex.InnerException.ToString
                 If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
-                AirTaxi.Insertsys_log(carrierid, appName, s, "Page_Load", "HoldLineTrips.aspx.vb")
                 AirTaxi.InsertEmailQueue(carrierid, "CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", "",
                     "HoldLineTrips.aspx.vb Page_Load error", s, False, "", "", "", False)
+                AirTaxi.Insertsys_log(carrierid, appName, s, "Page_Load", "HoldLineTrips.aspx.vb")
             End If
 
         End Try
 
     End Sub
 
-    Private Sub RunOptimizer_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+    Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
 
         '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
         If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
-        Dim carrierid As Integer = CInt(Session("carrierid"))
+        carrierid = CInt(Session("carrierid"))
 
         '20171115 - pab - fix carriers changing midstream - change _urlalias to Session("urlalias")
         If IsNothing(Session("urlalias")) Then Session("urlalias") = ""
@@ -146,9 +135,15 @@ Public Class HoldLineTrips
 
             Dim da As New DataAccess
 
-            '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs
-            Dim DynamicCost As String = Request.QueryString("DynamicCost")
-            If DynamicCost IsNot Nothing Then
+            If Not IsNothing(Session("username")) Then
+                If InStr(Session("username").ToString.ToLower, "coastalav") = 0 Then
+                    RadGrid1.MasterTableView.RenderColumns(3).Visible = False
+                    RadGrid1.MasterTableView.RenderColumns(4).Visible = False
+
+                    '20180718 - pab - add new master level and shift other levels up
+                    RadGrid2.MasterTableView.RenderColumns(5).Visible = False
+                    RadGrid2.MasterTableView.RenderColumns(8).Visible = False
+                End If
             End If
 
             If Not IsPostBack Then
@@ -184,132 +179,14 @@ Public Class HoldLineTrips
             If Not IsNothing(ex.StackTrace) Then
                 s &= vbNewLine & vbNewLine & ex.StackTrace.ToString
             End If
-            AirTaxi.Insertsys_log(carrierid, appName, Left(Now & " " & s, 500), "HoldLineTrips.aspx.vb Page_PreRender", "")
             SendEmail(Session("emailfrom"), "pbaumgart@coastalaviationsoftware.com", "",
                       appName & " HoldLineTrips.aspx.vb Page_PreRender error", s, carrierid)
+            AirTaxi.Insertsys_log(carrierid, appName, Left(Now & " " & s, 500), "HoldLineTrips.aspx.vb Page_PreRender", "")
 
         End Try
 
     End Sub
 
-    'Public Sub GetTrips(Optional ByRef getKey As String = "")
-    '    Dim odb As New OptimizerContext
-    '    Dim fcdrlist As New List(Of FCDRList)
-    '    Dim today = DateAdd("d", -2, DateTime.Now)
-    '    Dim i As Integer = 1
-    '    Dim ModelRun As Integer
-
-    '    '20180330 - pab - filter out placement fcdrs
-    '    Dim da As New DataAccess
-    '    Dim dt As DataTable
-
-    '    '20171115 - pab - fix carriers changing midstream - change _carrierid to Session("carrierid")
-    '    If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
-    '    Dim carrierid As Integer = CInt(Session("carrierid"))
-
-    '    If getKey.Contains("DynamicCosting") Then
-    '        ModelRun = Mid(getKey, InStr(getKey, "-") + 1)
-    '        '20180427 - pab - do not show if total saving > 0 per david
-    '        '20180621 - pab - show if total davings <= 1500 per Richard
-    '        'fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA").OrderByDescending(Function(c) c.TotalSavings).ToList()
-    '        fcdrlist = odb.FCDRList.Where(Function(c) c.ModelRun = ModelRun And c.CarrierAcceptStatus = "NA" And c.TotalSavings <= 1500).OrderByDescending(Function(c) c.TotalSavings).ToList()
-    '        '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs
-    '        'getKey = Nothing
-    '    Else
-    '        '20180701 - pab - assign new flights
-    '        'fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.TotalSavings > 999 And c.GMTStart >= today And c.CarrierAcceptStatus = "NA" And c.DynamicCost = False).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
-    '        fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.GMTStart >= today And c.CarrierAcceptStatus = "NA" And c.DynamicCost = False And c.TotalSavings <= 1500).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
-    '    End If
-    '    If fcdrlist.Count > 1 Then
-    '        Do While i <> fcdrlist.Count
-    '            Dim checkme = fcdrlist(i - 1)
-    '            If (fcdrlist(i).PriorTailNumber = checkme.PriorTailNumber And fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).TotalSavings = checkme.TotalSavings) Or
-    '            (fcdrlist(i).ModelRun = checkme.ModelRun And fcdrlist(i).DeltaNonRevMiles = checkme.DeltaNonRevMiles And fcdrlist(i).TotalSavings = checkme.TotalSavings) Then
-    '                fcdrlist.Remove(fcdrlist(i))
-    '                i -= 1
-    '            End If
-    '            i += 1
-    '        Loop
-
-    '        '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs
-    '        If getKey.Contains("DynamicCosting") Then
-    '            Do While fcdrlist.Count > 10
-    '                fcdrlist.Remove(fcdrlist(fcdrlist.Count - 1))
-    '            Loop
-    '            getKey = Nothing
-    '        End If
-    '    End If
-
-    '    'Dim prevmodel As Integer = 0
-    '    'Dim prevdesc As String = ""
-    '    If fcdrlist.Count > 1 Then
-    '        i = 1
-    '        '20180701 - pab - assign new flights
-    '        dt = da.GetOptimizerRequestByParentReqNo(carrierid)
-    '        Do While i <> fcdrlist.Count
-    '            If Not isdtnullorempty(dt) Then
-    '                Dim bdemand As Boolean = False
-    '                For n As Integer = 0 To dt.Rows.Count - 1
-    '                    If fcdrlist(i).ModelRun = dt.Rows(n).Item("id") Then
-    '                        bdemand = True
-    '                        Exit For
-    '                    End If
-    '                Next
-    '                If bdemand = False Then
-    '                    fcdrlist.Remove(fcdrlist(i))
-    '                    i -= 1
-    '                End If
-    '            End If
-    '            i += 1
-    '        Loop
-    '    End If
-
-    '    gvFCDRList.DataSource = fcdrlist
-    '    gvFCDRList.DataBind()
-    '    Colorme(getKey)
-    'End Sub
-    'Public Sub Colorme(ByRef GetKey As String)
-    '    Dim i As Integer = 0
-
-    '    For i = 0 To gvFCDRList.Rows.Count - 1
-    '        gvFCDRList.Rows(i).Cells(F_KEY).ForeColor = Drawing.Color.Blue
-    '        If gvFCDRList.Rows(i).Cells(F_KEY2).Text = GetKey And GetKey <> "" Then
-    '            gvFCDRList.Rows(i).BackColor = Drawing.Color.Aqua
-    '        Else
-    '            gvFCDRList.Rows(i).Cells(F_KEY).BackColor = Drawing.Color.Wheat
-    '        End If
-    '        If gvFCDRList.Rows(i).Cells(F_TRADE).Text = "True" Then gvFCDRList.Rows(i).BackColor = Drawing.Color.Green
-    '        If gvFCDRList.Rows(i).Cells(F_NRM).Text < 0 Then gvFCDRList.Rows(i).Cells(F_NRM).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-    '        If gvFCDRList.Rows(i).Cells(F_SV0).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV0).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-    '        If gvFCDRList.Rows(i).Cells(F_SV1).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV1).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-    '        If gvFCDRList.Rows(i).Cells(F_SV2).Text < 0 Then gvFCDRList.Rows(i).Cells(F_SV2).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-    '        If gvFCDRList.Rows(i).Cells(F_TOT).Text < 0 Then gvFCDRList.Rows(i).Cells(F_TOT).ForeColor = Drawing.Color.FromArgb(205, 0, 0)
-    '        'If gvFCDRList.Rows(i).Cells(F_ACC + 1).Text <> "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
-    '        'If gvFCDRList.Rows(i).Cells(F_ACC).Text = "NA" Then gvFCDRList.Columns(F_ACC).Visible = False
-
-    '        For ii = 2 To gvFCDRList.Columns.Count - 1
-    '            If ii <> F_ACC + 1 Then
-    '                gvFCDRList.Rows(i).Cells(ii).Text = Trim(gvFCDRList.Rows(i).Cells(ii).Text)
-    '            End If
-    '        Next
-    '    Next
-    '    gvFCDRList.Columns(F_ACC).Visible = False
-    '    gvFCDRList.Columns(F_KEY2).Visible = False
-    '    gvFCDRList.Columns(F_MDL).Visible = False
-    '    gvFCDRList.Columns(F_TRADE).Visible = False
-    'End Sub
-
-    Protected Sub Address_ItemsRequested(ByVal o As Object, ByVal e As RadComboBoxItemsRequestedEventArgs)
-
-        Try
-
-            Exit Sub
-
-        Catch ex As Exception
-
-        End Try
-
-    End Sub
 
     '20171101 - pab - display cleanup
     Protected Sub LinkLogOut_Click(sender As Object, e As EventArgs) Handles LinkLogOut.Click
@@ -351,76 +228,6 @@ Public Class HoldLineTrips
         Response.Redirect("CustomerLogin.aspx", True)
 
     End Sub
-    Public Sub AcceptRejectFCDR(action As String, KeyID As String)
-        Dim odb As New OptimizerContext
-        Dim fcdr As New FCDRList
-        'Dim fcdrPartner As 
-
-        fcdr = odb.FCDRList.Find(KeyID)
-        If fcdr.isTrade Then
-            'TODO .. Process a trade 
-        Else
-
-            fcdr.CarrierAcceptDate = Now
-            fcdr.CarrierAcceptID = Session("username")
-            fcdr.CarrierAcceptStatus = If(action = "accept", "AC", "RJ")
-        End If
-
-
-        If action = "accept" Then
-            'Send Email to those that need it
-        ElseIf action = "reject" Then
-            Dim fcdrDtl As New List(Of FCDRListDetail)
-            Dim cr As New CASFlightsOptimizerRecord
-            Dim fr As New FOSFlightsOptimizerRecord
-            fcdrDtl = odb.FCDRListDetail.Where(Function(e) e.KeyID = fcdr.keyid).ToList()
-            For Each fd As FCDRListDetail In fcdrDtl
-                Dim rf As New RejectedFlight
-                If fd.Modification = "Added" Then
-                    cr = odb.CASFlightsOptimizer.Find(fd.FlightID)
-                    rf.FOSKEY = Trim(cr.FOSKEY)
-                    rf.FromDateGMT = Trim(cr.DepartureTime)
-                    rf.ToDateGMT = Trim(cr.ArrivalTime)
-                    rf.Version = cr.Version
-                Else
-                    fr = odb.FOSFlightsOptimizer.Find(fd.FlightID)
-                    rf.PriorTail = If(fd.Modification <> "Removed", Trim(fd.AC), "")
-                    rf.FOSKEY = Trim(fr.FOSKey)
-                    rf.FromDateGMT = Trim(fr.DateTimeGMT)
-                    rf.ToDateGMT = Trim(Date.Parse(fr.ArrivalDateGMT).Add(TimeSpan.Parse(fr.ArrivalTimeGMT)))
-                    rf.Version = fr.Version
-                End If
-                rf.CarrierID = Trim(fcdr.CarrierID)
-                rf.Action = Trim(fd.Modification)
-                rf.DepartureAirport = Trim(fd.From_ICAO)
-                rf.ArrivalAirport = Trim(fd.To_ICAO)
-                rf.TripNumber = Trim(fd.TripNumber)
-                rf.AircraftRegistration = Trim(fd.AC)
-                rf.RejectedOn = Now
-                rf.Rejected = True
-                rf.CASFOid = 0
-                rf.PriorTailSavings = 0
-                'rf.Status = "/"
-                rf.TripType = "R"
-                rf.StatusComment = "Rejected in FCDR"
-                odb.RejectedFlights.Add(rf)
-            Next
-        End If
-        Try
-            odb.SaveChanges()
-        Catch ex As Exception
-        End Try
-
-    End Sub
-
-    Protected Sub gvFCDRList_PageIndexChanging(sender As Object, e As GridViewPageEventArgs)
-        gvFCDRList.PageIndex = e.NewPageIndex
-        'GetTrips()
-    End Sub
-
-    Protected Sub gvFCDRList_PreRender(sender As Object, e As EventArgs)
-        Dim p = gvFCDRList.SelectedIndex
-    End Sub
 
     '20171209 - pab - link to quoting portal
     Protected Sub LinkQuoting_Click(sender As Object, e As EventArgs) Handles LinkQuoting.Click
@@ -432,6 +239,100 @@ Public Class HoldLineTrips
             'Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx','_blank');</script>")
             Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".avaisearch.com/CustomerLogin.aspx','_blank');</script>")
         End If
+
+    End Sub
+
+    '20180712 - pab - hide some columns for users
+    Private Sub RadGrid1_DetailTableDataBind(sender As Object, e As GridDetailTableDataBindEventArgs) Handles RadGrid1.DetailTableDataBind
+
+        '20180624 - pab - add tracking fields to fcdr
+        If Not IsNothing(Session("username")) Then
+            If InStr(Session("username").ToString.ToLower, "coastalav") = 0 Then
+                Select Case e.DetailTableView.Name
+                    Case "Child1"
+                        For Each column As GridColumn In e.DetailTableView.Columns
+                            Select Case column.UniqueName
+                                Case "SavingsDay0", "SavingsDay1", "SavingsDay2", "CarrierID", "modelrun"
+                                    column.Visible = False
+                            End Select
+                        Next
+                End Select
+            End If
+        End If
+
+    End Sub
+
+    '20180712 - pab - hide some columns for users
+    Private Sub RadGrid1_PreRender(sender As Object, e As EventArgs) Handles RadGrid1.PreRender
+
+        For Each item As GridDataItem In RadGrid1.Items
+            If (item.OwnerTableView.Name = "Child1") Then
+                For i As Integer = 0 To item.OwnerTableView.Items.Count - 1
+                    For i2 As Integer = 3 To 7
+                        If IsNumeric(item.OwnerTableView.Items(i).Cells(i2).Text) Then
+                            If CInt(item.OwnerTableView.Items(i).Cells(i2).Text) < 0 Then
+                                item.OwnerTableView.Items(i).Cells(i2).ForeColor = System.Drawing.Color.Red
+                            Else
+                                item.OwnerTableView.Items(i).Cells(i2).ForeColor = System.Drawing.Color.Green
+                            End If
+                        End If
+                    Next
+                    '20180716 - pab - add pdf link
+                    item.OwnerTableView.Items(i).Cells(11).ForeColor = System.Drawing.Color.Blue
+                    item.OwnerTableView.Items(i).Cells(11).BackColor = System.Drawing.Color.FromArgb(215, 230, 247)
+                Next
+            End If
+        Next
+
+    End Sub
+
+    '20180718 - pab - add new master level and shift other levels up
+    Private Sub RadGrid2_DetailTableDataBind(sender As Object, e As GridDetailTableDataBindEventArgs) Handles RadGrid2.DetailTableDataBind
+
+        If Not IsNothing(Session("username")) Then
+            If InStr(Session("username").ToString.ToLower, "coastalav") = 0 Then
+                Select Case e.DetailTableView.Name
+                    Case "Child3"
+                        For Each column As GridColumn In e.DetailTableView.Columns
+                            Select Case column.UniqueName
+                                Case "Description", "GMTStart"
+                                    column.Visible = False
+                            End Select
+                        Next
+                    Case "Child4"
+                        For Each column As GridColumn In e.DetailTableView.Columns
+                            Select Case column.UniqueName
+                                Case "SavingsDay0", "SavingsDay1", "SavingsDay2", "CarrierID", "modelrun"
+                                    column.Visible = False
+                            End Select
+                        Next
+                End Select
+            End If
+        End If
+
+    End Sub
+
+    '20180718 - pab - add new master level and shift other levels up
+    Private Sub RadGrid2_PreRender(sender As Object, e As EventArgs) Handles RadGrid2.PreRender
+
+        For Each item As GridDataItem In RadGrid2.Items
+            If (item.OwnerTableView.Name = "Child4") Then
+                For i As Integer = 0 To item.OwnerTableView.Items.Count - 1
+                    For i2 As Integer = 3 To 7
+                        If IsNumeric(item.OwnerTableView.Items(i).Cells(i2).Text) Then
+                            If CInt(item.OwnerTableView.Items(i).Cells(i2).Text) < 0 Then
+                                item.OwnerTableView.Items(i).Cells(i2).ForeColor = System.Drawing.Color.Red
+                            Else
+                                item.OwnerTableView.Items(i).Cells(i2).ForeColor = System.Drawing.Color.Green
+                            End If
+                        End If
+                    Next
+                    '20180716 - pab - add pdf link
+                    item.OwnerTableView.Items(i).Cells(11).ForeColor = System.Drawing.Color.Blue
+                    item.OwnerTableView.Items(i).Cells(11).BackColor = System.Drawing.Color.FromArgb(215, 230, 247)
+                Next
+            End If
+        Next
 
     End Sub
 
