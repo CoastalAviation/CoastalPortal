@@ -86,15 +86,18 @@ Public Class AirTaxi
     'Public Shared CASRecords As New List(Of CASFlightsOptimizerRecord)
     Public Shared fname_dictionary As New Dictionary(Of String, String)
 
-    Public Const DELTA As Integer = 108
+    Public Const DEMOAIR As Integer = 48
+    Public Const XOJET As Integer = 49
+    Public Const TMC As Integer = 65
+    Public Const WHEELSUP As Integer = 100
     Public Const JETLINX As Integer = 104
     Public Const ASI As Integer = 107
-    Public Const XOJET As Integer = 49
-    Public Const WHEELSUP As Integer = 100
-    Public Const TMC As Integer = 65
-    Public Const DEMOAIR As Integer = 48
+    Public Const DELTA As Integer = 108
     '20171209 - pab - add instant jet
     Public Const INSTANTJET As Integer = 110
+    '20180823 - pab - add gajet and mountain
+    Public Const MOUNTAIN As Integer = 78
+    Public Const GAJET As Integer = 112
 
     '20171121 - pab - fix carriers changing midstream - change to Session variables
     'Public Shared _fosmodelstartfos As Date

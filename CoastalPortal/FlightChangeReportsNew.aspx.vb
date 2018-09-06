@@ -68,11 +68,6 @@ Public Class FlightChangeReportsNew
             Dim btnresult As String = Request.Form("btnacpt")
             Dim btnSelect As String = Request.Form("btnselect")
             Dim DynamicCost As String = Request.QueryString("DynamicCost")
-
-            '20180629 - pab - assign new flights
-            Dim AssignNewFlights As String = Request.QueryString("anf")
-            If IsNothing(AssignNewFlights) Then AssignNewFlights = ""
-
             '20120503 - pab - run time improvements - execute on if not postback
             If Not IsPostBack Then
 
@@ -110,13 +105,9 @@ Public Class FlightChangeReportsNew
                 pnlNotes.Visible = False
                 NotesPanel.Update()
 
-                If AssignNewFlights = "1" Then
-                    divHeadMain.InnerText = "Review Assign New Flight Reports"
-                    btnSelect = "AssignNewFlights" '& DynamicCost
-
-                    '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs per David - 10 fcdrs should be sufficient
-                    'If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
-                ElseIf DynamicCost IsNot Nothing Then
+                '20180329 - pab - hide detail, accept/reject and paging on dc fcdrs per David - 10 fcdrs should be sufficient
+                'If DynamicCost IsNot Nothing Then btnSelect = "DynamicCosting-" & DynamicCost
+                If DynamicCost IsNot Nothing Then
                     btnSelect = "DynamicCosting-" & DynamicCost
                     gvFCDRList.Columns(0).Visible = False
                     gvFCDRList.Columns(11).Visible = False
@@ -141,8 +132,11 @@ Public Class FlightChangeReportsNew
                     'divNotes.Visible = True
                     'divNotes.Style.Remove("visibility")
                     'divNotes.Style.Add("visibility", "visible")
-                    pnlNotes.Visible = True
-                    NotesPanel.Update()
+                    '20180712 - pab - do not show notes for dc
+                    If divHeading.Visible = False Then
+                        pnlNotes.Visible = True
+                        NotesPanel.Update()
+                    End If
 
                 End If
                 If btnresult IsNot Nothing Then
@@ -237,7 +231,9 @@ Public Class FlightChangeReportsNew
         End Try
 
     End Sub
+
     Public Sub GetTrips(Optional ByRef getKey As String = "")
+
         Dim odb As New OptimizerContext
         Dim fcdrlist As New List(Of FCDRList)
         Dim today = DateAdd("d", -2, DateTime.Now)
@@ -248,13 +244,7 @@ Public Class FlightChangeReportsNew
         If IsNothing(Session("carrierid")) Then Session("carrierid") = 0
         Dim carrierid As Integer = CInt(Session("carrierid"))
 
-        '20180629 - pab - assign new flights
-        If getKey.Contains("AssignNewFlights") Then
-            Dim anf As String = "SELECT ID FROM OptimizerRequest where CarrierID = " & carrierid &
-                " and ParentRequestNumber > 0 and Status = 'X'"
-            fcdrlist = odb.FCDRList.Where(Function(c) c.CarrierID = carrierid And c.GMTStart >= today And c.CarrierAcceptStatus = "NA" And c.DynamicCost = False).OrderByDescending(Function(c) c.ModelRun).ThenByDescending(Function(c) c.TotalSavings).ToList()
-
-        ElseIf getKey.Contains("DynamicCosting") Then
+        If getKey.Contains("DynamicCosting") Then
             ModelRun = Mid(getKey, InStr(getKey, "-") + 1)
             '20180427 - pab - do not show if total saving > 0 per david
             '20180621 - pab - show if total davings <= 1500 per Richard
@@ -302,6 +292,17 @@ Public Class FlightChangeReportsNew
                 End If
                 i += 1
             Loop
+        End If
+
+        '20180712 - pab - if first row is placement it's not being removed
+        If fcdrlist.Count > 0 Then
+            i = 0
+            dt = da.GetFOSOptimizerRequestByID(fcdrlist(i).CarrierID, fcdrlist(i).ModelRun)
+            If Not isdtnullorempty(dt) Then
+                If InStr(dt.Rows(0).Item("Description").ToString.ToLower, "placement request") > 0 Then
+                    fcdrlist.Remove(fcdrlist(i))
+                End If
+            End If
         End If
 
         gvFCDRList.DataSource = fcdrlist
@@ -408,12 +409,22 @@ Public Class FlightChangeReportsNew
             If Not IsNothing(Session("username")) Then
                 If InStr(Session("username").ToString.ToLower, "coastalav") = 0 Then
                     'gvFCDRList.Columns(F_RUN).Visible = False
-                    gvFCDRList.Columns(F_SV0).Visible = False
-                    gvFCDRList.Columns(F_SV1).Visible = False
-                    gvFCDRList.Columns(F_SV2).Visible = False
+                    '20180712 - pab - hide savings0-2 for dc only
+                    If divHeading.Visible = True Then
+                        gvFCDRList.Columns(F_SV0).Visible = False
+                        gvFCDRList.Columns(F_SV1).Visible = False
+                        gvFCDRList.Columns(F_SV2).Visible = False
+                    End If
                     gvFCDRList.Columns(F_ACC).Visible = False
                     gvFCDRList.Columns(F_CARRIER).Visible = False
                 End If
+            End If
+
+            '20180712 - pab - hide review fields for dc only - all users
+            If divHeading.Visible = True Then
+                gvFCDRList.Columns(F_RDATE).Visible = False
+                gvFCDRList.Columns(F_RBY).Visible = False
+                gvFCDRList.Columns(F_NOTES).Visible = False
             End If
 
             '20180624 - pab - add tracking fields to fcdr
@@ -546,13 +557,13 @@ Public Class FlightChangeReportsNew
 
             If row.Cells(F_KEY).Text = getKey Then
                 row.BackColor = Drawing.Color.Azure
-
-                '20180624 - pab - add tracking fields to fcdr
-                If row.Cells(F_NOTES).Text <> "" Then
-                    txtNotes.Text = row.Cells(F_NOTES).Text.Trim
-                End If
-
             End If
+
+            '20180624 - pab - add tracking fields to fcdr
+            If row.Cells(F_NOTES).Text <> "" Then
+                txtNotes.Text = row.Cells(F_NOTES).Text.Trim
+            End If
+
         Next
 
         detailitems = odb.FCDRListDetail.Where(Function(c) Trim(c.KeyID) = Trim(getKey)).ToList()
@@ -600,10 +611,6 @@ Public Class FlightChangeReportsNew
             'Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".personiflyadminuat.com/CustomerLogin.aspx','_blank');</script>")
             Response.Write("<script>window.open ('http://" & Session("urlalias").ToString.Trim & ".avaisearch.com/CustomerLogin.aspx','_blank');</script>")
         End If
-
-    End Sub
-
-    Protected Sub linkschedule_click()
 
     End Sub
 

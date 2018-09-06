@@ -250,7 +250,10 @@
     <Content Include="Error_Page2.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="FlightChangeDetail.aspx" />
+    <Content Include="FlightChangeDetailNew.aspx" />
+    <Content Include="FlightChangeDetailNew2.aspx" />
     <Content Include="FlightChangeReports.aspx" />
+    <Content Include="FlightChangeReportsNew.aspx" />
     <Content Include="FlightSchedule.aspx" />
     <Content Include="fonts\fontawesome-webfont.sql" />
     <Content Include="fonts\fontawesome-webfont.svg" />
@@ -539,11 +542,32 @@
       <DependentUpon>FlightChangeDetail.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="FlightChangeDetailNew.aspx.designer.vb">
+      <DependentUpon>FlightChangeDetailNew.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FlightChangeDetailNew.aspx.vb">
+      <DependentUpon>FlightChangeDetailNew.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="FlightChangeDetailNew2.aspx.designer.vb">
+      <DependentUpon>FlightChangeDetailNew2.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FlightChangeDetailNew2.aspx.vb">
+      <DependentUpon>FlightChangeDetailNew2.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="FlightChangeReports.aspx.designer.vb">
       <DependentUpon>FlightChangeReports.aspx</DependentUpon>
     </Compile>
     <Compile Include="FlightChangeReports.aspx.vb">
       <DependentUpon>FlightChangeReports.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="FlightChangeReportsNew.aspx.designer.vb">
+      <DependentUpon>FlightChangeReportsNew.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="FlightChangeReportsNew.aspx.vb">
+      <DependentUpon>FlightChangeReportsNew.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="FlightSchedule.aspx.designer.vb">

@@ -168,6 +168,7 @@
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
 					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
+					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 				</ul>
 			</div>
 			
@@ -189,6 +190,7 @@
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
 					<%--<li><a href="#">Model Run History</a></li>--%>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
+					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 					<li><a href="FlightSchedule.aspx?r0=0">Flight Schedule</a></li>
 					<%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>
@@ -267,7 +269,7 @@
                         <asp:Label ID="lbRegistration" runat="server" Text=""></asp:Label>
                     </ItemTemplate>
                 </asp:TemplateField>
-                <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center" Visible="False" />
+                <asp:BoundField DataField="carrieracceptstatus" HeaderText="Accept/Reject" SortExpression="Accept" ItemStyle-HorizontalAlign="Center"/>
                <asp:TemplateField HeaderText ="Accept/Reject">
                     <ItemTemplate>
                         <button name="btnacpt" value='<%# "accept" + " " + Eval("keyid") %>' >Accept</button>&nbsp;&nbsp; 
@@ -306,15 +308,6 @@
                </asp:UpdatePanel>
            <br />
            <br />
-		   <%--<div class="title" runat="server" id="divNotes" style="visibility: visible">Notes
-            <span class="description" style="width: 100%">
-                <div class="form" style="width: 100%">
-                    <asp:Label ID="Label6" runat="server" Text="Enter up to 50 characters: " Font-Size="x-small"></asp:Label>
-                    <asp:TextBox ID="txtNotes" runat="server" Width="500px" Height="24px" MaxLength="50" CssClass="txt" ></asp:TextBox>
-                    <asp:Button ID="bttnUpdate" runat="server" Text="Update" CssClass="button" />
-                </div>
-            </span>
-            </div>--%>
            <asp:UpdatePanel runat="server" ID="NotesPanel" UpdateMode="Conditional">
                <ContentTemplate>
                    <asp:Panel ID="pnlNotes" runat="server">

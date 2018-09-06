@@ -132,8 +132,11 @@ Public Class FlightChangeReports
                     'divNotes.Visible = True
                     'divNotes.Style.Remove("visibility")
                     'divNotes.Style.Add("visibility", "visible")
-                    pnlNotes.Visible = True
-                    NotesPanel.Update()
+                    '20180712 - pab - do not show notes for dc
+                    If divHeading.Visible = False Then
+                        pnlNotes.Visible = True
+                        NotesPanel.Update()
+                    End If
 
                 End If
                 If btnresult IsNot Nothing Then
@@ -289,6 +292,17 @@ Public Class FlightChangeReports
             Loop
         End If
 
+        '20180712 - pab - if first row is placement it's not being removed
+        If fcdrlist.Count > 0 Then
+            i = 0
+            dt = da.GetFOSOptimizerRequestByID(fcdrlist(i).CarrierID, fcdrlist(i).ModelRun)
+            If Not isdtnullorempty(dt) Then
+                If InStr(dt.Rows(0).Item("Description").ToString.ToLower, "placement request") > 0 Then
+                    fcdrlist.Remove(fcdrlist(i))
+                End If
+            End If
+        End If
+
         gvFCDRList.DataSource = fcdrlist
         gvFCDRList.DataBind()
         Colorme(getKey)
@@ -393,12 +407,22 @@ Public Class FlightChangeReports
             If Not IsNothing(Session("username")) Then
                 If InStr(Session("username").ToString.ToLower, "coastalav") = 0 Then
                     'gvFCDRList.Columns(F_RUN).Visible = False
-                    gvFCDRList.Columns(F_SV0).Visible = False
-                    gvFCDRList.Columns(F_SV1).Visible = False
-                    gvFCDRList.Columns(F_SV2).Visible = False
+                    '20180712 - pab - hide savings0-2 for dc only
+                    If divHeading.Visible = True Then
+                        gvFCDRList.Columns(F_SV0).Visible = False
+                        gvFCDRList.Columns(F_SV1).Visible = False
+                        gvFCDRList.Columns(F_SV2).Visible = False
+                    End If
                     gvFCDRList.Columns(F_ACC).Visible = False
                     gvFCDRList.Columns(F_CARRIER).Visible = False
                 End If
+            End If
+
+            '20180712 - pab - hide review fields for dc only - all users
+            If divHeading.Visible = True Then
+                gvFCDRList.Columns(F_RDATE).Visible = False
+                gvFCDRList.Columns(F_RBY).Visible = False
+                gvFCDRList.Columns(F_NOTES).Visible = False
             End If
 
             '20180624 - pab - add tracking fields to fcdr

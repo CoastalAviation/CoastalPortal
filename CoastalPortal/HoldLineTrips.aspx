@@ -362,7 +362,7 @@
             <MasterTableView EnableHierarchyExpandAll="true" DataSourceID="SqlDataSource4" DataKeyNames="modelrun" AllowMultiColumnSorting="True">
                 <DetailTables>
                     <telerik:GridTableView EnableHierarchyExpandAll="true" DataKeyNames="modelrun" DataSourceID="SqlDataSource5" Width="100%"
-                        runat="server" Name="Child3">
+                        runat="server" Name="Child3" NoMasterRecordsText="No Hold Line Requests to display." NoDetailRecordsText="No Placement Requests to display.">
                         <ParentTableRelation>
                             <telerik:GridRelationFields DetailKeyField="modelrun" MasterKeyField="modelrun"></telerik:GridRelationFields>
                         </ParentTableRelation>
@@ -527,8 +527,15 @@
     </asp:SqlDataSource>
     <asp:SqlDataSource ID="SqlDataSource6" ConnectionString="<%$ ConnectionStrings:OptimizerDB %>"
         ProviderName="System.Data.SqlClient" runat="server"
-        SelectCommand="SELECT max(keyid) as KeyId,modelrun,DeltaNonRevMiles,TotalSavings,SavingsDay0,SavingsDay1,SavingsDay2,PriorTailNumber,Registration,l.CarrierID,ReviewedDate,ReviewedByInit,Notes,'~/FCDRpages/' + KeyId + '.pdf' as PDFLink FROM FCDRList l join Aircraft a on l.CarrierID = a.CarrierID and l.PriorTailNumber = a.FOSAircraftID Where modelrun = @modelrun group by modelrun,DeltaNonRevMiles,TotalSavings,SavingsDay0,SavingsDay1,SavingsDay2,PriorTailNumber,Registration,l.CarrierID,ReviewedDate,ReviewedByInit,Notes,KeyId">
+        SelectCommand="SELECT distinct 
+(SELECT TOP 1 KeyId FROM FCDRList where modelrun = @modelrun and TotalSavings = l.TotalSavings order by KeyId desc) as KeyId,
+l.modelrun,l.DeltaNonRevMiles,l.TotalSavings,l.SavingsDay0,l.SavingsDay1,l.SavingsDay2,l.PriorTailNumber
+,Registration,l.CarrierID,l.ReviewedDate,l.ReviewedByInit,l.Notes
+,'~/FCDRpages/' + (SELECT TOP 1 KeyId FROM FCDRList where modelrun = @modelrun and TotalSavings = l.TotalSavings order by KeyId desc) + '.pdf' as PDFLink 
+FROM FCDRList l join Aircraft a on l.CarrierID = a.CarrierID and l.PriorTailNumber = a.FOSAircraftID Where l.modelrun = @modelrun 
+group by l.modelrun,l.DeltaNonRevMiles,l.TotalSavings,l.SavingsDay0,l.SavingsDay1,l.SavingsDay2,l.PriorTailNumber,Registration,l.CarrierID,l.ReviewedDate,l.ReviewedByInit,l.Notes,l.KeyId">
         <SelectParameters>
+            <%--<asp:Parameter Name="carrierid" />--%>
             <asp:SessionParameter Name="modelrun" SessionField="modelrun" Type="Int32"></asp:SessionParameter>
         </SelectParameters>
     </asp:SqlDataSource>

@@ -410,15 +410,15 @@
                                     <table style="vertical-align: top;">
                                         <tr>
                                             <td>
-                                                <asp:Label runat="server" Font-Size="Medium" Text="Change in Non Revenue Miles:">
+                                                <asp:Label runat="server" Font-Size="Medium" Text="Change in Non Revenue Miles: ">
                                                     <asp:Label ID="lblNonRevDeltab" runat="server" Font-Size="Medium" Text='<%#Eval("NRM", "{0:N0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Cost Savings:">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Cost Savings: ">
                                                     <asp:Label ID="lblCostSavings" runat="server" Font-Size="Medium" Text='<%#Eval("TotalSavings", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 0:">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 0: ">
                                                     <asp:Label ID="lblCostDay0b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday0", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 1:">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 1: ">
                                                     <asp:Label ID="lblCostDay1b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday1", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
-                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 2 +:">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<asp:Label runat="server" Font-Size="Medium" Text="Total Cost Day 2 +: ">
                                                     <asp:Label ID="lblCostDay2b" runat="server" Font-Size="Medium" Text='<%#Eval("dcostday2", "{0:C0}") %>' ForeColor="#00936F"></asp:Label></asp:Label>
                                             </td>
                                         </tr>
@@ -426,7 +426,7 @@
                                             <td>
                                                 <asp:Label ID="PnlFCDR" runat="server" Visible="false" Text="<%#Item.FCDR_Key %>"></asp:Label>
                                                 <asp:Label runat="server" Font-Size="Medium" Text='<%# "Starting Tail Number: " + Eval("TailNumber") %>'> </asp:Label>
-                                                <asp:Label runat="server" Style="padding-left: 10px; font-size: small">ModelNumber: <a href='http://optimizerpanel.com/Panel.aspx?modelrunid=<%#Eval("ModelNumber")%>'> <%#Item.ModelNumber  %> </a></asp:Label>
+                                                <asp:Label runat="server" Style="padding-left: 10px; font-size: small">Model Number: <a href='http://optimizerpanel.com/Panel.aspx?modelrunid=<%#Eval("ModelNumber")%>'> <%#Item.ModelNumber  %> </a></asp:Label>
                                             </td>
                                         </tr>
                                         <tr>

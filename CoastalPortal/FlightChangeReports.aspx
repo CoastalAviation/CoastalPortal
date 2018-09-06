@@ -256,6 +256,7 @@
                     </ItemTemplate>
                 </asp:TemplateField>
                 <asp:HyperLinkField Text="See Schedule" DataNavigateUrlFields="PDFLink" HeaderText="Schedule" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />
+                <%--<asp:HyperLinkField Text="See Schedule" DataNavigateUrlFields="FCDRPage" HeaderText="Schedule" SortExpression="Key" ItemStyle-HorizontalAlign="Center" Target="_blank" />--%>
                 <asp:BoundField DataField="modelrun" HeaderText="Model Run" SortExpression="ModelRun" ItemStyle-HorizontalAlign="Center" />
                 <asp:BoundField DataField="GMTStart" HeaderText="Model Start" SortExpression="Start" ItemStyle-HorizontalAlign="Center" />
                 <asp:BoundField DataField="deltanonrevmiles" HeaderText="Delta NRM" SortExpression="NRM" DataFormatString="{0:N0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
@@ -264,7 +265,7 @@
                 <asp:BoundField DataField="savingsday1" HeaderText="SAV D1" SortExpression="Save1" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center" ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="savingsday2" HeaderText="SAV D2" SortExpression="Save2" DataFormatString="{0:c0}" ItemStyle-HorizontalAlign="Center"  ItemStyle-ForeColor="#00936F"/>
                 <asp:BoundField DataField="priortailnumber" HeaderText="Start Tail" SortExpression="priortail" ItemStyle-HorizontalAlign="Center"/>
-                <asp:TemplateField HeaderText ="Reg">
+                <asp:TemplateField HeaderText ="Start Reg">
                     <ItemTemplate>
                         <asp:Label ID="lbRegistration" runat="server" Text=""></asp:Label>
                     </ItemTemplate>

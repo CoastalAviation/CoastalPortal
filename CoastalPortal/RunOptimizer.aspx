@@ -225,9 +225,9 @@
 			<div class="menu__left">
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
-					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
+					    <%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
-					<%--<li><a href="#">Model Run History</a></li>--%>
+					    <%--<li><a href="#">Model Run History</a></li>--%>
 					<li><asp:LinkButton ID="LinkQuoting" runat="server" Visible="False">Rev Mgmt</asp:LinkButton></li>
 				</ul>
 			</div>
@@ -240,9 +240,9 @@
 				<ul>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="FlightSchedule.aspx?r0=0">Flight Schedule</a></li>
-					<%--<li><a href="#">Log Off</a></li>--%>
+					    <%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut" runat="server">Log Off</asp:LinkButton></li>
-					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
+                        <%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 				</ul>
 			</div>
@@ -255,21 +255,21 @@
 			
 			<div class="header__title small__padding">
                 <asp:Label ID="lblCarrier" runat="server" Text="TMC"></asp:Label>
-				 <%--&nbsp;OPTIMIZER PORTAL BY COASTAL--%> 
+                <%--&nbsp;OPTIMIZER PORTAL BY COASTAL--%> 
 			</div>
 			
 			<div class="menu__mobile" id="mainmenu">
 				<ul>
 					<li><a href="RunOptimizer.aspx">Run Optimizer</a></li>
-					<%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
+					    <%--<li><a href="AOGRecovery.aspx">AOG Recovery</a></li>--%>
 					<li><a href="ModelRunHistory.aspx">Model Run History</a></li>
-					<%--<li><a href="#">Model Run History</a></li>--%>
+					    <%--<li><a href="#">Model Run History</a></li>--%>
 					<li><a href="FlightChangeReports.aspx">Review Flight Change Reports</a></li>
 					<li><a href="HoldLineTrips.aspx">Review Hold Line Trips</a></li>
 					<li><a href="FlightSchedule.aspx?r0=0">Flight Schedule</a></li>
-					<%--<li><a href="#">Log Off</a></li>--%>
+					    <%--<li><a href="#">Log Off</a></li>--%>
                     <li><asp:LinkButton ID="LinkLogOut2" runat="server">Log Off</asp:LinkButton></li>
-					<%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
+                        <%--<li><a href="Dashboard.aspx">Operations Dashboard</a></li>--%>
 				</ul>
 			</div>	
 		</div>	
@@ -357,11 +357,11 @@
                         <asp:CheckBox ID="chkallowupgrades" runat="server" Text=" Allow Upgrades" Font-Names="arial" ToolTip="Allow Upgrades"  Checked="True" />
                         <br />
                         <br />
-                        <%--<asp:CheckBox ID="CheckBox1" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />--%>
+                        <%--<asp:ListItem Value="Full"> Full Schedule Rebuild (40-60 minutes)</asp:ListItem>--%>
                         <asp:CheckBox ID="chkAssignNewTrips" runat="server" Text=" Assign Individual Hold Line Trips" Font-Names="arial" ToolTip="Assign Individual Hold Line Tripsy"  Checked="false" />
                         <br />
                         <br />
-                        <%--<asp:CheckBox ID="CheckBox1" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />--%>
+                        <%--<asp:CheckBox ID="CheckBox1" runat="server" Text=" Assign New Trips" Font-Names="arial" ToolTip="Assign New Trips"  Checked="false" />--%>
                         <asp:CheckBox ID="chkAssigns" runat="server" Text=" Integrate Hold Line Trips with Optimizer Run" Font-Names="arial" ToolTip="Integrate Hold Line Trips with Optimizer Run"  Checked="false" />
                         <br />
                         <br />
@@ -576,8 +576,7 @@
             </asp:Panel>
         </div>
 
-		<%--<div class="title"> <asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label> </div>--%>
-		<%--<div class="table">
+		<%--<asp:CheckBox ID="CheckBox1" runat="server" Text=" Use Assignments" Font-Names="arial" ToolTip="Use Assignments"  Checked="false" />--%>		<%--<div class="title"> <asp:Label runat="server" ID="aircraft_type_txt_1" CssClass="title"></asp:Label> </div>--%>    	<%--<div class="table">
 			<div class="table__scroll">
 			<div class="table_h">
 				<span class="h">Origin</span>
@@ -626,7 +625,14 @@
 			</div>
 		</div>	
 		</div>--%>
-    	<%--<div class="table grid">
+	
+	</div>
+
+    <div class="form__order">
+        <div class="form">
+            <div class="button_boxing order_box">
+                <asp:Button ID="LinkButtonRun" CssClass="button" Text="Submit Run" runat="server" />
+                <%--<div class="table grid">
             <asp:GridView ID="gvServiceProviderMatrix" runat="server" HeaderStyle-CssClass="table__h" BorderWidth="0"
             AutoGenerateColumns="False" DataKeyNames="Origin,Departs,Destination,Arrives,Flight Duration,Price"  CssClass="table__tr">
             <Columns >
@@ -680,75 +686,11 @@
             </Columns>
             </asp:GridView>		
 		</div>--%>
-	
-	</div>
-
-    <div class="form__order">
-        <div class="form">
-            <div class="button_boxing order_box">
-                <asp:Button ID="LinkButtonAdd" CssClass="button" Text="Submit Run" runat="server" />
-                <%--<asp:Button CssClass="button__secont" text="Start Over" runat="server" ID="cmdStartOver1" />--%>
             </div>
         </div>
     </div>
 	
-<%--<div class="form__order2" id="form_2" runat="server">
-		<div class="title"> <asp:Label runat="server" ID="aircraft_type_txt_2" CssClass="title" Text="Cirrus SR22"> </asp:Label> </div>
-		<div class="table">
-			<div class="table__scroll">
-			<div class="table_h">
-				<span class="h">Origin</span>
-				<span class="h">Departs</span>
-				<span class="h">Destination</span>
-				<span class="h">Arrives</span>
-				<span class="h col-small">Flight Duration</span>
-				<span class="h col-small">Price</span>
-			</div>
-
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="origin_one_2" Text="WESTCHESTER COUNTY (HPN)">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="origin_two_2" Text="BEVERLY MUNI (BVY)">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="departs_one_2" Text="2/23/16 9:00 AM">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="departs_two_2" Text="2/23/16 9:00 AM">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="destination_one_2" Text="BEVERLY MUNI (BVY)">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="destination_two_2" Text="WESTCHESTER COUNTY (HPN)">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="arrives_one_2" Text="2/23/16 9:29 AM">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="arrives_two_2" Text="2/23/16 9:29 AM">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item col-small">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="flight_one_2" Text="00:29">  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="flight_two_2" Text="00:29">  </asp:Label></li>
-				</ul>
-			</div>
-			<div class="table__item col-small">
-				<ul class="table__list">
-					<li> <asp:Label runat="server" ID="price_one_2" Text="$5200" >  </asp:Label></li>
-					<li> <asp:Label runat="server" ID="price_two_2" Text="$5200" >  </asp:Label></li>
-				</ul>
-			</div>
-		</div>	
-		</div>
-		<div class="form__buttons">
-            <asp:Button ID="cmdQuote" CssClass="button" Text="Generate Qoute" runat="server" />
-            <asp:Button ID="cmdStartOver" CssClass="button no__color" Text="New Quote" runat="server" />
-			<p class="price"> <asp:Label runat="server" ID="price_summary_2" Text="$5700">  </asp:Label> </p>
-		</div>
-	</div>--%>
+<%--<asp:Button CssClass="button__secont" text="Start Over" runat="server" ID="cmdStartOver1" />--%>
 			
 </section>
 	

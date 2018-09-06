@@ -10,6 +10,150 @@ Imports System.IO
 
 Public Class DataAccess
 
+    '20180817 - pab - do not use session or global variables for this page
+    Public Function GetProviderByCarrierID(ByVal carrierid As Integer) As DataTable
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oAdp As SqlDataAdapter = Nothing
+        Dim oParam As SqlParameter = Nothing
+        Dim dt As New DataTable
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(UATPortalServer))
+
+            oAdp = New SqlDataAdapter("sp_GetProviderByCarrierID", oConn)
+            dt = New DataTable
+            oParam = Nothing
+
+            oParam = New SqlParameter("@carrierid", SqlDbType.Int)
+            oParam.Value = carrierid
+            oAdp.SelectCommand.Parameters.Add(oParam)
+
+            oAdp.SelectCommand.CommandType = CommandType.StoredProcedure
+
+            oAdp.Fill(dt)
+
+            Return dt
+
+        Catch ex As Exception
+            Dim s As String = "parm - carrierid " & carrierid & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbCr & vbLf & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbCr & vbLf & ex.StackTrace.ToString
+            Insertsys_log(carrierid, appName, s, "GetProviderByCarrierID", "DataAccess.vb")
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb GetProviderByCarrierID Error", s, carrierid)
+            Return Nothing
+
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            dt.Dispose()
+            oAdp.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
+    '20180816 - pab - rewrite - remove marc's classes
+    Public Function InsertFCDRList(ByRef KeyId As Integer, ByRef PriorTailNumber As String, ByRef CasRecordList As String,
+        ByRef FosRecordList As String, ByRef DeltaNonRevMiles As Integer, ByRef SavingsDay0 As Double, ByRef SavingsDay1 As Double,
+        ByRef SavingsDay2 As Double, ByRef TotalSavings As Double, ByRef ModelrunId As String, ByRef modelrun As Integer,
+        ByRef GMTStart As Date, ByRef CarrierID As Integer, ByRef DynamicCost As Boolean) As Integer
+
+        Dim oConn As SqlConnection = Nothing
+        Dim oCmd As SqlCommand = Nothing
+        Dim oParam As SqlParameter = Nothing
+
+        Try
+            oConn = New SqlConnection(ConnectionStringHelper.getglobalconnectionstring(PortalServer))
+            oConn.Open()
+            oCmd = New SqlCommand("sp_InsertFCDRList", oConn)
+            oCmd.CommandType = CommandType.StoredProcedure
+
+            oParam = New SqlParameter("@KeyId", SqlDbType.Int)
+            oParam.Value = KeyId
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@PriorTailNumber", SqlDbType.NVarChar)
+            oParam.Value = PriorTailNumber
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@CasRecordList", SqlDbType.NVarChar)
+            oParam.Value = CasRecordList
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@FosRecordList", SqlDbType.NVarChar)
+            oParam.Value = FosRecordList
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@DeltaNonRevMiles", SqlDbType.Int)
+            oParam.Value = DeltaNonRevMiles
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@SavingsDay0", SqlDbType.Money)
+            oParam.Value = SavingsDay0
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@SavingsDay1 ", SqlDbType.Money)
+            oParam.Value = SavingsDay1
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@SavingsDay2", SqlDbType.Money)
+            oParam.Value = SavingsDay2
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@TotalSavings ", SqlDbType.Money)
+            oParam.Value = TotalSavings
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@ModelrunId", SqlDbType.NVarChar)
+            oParam.Value = ModelrunId
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@modelrun", SqlDbType.Int)
+            oParam.Value = modelrun
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@GMTStart", SqlDbType.DateTime)
+            oParam.Value = GMTStart
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@CarrierID", SqlDbType.Int)
+            oParam.Value = CarrierID
+            oCmd.Parameters.Add(oParam)
+
+            oParam = New SqlParameter("@DynamicCost", SqlDbType.Bit)
+            oParam.Value = DynamicCost
+            oCmd.Parameters.Add(oParam)
+
+            'oParam = New SqlParameter()
+            'oParam.Direction = ParameterDirection.ReturnValue
+            'oCmd.Parameters.Add(oParam)
+
+            oCmd.ExecuteNonQuery()
+
+            Return 0
+
+        Catch ex As Exception
+            Dim s As String = "parms - KeyId " & KeyId & "; PriorTailNumber " & PriorTailNumber & "; CasRecordList " & CasRecordList &
+                "; FosRecordList " & FosRecordList & "; CarrierID " & CarrierID & vbCr & vbLf & ex.Message
+            If Not IsNothing(ex.InnerException) Then s &= vbNewLine & ex.InnerException.ToString
+            If Not IsNothing(ex.StackTrace) Then s &= vbNewLine & ex.StackTrace.ToString
+            SendEmail("CharterSales@coastalavtech.com", "pbaumgart@coastalaviationsoftware.com", "", appName &
+                " DataAccess.vb InsertFCDRList Error", s, CarrierID)
+            Insertsys_log(CarrierID, appName, s, "InsertFCDRList", "DataAccess.vb")
+            Return 0
+        Finally
+            If oConn.State = ConnectionState.Open Then
+                oConn.Close()
+            End If
+            oCmd.Dispose()
+            oConn.Dispose()
+        End Try
+
+    End Function
+
     '20180701 - pab - assign new fligths
     Function GetOptimizerRequestByParentReqNo(ByVal CarrierID As Integer) As DataTable
 

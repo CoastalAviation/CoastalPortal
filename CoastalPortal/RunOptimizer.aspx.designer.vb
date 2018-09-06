@@ -599,11 +599,11 @@ Partial Public Class RunOptimizer
     Protected WithEvents RadSliderTaxiTime1 As Global.Telerik.Web.UI.RadSlider
     
     '''<summary>
-    '''LinkButtonAdd control.
+    '''LinkButtonRun control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents LinkButtonAdd As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents LinkButtonRun As Global.System.Web.UI.WebControls.Button
 End Class

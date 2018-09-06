@@ -231,7 +231,7 @@ Public Class RunOptimizer
 
     End Sub
 
-    Protected Sub LinkButtonAdd_Click(sender As Object, e As EventArgs) Handles LinkButtonAdd.Click
+    Protected Sub LinkButtonRun_Click(sender As Object, e As EventArgs) Handles LinkButtonRun.Click
 
         If Session("carrierid") = 0 Then
 
@@ -488,7 +488,9 @@ Public Class RunOptimizer
             End If
             rs.Fields("CrewWithinX").Value = RadSliderCrewWithinX.Value.ToString
             rs.Fields("email").Value = Me.txtemail.Text 'rk 3/6/2013 add email for notifications
-            rs.Fields("RequestDate").Value = Now
+            '20180827 - pab - per David - for optimizer related reporting (all here, including requests) put everything in GMT
+            'rs.Fields("RequestDate").Value = Now
+            rs.Fields("RequestDate").Value = DateTime.UtcNow
             ' rs.Fields("CompleteDate").Value =
             rs.Fields("BestModel").Value = ""
             rs.Fields("BestModelCost").Value = 0
